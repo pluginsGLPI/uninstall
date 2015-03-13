@@ -662,25 +662,7 @@ class PluginUninstallReplace {
          }
 
          echo "<td>";
-         $rand  = mt_rand();
-         Ajax::displaySearchTextForDropdown("newItems[" . $id . "]".$rand, 8);
-
-         $params = array('searchText'   => '__VALUE__',
-                         'myname'       => "newItems[" . $id . "]",
-                         'table'        => getTableForItemType($type),
-                         'itemtype'     => $type,
-                         'current_item' => $id);
-
-         Ajax::updateItemOnInputTextEvent("search_newItems[" . $id . "]".$rand, "results_ID$rand",
-                                          "../ajax/dropdownReplaceFindDevice.php",
-                                          $params);
-
-         echo "<span id='results_ID$rand'>";
-         echo "<select name='id'>";
-         echo "<option value='0'>" . Dropdown::EMPTY_VALUE . "</option>";
-         echo "</select>";
-         echo "</span>\n";
-
+         self::showNewItemDropdown($id, $type);
          echo "</td></tr>";
       }
 
@@ -699,6 +681,34 @@ class PluginUninstallReplace {
       Html::closeForm();
    }
 
+   /**
+    * @since version 0.85
+    * 
+    * @param unknown $id
+    * @param unknown $type
+    */
+   static function showNewItemDropdown($id, $type) {
+      $rand = mt_rand();
+      $table = getTableForItemType($type);
+      
+      echo "<span id='results_ID$rand'></span>";
+      
+      echo "<script>
+      $(document).ready(function() {
+         var searchText = '';
+         var myname = 'newItems[$id]';
+        
+         $.ajax({
+            type: 'POST',
+            url: '../ajax/dropdownReplaceFindDevice.php',
+            data: 'searchText=' + searchText + '&myname=newItems[$id]&table=$table&itemtype=$type&current_item=$id',
+            success: function(msg){
+               $('#results_ID'+$rand).after(msg);
+            }
+         });
+      });
+      </script>";
+   }
 
    /**
     * @param $itemtype
