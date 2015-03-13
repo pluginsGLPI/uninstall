@@ -368,7 +368,8 @@ class PluginUninstallModel extends CommonDBTM {
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td><td>";
       Dropdown::showYesNo("replace_otherserial",
                           (isset($this->fields["replace_otherserial"])
-                           ? $this->fields["replace_otherserial"]: 1));
+                           ? $this->fields["replace_otherserial"]: 1),
+                           -1, array('width' => '100%'));
       echo "</td>";
       echo "<td>".__('Overwrite informations (from old item to the new)', 'uninstall')."</td>";
       echo "<td>";
@@ -406,7 +407,8 @@ class PluginUninstallModel extends CommonDBTM {
       echo "<td>";
       Dropdown::showYesNo("replace_documents",
                           (isset($this->fields["replace_documents"])
-                           ? $this->fields["replace_documents"] : 1));
+                           ? $this->fields["replace_documents"] : 1),
+                           -1, array('width' => '100%'));
       echo "</td>";
       echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2))."</td>";
       echo "<td>";
@@ -421,7 +423,8 @@ class PluginUninstallModel extends CommonDBTM {
       echo "<td>";
       Dropdown::showYesNo("replace_infocoms",
                           (isset($this->fields["replace_infocoms"])
-                           ? $this->fields["replace_infocoms"] : 1));
+                           ? $this->fields["replace_infocoms"] : 1),
+                           -1, array('width' => '100%'));
       echo "</td>";
       echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2));
       echo "</td>";
@@ -442,7 +445,7 @@ class PluginUninstallModel extends CommonDBTM {
       } else {
          $user = 1;
       }
-      Dropdown::showYesNo("replace_users", $user);
+      Dropdown::showYesNo("replace_users", $user, -1, array('width' => '100%'));
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
       echo "<td>";
@@ -457,7 +460,8 @@ class PluginUninstallModel extends CommonDBTM {
       echo "<td>";
       Dropdown::showYesNo("replace_tickets",
                           (isset ($this->fields["replace_tickets"])
-                           ? $this->fields["replace_tickets"] : 1));
+                           ? $this->fields["replace_tickets"] : 1),
+                           -1, array('width' => '100%'));
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),
                            sprintf(__('%1$s %2$s'), _n('Connection', 'Connections', 2),
@@ -474,7 +478,8 @@ class PluginUninstallModel extends CommonDBTM {
       echo "<td>";
       Dropdown::showYesNo("replace_direct_connections",
                           (isset($this->fields["replace_direct_connections"])
-                           ? $this->fields["replace_direct_connections"] : 1));
+                           ? $this->fields["replace_direct_connections"] : 1),
+                           -1, array('width' => '100%'));
       echo "</td>";
       echo "<td colspan='2'></td>";
       echo "</tr>";
