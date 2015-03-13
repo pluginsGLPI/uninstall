@@ -694,7 +694,7 @@ class PluginUninstallReplace {
       echo "<span id='results_ID$rand'></span>";
       
       echo "<script>
-      $(document).ready(function() {
+      $('results_ID$rand').ready(function() {
          var searchText = '';
          var myname = 'newItems[$id]';
         
