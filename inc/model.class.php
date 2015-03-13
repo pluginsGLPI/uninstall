@@ -230,8 +230,223 @@ class PluginUninstallModel extends CommonDBTM {
 
          return true;
    }
+   
+   function showPartFormUninstall() {
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<th colspan='4'>" . __('Erase datas', 'uninstall') . "</th></tr>";
 
+      echo "<tr class='tab_bg_1 center'><td>" . __('Delete software history (computers)',
+                                                   'uninstall') ."</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_soft_history",
+                          (isset($this->fields["raz_soft_history"])
+                           ? $this->fields["raz_soft_history"] : 1));
+      echo "</td><td>".__('Delete the whole history', 'uninstall')."</td><td>";
+      Dropdown::showYesNo("raz_history",
+                          (isset ($this->fields["raz_history"])
+                           ? $this->fields["raz_history"] : 1));
+      echo "</td></tr>";
 
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>".sprintf(__('%1$s %2$s'), __('Blank'), __('Name')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_name",
+                          (isset($this->fields["raz_name"])
+                           ? $this->fields["raz_name"] : 1));
+      echo "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'),  __('Blank'), __('Contact')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_contact",
+                          (isset($this->fields["raz_contact"])
+                           ? $this->fields["raz_contact"] : 1));
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('User')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_user",
+                          (isset($this->fields["raz_user"])
+                           ? $this->fields["raz_user"] : 1));
+      echo "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Operating system')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_os",
+                          (isset($this->fields["raz_os"]) ? $this->fields["raz_os"] : 1));
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Network')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_network",
+                          (isset($this->fields["raz_network"])
+                           ? $this->fields["raz_network"] : 1));
+      echo "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Domain')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_domain",
+                          (isset($this->fields["raz_domain"])
+                           ? $this->fields["raz_domain"] : 1));
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>".sprintf(__('%1$s %2$s'),__('Blank'),
+                          __('IP')." & ".__('Subnet mask')." & ".__('Gateway')." & ".
+                           __('Subnet')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_ip",
+                          (isset($this->fields["raz_ip"]) ? $this->fields["raz_ip"] : 1));
+      echo "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Budget')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_budget",
+                          (isset($this->fields["raz_budget"])
+                           ? $this->fields["raz_budget"] : 0));
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>".'unknown'."</td>"; //unknown name on 0.85
+      echo "<td>";
+      Dropdown::showYesNo("raz_ocs_registrykeys", (isset($this->fields["raz_ocs_registrykeys"])
+                                     ? $this->fields["raz_ocs_registrykeys"] : 1));
+      echo "</td>";
+      echo "<td colspan='2'></td>";
+      echo "</tr>";
+   }
+
+   function showPartFormRemplacement() {
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<th colspan='4'>".sprintf(__('%1$s - %2$s'),
+                                      __('Informations replacement', 'uninstall'),
+                                      __('General informations', 'uninstall'))."</th></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td><td>";
+      Dropdown::showYesNo("replace_name",
+                          (isset($this->fields["replace_name"])
+                           ? $this->fields["replace_name"]: 1));
+      echo "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Serial Number')) . "</td><td>";
+      Dropdown::showYesNo("replace_serial",
+                          (isset($this->fields["replace_serial"])
+                           ? $this->fields["replace_serial"]: 1));
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td><td>";
+      Dropdown::showYesNo("replace_otherserial",
+                          (isset($this->fields["replace_otherserial"])
+                           ? $this->fields["replace_otherserial"]: 1));
+      echo "</td>";
+      echo "<td>".__('Overwrite informations (from old item to the new)', 'uninstall')."</td>";
+      echo "<td>";
+      Dropdown::showYesNo("overwrite",
+                          (isset($this->fields["overwrite"]) ? $this->fields["overwrite"]: 1));
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" . __('Archiving method of the old material', 'uninstall') . "</td>";
+      echo "<td colspan='2'>";
+      $value = (isset($this->fields["replace_method"]) ? $this->fields["replace_method"] : 0);
+      self::dropdownMethodReplacement('replace_method', $value);
+      echo "</td>";
+      echo "<td>";
+      $plug = new Plugin();
+      if ($plug->isActivated('PDF')
+          && $plug->fields['version'] >= '0.7.1') {
+         echo "<span class='green b tracking_small'>".
+                __('Plugin PDF is installed and activated', 'uninstall')."</span>";
+      } else {
+         echo "<span class='red b tracking_small'>".
+                __("Plugin PDF is not installed, you won't be able to use PDF format for archiving",
+                   "uninstall")."</span>";
+      }
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<th colspan='4'>".sprintf(__('%1$s - %2$s'),
+                                      __('Informations replacement', 'uninstall'),
+                                      __('Connections with other materials', 'uninstall'));
+      echo "</th></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Document', 'Documents', 2))."</td>";
+      echo "<td>";
+      Dropdown::showYesNo("replace_documents",
+                          (isset($this->fields["replace_documents"])
+                           ? $this->fields["replace_documents"] : 1));
+      echo "</td>";
+      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2))."</td>";
+      echo "<td>";
+      Dropdown::showYesNo("replace_contracts",
+                          (isset($this->fields["replace_contracts"])
+                           ? $this->fields["replace_contracts"] : 1));
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'),
+                          __('Financial and administratives information')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("replace_infocoms",
+                          (isset($this->fields["replace_infocoms"])
+                           ? $this->fields["replace_infocoms"] : 1));
+      echo "</td>";
+      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2));
+      echo "</td>";
+      echo "<td>";
+      if (isset($this->fields["replace_reservations"])) {
+         $reservation = $this->fields["replace_reservations"];
+      } else {
+         $reservation = 1;
+      }
+      Dropdown::showYesNo("replace_reservations", $reservation);
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('User')) . "</td>";
+      echo "<td>";
+      if (isset($this->fields["replace_users"])) {
+         $user = $this->fields["replace_users"];
+      } else {
+         $user = 1;
+      }
+      Dropdown::showYesNo("replace_users", $user);
+      echo "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("replace_groups",
+                          (isset($this->fields["replace_groups"])
+                           ? $this->fields["replace_groups"] : 1));
+      echo "</td>";
+      echo "</tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), _n('Ticket', 'Tickets', 2)). "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("replace_tickets",
+                          (isset ($this->fields["replace_tickets"])
+                           ? $this->fields["replace_tickets"] : 1));
+      echo "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),
+                           sprintf(__('%1$s %2$s'), _n('Connection', 'Connections', 2),
+                                   _n('Network', 'Networks', 2))) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("replace_netports",
+                          (isset ($this->fields["replace_netports"])
+                           ? $this->fields["replace_netports"] : 1));
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'><";
+      echo "td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Direct connections', 'uninstall'));
+      echo "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("replace_direct_connections",
+                          (isset($this->fields["replace_direct_connections"])
+                           ? $this->fields["replace_direct_connections"] : 1));
+      echo "</td>";
+      echo "<td colspan='2'></td>";
+      echo "</tr>";
+   }
+   
    /**
     * @param $item
    **/
@@ -254,271 +469,59 @@ class PluginUninstallModel extends CommonDBTM {
          }
       }
 
-      if ($spotted) {
-
-         $canedit = $this->can($id, 'w');
-         echo "<form action='$target' method='post'>";
-
-         if ($this->fields["types_id"] == 1) {
-            // if Uninstall is selected
-            echo "<table class='tab_cadre_fixe' cellpadding='5'>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . __('Erase datas', 'uninstall') . "</th></tr>";
-
-            echo "<tr class='tab_bg_1 center'><td>" . __('Delete software history (computers)',
-                                                         'uninstall') ."</td>";
-            echo "<td>";
-            Dropdown::showYesNo("raz_soft_history",
-                                (isset($this->fields["raz_soft_history"])
-                                 ? $this->fields["raz_soft_history"] : 1));
-            echo "</td><td>".__('Delete the whole history', 'uninstall')."</td><td>";
-            Dropdown::showYesNo("raz_history",
-                                (isset ($this->fields["raz_history"])
-                                 ? $this->fields["raz_history"] : 1));
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>".sprintf(__('%1$s %2$s'), __('Blank'), __('Name')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("raz_name",
-                                (isset($this->fields["raz_name"])
-                                 ? $this->fields["raz_name"] : 1));
-            echo "</td>";
-            echo "<td>" .sprintf(__('%1$s %2$s'),  __('Blank'), __('Contact')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("raz_contact",
-                                (isset($this->fields["raz_contact"])
-                                 ? $this->fields["raz_contact"] : 1));
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('User')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("raz_user",
-                                (isset($this->fields["raz_user"])
-                                 ? $this->fields["raz_user"] : 1));
-            echo "</td>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Operating system')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("raz_os",
-                                (isset($this->fields["raz_os"]) ? $this->fields["raz_os"] : 1));
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Network')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("raz_network",
-                                (isset($this->fields["raz_network"])
-                                 ? $this->fields["raz_network"] : 1));
-            echo "</td>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Domain')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("raz_domain",
-                                (isset($this->fields["raz_domain"])
-                                 ? $this->fields["raz_domain"] : 1));
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>".sprintf(__('%1$s %2$s'),__('Blank'),
-                                __('IP')." & ".__('Subnet mask')." & ".__('Gateway')." & ".
-                                 __('Subnet')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("raz_ip",
-                                (isset($this->fields["raz_ip"]) ? $this->fields["raz_ip"] : 1));
-            echo "</td>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Budget')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("raz_budget",
-                                (isset($this->fields["raz_budget"])
-                                 ? $this->fields["raz_budget"] : 0));
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>".'unknown'."</td>"; //unknown name on 0.85
-            echo "<td>";
-            Dropdown::showYesNo("raz_ocs_registrykeys", (isset($this->fields["raz_ocs_registrykeys"])
-                                           ? $this->fields["raz_ocs_registrykeys"] : 1));
-            echo "</td>";
-            echo "<td colspan='2'></td></tr>";
-
-         } else {
-            // if Replacement is selected
-            echo "<table class='tab_cadre_fixe' cellpadding='5'>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>".sprintf(__('%1$s - %2$s'),
-                                            __('Informations replacement', 'uninstall'),
-                                            __('General informations', 'uninstall'))."</th></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td><td>";
-            Dropdown::showYesNo("replace_name",
-                                (isset($this->fields["replace_name"])
-                                 ? $this->fields["replace_name"]: 1));
-            echo "</td>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Serial Number')) . "</td><td>";
-            Dropdown::showYesNo("replace_serial",
-                                (isset($this->fields["replace_serial"])
-                                 ? $this->fields["replace_serial"]: 1));
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td><td>";
-            Dropdown::showYesNo("replace_otherserial",
-                                (isset($this->fields["replace_otherserial"])
-                                 ? $this->fields["replace_otherserial"]: 1));
-            echo "</td>";
-            echo "<td>".__('Overwrite informations (from old item to the new)', 'uninstall')."</td>";
-            echo "<td>";
-            Dropdown::showYesNo("overwrite",
-                                (isset($this->fields["overwrite"]) ? $this->fields["overwrite"]: 1));
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" . __('Archiving method of the old material', 'uninstall') . "</td>";
-            echo "<td colspan='2'>";
-            $value = (isset($this->fields["replace_method"]) ? $this->fields["replace_method"] : 0);
-            self::dropdownMethodReplacement('replace_method', $value);
-            echo "</td>";
-            echo "<td>";
-            $plug = new Plugin();
-            if ($plug->isActivated('PDF')
-                && $plug->fields['version'] >= '0.7.1') {
-               echo "<span class='green b tracking_small'>".
-                      __('Plugin PDF is installed and activated', 'uninstall')."</span>";
-            } else {
-               echo "<span class='red b tracking_small'>".
-                      __("Plugin PDF is not installed, you won't be able to use PDF format for archiving",
-                         "uninstall")."</span>";
-            }
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>".sprintf(__('%1$s - %2$s'),
-                                            __('Informations replacement', 'uninstall'),
-                                            __('Connections with other materials', 'uninstall'));
-            echo "</th></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Document', 'Documents', 2))."</td>";
-            echo "<td>";
-            Dropdown::showYesNo("replace_documents",
-                                (isset($this->fields["replace_documents"])
-                                 ? $this->fields["replace_documents"] : 1));
-            echo "</td>";
-            echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2))."</td>";
-            echo "<td>";
-            Dropdown::showYesNo("replace_contracts",
-                                (isset($this->fields["replace_contracts"])
-                                 ? $this->fields["replace_contracts"] : 1));
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'),
-                                __('Financial and administratives information')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("replace_infocoms",
-                                (isset($this->fields["replace_infocoms"])
-                                 ? $this->fields["replace_infocoms"] : 1));
-            echo "</td>";
-            echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2));
-            echo "</td>";
-            echo "<td>";
-            if (isset($this->fields["replace_reservations"])) {
-               $reservation = $this->fields["replace_reservations"];
-            } else {
-               $reservation = 1;
-            }
-            Dropdown::showYesNo("replace_reservations", $reservation);
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('User')) . "</td>";
-            echo "<td>";
-            if (isset($this->fields["replace_users"])) {
-               $user = $this->fields["replace_users"];
-            } else {
-               $user = 1;
-            }
-            Dropdown::showYesNo("replace_users", $user);
-            echo "</td>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("replace_groups",
-                                (isset($this->fields["replace_groups"])
-                                 ? $this->fields["replace_groups"] : 1));
-            echo "</td>";
-            echo "</tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), _n('Ticket', 'Tickets', 2)). "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("replace_tickets",
-                                (isset ($this->fields["replace_tickets"])
-                                 ? $this->fields["replace_tickets"] : 1));
-            echo "</td>";
-            echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),
-                                 sprintf(__('%1$s %2$s'), _n('Connection', 'Connections', 2),
-                                         _n('Network', 'Networks', 2))) . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("replace_netports",
-                                (isset ($this->fields["replace_netports"])
-                                 ? $this->fields["replace_netports"] : 1));
-            echo "</td></tr>";
-
-            echo "<tr class='tab_bg_1 center'><";
-            echo "td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Direct connections', 'uninstall'));
-            echo "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("replace_direct_connections",
-                                (isset($this->fields["replace_direct_connections"])
-                                 ? $this->fields["replace_direct_connections"] : 1));
-            echo "</td><td colspan='2'></td>";
-            echo "</tr>";
-         }
-         $plug = new Plugin();
-         if ($plug->isActivated('ocsinventoryng')) {
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . _n('OCSNG link', 'OCSNG links', 2, 'ocsinventoryng').
-                 "</th></tr>";
-            echo "<th colspan='4'>".__('These options only apply to computers coming from OCSNG',
-                                       'uninstall') . "</th></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" . __('Delete computer in OCSNG', 'ocsinventoryng') . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("remove_from_ocs",
-                                (isset($this->fields["remove_from_ocs"])
-                                 ? $this->fields["remove_from_ocs"] : 0));
-            echo "</td>";
-            echo "<td>" . __('Delete link with computer in OCSNG', 'uninstall') . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo("delete_ocs_link",
-                                (isset($this->fields["delete_ocs_link"])
-                                 ? $this->fields["delete_ocs_link"] : 0));
-            echo "</td></tr>";
-         }
-
-         if ($canedit) {
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td colspan='4' class='center'>";
-            echo "<input type='hidden' name='id' value='" . $this->fields["id"] . "'>";
-            echo "<input type='submit' name='update' value=\"" . _sx('button', 'Save') . "\" class='submit'>";
-            echo "</td></tr>";
-         }
-
-         echo "</table>";
-
-         echo "<input type='hidden' name='entities_id' value='".$this->fields["entities_id"]."'>";
-
-         Html::closeForm();
-
-      } else {
+      if (! $spotted) {
          echo "<span class='center b'>" . __('No item found') . "</span>";
          return false;
       }
 
+      $canedit = $this->can($id, 'w');
+      echo "<form action='$target' method='post'>";
+      echo "<table class='tab_cadre_fixe' cellpadding='5'>";
+
+      if ($this->fields["types_id"] == 1) {
+         // if Uninstall is selected
+         self::showPartFormUninstall();
+      } else {
+         // if Replacement is selected
+         self::showPartFormRemplacement();
+      }
+      $plug = new Plugin();
+      if ($plug->isActivated('ocsinventoryng')) {
+         echo "<tr class='tab_bg_1 center'>";
+         echo "<th colspan='4'>" . _n('OCSNG link', 'OCSNG links', 2, 'ocsinventoryng').
+              "</th></tr>";
+         echo "<th colspan='4'>".__('These options only apply to computers coming from OCSNG',
+                                    'uninstall') . "</th></tr>";
+
+         echo "<tr class='tab_bg_1 center'>";
+         echo "<td>" . __('Delete computer in OCSNG', 'ocsinventoryng') . "</td>";
+         echo "<td>";
+         Dropdown::showYesNo("remove_from_ocs",
+                             (isset($this->fields["remove_from_ocs"])
+                              ? $this->fields["remove_from_ocs"] : 0));
+         echo "</td>";
+         echo "<td>" . __('Delete link with computer in OCSNG', 'uninstall') . "</td>";
+         echo "<td>";
+         Dropdown::showYesNo("delete_ocs_link",
+                             (isset($this->fields["delete_ocs_link"])
+                              ? $this->fields["delete_ocs_link"] : 0));
+         echo "</td></tr>";
+      }
+
+      if ($canedit) {
+         echo "<tr class='tab_bg_1 center'>";
+         echo "<td colspan='4' class='center'>";
+         echo "<input type='hidden' name='id' value='" . $this->fields["id"] . "'>";
+         echo "<input type='submit' name='update' value=\"" . _sx('button', 'Save') . "\" class='submit'>";
+         echo "</td></tr>";
+      }
+
+      echo "</table>";
+
+      echo "<input type='hidden' name='entities_id' value='".$this->fields["entities_id"]."'>";
+
+      Html::closeForm();
+      
       return true;
    }
 
