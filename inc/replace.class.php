@@ -640,7 +640,7 @@ class PluginUninstallReplace {
       }
 
       if (self::searchFieldInSearchOptions($type, 'serial')) {
-         echo "<th>" . __('Serial Number') . "</th>";
+         echo "<th>" . __('Serial number') . "</th>";
       }
 
       echo "<th>" . __('New item', 'uninstall') . "</th>";
@@ -662,13 +662,12 @@ class PluginUninstallReplace {
          }
 
          echo "<td>";
-         $table = getTableForItemType($type);
          $rand  = mt_rand();
-         Ajax::displaySearchTextForDropdown("newItems[" . $id . "]".$rand,8);
+         Ajax::displaySearchTextForDropdown("newItems[" . $id . "]".$rand, 8);
 
          $params = array('searchText'   => '__VALUE__',
                          'myname'       => "newItems[" . $id . "]",
-                         'table'        => $table,
+                         'table'        => getTableForItemType($type),
                          'itemtype'     => $type,
                          'current_item' => $id);
 
@@ -677,7 +676,9 @@ class PluginUninstallReplace {
                                           $params);
 
          echo "<span id='results_ID$rand'>";
-         echo "<select name='id'><option value='0'>".Dropdown::EMPTY_VALUE."</option></select>";
+         echo "<select name='id'>";
+         echo "<option value='0'>" . Dropdown::EMPTY_VALUE . "</option>";
+         echo "</select>";
          echo "</span>\n";
 
          echo "</td></tr>";
