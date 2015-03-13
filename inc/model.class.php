@@ -504,8 +504,7 @@ class PluginUninstallModel extends CommonDBTM {
             echo "<tr class='tab_bg_1 center'>";
             echo "<td colspan='4' class='center'>";
             echo "<input type='hidden' name='id' value='" . $this->fields["id"] . "'>";
-            echo "<input type='submit' name='update' value=\"" . _sx('button', 'Save') .
-                   "\" class='submit'>";
+            echo "<input type='submit' name='update' value=\"" . _sx('button', 'Save') . "\" class='submit'>";
             echo "</td></tr>";
          }
 
@@ -528,17 +527,8 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $model_id
    **/
    function getConfig($model_id) {
-      global $DB;
-
-      $query = "SELECT *
-                FROM `" . $this->getTable() . "`
-                WHERE `id` = '$model_id'";
-      $result = $DB->query($query);
-
-      if ($DB->numrows($result) == 1) {
-         $this->fields = $DB->fetch_array($result);
-      } else {
-         $this->fields = array ();
+      if (! $this->getFromDB($model_id)) {
+         $this->fields = array();
       }
    }
 
