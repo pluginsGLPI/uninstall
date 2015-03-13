@@ -37,16 +37,6 @@ class PluginUninstallModel extends CommonDBTM {
       return __("Uninstallation template", 'uninstall');
    }
 
-
-   function defineTabs($options=array()) {
-
-      $ong = array();
-      $this->addStandardTab(__CLASS__, $ong, $options);
-      $this->addStandardTab('Log', $ong, $options);
-      return $ong;
-   }
-
-
    static function canCreate() {
       return plugin_uninstall_haveRight('use', 'w');
    }
@@ -132,12 +122,54 @@ class PluginUninstallModel extends CommonDBTM {
       return "";
    }
 
+   /**
+    * Définition du nom de l'onglet
+    **/
+   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+     
+      switch ($item->getType()) {
+         case 'Preference' :
+            return PluginUninstallUninstall::getTypeName(1);
+   
+         case __CLASS__ :
+            $tab = array();
+            $tab[1] = self::getTypeName(1);
+            $tab[2] = _n('Associated item', 'Associated items', 2);
+            return $tab;
+      }
+      return '';
+   }
+   
+   /**
+    * Définition du contenu de l'onglet
+    **/
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+      switch ($item->getType()) {
+         case __CLASS__ :
+            switch ($tabnum) {
+               case 1 :
+                  $item->showForm($item->getID());
+                  break;
+               case 2 :
+                  $item->showFormAction($item);
+                  break;
+            }
+      }
+      return true;
+   }
+   
+   function defineTabs($options=array()){
+      $ong = array();
+      $this->addStandardTab(__CLASS__, $ong, $options);
+      $this->addStandardTab('Log', $ong, $options);
+      return $ong;
+   }
 
    function showForm($ID, $options=array()) {
       global $DB, $CFG_GLPI;
 
-         $this->initForm($ID, $options);
-         $this->showTabs($options);
+         //$this->initForm($ID, $options);
+         //$this->showTabs($options);
          $this->showFormHeader($options);
 
          $entities = (isset($_SESSION['glpiparententities'])?$_SESSION['glpiparententities']:0);
@@ -229,7 +261,7 @@ class PluginUninstallModel extends CommonDBTM {
          }
 
          $this->showFormButtons($options);
-         $this->addDivForTabs();
+         //$this->addDivForTabs();
 
          return true;
    }
@@ -1033,31 +1065,6 @@ class PluginUninstallModel extends CommonDBTM {
          $model->add($tmp);
       }
    }
-
-
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-
-      switch ($item->getType()) {
-         case 'Preference' :
-            return PluginUninstallUninstall::getTypeName(1);
-
-         case __CLASS__ :
-            return self::getTypeName(1);
-      }
-      return '';
-   }
-
-
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-      global $CFG_GLPI;
-
-      switch ($item->getType()) {
-         case __CLASS__ :
-            $item->showFormAction($item);
-      }
-      return true;
-   }
-
 
    function getSpecificMassiveActions($checkitem=NULL) {
 

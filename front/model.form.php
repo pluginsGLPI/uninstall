@@ -57,10 +57,11 @@ if (isset ($_POST["add"])) {
 
 } else {
 
-   Html::header(PluginUninstallModel::getTypeName(), $_SERVER['PHP_SELF'], "plugins", "uninstall",
-                "model");
+   Html::header(PluginUninstallModel::getTypeName(), $_SERVER['PHP_SELF'], "plugins", "uninstall", "model"); //TODO : port to 0.85
 
-   $model->showForm($id, array('withtemplate' => $_GET["withtemplate"]));
+   $model->display(array('id'           => $id,
+                        'withtemplate' => $_GET["withtemplate"])
+   );
 
    Html::footer();
 }

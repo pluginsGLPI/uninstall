@@ -30,9 +30,9 @@
 
 include ('../../../inc/includes.php');
 
-Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'],"plugins","uninstall",'model');
+Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'],"plugins","uninstall",'model'); //TODO : port to 0.85
 
-if (plugin_uninstall_haveRight("use", "r")) {
+if (plugin_uninstall_haveRight("use", READ)) {
    Search::show("PluginUninstallModel");
 } else {
    Html::displayRightError();
