@@ -985,7 +985,7 @@ class PluginUninstallModel extends CommonDBTM {
       //Delete history
       $log = new Log();
       $log->dohistory = false;
-      $log->deleteByCriteria(array('itemtype' => 'PluginUninstallModel'));
+      $log->deleteByCriteria(array('itemtype' => __CLASS__));
    }
 
 

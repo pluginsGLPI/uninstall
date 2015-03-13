@@ -64,8 +64,7 @@ if ((strlen($_POST['searchText']) > 0)
    $where .= " AND (`name` ".$search."
                     OR `id` = '".$_POST['searchText']."'
                     OR `serial` ".$search."
-                    OR `otherserial` ".$search."";
-   $where .= ")";
+                    OR `otherserial` ".$search.")";
 }
 
 //If software or plugins : filter to display only the objects that are allowed to be visible in Helpdesk
@@ -126,4 +125,3 @@ if ($DB->numrows($result)) {
 }
 
 echo "</select>";
-?>

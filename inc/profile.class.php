@@ -188,7 +188,7 @@ class PluginUninstallProfile extends CommonDBTM {
             $migration->addField($table, 'replace', "bool");
             $migration->migrationOneTable($table);
             // UPDATE replace access for current user
-            $prof             = new PluginUninstallProfile();
+            $prof             = new self();
             $input['id']      = $_SESSION['glpiactiveprofile']['id'];
             $input['replace'] = 1;
             $prof->update($input);

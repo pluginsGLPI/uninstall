@@ -85,8 +85,8 @@ class PluginUninstallReplace {
          if ($model->fields['replace_method'] == 1) {
 
             $name_out = str_shuffle(Toolbox::getRandomString(5).time());
+            
             $plugin   = new Plugin();
-
             if ($plugin->isActivated('PDF')) {
 
                // USE PDF EXPORT
@@ -101,7 +101,7 @@ class PluginUninstallReplace {
                $itempdf = new $PLUGIN_HOOKS['plugin_pdf'][$type]($olditem);
                
                $out = $itempdf->generatePDF(array($olditem_id), $tab, 1, false);
-               $name_out.= ".pdf";
+               $name_out .= ".pdf";
             } else {
                //TODO Which datas ? Add Defaults...
                $out = __('Replacement', 'uninstall')."\r\n";
@@ -117,7 +117,7 @@ class PluginUninstallReplace {
                }
 
                // USE CSV EXPORT
-               $name_out.= ".csv";
+               $name_out .= ".csv";
             }
 
             // Write document
@@ -126,8 +126,8 @@ class PluginUninstallReplace {
             fwrite ($open_file, $out);
             fclose($open_file);
             // Compute comment text
-            $comment = __('This document is the archive of this replaced item', 'uninstall');
-            $comment.= " ".self::getCommentsForReplacement($olditem, false, false);
+            $comment  = __('This document is the archive of this replaced item', 'uninstall');
+            $comment .= " ".self::getCommentsForReplacement($olditem, false, false);
 
             // Attach & Create new document to current item
             $doc   = new Document();
@@ -364,12 +364,6 @@ class PluginUninstallReplace {
                case -1:
                   break;
 
-                case 0 :
-                   $olditem->update(array('id'           => $olditem_id,
-                                          'locations_id' => 0),
-                                    false);
-                   break;
-
                 default:
                    $olditem->update(array('id'           => $olditem_id,
                                           'locations_id' => $location),
@@ -514,18 +508,18 @@ class PluginUninstallReplace {
            "</th></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_name"])."</td>";
-      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),__('Serial Number')) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_serial"])."</td>";
-      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_otherserial"]) . "</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_name"])."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),__('Serial Number')) . "</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_serial"])."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_otherserial"]) . "</td>";
       echo "</tr>";
 
       echo "<tr><td colspan='6'></td></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td colspan='2'>".__('Overwrite informations (from old item to the new)', 'uninstall') .
+      echo "<td colspan='2'>" . __('Overwrite informations (from old item to the new)', 'uninstall') .
            "</td>";
       echo "<td>".self::coloredYN($model->fields["overwrite"])."</td>";
       echo "<td colspan='2'>" . __('Archiving method of the old material', 'uninstall') . "</td>";
@@ -591,39 +585,39 @@ class PluginUninstallReplace {
            "</th></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>" .sprintf(__('%1$s %2$s'),  __('Copy'), _n('Document', 'Documents', 2)) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_documents"])."</td>";
-      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2)) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_contracts"])."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'),  __('Copy'), _n('Document', 'Documents', 2)) . "</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_documents"])."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2)) . "</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_contracts"])."</td>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),
                            __('Financial and administratives information')) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_infocoms"])."</td>";
-      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'),_n('Reservation', 'Reservations', 2))."</td>";
-      echo "<td>". self::coloredYN($model->fields["replace_reservations"])."</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_infocoms"])."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),_n('Reservation', 'Reservations', 2))."</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_reservations"])."</td>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1 center'>";
       echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('User')) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_users"])."</td>";
-      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_groups"])."</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_users"])."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_groups"])."</td>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), _n('Ticket', 'Tickets', 2)) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_tickets"])."</td>";
-      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Ticket', 'Tickets', 2)) . "</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_tickets"])."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),
                            sprintf(__('%1$s %2$s'), _n('Connection', 'Connections', 2),
                                    _n('Network', 'Networks', 2))) . "</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_netports"])."</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_netports"])."</td>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), __('Direct connections', 'uninstall'))."</td>";
-      echo "<td>".self::coloredYN($model->fields["replace_direct_connections"])."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Direct connections', 'uninstall')) . "</td>";
+      echo "<td>" . self::coloredYN($model->fields["replace_direct_connections"]) . "</td>";
       echo "<td colspan='2'></td>";
       echo "</tr></table></div>";
 
@@ -879,9 +873,8 @@ class PluginUninstallReplace {
 
       $ID = $comp->fields['id'];
 
-      $items = array('Monitor', 'Peripheral', 'Phone', 'Printer');
       $data  = array();
-      foreach ($items as $itemtype) {
+      foreach (array('Monitor', 'Peripheral', 'Phone', 'Printer') as $itemtype) {
          $item = new $itemtype();
          if ($item->canView()) {
             $datas = getAllDatasFromTable('glpi_computers_items',

@@ -32,8 +32,6 @@ class PluginUninstallUninstall {
 
    const PLUGIN_UNINSTALL_TRANSFER_NAME = "plugin_uninstall";
 
-
-
    static function getTypeName($nb=0) {
       return __("Item's uninstallation", 'uninstall');
    }
@@ -299,11 +297,6 @@ class PluginUninstallUninstall {
 
       PluginOcsinventoryngOcsServer::checkOCSconnection($ocs_server_id);
 
-      $tables = array ("accesslog", "accountinfo", "bios", "controllers", "devices", "drives",
-                       "download_history", "download_servers", "groups_cache", "inputs",
-                       "memories", "modems", "monitors", "networks", "ports", "printers",
-                       "registry", "slots", "softwares", "sounds", "storages", "videos");
-
       //First try to remove all the network ports
       $query = "DELETE
                 FROM `netmap`
@@ -312,6 +305,11 @@ class PluginUninstallUninstall {
                                 WHERE `networks`.`HARDWARE_ID` = '".$ocs_id."')";
       $PluginOcsinventoryngDBocs->query($query);
 
+      $tables = array ("accesslog", "accountinfo", "bios", "controllers", "devices", "drives",
+            "download_history", "download_servers", "groups_cache", "inputs",
+            "memories", "modems", "monitors", "networks", "ports", "printers",
+            "registry", "slots", "softwares", "sounds", "storages", "videos");
+      
       foreach ($tables as $table) {
          if (self::OcsTableExists($table)) {
             $query = "DELETE
@@ -419,7 +417,7 @@ class PluginUninstallUninstall {
                                              $ocs_id));
             break;
       }
-      Log::history($computer_id, $type, $changes, "PluginUninstallUninstall", Log::HISTORY_PLUGIN);
+      Log::history($computer_id, $type, $changes, __CLASS__, Log::HISTORY_PLUGIN);
    }
 
 
@@ -633,7 +631,7 @@ class PluginUninstallUninstall {
    static function getAllTemplatesByEntity($entity, $add_entity=false) {
       global $DB, $CFG_GLPI;
 
-      $templates = array ();
+      $templates = array();
       $query = "SELECT `entities_id`, `id`, `name`
                 FROM `glpi_plugin_uninstall_models`".
                 getEntitiesRestrictRequest(" WHERE", "glpi_plugin_uninstall_models", "entities_id",

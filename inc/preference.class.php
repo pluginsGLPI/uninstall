@@ -31,7 +31,6 @@
 
 class PluginUninstallPreference extends CommonDBTM {
 
-
    function showFormUserPreferences() {
       global $DB;
 
@@ -126,14 +125,14 @@ class PluginUninstallPreference extends CommonDBTM {
    static function deleteUserPreferenceForModel($models_id, $except_entity=-1) {
       global $DB;
 
-      $sql = "DELETE
-              FROM `glpi_plugin_uninstall_preferences`
+      $query = "DELETE
+              FROM `".getTableForItemType(__CLASS__)."`
               WHERE `templates_id` = '".$models_id."'";
 
       if ($except_entity != -1) {
-         $sql .= " AND `entities_id` NOT IN (".$except_entity.")";
+         $query .= " AND `entities_id` NOT IN (".$except_entity.")";
       }
-      $DB->query($sql);
+      $DB->query($query);
    }
 
 
@@ -141,7 +140,6 @@ class PluginUninstallPreference extends CommonDBTM {
     * @param $users_id
    **/
    static function deleteUserPreferences($users_id) {
-
       $preference = new self();
       $preference->deleteByCriteria(array('users_id' => $users_id));
    }
@@ -267,10 +265,7 @@ class PluginUninstallPreference extends CommonDBTM {
 
 
    static function uninstall() {
-      global $DB;
-
-      $DB->query("DROP TABLE  IF EXISTS `".getTableForItemType(__CLASS__)."`");
+      $GLOBALS['DB']->query("DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`");
    }
 
 }
-?>

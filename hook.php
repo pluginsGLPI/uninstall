@@ -130,6 +130,3 @@ function plugin_uninstall_uninstall() {
    PluginUninstallPreference::uninstall();
    return true;
 }
-
-
-?>
