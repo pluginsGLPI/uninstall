@@ -29,7 +29,7 @@
  ---------------------------------------------------------------------- */
 
 function plugin_init_uninstall() {
-   global $PLUGIN_HOOKS, $CFG_GLPI,$UNINSTALL_TYPES,$UNINSTALL_DIRECT_CONNECTIONS_TYPE;
+   global $PLUGIN_HOOKS, $CFG_GLPI, $UNINSTALL_TYPES,$UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
    $PLUGIN_HOOKS['csrf_compliant']['uninstall'] = true;
 
@@ -80,7 +80,7 @@ function plugin_init_uninstall() {
 function plugin_version_uninstall() {
    return array('name'           => __("Item's uninstallation", 'uninstall'),
                 'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
-                'license'        => 'GPLv2+',
+                'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
                 'homepage'       => 'https://forge.indepnet.net/projects/uninstall',
                 'minGlpiVersion' => '0.85',
                 'version'        => '2.2');
