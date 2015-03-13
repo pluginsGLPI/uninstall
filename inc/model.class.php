@@ -95,12 +95,12 @@ class PluginUninstallModel extends CommonDBTM {
 
    static function getReplacementMethods() {
 
-      $plug = new Plugin();
-      if ($plug->isActivated('PDF')) {
-         $archive_method = " - ".__('PDF Archiving', 'uninstall');
-      } else {
+      //$plug = new Plugin();
+      //if ($plug->isActivated('PDF')) {
+      //   $archive_method = " - ".__('PDF Archiving', 'uninstall');
+      //} else {
          $archive_method = " - ".__('CSV Archiving', 'uninstall');
-      }
+      //}
 
       return array(1 => __('Purge', 'uninstall') . $archive_method,
                    2 => __('Delete + Comment', 'uninstall'));
@@ -352,16 +352,16 @@ class PluginUninstallModel extends CommonDBTM {
       self::dropdownMethodReplacement('replace_method', $value);
       echo "</td>";
       echo "<td>";
-      $plug = new Plugin();
-      if ($plug->isActivated('PDF')
-          && $plug->fields['version'] >= '0.7.1') {
-         echo "<span class='green b tracking_small'>".
-                __('Plugin PDF is installed and activated', 'uninstall')."</span>";
-      } else {
+      //$plug = new Plugin();
+      //if ($plug->isActivated('PDF')
+      //    && $plug->fields['version'] >= '0.7.1') {
+      //   echo "<span class='green b tracking_small'>".
+      //          __('Plugin PDF is installed and activated', 'uninstall')."</span>";
+      //} else {
          echo "<span class='red b tracking_small'>".
                 __("Plugin PDF is not installed, you won't be able to use PDF format for archiving",
                    "uninstall")."</span>";
-      }
+      //}
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1 center'>";

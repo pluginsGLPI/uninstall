@@ -86,6 +86,7 @@ class PluginUninstallReplace {
 
             $name_out = str_shuffle(Toolbox::getRandomString(5).time());
             
+            /*
             $plugin   = new Plugin();
             if ($plugin->isActivated('PDF')) {
 
@@ -103,6 +104,7 @@ class PluginUninstallReplace {
                $out = $itempdf->generatePDF(array($olditem_id), $tab, 1, false);
                $name_out .= ".pdf";
             } else {
+            */
                //TODO Which datas ? Add Defaults...
                $out = __('Replacement', 'uninstall')."\r\n";
 
@@ -118,7 +120,7 @@ class PluginUninstallReplace {
 
                // USE CSV EXPORT
                $name_out .= ".csv";
-            }
+            /* } */
 
             // Write document
             $out_file  = GLPI_DOC_DIR."/_uploads/".$name_out;
@@ -528,11 +530,11 @@ class PluginUninstallReplace {
          // Compute archive method
          $plug = new Plugin();
          $archive_method = "";
-         if ($plug->isActivated('PDF')) {
-            $archive_method = " - ".__('PDF Archiving', 'uninstall');
-         } else {
+         //f ($plug->isActivated('PDF')) {
+         //   $archive_method = " - ".__('PDF Archiving', 'uninstall');
+         //} else {
             $archive_method = " - ".__('CSV Archiving', 'uninstall');
-         }
+         //}
 
          echo "<span class='red b'>".__('Purge', 'uninstall') .$archive_method ."</span>";
 
