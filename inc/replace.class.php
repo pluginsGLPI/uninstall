@@ -1,0 +1,899 @@
+<?php
+/*
+ * @version $Id: replace.class.php 175 2015-01-28 09:57:57Z orthagh $
+ LICENSE
+
+ This file is part of the uninstall plugin.
+
+ Uninstall plugin is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ Uninstall plugin is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with uninstall. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ @package   uninstall
+ @author    the uninstall plugin team
+ @copyright Copyright (c) 2010-2013 Uninstall plugin team
+ @license   GPLv2+
+            http://www.gnu.org/licenses/gpl.txt
+ @link      https://forge.indepnet.net/projects/uninstall
+ @link      http://www.glpi-project.org/
+ @since     2009
+ ---------------------------------------------------------------------- */
+
+class PluginUninstallReplace {
+
+
+   static function getTypeName($nb=0) {
+      return __("Item's replacement", 'uninstall');
+   }
+
+
+   /**
+    * @param $type
+    * @param $model_id
+    * @param $tab_ids
+    * @param $location
+   **/
+   static function replace($type, $model_id, $tab_ids, $location) {
+      global $DB, $CFG_GLPI, $PLUGIN_HOOKS;
+
+      $model = new PluginUninstallModel();
+      $model->getConfig($model_id);
+
+      $overwrite = $model->fields["overwrite"];
+
+      echo "<div class='center'>";
+      echo "<table class='tab_cadre_fixe'><tr><th>".__('Replacement', 'uninstall')."</th></tr>";
+      echo "<tr class='tab_bg_2'><td>";
+      $count = 0;
+      $tot   = count($tab_ids);
+      Html::createProgressBar(__('Please wait, replacement is running...', 'uninstall'));
+
+      foreach($tab_ids as $olditem_id => $newitem_id) {
+
+         $count++;
+         $olditem = new $type();
+         $olditem->getFromDB($olditem_id);
+
+         $newitem = new $type();
+         $newitem->getFromDB($newitem_id);
+
+         //Hook to perform actions before item is being replaced
+         $olditem->fields['_newid'] = $newitem_id;
+         $olditem->fields['_uninstall_event'] = $model_id;
+         $olditem->fields['_action'] = 'replace'; 
+         Plugin::doHook("plugin_uninstall_replace_before", $olditem);
+
+         // Retrieve informations
+
+         //States
+         if ($model->fields['states_id'] != 0) {
+            $olditem->update(array('id'        => $olditem_id,
+                                   'states_id' => $model->fields['states_id']),
+                             false);
+         }
+
+         // METHOD REPLACEMENT 1 : Archive
+         if ($model->fields['replace_method'] == 1) {
+
+            $name_out = str_shuffle(Toolbox::getRandomString(5).time());
+            $plugin   = new Plugin();
+
+            if ($plugin->isActivated('PDF')) {
+
+               // USE PDF EXPORT
+               $plugin->load('pdf', true);
+               include_once (GLPI_ROOT . "/lib/ezpdf/class.ezpdf.php");
+               //Get all item's tabs
+               $tab      = array_keys($olditem->defineTabs());
+
+               //Tell PDF to also export item's main tab, and in first position
+               array_unshift($tab, "_main_");
+               
+               $itempdf = new $PLUGIN_HOOKS['plugin_pdf'][$type]($olditem);
+               
+               $out = $itempdf->generatePDF(array($olditem_id), $tab, 1, false);
+               $name_out.= ".pdf";
+            } else {
+               //TODO Which datas ? Add Defaults...
+               $out = __('Replacement', 'uninstall')."\r\n";
+
+               $datas = $olditem->fields;
+               unset($datas['comment']);
+               foreach($datas as $k => $v) {
+                  $out.= $k.";";
+               }
+               $out.= "\r\n";
+               foreach($datas as $k => $v) {
+                  $out.= $v.";";
+               }
+
+               // USE CSV EXPORT
+               $name_out.= ".csv";
+            }
+
+            // Write document
+            $out_file  = GLPI_DOC_DIR."/_uploads/".$name_out;
+            $open_file = fopen($out_file, 'a');
+            fwrite ($open_file, $out);
+            fclose($open_file);
+            // Compute comment text
+            $comment = __('This document is the archive of this replaced item', 'uninstall');
+            $comment.= " ".self::getCommentsForReplacement($olditem, false, false);
+
+            // Attach & Create new document to current item
+            $doc   = new Document();
+            $input = array('name'                  => __('Archive of old material', 'uninstall'),
+                           'upload_file'           => $name_out,
+                           'comment'               => addslashes($comment),
+                           'add'                   => __('Add'),
+                           'entities_id'           => $newitem->getEntityID(),
+                           'is_recursive'          => $newitem->isRecursive(),
+                           'link'                  => "",
+                           'documentcategories_id' => 0,
+                           'items_id'              => $olditem_id,
+                           'itemtype'              => $type);
+
+            //Attached the document to the old item, to generate an accurate name
+            $document_added = $doc->add($input);
+
+            //Attach the document to the new item, once the document's name is correct
+            $doc->update(array('id'       => $document_added,
+                               'items_id' => $newitem_id),
+                         false);
+         }
+
+         // General Informations - NAME
+         if ($model->fields["replace_name"]) {
+
+            if ($overwrite || empty($newitem->fields['name'])) {
+               $newitem->update(array('id'  => $newitem_id,
+                                     'name' => $olditem->getField('name')),
+                                false);
+            }
+         }
+
+         $data['id'] = $newitem->getID();
+         // General Informations - SERIAL
+         if ($model->fields["replace_serial"]) {
+
+            if ($overwrite || empty($newitem->fields['serial'])) {
+               $newitem->update(array('id'     => $newitem_id,
+                                      'serial' => $olditem->getField('serial')),
+                                false);
+            }
+         }
+
+         // General Informations - OTHERSERIAL
+         if ($model->fields["replace_otherserial"]) {
+
+            if ($overwrite || empty($newitem->fields['otherserial'])) {
+               $newitem->update(array('id'          => $newitem_id,
+                                      'otherserial' => $olditem->getField('otherserial')),
+                                false);
+            }
+         }
+
+         // Documents
+         if ($model->fields["replace_documents"]
+             && in_array($type, $CFG_GLPI["document_types"])) {
+
+            $doc_item = new Document_Item();
+            foreach(self::getAssociatedDocuments($olditem) as $document) {
+               $doc_item->update(array('id'       => $document['assocID'],
+                                       'itemtype' => $type,
+                                       'items_id' => $newitem_id),
+                                 false);
+            }
+
+         }
+
+         // Contracts
+         if ($model->fields["replace_contracts"]
+             && in_array($type, $CFG_GLPI["contract_types"])) {
+
+            $contract_item = new Contract_Item();
+            foreach(self::getAssociatedContracts($olditem) as $contract) {
+               $contract_item->update(array('id'       => $contract['id'],
+                                            'itemtype' => $type,
+                                            'items_id' => $newitem_id),
+                                      false);
+            }
+
+         }
+
+         // Infocoms
+         if ($model->fields["replace_infocoms"]
+             && in_array($type, $CFG_GLPI["infocom_types"])) {
+
+            $infocom = new Infocom();
+            if ($overwrite) {
+               // Delete current Infocoms of new item
+               if ($infocom->getFromDBforDevice($type, $newitem_id)) {
+                  //Do not log infocom deletion in the new item's history
+                  $infocom->dohistory = false;
+                  $infocom->deleteFromDB(1);
+               }
+            }
+
+            // Update current Infocoms of old item
+            if ($infocom->getFromDBforDevice($type, $olditem_id)) {
+               $infocom->update(array('id'       => $infocom->getID(),
+                                      'itemtype' => $type,
+                                      'items_id' => $newitem_id),
+                                false);
+            }
+
+         }
+
+         // Reservations
+         if ($model->fields["replace_reservations"]
+             && in_array($type, $CFG_GLPI["reservation_types"])) {
+
+            $resaitem = new ReservationItem();
+            if ($overwrite) {
+               // Delete current reservation of new item
+               $resa_new = new Reservation();
+               $resa_new->getFromDB($newitem_id);
+
+               if ($resa_new->is_reserved()) {
+                  $resa_new = new ReservationItem();
+                  $resa_new->getFromDBbyItem($type, $newitem_id);
+
+                  if (count($resa_new->fields)) {
+                     $resa_new->deleteFromDB(1);
+                  }
+               }
+            }
+
+            // Update old reservation for attribute to new item
+            $resa_old = new Reservation();
+            $resa_old->getFromDB($olditem_id);
+
+            if ($resa_old->is_reserved()) {
+               $resa_old = new ReservationItem();
+               $resa_old->getFromDBbyItem($type, $olditem_id);
+
+               if (count($resa_old->fields)) {
+                   $resa_old->update(array('id'       => $resa_old->getID(),
+                                           'itemtype' => $type,
+                                           'items_id' => $newitem_id),
+                                     false);
+               }
+            }
+         }
+
+         // User
+         if ($model->fields["replace_users"]
+             && in_array($type, $CFG_GLPI["linkuser_types"])) {
+
+            $data        = array();
+            $data['id']  = $newitem->getID();
+
+            if ($newitem->isField('users_id')
+                && ($overwrite || empty($data['users_id']))) {
+                  $data['users_id'] = $olditem->getField('users_id');
+            }
+
+            if ($newitem->isField('contact')
+                && ($overwrite || empty($data['contact']))) {
+                  $data['contact'] = $olditem->getField('contact');
+            }
+
+            if ($newitem->isField('contact_num')
+                && ($overwrite || empty($data['contact_num']))) {
+                  $data['contact_num'] = $olditem->getField('contact_num');
+            }
+
+            $newitem->update($data, false);
+         }
+
+         // Group
+         if ($model->fields["replace_groups"]
+             && in_array($type, $CFG_GLPI["linkgroup_types"])) {
+            if ($newitem->isField('groups_id')
+                && ($overwrite || empty($data['groups_id']))) {
+               $newitem->update(array('id'        => $newitem_id,
+                                      'groups_id' => $olditem->getField('groups_id')),
+                                false);
+            }
+         }
+
+         // Tickets
+         if ($model->fields["replace_tickets"]
+             && in_array($type, $CFG_GLPI["ticket_types"])) {
+
+            $ticket_item = new Ticket();
+            foreach(self::getAssociatedTickets($type,$olditem_id) as $ticket) {
+               $ticket_item->update(array('id'       => $ticket['id'],
+                                          'itemtype' => $type,
+                                          'items_id' => $newitem_id),
+                                    false);
+            }
+
+         }
+
+         //Array netport_types renamed in networkport_types in GLPI 0.80
+         if (isset($CFG_GLPI["netport_types"])) {
+            $netport_types = $CFG_GLPI["netport_types"];
+         } else {
+            $netport_types = $CFG_GLPI["networkport_types"];
+         }
+         // NetPorts
+         if ($model->fields["replace_netports"]
+             && in_array($type, $netport_types)) {
+
+            $netport_item = new NetworkPort();
+            foreach(self::getAssociatedNetports($type,$olditem_id) as $netport) {
+               $netport_item->update(array('id'       => $netport['id'],
+                                           'itemtype' => $type,
+                                           'items_id' => $newitem_id),
+                                     false);
+            }
+
+         }
+
+         // Directs connections
+         if ($model->fields["replace_direct_connections"]
+             && (in_array($type, array('Computer')))) {
+
+            $comp_item = new Computer_Item();
+            foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
+
+               foreach ($connections as $connection) {
+                  $comp_item->update(array('id'           => $connection['id'],
+                                           'computers_id' => $newitem_id,
+                                           'itemtype'     => $itemtype),
+                                     false);
+               }
+            }
+         }
+
+         // Location
+         if ($location != 0 && $olditem->isField('locations_id')){
+            $olditem->getFromDB($olditem_id);
+            switch ($location) {
+               case -1:
+                  break;
+
+                case 0 :
+                   $olditem->update(array('id'           => $olditem_id,
+                                          'locations_id' => 0),
+                                    false);
+                   break;
+
+                default:
+                   $olditem->update(array('id'           => $olditem_id,
+                                          'locations_id' => $location),
+                                    false);
+                   break;
+            }
+         }
+
+
+         $plug = new Plugin();
+         if ($plug->isActivated('ocsinventoryng')) {
+            //Delete computer from OCS
+            if ($model->fields["remove_from_ocs"] == 1) {
+               PluginUninstallUninstall::deleteComputerInOCSByGlpiID($olditem_id);
+            }
+            //Delete link in glpi_ocs_link
+            if ($model->fields["delete_ocs_link"] || $model->fields["remove_from_ocs"]) {
+               PluginUninstallUninstall::deleteOcsLink($olditem_id);
+            }
+         }
+
+         // METHOD REPLACEMENT 1 : Purge
+         if ($model->fields['replace_method'] == 1) {
+
+            // Retrieve, Compute && Update NEW comment field
+            $comment = self::getCommentsForReplacement($olditem, true);
+            $comment.="\n- " . __('See attached document', 'uninstall');
+            $newitem->update(array('id'      => $newitem_id,
+                                   'comment' => addslashes($comment)),
+                             false);
+
+            // If old item is attached in PDF/CSV
+            // Delete AND Purge it in DB
+            if ($document_added) {
+               $olditem->delete(array('id' => $olditem_id), true);
+            }
+         }
+
+         // METHOD REPLACEMENT 2 : Delete AND Comment
+         if ($model->fields['replace_method'] == 2) {
+
+            //Add comment on the new item first
+            $comment = self::getCommentsForReplacement($olditem, true);
+
+            $newitem->update(array('id'      => $newitem_id,
+                                   'comment' => Toolbox::addslashes_deep($comment)),
+                             false);
+
+            // Retrieve, Compute && Update OLD comment field
+            $comment = self::getCommentsForReplacement($newitem, false);
+
+            $olditem->update(array('id'      => $olditem_id,
+                                   'comment' => Toolbox::addslashes_deep($comment)),
+                             false);
+
+            // Delete OLD item from DB (not PURGE)
+            PluginUninstallUninstall::addUninstallLog($type, $olditem_id, 'replaced_by');
+            $olditem->delete(array('id' => $olditem_id), 0, false);
+         }
+
+         //Plugin hook after replacement
+         Plugin::doHook("plugin_uninstall_replace_after", $olditem);
+
+         //Add history
+         PluginUninstallUninstall::addUninstallLog($type, $newitem_id, 'replace');
+         Html::changeProgressBarPosition($count,$tot+1);
+      }
+
+      Html::changeProgressBarPosition($count,$tot,__('Replacement successful', 'uninstall'));
+
+      echo "</td></tr>";
+      echo "</table></div>";
+   }
+
+
+   /**
+    * Build the comments associated with an item
+    *
+    * @param $item            CommonDBTM object
+    * @param $new is          the item a new item (true) or the old one (false) (true by default)
+    * @param $display_message (true by default)
+    *
+    * @return the comments generated
+   **/
+   static function getCommentsForReplacement(CommonDBTM $item, $new=true, $display_message=true) {
+
+      $string = "";
+
+      if (!empty($item->fields['comment'])) {
+         $string = stripslashes($item->fields['comment']);
+      }
+      if ($display_message) {
+         if ($new) {
+            $string.= "\n" . __('This item is a replacement for item', 'uninstall')." ";
+         } else {
+            $string.= "\n" . __('This item was replaced by', 'uninstall')." ";
+         }
+      }
+
+      if ($item->isField('name')) {
+         $string.= "\n ".sprintf(__('%1$s: %2$s'), __('Name'), $item->getField('name'));
+      }
+
+      if ($item->isField('serial')) {
+         $string.= "\n ".sprintf(__('%1$s: %2$s'), __('Serial Number'), $item->getField('serial'));
+      }
+
+      if ($item->isField('otherserial')) {
+         $string.= "\n ".sprintf(__('%1$s: %2$s'), __('Inventory number'),
+                                 $item->getField('otherserial'));
+      }
+      return $string;
+   }
+
+
+   /**
+    * @param $field
+   **/
+   static function coloredYN($field) {
+
+      return ($field == 1)
+               ? "<span class='green b'>" . __('Yes') . "</span>"
+               : "<span class='red b'>" . __('No') . "</span>";
+   }
+
+
+   static function showForm($type, $model_id, $tab_ids, $location) {
+      global $DB, $CFG_GLPI;
+
+      // Retrieve model informations and show details
+      // It's just for helping user!
+      $model = new PluginUninstallModel();
+      $model->getConfig($model_id);
+
+      echo "<div class='first_bloc'>";
+      echo "<table class='tab_cadre_fixe' cellpadding='5'>";
+
+      echo "<tr class='tab_bg_1 center'>".
+           "<th colspan='6'>".sprintf(__('%1$s - %2$s'),
+                                      __('Reminder of the replacement model', 'uninstall'),
+                                      __('General informations', 'uninstall')).
+           "</th></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_name"])."</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),__('Serial Number')) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_serial"])."</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_otherserial"]) . "</td>";
+      echo "</tr>";
+
+      echo "<tr><td colspan='6'></td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td colspan='2'>".__('Overwrite informations (from old item to the new)', 'uninstall') .
+           "</td>";
+      echo "<td>".self::coloredYN($model->fields["overwrite"])."</td>";
+      echo "<td colspan='2'>" . __('Archiving method of the old material', 'uninstall') . "</td>";
+      echo "<td>";
+      if ($model->fields["replace_method"] == 1) {
+         // Compute archive method
+         $plug = new Plugin();
+         $archive_method = "";
+         if ($plug->isActivated('PDF')) {
+            $archive_method = " - ".__('PDF Archiving', 'uninstall');
+         } else {
+            $archive_method = " - ".__('CSV Archiving', 'uninstall');
+         }
+
+         echo "<span class='red b'>".__('Purge', 'uninstall') .$archive_method ."</span>";
+
+      } else if ($model->fields["replace_method"]==2) {
+         echo "<span class='green b'>".__('Delete + Comment', 'uninstall')."</span>";
+      }
+      echo "</td></tr>";
+
+      echo "<tr><td colspan='6'></td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td></td><td>" . __('New location of item', 'uninstall') . "</td>";
+      switch ($location) {
+         case -1 :
+            echo "<td><span class='red b'>".__('Keep previous location', 'uninstall')."</span></td>";
+            break;
+
+         case 0 :
+            echo "<td><span class='red b'>".__('Empty location', 'uninstall') . "</span></td>";
+            break;
+
+         default :
+            echo "<td><span class='green b'>";
+            echo Dropdown::getDropdownName('glpi_locations',$location);
+            echo "</span></td>";
+            break;
+      }
+
+      echo "<td>" . __('New status of the computer', 'uninstall') . "</td>";
+      if ($model->fields['states_id'] == 0) {
+         echo "<td><span class='red b'>".__('Status') . "</span></td>";
+      } else {
+         echo "<td><span class='green b'>";
+         echo Dropdown::getDropdownName('glpi_states', $model->fields['states_id']);
+         echo "</span></td>";
+      }
+      echo "<td></td></tr>";
+
+      echo "</table>";
+      echo "</div>";
+
+      // CONNEXIONS with other items
+      echo "<div class='firstbloc'>";
+      echo "<table class='tab_cadre_fixe' cellpadding='5'>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<th colspan='4'>".sprintf(__('%1$s - %2$s'),
+                                      __('Reminder of the replacement model', 'uninstall'),
+                                      __('Connections with other materials', 'uninstall')).
+           "</th></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'),  __('Copy'), _n('Document', 'Documents', 2)) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_documents"])."</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2)) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_contracts"])."</td>";
+      echo "</tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),
+                           __('Financial and administratives information')) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_infocoms"])."</td>";
+      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'),_n('Reservation', 'Reservations', 2))."</td>";
+      echo "<td>". self::coloredYN($model->fields["replace_reservations"])."</td>";
+      echo "</tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('User')) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_users"])."</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_groups"])."</td>";
+      echo "</tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), _n('Ticket', 'Tickets', 2)) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_tickets"])."</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),
+                           sprintf(__('%1$s %2$s'), _n('Connection', 'Connections', 2),
+                                   _n('Network', 'Networks', 2))) . "</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_netports"])."</td>";
+      echo "</tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), __('Direct connections', 'uninstall'))."</td>";
+      echo "<td>".self::coloredYN($model->fields["replace_direct_connections"])."</td>";
+      echo "<td colspan='2'></td>";
+      echo "</tr></table></div>";
+
+      // Show form for selecting new items
+      $target = "../front/action.php";
+
+      echo "<form action='$target' method='post'>";
+      echo "<table class='tab_cadre_fixe' cellpadding='5'>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<th colspan='4'>" . __('Choices for item to replace', 'uninstall') . "</th></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<th>" . __('Old item', 'uninstall') . "</th>";
+
+      if (self::searchFieldInSearchOptions($type, 'otherserial')) {
+         echo "<th>" . __('Inventory number') . "</th>";
+      }
+
+      if (self::searchFieldInSearchOptions($type, 'serial')) {
+         echo "<th>" . __('Serial Number') . "</th>";
+      }
+
+      echo "<th>" . __('New item', 'uninstall') . "</th>";
+      echo "</tr>";
+
+      foreach($tab_ids[$type] as $id => $value) {
+         $commonitem = new $type();
+         $commonitem->getFromDB($id);
+
+         echo "<tr class='tab_bg_1 center'>";
+         echo "<td>" . $commonitem->getName() . "</td>";
+
+         if (self::searchFieldInSearchOptions($type, 'otherserial')) {
+            echo "<td>" . $commonitem->fields['otherserial'] . "</td>";
+         }
+
+         if (self::searchFieldInSearchOptions($type, 'serial')) {
+            echo "<td>" . $commonitem->fields['serial'] . "</td>";
+         }
+
+         echo "<td>";
+         $table = getTableForItemType($type);
+         $rand  = mt_rand();
+         Ajax::displaySearchTextForDropdown("newItems[" . $id . "]".$rand,8);
+
+         $params = array('searchText'   => '__VALUE__',
+                         'myname'       => "newItems[" . $id . "]",
+                         'table'        => $table,
+                         'itemtype'     => $type,
+                         'current_item' => $id);
+
+         Ajax::updateItemOnInputTextEvent("search_newItems[" . $id . "]".$rand, "results_ID$rand",
+                                          "../ajax/dropdownReplaceFindDevice.php",
+                                          $params);
+
+         echo "<span id='results_ID$rand'>";
+         echo "<select name='id'><option value='0'>".Dropdown::EMPTY_VALUE."</option></select>";
+         echo "</span>\n";
+
+         echo "</td></tr>";
+      }
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td colspan='4' class='center'>";
+
+      echo "<input type='hidden' name='device_type' value='" . $type . "' />";
+      echo "<input type='hidden' name='model_id' value='" . $model_id . "' />";
+      echo "<input type='hidden' name='locations_id' value='" . $location . "' />";
+
+      echo "<input type='submit' name='replace' value=\"" .__('Replace', 'uninstall') . "\"
+             class='submit'>";
+      echo "</td></tr>";
+
+      echo "</table>";
+      Html::closeForm();
+   }
+
+
+   /**
+    * @param $itemtype
+    * @param $field     (default '')
+   **/
+   static function searchFieldInSearchOptions($itemtype, $field='') {
+
+      if ($item = getItemForItemtype($itemtype)) {
+         foreach($item->getSearchOptions() as $searchOption) {
+            if (is_array($searchOption) && $searchOption['field']==$field) {
+               return true;
+            }
+         }
+      }
+
+      return false;
+   }
+
+
+   /**
+    * Get documents associated to an item
+    *
+    * @param $item            CommonDBTM object for which associated documents must be displayed
+    * @param $withtemplate    (default '')
+   **/
+   static function getAssociatedDocuments(CommonDBTM $item, $withtemplate='') {
+      global $DB, $CFG_GLPI;
+
+      $ID = $item->getField('id');
+      if (!(($item instanceof KnowbaseItem)
+            && $CFG_GLPI["use_public_faq"]
+            && !$item->getEntityID())) {
+
+         if ($item->isNewID($ID)) {
+            return false;
+         }
+
+         if ($item->getType() != 'Ticket'
+             && $item->getType() != 'KnowbaseItem'
+             && !Session::haveRight('document', 'r')) {
+            return false;
+         }
+
+         if (!$item->can($item->fields['id'], 'r')) {
+            return false;
+         }
+      }
+
+      $query = "SELECT `glpi_documents_items`.`id` as assocID,
+                       `glpi_documents`.*
+                FROM `glpi_documents_items`
+                LEFT JOIN `glpi_documents`
+                          ON (`glpi_documents_items`.`documents_id`=`glpi_documents`.`id`)
+                LEFT JOIN `glpi_entities` ON (`glpi_documents`.`entities_id`=`glpi_entities`.`id`)
+                WHERE `glpi_documents_items`.`items_id` = '".$ID."'
+                      AND `glpi_documents_items`.`itemtype` = '".$item->getType()."' ";
+
+      if (Session::getLoginUserID()) {
+         $query .= getEntitiesRestrictRequest(" AND","glpi_documents",'','',true);
+      } else {
+         // Anonymous access from FAQ
+         $query .= " AND `glpi_documents`.`entities_id`= '0' ";
+      }
+
+      $docs = array();
+      foreach ($DB->request($query) as $data) {
+         $docs[] = $data;
+      }
+      return $docs;
+   }
+
+
+   /**
+    * Get contracts associated to an item
+    *
+    * @param $item            CommonDBTM : object wanted
+    *
+    * @return Nothing (display)
+   **/
+   static function getAssociatedContracts(CommonDBTM $item) {
+      global $DB;
+
+      $itemtype  = $item->getType();
+      $ID        = $item->fields['id'];
+      $contracts = array();
+
+      if (!Session::haveRight("contract","r") || !$item->can($ID, "r")) {
+         return false;
+      }
+
+      $query = "SELECT `glpi_contracts_items`.*
+                FROM `glpi_contracts_items`,
+                     `glpi_contracts`
+                LEFT JOIN `glpi_entities` ON (`glpi_contracts`.`entities_id`=`glpi_entities`.`id`)
+                WHERE `glpi_contracts`.`id`=`glpi_contracts_items`.`contracts_id`
+                      AND `glpi_contracts_items`.`items_id` = '".$ID."'
+                      AND `glpi_contracts_items`.`itemtype` = '".$itemtype."'".
+                      getEntitiesRestrictRequest(" AND","glpi_contracts",'','',true)."
+               ORDER BY `glpi_contracts`.`name`";
+      foreach ($DB->request($query) as $data) {
+         $contracts[] = $data;
+      }
+
+      return $contracts;
+   }
+
+
+   /**
+   * Get tickets for an item
+    *
+    * @param $itemtype
+    * @param $items_id
+    *
+    * @return nothing (display a table)
+   **/
+   static function getAssociatedTickets($itemtype, $items_id) {
+      global $DB;
+
+      if (!Session::haveRight("show_all_ticket", "1")
+          || !($item = getItemForItemtype($itemtype))) {
+         return false;
+      }
+
+      if (!$item->getFromDB($items_id)) {
+         return false;
+      }
+
+      $tickets = array();
+      $query   = "(`items_id` = '".$items_id."'
+                   AND `itemtype` = '".$itemtype."') ".
+                   getEntitiesRestrictRequest("AND", "glpi_tickets");
+      foreach ($DB->request('glpi_tickets', $query) as $data) {
+            $tickets[] = $data;
+      }
+      return $tickets;
+
+   }
+
+
+   /**
+    * Get ports for an item
+    *
+    * @param $itemtype     integer  item type
+    * @param $ID           integer  item ID
+   **/
+   static function getAssociatedNetports($itemtype, $ID) {
+      global $DB;
+
+      if (!($item = getItemForItemtype($itemtype))) {
+         return false;
+      }
+
+      if (!Session::haveRight('networking','r') || !$item->can($ID, 'r')) {
+         return false;
+      }
+
+      $netports = array();
+      foreach ($DB->request('glpi_networkports',
+                            "`items_id` = '".$ID."' AND `itemtype` = '".$itemtype."'") as $data) {
+         $netports[] = $data;
+      }
+      return $netports;
+   }
+
+
+   /**
+    * Get local connection for computer
+    *
+    * @param $comp Computer object
+    *
+    * @return Nothing (call to classes members)
+   **/
+   static function getAssociatedItems(Computer $comp) {
+      global $DB;
+
+      $ID = $comp->fields['id'];
+
+      $items = array('Monitor', 'Peripheral', 'Phone', 'Printer');
+      $data  = array();
+      foreach ($items as $itemtype) {
+         $item = new $itemtype();
+         if ($item->canView()) {
+            $datas = getAllDatasFromTable('glpi_computers_items',
+                                         "`computers_id` = '".$ID."' AND `itemtype` = '".$itemtype."'");
+            foreach ($datas as $computer_item) {
+               $data[$itemtype][] = $computer_item;
+            }
+         }
+      }
+
+      return $data;
+   }
+
+}
+?>
