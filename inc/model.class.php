@@ -336,7 +336,7 @@ class PluginUninstallModel extends CommonDBTM {
             echo "</td></tr>";
 
             echo "<tr class='tab_bg_1 center'>";
-            echo "<td>".$LANG['title'][43]."</td>";
+            echo "<td>".'unknown'."</td>"; //unknown name on 0.85
             echo "<td>";
             Dropdown::showYesNo("raz_ocs_registrykeys", (isset($this->fields["raz_ocs_registrykeys"])
                                            ? $this->fields["raz_ocs_registrykeys"] : 1));
@@ -727,7 +727,7 @@ class PluginUninstallModel extends CommonDBTM {
       $tab[33]['table']      = $this->getTable();
       $tab[33]['field']      = 'raz_ocs_registrkeys';
       $tab[33]['linkfield']  = 'raz_ocs_registrykeys';
-      $tab[33]['name']       = $LANG['title'][43];
+      $tab[33]['name']       = 'unknown'; //unknown name on 0.85
       $tab[33]['datatype']   = 'bool';
       $tab[33]['searchtype'] = 'equals';
 
