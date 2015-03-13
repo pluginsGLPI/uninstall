@@ -42,9 +42,8 @@ $item             = new $_POST['itemtype']();
 
 if ($item->isEntityAssign()) {
    // allow opening ticket on recursive object (printer, software, ...)
-   $recursive = $item->maybeRecursive();
-   $where     = getEntitiesRestrictRequest("WHERE", $_POST['table'], '',
-                                            $_SESSION['glpiactiveentities'], $recursive);
+   $where = getEntitiesRestrictRequest("WHERE", $_POST['table'], '',
+                                         $_SESSION['glpiactiveentities'], $item->maybeRecursive());
 
 } else {
    $where = "WHERE 1";
