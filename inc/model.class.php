@@ -168,102 +168,99 @@ class PluginUninstallModel extends CommonDBTM {
    function showForm($ID, $options=array()) {
       global $DB, $CFG_GLPI;
 
-         //$this->initForm($ID, $options);
-         //$this->showTabs($options);
-         $this->showFormHeader($options);
+      $this->showFormHeader($options);
 
-         $entities = (isset($_SESSION['glpiparententities'])?$_SESSION['glpiparententities']:0);
+      $entities = (isset($_SESSION['glpiparententities'])?$_SESSION['glpiparententities']:0);
 
-         echo "<tr class='tab_bg_1'><td>" . __('Name') . "</td>";
+      echo "<tr class='tab_bg_1'><td>" . __('Name') . "</td>";
+      echo "<td>";
+      Html::autocompletionTextField($this,'name');
+      echo "</td>";
+      echo "<td>" . __('Type of template', 'uninstall')."</td>";
+      echo "<td>";
+      $value = (isset ($this->fields["types_id"]) ? $this->fields["types_id"] : 0);
+      self::dropdownType('types_id', $value);
+      echo "</td>";
+      echo "</tr>";
+
+      echo "<tr class='tab_bg_1'>";
+      if ($this->fields["types_id"] != 2) {
+         echo "<td>" . __("Transfer's model to use", "uninstall") ."</td>";
          echo "<td>";
-         Html::autocompletionTextField($this,'name');
-         echo "</td>";
-         echo "<td>" . __('Type of template', 'uninstall')."</td>";
-         echo "<td>";
-         $value = (isset ($this->fields["types_id"]) ? $this->fields["types_id"] : 0);
-         self::dropdownType('types_id', $value);
-         echo "</td>";
-         echo "</tr>";
-
-         echo "<tr class='tab_bg_1'>";
-         if ($this->fields["types_id"] != 2) {
-            echo "<td>" . __("Transfer's model to use", "uninstall") ."</td>";
-            echo "<td>";
-            if ($ID == -1) {
-               $uninst = new PluginUninstallUninstall();
-               $value = $uninst->getUninstallTransferModelid();
-            } else {
-               $value = $this->fields["transfers_id"];
-            }
-            Transfer::dropdown(array('value'               => $value,
-                                     'display_emptychoice' => false));
-         } else {
-            echo "<td></td>";
-            echo "<td></td>";
-            echo "<input type='hidden' name='transfers_id' value='0'";
-         }
-         echo "</td>";
-         echo "<td rowspan='4'>" . __('Comments') . "</td>";
-         echo "<td rowspan='4'>";
-         echo "<textarea cols='60' rows='4' name='comment'>" . $this->fields["comment"] . "</textarea>";
-         echo "</td></tr>";
-
-         echo "<tr class='tab_bg_1'><td>" . __('New status of the computer', 'uninstall') ."</td>";
-         echo "<td>";
-         State::dropdown(array('value'       => $this->fields['states_id'],
-                               'emptylabel'  => __('None')));
-         echo "</td></tr>";
-
-         echo "<tr class='tab_bg_1'>";
          if ($ID == -1) {
-            $this->fields['groups_id'] = -1;
-         }
-
-         if ($this->fields["types_id"] != 2) {
-            echo "<td>" . __('Action on group', 'uninstall') . "</td><td>";
             $uninst = new PluginUninstallUninstall();
-            $action = $uninst->dropdownFieldAction("groups_id", $this->fields['entities_id'],
-                                                   $entities, $this->fields["groups_id"]);
-            echo "</td>";
+            $value = $uninst->getUninstallTransferModelid();
          } else {
-            echo "<td colspan='2'></td>";
+            $value = $this->fields["transfers_id"];
          }
-         echo "</tr>";
+         Transfer::dropdown(array('value'               => $value,
+                                  'display_emptychoice' => false));
+      } else {
+         echo "<td></td>";
+         echo "<td></td>";
+         echo "<input type='hidden' name='transfers_id' value='0'";
+      }
+      echo "</td>";
+      echo "<td rowspan='4'>" . __('Comments') . "</td>";
+      echo "<td rowspan='4'>";
+      echo "<textarea cols='60' rows='4' name='comment'>" . $this->fields["comment"] . "</textarea>";
+      echo "</td></tr>";
 
+      echo "<tr class='tab_bg_1'><td>" . __('New status of the computer', 'uninstall') ."</td>";
+      echo "<td>";
+      State::dropdown(array('value'       => $this->fields['states_id'],
+                            'emptylabel'  => __('None')));
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1'>";
+      if ($ID == -1) {
+         $this->fields['groups_id'] = -1;
+      }
+
+      if ($this->fields["types_id"] != 2) {
+         echo "<td>" . __('Action on group', 'uninstall') . "</td><td>";
+         $uninst = new PluginUninstallUninstall();
+         $action = $uninst->dropdownFieldAction("groups_id", $this->fields['entities_id'],
+                                                $entities, $this->fields["groups_id"]);
+         echo "</td>";
+      } else {
+         echo "<td colspan='2'></td>";
+      }
+      echo "</tr>";
+
+      echo "<tr class='tab_bg_1'>";
+      if ($this->fields["types_id"] != 2) {
+         echo "<td>" . __('New group', 'uninstall') . "</td><td>";
+         echo "<span id='show_groups' name='show_groups'>";
+         if ($this->fields['groups_id'] != -1) {
+            Group::dropdown(array('value'       => $this->fields["groups_id"],
+                                  'entity'      => $this->fields["entities_id"],
+                                  'entity_sons' => $entities,
+                                  'emptylabel'  => __('None')));
+         } else {
+            echo Dropdown::EMPTY_VALUE;
+         }
+         echo "</span></td>";
+      } else {
+         echo "<td colspan='2'></td>";
+      }
+      echo "</tr>";
+
+      if (!Session::isMultiEntitiesMode()
+          && Session::haveRight("transfer", "r")) {
          echo "<tr class='tab_bg_1'>";
-         if ($this->fields["types_id"] != 2) {
-            echo "<td>" . __('New group', 'uninstall') . "</td><td>";
-            echo "<span id='show_groups' name='show_groups'>";
-            if ($this->fields['groups_id'] != -1) {
-               Group::dropdown(array('value'       => $this->fields["groups_id"],
-                                     'entity'      => $this->fields["entities_id"],
-                                     'entity_sons' => $entities,
-                                     'emptylabel'  => __('None')));
-            } else {
-               echo Dropdown::EMPTY_VALUE;
-            }
-            echo "</span></td>";
-         } else {
-            echo "<td colspan='2'></td>";
-         }
+         echo "<td colspan='2'>";
+         echo "<a href='" . $CFG_GLPI["root_doc"] .
+                "/front/transfer.form.php'\">" . __('Add template', 'uninstall') . "</td>";
+         echo "<td colspan='2'>";
+         echo "<a href='" . $CFG_GLPI["root_doc"] . "/front/transfer.php'\">" .
+                __('Manage templates', 'uninstall') . "</a></td>";
          echo "</tr>";
+      }
 
-         if (!Session::isMultiEntitiesMode()
-             && Session::haveRight("transfer", "r")) {
-            echo "<tr class='tab_bg_1'>";
-            echo "<td colspan='2'>";
-            echo "<a href='" . $CFG_GLPI["root_doc"] .
-                   "/front/transfer.form.php'\">" . __('Add template', 'uninstall') . "</td>";
-            echo "<td colspan='2'>";
-            echo "<a href='" . $CFG_GLPI["root_doc"] . "/front/transfer.php'\">" .
-                   __('Manage templates', 'uninstall') . "</a></td>";
-            echo "</tr>";
-         }
+      $this->showFormButtons($options);
 
-         $this->showFormButtons($options);
-         //$this->addDivForTabs();
-
-         return true;
+      return true;
    }
    
    function showPartFormUninstall() {
@@ -358,7 +355,8 @@ class PluginUninstallModel extends CommonDBTM {
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td><td>";
       Dropdown::showYesNo("replace_name",
                           (isset($this->fields["replace_name"])
-                           ? $this->fields["replace_name"]: 1));
+                           ? $this->fields["replace_name"]: 1),
+                           -1, array('width' => '100%'));
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Serial Number')) . "</td><td>";
       Dropdown::showYesNo("replace_serial",
@@ -493,12 +491,12 @@ class PluginUninstallModel extends CommonDBTM {
       $target  = $item->getFormURL();
 
       if ($id > 0) {
-         if ($this->can($id, 'r')) {
+         if ($this->can($id, READ)) {
             $spotted = true;
          }
       } else {
-         $use_cache = false;
-         if ($this->can(-1, 'w')) {
+         //$use_cache = false;
+         if ($this->can(-1, UPDATE)) {
             $spotted = true;
             $this->getEmpty();
          }
@@ -520,6 +518,7 @@ class PluginUninstallModel extends CommonDBTM {
          // if Replacement is selected
          self::showPartFormRemplacement();
       }
+      
       $plug = new Plugin();
       if ($plug->isActivated('ocsinventoryng')) {
          echo "<tr class='tab_bg_1 center'>";
@@ -543,18 +542,17 @@ class PluginUninstallModel extends CommonDBTM {
          echo "</td></tr>";
       }
 
-      if ($canedit) {
+      //if ($canedit) {
          echo "<tr class='tab_bg_1 center'>";
          echo "<td colspan='4' class='center'>";
          echo "<input type='hidden' name='id' value='" . $this->fields["id"] . "'>";
          echo "<input type='submit' name='update' value=\"" . _sx('button', 'Save') . "\" class='submit'>";
          echo "</td></tr>";
-      }
+      //}
 
       echo "</table>";
 
       echo "<input type='hidden' name='entities_id' value='".$this->fields["entities_id"]."'>";
-
       Html::closeForm();
       
       return true;
