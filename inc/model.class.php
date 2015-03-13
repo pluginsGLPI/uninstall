@@ -189,6 +189,7 @@ class PluginUninstallModel extends CommonDBTM {
 
          if ($this->fields["types_id"] != 2) {
             echo "<td>" . __('Action on group', 'uninstall') . "</td><td>";
+            $uninst = new PluginUninstallUninstall();
             $action = $uninst->dropdownFieldAction("groups_id", $this->fields['entities_id'],
                                                    $entities, $this->fields["groups_id"]);
             echo "</td>";
