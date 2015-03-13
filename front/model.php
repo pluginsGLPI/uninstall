@@ -32,10 +32,9 @@ include ('../../../inc/includes.php');
 
 Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'],"plugins","uninstall",'model');
 
-if (plugin_uninstall_haveRight("use","r")) {
-Search::show("PluginUninstallModel");
+if (plugin_uninstall_haveRight("use", "r")) {
+   Search::show("PluginUninstallModel");
 } else {
    Html::displayRightError();
 }
 Html::footer();
-?>

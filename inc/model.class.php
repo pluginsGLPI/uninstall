@@ -171,8 +171,7 @@ class PluginUninstallModel extends CommonDBTM {
          echo "</td>";
          echo "<td rowspan='4'>" . __('Comments') . "</td>";
          echo "<td rowspan='4'>";
-         echo "<textarea cols='60' rows='4' name='comment'>" . $this->fields["comment"] .
-              "</textarea>";
+         echo "<textarea cols='60' rows='4' name='comment'>" . $this->fields["comment"] . "</textarea>";
          echo "</td></tr>";
 
          echo "<tr class='tab_bg_1'><td>" . __('New status of the computer', 'uninstall') ."</td>";
@@ -186,7 +185,7 @@ class PluginUninstallModel extends CommonDBTM {
             $this->fields['groups_id'] = -1;
          }
 
-         if ($this->fields["types_id"]!=2) {
+         if ($this->fields["types_id"] != 2) {
             echo "<td>" . __('Action on group', 'uninstall') . "</td><td>";
             $action = $uninst->dropdownFieldAction("groups_id", $this->fields['entities_id'],
                                                    $entities, $this->fields["groups_id"]);
@@ -197,7 +196,7 @@ class PluginUninstallModel extends CommonDBTM {
          echo "</tr>";
 
          echo "<tr class='tab_bg_1'>";
-         if ($this->fields["types_id"]!=2) {
+         if ($this->fields["types_id"] != 2) {
             echo "<td>".__('New group', 'uninstall')."</td><td>";
             echo "<span id='show_groups' name='show_groups'>";
             if ($this->fields['groups_id'] != -1) {
@@ -341,7 +340,7 @@ class PluginUninstallModel extends CommonDBTM {
             Dropdown::showYesNo("raz_ocs_registrykeys", (isset($this->fields["raz_ocs_registrykeys"])
                                            ? $this->fields["raz_ocs_registrykeys"] : 1));
             echo "</td>";
-	    echo "<td colspan='2'></td></tr>";
+            echo "<td colspan='2'></td></tr>";
 
          } else {
             // if Replacement is selected
@@ -920,7 +919,7 @@ class PluginUninstallModel extends CommonDBTM {
 
       // plugin never installed
       } else {
-         $query = "CREATE TABLE IF NOT EXISTS `glpi_plugin_uninstall_models` (
+         $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType(__CLASS__)."` (
                     `id` int(11) NOT NULL AUTO_INCREMENT,
                     `entities_id` int(11) DEFAULT '0',
                     `is_recursive` tinyint(1) NOT NULL DEFAULT '1',
@@ -972,7 +971,7 @@ class PluginUninstallModel extends CommonDBTM {
    static function uninstall() {
       global $DB;
 
-      $DB->query("DROP TABLE IF EXISTS`".getTableForItemType(__CLASS__)."`");
+      $DB->query("DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`");
 
       //If a transfer model exists for this plugin -> delete it
       $uninst = new PluginUninstallUninstall();
@@ -1057,10 +1056,9 @@ class PluginUninstallModel extends CommonDBTM {
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
       global $CFG_GLPI;
 
-      $self = new self();
       switch ($item->getType()) {
          case __CLASS__ :
-            $self->showFormAction($item);
+            $item->showFormAction($item);
       }
       return true;
    }
