@@ -43,4 +43,3 @@ if (plugin_uninstall_haveRight("use", "r")
                             'toadd'     => array(-1 => __('Keep previous location', 'uninstall'),
                                                  0  => __('Empty location', 'uninstall'))));
 }
-?>

@@ -63,10 +63,10 @@ class PluginUninstallUninstall {
 
          //First clean object and change location and status if needed
          $entity               = $item->fields["entities_id"];
-         $input                = array ();
+         $input                = array();
          $input["id"]          = $id;
          $input["entities_id"] = $entity;
-         $fields               = array ();
+         $fields               = array();
 
          Plugin::doHook("plugin_uninstall_before", $item);
 
@@ -657,7 +657,6 @@ class PluginUninstallUninstall {
          if (!$withtemplate) {
             return __('Uninstall', 'uninstall');
          }
-         return '';
       }
       return '';
    }

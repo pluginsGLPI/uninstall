@@ -154,7 +154,7 @@ class PluginUninstallPreference extends CommonDBTM {
       global $DB;
 
       $query = "SELECT `id`
-                FROM `glpi_plugin_uninstall_preferences`
+                FROM `".getTableForItemType(__CLASS__)."`
                 WHERE `users_id` = '" . $user_id . "'
                       AND `entities_id` = '" . $entity . "'
                       AND `templates_id` = '$template'";
@@ -192,7 +192,7 @@ class PluginUninstallPreference extends CommonDBTM {
       global $DB;
 
       $query = "SELECT `locations_id`
-                FROM `glpi_plugin_uninstall_preferences`
+                FROM `".getTableForItemType(__CLASS__)."`
                 WHERE `users_id` = '" . $user_id . "'
                       AND `entities_id` = '" . $entity. "'
                       AND `templates_id` = '".$template."'";
@@ -233,10 +233,10 @@ class PluginUninstallPreference extends CommonDBTM {
       if (TableExists($table)) {
          $migration->changeField($table, 'user_id', 'FK_users', "integer");
          $migration->addField($table, 'FK_template', 'integer');
-         $migration->renameTable($table, 'glpi_plugin_uninstall_preferences');
+         $migration->renameTable($table, getTableForItemType(__CLASS__));
       }
 
-      $table = 'glpi_plugin_uninstall_preferences';
+      $table = getTableForItemType(__CLASS__);
       // plugin already installed
       if (TableExists($table)) {
          // from 1.0.0 to 1.3.0
