@@ -77,36 +77,29 @@ function plugin_init_uninstall() {
    }
 }
 
-
 function plugin_version_uninstall() {
-
    return array('name'           => __("Item's uninstallation", 'uninstall'),
                 'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
                 'license'        => 'GPLv2+',
                 'homepage'       => 'https://forge.indepnet.net/projects/uninstall',
-                'minGlpiVersion' => '0.84',
+                'minGlpiVersion' => '0.85',
                 'version'        => '2.2');
 }
 
-
 function plugin_uninstall_check_prerequisites() {
-
-   if (version_compare(GLPI_VERSION,'0.84','lt')
-       || version_compare(GLPI_VERSION,'0.85','ge')) {
-      _e('This plugin requires GLPI >= 0.84', 'uninstall');
+   if (version_compare(GLPI_VERSION,'0.85','lt')
+       || version_compare(GLPI_VERSION,'0.86','ge')) {
+      _e('This plugin requires GLPI >= 0.85', 'uninstall');
       return false;
    }
    return true;
 }
 
-
 function plugin_uninstall_check_config($verbose=false) {
    return true;
 }
 
-
 function plugin_uninstall_haveRight($module, $right) {
-
    $matches = array (""  => array ("","r","w"),
                      "r" => array ("r","w"),
                      "w" => array ("w"),
@@ -119,4 +112,3 @@ function plugin_uninstall_haveRight($module, $right) {
    }
    return false;
 }
-?>
