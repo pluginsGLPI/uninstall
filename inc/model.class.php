@@ -77,7 +77,6 @@ class PluginUninstallModel extends CommonDBTM {
       return $this->prepareInputForAdd($input);
    }
 
-
    /**
     * Dropdown of model type
     *
@@ -145,7 +144,7 @@ class PluginUninstallModel extends CommonDBTM {
          case __CLASS__ :
             $tab = array();
             $tab[1] = self::getTypeName(1);
-            $tab[2] = _n('Associated item', 'Associated items', 2); //TODO :
+            $tab[2] = __('Replacing data', 'uninstall');
             return $tab;
       }
       return '';
