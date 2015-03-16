@@ -28,6 +28,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
+
 function plugin_init_uninstall() {
    global $PLUGIN_HOOKS, $CFG_GLPI, $UNINSTALL_TYPES,$UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
@@ -48,11 +49,16 @@ function plugin_init_uninstall() {
 
       if (Session::getLoginUserID()) {
          if (plugin_uninstall_haveRight("use", "r")) {
-            $PLUGIN_HOOKS['use_massive_action']['uninstall']   = 1;
-
+            $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
+            
             //Note : Possibilité de conditionner ce lien
             if (true) {
                $PLUGIN_HOOKS['config_page']['uninstall'] = "front/model.php"; //OK
+            }
+            
+            if (Session::haveRight('config', READ)) {
+               // add to 'Admin' menu :
+               $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = array('admin' => 'PluginUninstallMenu');
             }
             
             //Menus
