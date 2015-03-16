@@ -41,7 +41,7 @@ function plugin_init_uninstall() {
 
    $plugin = new Plugin();
    if ($plugin->isActivated('uninstall')) {
-      $UNINSTALL_TYPES                    = array ('Computer', 'Monitor', 'NetworkEquipment',
+      $UNINSTALL_TYPES                    = array('Computer', 'Monitor', 'NetworkEquipment',
                                                    'Peripheral', 'Phone', 'Printer');
       $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = array('Monitor', 'Peripheral', 'Phone', 'Printer');
 
@@ -50,6 +50,11 @@ function plugin_init_uninstall() {
          if (plugin_uninstall_haveRight("use", "r")) {
             $PLUGIN_HOOKS['use_massive_action']['uninstall']   = 1;
 
+            //Note : Possibilité de conditionner ce lien
+            if (true) {
+               $PLUGIN_HOOKS['config_page']['uninstall'] = "front/model.php"; //OK
+            }
+            
             //Menus
             $PLUGIN_HOOKS['menu_entry']['uninstall']           = 'front/model.php';
             $PLUGIN_HOOKS['submenu_entry']['uninstall']['search']
