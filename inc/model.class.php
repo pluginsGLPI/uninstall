@@ -346,6 +346,7 @@ class PluginUninstallModel extends CommonDBTM {
                            ? $this->fields["raz_budget"] : 0));
       echo "</td></tr>";
 
+      /*
       echo "<tr class='tab_bg_1 center'>";
       echo "<td>".'unknown'."</td>"; //unknown name on 0.85
       echo "<td>";
@@ -354,6 +355,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "</td>";
       echo "<td colspan='2'></td>";
       echo "</tr>";
+      */
    }
 
    function showPartFormRemplacement() {
@@ -764,12 +766,14 @@ class PluginUninstallModel extends CommonDBTM {
       $tab[80]['name']           = __('Entity');
       $tab[80]['datatype']       = 'dropdown';
 
+      /*
       $tab[33]['table']      = $this->getTable();
       $tab[33]['field']      = 'raz_ocs_registrkeys';
       $tab[33]['linkfield']  = 'raz_ocs_registrykeys';
       $tab[33]['name']       = 'unknown'; //unknown name on 0.85
       $tab[33]['datatype']   = 'bool';
       $tab[33]['searchtype'] = 'equals';
+      */
 
       return $tab;
    }
