@@ -32,11 +32,22 @@ class PluginUninstallModel extends CommonDBTM {
 
    public $dohistory = true;
 
-
    static function getTypeName($nb=0) {
       return __("Uninstallation template", 'uninstall');
    }
 
+   static function canUpdate() {
+      return true;
+   }
+   
+   static function canDelete() {
+      return true;
+   }
+   
+   static function canPurge() {
+      return true;
+   }
+   
    static function canCreate() {
       return plugin_uninstall_haveRight('use', 'w');
    }
@@ -134,7 +145,7 @@ class PluginUninstallModel extends CommonDBTM {
          case __CLASS__ :
             $tab = array();
             $tab[1] = self::getTypeName(1);
-            $tab[2] = _n('Associated item', 'Associated items', 2);
+            $tab[2] = _n('Associated item', 'Associated items', 2); //TODO :
             return $tab;
       }
       return '';
@@ -845,8 +856,7 @@ class PluginUninstallModel extends CommonDBTM {
       }
       return parent::getSpecificValueToSelect($field, $name, $values, $options);
    }
-
-
+   
    /**
     * Get the standard massive actions which are forbidden
     *
@@ -1075,7 +1085,7 @@ class PluginUninstallModel extends CommonDBTM {
       $actions = parent::getSpecificMassiveActions($checkitem);
 
       if ($isadmin) {
-         if (Session::haveRight('transfer', 'r')
+         if (Session::haveRight('transfer', READ)
              && Session::isMultiEntitiesMode()) {
             $actions['Transfert'] = __('Transfer');
          }
