@@ -30,8 +30,8 @@
 
 include ('../../../inc/includes.php');
 
-Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'],"plugins","uninstall",'model');
-//Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'],"model",'PluginUninstallModel');
+Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'], "admin", 
+   "PluginUninstallModel", "model");
 
 if (true || plugin_uninstall_haveRight("use", READ)) { //DEBUG
    Search::show("PluginUninstallModel");

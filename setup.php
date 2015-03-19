@@ -28,7 +28,9 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-
+/**
+ * Function Init
+ */
 function plugin_init_uninstall() {
    global $PLUGIN_HOOKS, $CFG_GLPI, $UNINSTALL_TYPES,$UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
@@ -48,24 +50,17 @@ function plugin_init_uninstall() {
 
 
       if (Session::getLoginUserID()) {
-         if (plugin_uninstall_haveRight("use", "r")) {
+         if (true || plugin_uninstall_haveRight("use", READ)) { //DEBUG
             $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
             
-            //Note : Possibilité de conditionner ce lien
-            if (true) {
-               $PLUGIN_HOOKS['config_page']['uninstall'] = "front/model.php"; //OK
-            }
+            // Add link in GLPI plugins list :
+            $PLUGIN_HOOKS['config_page']['uninstall'] = "front/model.php";
             
-            if (Session::haveRight('config', READ)) {
+            //if (Session::haveRight('config', READ)) {
                // add to 'Admin' menu :
-               $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = array('admin' => 'PluginUninstallMenu');
-            }
+               $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = array('admin' => 'PluginUninstallModel');
+            //}
             
-            //Menus
-            $PLUGIN_HOOKS['menu_entry']['uninstall']           = 'front/model.php';
-            $PLUGIN_HOOKS['submenu_entry']['uninstall']['search']
-                                                               = 'front/model.php';
-
             //Item actions
             $PLUGIN_HOOKS['item_update']['uninstall']
                = array('PluginUninstallModel' => array('PluginUninstallPreference',
@@ -78,11 +73,7 @@ function plugin_init_uninstall() {
             $PLUGIN_HOOKS['pre_item_purge']['uninstall']
                = array('User' => array('PluginUninstallPreference', 'beforeItemPurge'));
          }
-
-         if (Session::haveRight("config", "w")
-             || Session::haveRight("profile", "r")) {
-            $PLUGIN_HOOKS['submenu_entry']['uninstall']['add'] = 'front/model.form.php';
-         }
+         
       }
       $PLUGIN_HOOKS['post_init']['uninstall'] = 'plugin_uninstall_postinit';
    }

@@ -32,6 +32,9 @@ class PluginUninstallModel extends CommonDBTM {
 
    public $dohistory = true;
    
+   public $first_level_menu  = "plugins";
+   public $second_level_menu = "uninstall";
+   
    const TYPE_MODEL_UNINSTALL    = 1;
    const TYPE_MODEL_REPLACEMENT  = 2;
 
@@ -52,20 +55,47 @@ class PluginUninstallModel extends CommonDBTM {
    }
    
    static function canCreate() {
-      return plugin_uninstall_haveRight('use', 'w');
+      return true;
+      //return plugin_uninstall_haveRight('use', 'w');
    }
 
 
    static function canView() {
-      return plugin_uninstall_haveRight('use', 'r');
+      return true;
+      //return plugin_uninstall_haveRight('use', 'r');
    }
 
 
    static function canReplace() {
-      return plugin_uninstall_haveRight('replace', '1');
+      return true;
+      //return plugin_uninstall_haveRight('replace', '1');
    }
-
-
+   
+   static function getMenuContent() {
+      global $CFG_GLPI;
+      $menu          = array();
+      
+      // get Menu name :
+      $tab = plugin_version_uninstall();
+      $menu['title'] = $tab["name"];
+      
+      $menu['page']  = '/plugins/uninstall/front/model.php';
+   
+      //if (Session::haveRight('config', READ)) {
+   
+         $menu['options']['model']['title'] = self::getTypeName(1);
+         $menu['options']['model']['page'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
+         $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
+      
+         //if (Session::haveRight('config', UPDATE)) {
+            $menu['options']['model']['links']['add'] = Toolbox::getItemTypeFormUrl('PluginUninstallModel', false);
+         //}
+   
+      //}
+   
+      return $menu;
+   }
+   
    function prepareInputForAdd($input) {
 
       if (isset($input['_groups_id_action']) 
