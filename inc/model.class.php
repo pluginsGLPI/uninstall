@@ -98,15 +98,15 @@ class PluginUninstallModel extends CommonDBTM {
 
    static function getReplacementMethods() {
 
-      //$plug = new Plugin();
-      //if ($plug->isActivated('PDF')) {
-      //   $archive_method = " - ".__('PDF Archiving', 'uninstall');
-      //} else {
+      $plug = new Plugin();
+      if ($plug->isActivated('PDF')) {
+         $archive_method = " - ".__('PDF Archiving', 'uninstall');
+      } else {
          $archive_method = " - ".__('CSV Archiving', 'uninstall');
-      //}
+      }
 
-      return array(1 => __('Purge', 'uninstall') . $archive_method,
-                   2 => __('Delete + Comment', 'uninstall'));
+      return array(PluginUninstallReplace::METHOD_PURGE => __('Purge', 'uninstall') . $archive_method,
+                   PluginUninstallReplace::METHOD_DELETE_AND_COMMENT => __('Delete + Comment', 'uninstall'));
    }
 
 
@@ -400,16 +400,16 @@ class PluginUninstallModel extends CommonDBTM {
       self::dropdownMethodReplacement('replace_method', $value);
       echo "</td>";
       echo "<td>";
-      //$plug = new Plugin();
-      //if ($plug->isActivated('PDF')
-      //    && $plug->fields['version'] >= '0.7.1') {
-      //   echo "<span class='green b tracking_small'>".
-      //          __('Plugin PDF is installed and activated', 'uninstall')."</span>";
-      //} else {
+      $plug = new Plugin();
+      if ($plug->isActivated('PDF')
+          && $plug->fields['version'] >= '0.7.1') {
+         echo "<span class='green b tracking_small'>".
+                __('Plugin PDF is installed and activated', 'uninstall')."</span>";
+      } else {
          echo "<span class='red b tracking_small'>".
                 __("Plugin PDF is not installed, you won't be able to use PDF format for archiving",
                    "uninstall")."</span>";
-      //}
+      }
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
@@ -803,7 +803,7 @@ class PluginUninstallModel extends CommonDBTM {
             break;
 
       case 'types_id' :
-            if ($values['types_id'] == 1) {
+            if ($values['types_id'] == self::TYPE_MODEL_UNINSTALL) {
                return __('Uninstallation', 'uninstall');
             }
             return __('Replacement', 'uninstall');
@@ -814,9 +814,9 @@ class PluginUninstallModel extends CommonDBTM {
             return __('Keep in the current group', 'uninstall');
          } else if (!$values['groups_id']) {
             return __('None');
-         } else {
-            return Dropdown::getDropdownName('glpi_groups', $values['groups_id']);
          }
+         return Dropdown::getDropdownName('glpi_groups', $values['groups_id']);
+         
          break;
 
       }
@@ -846,9 +846,9 @@ class PluginUninstallModel extends CommonDBTM {
 
          case 'types_id' :
 
-            $types[1] = __('Uninstallation', 'uninstall');
+            $types[self::TYPE_MODEL_UNINSTALL] = __('Uninstallation', 'uninstall');
             if (self::canReplace()) {
-               $types[2] = __('Replacement', 'uninstall');
+               $types[self::TYPE_MODEL_REPLACEMENT] = __('Replacement', 'uninstall');
             }
             $options['value'] = $values[$field];
             return Dropdown::showFromArray($name, $types, $options);
@@ -1063,9 +1063,9 @@ class PluginUninstallModel extends CommonDBTM {
          $tmp['remove_from_ocs']            = 0;
          $tmp['delete_ocs_link']            = 0;
          if ($name == 'Uninstall') {
-            $tmp['types_id']                = 1;
+            $tmp['types_id']                = self::TYPE_MODEL_UNINSTALL;
          } else {
-            $tmp['types_id']                = 2;
+            $tmp['types_id']                = self::TYPE_MODEL_REPLACEMENT;
          }
          $tmp['replace_name']               = 1;
          $tmp['replace_serial']             = 1;
@@ -1080,7 +1080,7 @@ class PluginUninstallModel extends CommonDBTM {
          $tmp['replace_netports']           = 1;
          $tmp['replace_direct_connections'] = 1;
          $tmp['overwrite']                  = 0;
-         $tmp['replace_method']             = 2;
+         $tmp['replace_method']             = PluginUninstallReplace::METHOD_DELETE_AND_COMMENT;
          $model->add($tmp);
       }
    }

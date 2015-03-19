@@ -30,6 +30,8 @@
 
 class PluginUninstallReplace {
 
+   const METHOD_PURGE = 1;
+   const METHOD_DELETE_AND_COMMENT = 2;
 
    static function getTypeName($nb=0) {
       return __("Item's replacement", 'uninstall');
@@ -82,19 +84,18 @@ class PluginUninstallReplace {
          }
 
          // METHOD REPLACEMENT 1 : Archive
-         if ($model->fields['replace_method'] == 1) {
+         if ($model->fields['replace_method'] == self::METHOD_PURGE) {
 
             $name_out = str_shuffle(Toolbox::getRandomString(5).time());
             
-            /*
-            $plugin   = new Plugin();
+            $plugin = new Plugin();
             if ($plugin->isActivated('PDF')) {
 
                // USE PDF EXPORT
                $plugin->load('pdf', true);
                include_once (GLPI_ROOT . "/lib/ezpdf/class.ezpdf.php");
                //Get all item's tabs
-               $tab      = array_keys($olditem->defineTabs());
+               $tab = array_keys($olditem->defineTabs());
 
                //Tell PDF to also export item's main tab, and in first position
                array_unshift($tab, "_main_");
@@ -104,7 +105,6 @@ class PluginUninstallReplace {
                $out = $itempdf->generatePDF(array($olditem_id), $tab, 1, false);
                $name_out .= ".pdf";
             } else {
-            */
                //TODO Which datas ? Add Defaults...
                $out = __('Replacement', 'uninstall')."\r\n";
 
@@ -120,7 +120,7 @@ class PluginUninstallReplace {
 
                // USE CSV EXPORT
                $name_out .= ".csv";
-            /* } */
+            }
 
             // Write document
             $out_file  = GLPI_DOC_DIR."/_uploads/".$name_out;
@@ -189,7 +189,7 @@ class PluginUninstallReplace {
              && in_array($type, $CFG_GLPI["document_types"])) {
 
             $doc_item = new Document_Item();
-            foreach(self::getAssociatedDocuments($olditem) as $document) {
+            foreach (self::getAssociatedDocuments($olditem) as $document) {
                $doc_item->update(array('id'       => $document['assocID'],
                                        'itemtype' => $type,
                                        'items_id' => $newitem_id),
@@ -203,7 +203,7 @@ class PluginUninstallReplace {
              && in_array($type, $CFG_GLPI["contract_types"])) {
 
             $contract_item = new Contract_Item();
-            foreach(self::getAssociatedContracts($olditem) as $contract) {
+            foreach (self::getAssociatedContracts($olditem) as $contract) {
                $contract_item->update(array('id'       => $contract['id'],
                                             'itemtype' => $type,
                                             'items_id' => $newitem_id),
@@ -388,7 +388,7 @@ class PluginUninstallReplace {
          }
 
          // METHOD REPLACEMENT 1 : Purge
-         if ($model->fields['replace_method'] == 1) {
+         if ($model->fields['replace_method'] == self::METHOD_PURGE) {
 
             // Retrieve, Compute && Update NEW comment field
             $comment = self::getCommentsForReplacement($olditem, true);
@@ -405,7 +405,7 @@ class PluginUninstallReplace {
          }
 
          // METHOD REPLACEMENT 2 : Delete AND Comment
-         if ($model->fields['replace_method'] == 2) {
+         if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
 
             //Add comment on the new item first
             $comment = self::getCommentsForReplacement($olditem, true);
@@ -526,19 +526,19 @@ class PluginUninstallReplace {
       echo "<td>".self::coloredYN($model->fields["overwrite"])."</td>";
       echo "<td colspan='2'>" . __('Archiving method of the old material', 'uninstall') . "</td>";
       echo "<td>";
-      if ($model->fields["replace_method"] == 1) {
+      if ($model->fields["replace_method"] == self::METHOD_PURGE) {
          // Compute archive method
          $plug = new Plugin();
          $archive_method = "";
-         //f ($plug->isActivated('PDF')) {
-         //   $archive_method = " - ".__('PDF Archiving', 'uninstall');
-         //} else {
+         if ($plug->isActivated('PDF')) {
+            $archive_method = " - ".__('PDF Archiving', 'uninstall');
+         } else {
             $archive_method = " - ".__('CSV Archiving', 'uninstall');
-         //}
+         }
 
          echo "<span class='red b'>".__('Purge', 'uninstall') .$archive_method ."</span>";
 
-      } else if ($model->fields["replace_method"]==2) {
+      } else if ($model->fields["replace_method"] == self::METHOD_DELETE_AND_COMMENT) {
          echo "<span class='green b'>".__('Delete + Comment', 'uninstall')."</span>";
       }
       echo "</td></tr>";
@@ -749,11 +749,11 @@ class PluginUninstallReplace {
 
          if ($item->getType() != 'Ticket'
              && $item->getType() != 'KnowbaseItem'
-             && !Session::haveRight('document', 'r')) {
+             && !Session::haveRight('document', READ)) {
             return false;
          }
 
-         if (!$item->can($item->fields['id'], 'r')) {
+         if (!$item->can($item->fields['id'], READ)) {
             return false;
          }
       }
