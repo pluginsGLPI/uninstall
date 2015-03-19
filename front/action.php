@@ -47,6 +47,7 @@ if (isset($_REQUEST["locations_id"])) {
 }
 
 if (isset($_REQUEST["replace"])) {
+   
    PluginUninstallReplace::replace($_REQUEST["device_type"], $_REQUEST["model_id"],
                                    $_REQUEST['newItems'], $location);
 

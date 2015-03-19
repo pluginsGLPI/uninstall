@@ -57,7 +57,7 @@ class PluginUninstallReplace {
       $tot   = count($tab_ids);
       Html::createProgressBar(__('Please wait, replacement is running...', 'uninstall'));
 
-      foreach($tab_ids as $olditem_id => $newitem_id) {
+      foreach ($tab_ids as $olditem_id => $newitem_id) {
 
          $count++;
          $olditem = new $type();
@@ -701,7 +701,7 @@ class PluginUninstallReplace {
          $.ajax({
             type: 'POST',
             url: '../ajax/dropdownReplaceFindDevice.php',
-            data: 'searchText=' + searchText + '&myname=newItems[$id]&table=$table&itemtype=$type&current_item=$id',
+            data: 'searchText=' + searchText + '&newItems_id=$id&table=$table&itemtype=$type&current_item=$id',
             success: function(msg){
                $('#results_ID'+$rand).after(msg);
                $('#results_ID$rand + select').select2();

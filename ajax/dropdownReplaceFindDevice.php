@@ -89,7 +89,7 @@ $query = "SELECT *
           $LIMIT";
 $result = $DB->query($query);
 
-echo "<select name='".$_POST['myname']."' size='1'>";
+echo "<select name='newItems[\"".$_POST['newItems_id']."\"]' size='1'>";
 
 if (($_POST['searchText'] != $CFG_GLPI["ajax_wildcard"])
     && ($DB->numrows($result) == $NBMAX)) {
