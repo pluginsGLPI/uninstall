@@ -37,12 +37,12 @@ class PluginUninstallProfile extends CommonDBTM {
 
 
    static function canCreate() {
-      return Session::haveRight('profile', 'w');
+      return Session::haveRight('profile', UPDATE);
    }
 
 
    static function canView() {
-      return Session::haveRight('profile', 'r');
+      return Session::haveRight('profile', READ);
    }
 
 
@@ -61,13 +61,13 @@ class PluginUninstallProfile extends CommonDBTM {
         $target = $options['target'];
       }
 
-      $profile = new Profile();
-
-      if (!Session::haveRight("profile", "r")) {
+      if (!Session::haveRight("profile", READ)) {
          return false;
       }
+      
+      $profile = new Profile();
 
-      if ($ID){
+      if ($ID) {
          $this->getFromDB($ID);
          $profile->getFromDB($ID);
       } else {
@@ -106,7 +106,7 @@ class PluginUninstallProfile extends CommonDBTM {
    static function createFirstAccess($ID) {
 
       $firstProf = new self();
-      if (!$firstProf->GetfromDB($ID)) {
+      if (!$firstProf->getFromDB($ID)) {
          $profile = new Profile();
          $profile->getFromDB($ID);
          $name = addslashes($profile->fields["name"]);

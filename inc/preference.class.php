@@ -125,8 +125,7 @@ class PluginUninstallPreference extends CommonDBTM {
    static function deleteUserPreferenceForModel($models_id, $except_entity=-1) {
       global $DB;
 
-      $query = "DELETE
-              FROM `".getTableForItemType(__CLASS__)."`
+      $query = "DELETE FROM `".getTableForItemType(__CLASS__)."`
               WHERE `templates_id` = '".$models_id."'";
 
       if ($except_entity != -1) {

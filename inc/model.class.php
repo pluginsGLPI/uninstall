@@ -31,6 +31,9 @@
 class PluginUninstallModel extends CommonDBTM {
 
    public $dohistory = true;
+   
+   const TYPE_MODEL_UNINSTALL    = 1;
+   const TYPE_MODEL_REPLACEMENT  = 2;
 
    static function getTypeName($nb=0) {
       return __("Uninstallation template", 'uninstall');
@@ -181,6 +184,7 @@ class PluginUninstallModel extends CommonDBTM {
       $this->showFormHeader($options);
 
       $entities = (isset($_SESSION['glpiparententities'])?$_SESSION['glpiparententities']:0);
+      $entity_sons = empty($entity_sons) ? 0 : 1;
 
       echo "<tr class='tab_bg_1'><td>" . __('Name') . "</td>";
       echo "<td>";
@@ -194,7 +198,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
-      if ($this->fields["types_id"] != 2) {
+      if ($this->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
          echo "<td>" . __("Transfer's model to use", "uninstall") ."</td>";
          echo "<td>";
          if ($ID == -1) {
@@ -227,11 +231,11 @@ class PluginUninstallModel extends CommonDBTM {
          $this->fields['groups_id'] = -1;
       }
 
-      if ($this->fields["types_id"] != 2) {
+      if ($this->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
          echo "<td>" . __('Action on group', 'uninstall') . "</td><td>";
          $uninst = new PluginUninstallUninstall();
          $action = $uninst->dropdownFieldAction("groups_id", $this->fields['entities_id'],
-                                                $entities, $this->fields["groups_id"]);
+                                                $entity_sons, $this->fields["groups_id"]);
          echo "</td>";
       } else {
          echo "<td colspan='2'></td>";
@@ -239,7 +243,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
-      if ($this->fields["types_id"] != 2) {
+      if ($this->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
          echo "<td>" . __('New group', 'uninstall') . "</td><td>";
          echo "<span id='show_groups' name='show_groups'>";
          if ($this->fields['groups_id'] != -1) {
@@ -501,11 +505,10 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $item
    **/
    function showFormAction($item) {
-      global $DB, $CFG_GLPI;
+      global $DB;
 
       $spotted = false;
       $id      = $item->getID();
-      $target  = $item->getFormURL();
 
       if ($id > 0) {
          if ($this->can($id, READ)) {
@@ -524,11 +527,11 @@ class PluginUninstallModel extends CommonDBTM {
          return false;
       }
 
-      $canedit = $this->can($id, 'w');
-      echo "<form action='$target' method='post'>";
+      $canedit = $this->can($id, UPDATE);
+      echo "<form action='".$item->getFormURL()."' method='post'>";
       echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
-      if ($this->fields["types_id"] == 1) {
+      if ($this->fields["types_id"] == self::TYPE_MODEL_UNINSTALL) {
          // if Uninstall is selected
          self::showPartFormUninstall();
       } else {
@@ -559,13 +562,13 @@ class PluginUninstallModel extends CommonDBTM {
          echo "</td></tr>";
       }
 
-      //if ($canedit) {
+      if ($canedit) {
          echo "<tr class='tab_bg_1 center'>";
          echo "<td colspan='4' class='center'>";
          echo "<input type='hidden' name='id' value='" . $this->fields["id"] . "'>";
          echo "<input type='submit' name='update' value=\"" . _sx('button', 'Save') . "\" class='submit'>";
          echo "</td></tr>";
-      //}
+      }
 
       echo "</table>";
 
