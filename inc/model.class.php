@@ -81,17 +81,17 @@ class PluginUninstallModel extends CommonDBTM {
       
       $menu['page']  = '/plugins/uninstall/front/model.php';
    
-      //if (Session::haveRight('config', READ)) {
+      if (Session::haveRight('config', READ)) {
    
          $menu['options']['model']['title'] = self::getTypeName(1);
          $menu['options']['model']['page'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
          $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
       
-         //if (Session::haveRight('config', UPDATE)) {
+         if (Session::haveRight('config', UPDATE)) {
             $menu['options']['model']['links']['add'] = Toolbox::getItemTypeFormUrl('PluginUninstallModel', false);
-         //}
+         }
    
-      //}
+      }
    
       return $menu;
    }
@@ -213,7 +213,7 @@ class PluginUninstallModel extends CommonDBTM {
 
       $this->showFormHeader($options);
 
-      $entities = (isset($_SESSION['glpiparententities'])?$_SESSION['glpiparententities']:0);
+      $entities = (isset($_SESSION['glpiparententities']) ? $_SESSION['glpiparententities'] : 0);
       $entity_sons = empty($entity_sons) ? 0 : 1;
 
       echo "<tr class='tab_bg_1'><td>" . __('Name') . "</td>";
@@ -232,8 +232,8 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<td>" . __("Transfer's model to use", "uninstall") ."</td>";
          echo "<td>";
          if ($ID == -1) {
-            $uninst = new PluginUninstallUninstall();
-            $value = $uninst->getUninstallTransferModelid();
+            $value = PluginUninstallUninstall::getUninstallTransferModelid();
+            echo $value;
          } else {
             $value = $this->fields["transfers_id"];
          }
@@ -518,8 +518,8 @@ class PluginUninstallModel extends CommonDBTM {
                            ? $this->fields["replace_netports"] : 1));
       echo "</td></tr>";
 
-      echo "<tr class='tab_bg_1 center'><";
-      echo "td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Direct connections', 'uninstall'));
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Direct connections', 'uninstall'));
       echo "</td>";
       echo "<td>";
       Dropdown::showYesNo("replace_direct_connections",
@@ -582,7 +582,7 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<td>";
          Dropdown::showYesNo("remove_from_ocs",
                              (isset($this->fields["remove_from_ocs"])
-                              ? $this->fields["remove_from_ocs"] : 0));
+                              ? $this->fields["remove_from_ocs"] : 0), -1, array('width' => '100%'));
          echo "</td>";
          echo "<td>" . __('Delete link with computer in OCSNG', 'uninstall') . "</td>";
          echo "<td>";
@@ -1050,11 +1050,10 @@ class PluginUninstallModel extends CommonDBTM {
       $DB->query("DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`");
 
       //If a transfer model exists for this plugin -> delete it
-      $uninst = new PluginUninstallUninstall();
-      $id     = $uninst->getUninstallTransferModelID(false);
-      if ($id) {
+      $transfer_id     = PluginUninstallUninstall::getUninstallTransferModelID(false);
+      if ($transfer_id) {
          $tr = new Transfer();
-         $tr->delete(array('id' => $id), true);
+         $tr->delete(array('id' => $transfer_id), true);
       }
 
       //Delete history

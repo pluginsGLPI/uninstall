@@ -59,14 +59,14 @@ if (isset($_REQUEST["replace"])) {
    Html::redirect(Toolbox::getItemTypeSearchURL($_REQUEST["device_type"]));
 }
 
+$model = new PluginUninstallModel();
+$model->getConfig($_REQUEST["model_id"]);
+
 //Case of a uninstallation initiated from the object form
 if (isset($_REQUEST["uninstall"])) {
 
-   $model = new PluginUninstallModel();
-   $model->getConfig($_REQUEST["model_id"]);
-
    //Uninstall only if a model is selected
-   if ($model->fields['types_id'] == 1) {
+   if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL) {
       //Massive uninstallation
 
       PluginUninstallUninstall::uninstall($_REQUEST["device_type"], $_REQUEST["model_id"],
@@ -82,10 +82,8 @@ if (isset($_REQUEST["uninstall"])) {
    }
 
 } else {
-   $model = new PluginUninstallModel();
-   $model->getConfig($_REQUEST["model_id"]);
 
-   if ($model->fields['types_id'] == 1) {
+   if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL) {
       //Massive uninstallation
       if (isset($_SESSION['glpi_uninstalllist'])){
          PluginUninstallUninstall::uninstall($_REQUEST["device_type"], $_REQUEST["model_id"],

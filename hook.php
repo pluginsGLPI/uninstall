@@ -36,6 +36,7 @@ function plugin_uninstall_postinit() {
    }
 }
 
+// ** Massive actions **
 
 function plugin_uninstall_MassiveActions($type) {
    global $UNINSTALL_TYPES;
@@ -87,6 +88,7 @@ function plugin_uninstall_MassiveActionsProcess($data) {
    return $res;
 }
 
+// ** Search **
 
 function plugin_uninstall_addDefaultWhere($itemtype) {
 
@@ -99,6 +101,7 @@ function plugin_uninstall_addDefaultWhere($itemtype) {
    }
 }
 
+// ** Install / Uninstall plugin **
 
 function plugin_uninstall_install() {
 

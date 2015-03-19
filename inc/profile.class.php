@@ -35,12 +35,26 @@ class PluginUninstallProfile extends CommonDBTM {
       return __('Rights management', 'uninstall');
    }
 
-
-   static function canCreate() {
-      return Session::haveRight('profile', UPDATE);
+   /**
+    * @see CommonDBTM::can()
+    */
+   function can($ID, $right, array &$input=NULL) {
+      switch ($right) {
+         case UPDATE:
+            return self::canUpdate();
+      }
+      
+      return parent::can($ID, $right);
    }
 
+   static function canCreate() {
+      return Session::haveRight('profile', CREATE);
+   }
 
+   static function canUpdate() {
+      return Session::haveRight('profile', UPDATE);
+   }
+   
    static function canView() {
       return Session::haveRight('profile', READ);
    }
@@ -53,16 +67,17 @@ class PluginUninstallProfile extends CommonDBTM {
    }
 
 
-   function showForm($ID,$options=array()){
+   function showForm($ID, $options=array()) {
       global $DB;
 
-      $target = $this->getFormURL();
+      if (!Session::haveRight("profile", READ)) {
+         //return false;
+      }
+      
       if (isset($options['target'])) {
         $target = $options['target'];
-      }
-
-      if (!Session::haveRight("profile", READ)) {
-         return false;
+      } else {
+         $target = $this->getFormURL();
       }
       
       $profile = new Profile();
@@ -82,12 +97,12 @@ class PluginUninstallProfile extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td>".PluginUninstallUninstall::getTypeName()."</td><td>";
       Profile::dropdownNoneReadWrite("use", $this->fields["use"], 1, 1, 1);
-      echo "</td></tr>\n";
+      echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".PluginUninstallReplace::getTypeName()."</td><td>";
-      Dropdown::showYesNo("replace",$this->fields["replace"]);
-      echo "</td></tr>\n";
+      Dropdown::showYesNo("replace", $this->fields["replace"]);
+      echo "</td></tr>";
 
       echo "<input type='hidden' name='id' value=".$this->fields["id"].">";
 
@@ -109,10 +124,9 @@ class PluginUninstallProfile extends CommonDBTM {
       if (!$firstProf->getFromDB($ID)) {
          $profile = new Profile();
          $profile->getFromDB($ID);
-         $name = addslashes($profile->fields["name"]);
 
          $firstProf->add(array('id'       => $ID,
-                               'profile'  => $name,
+                               'profile'  => addslashes($profile->fields["name"]),
                                'use'      => 'w',
                                'replace'  => 1));
       }
@@ -136,7 +150,6 @@ class PluginUninstallProfile extends CommonDBTM {
          if ($item->getField('interface') == 'central') {
             return PluginUninstallUninstall::getTypeName();
          }
-         return '';
       }
       return '';
    }
@@ -147,7 +160,7 @@ class PluginUninstallProfile extends CommonDBTM {
       if ($item->getType() == 'Profile') {
          $prof = new self();
          $ID = $item->getField('id');
-         if (!$prof->GetfromDB($ID)) {
+         if (!$prof->getFromDB($ID)) {
             $prof->createUserAccess($item);
          }
          $prof->showForm($ID);
@@ -218,4 +231,3 @@ class PluginUninstallProfile extends CommonDBTM {
    }
 
 }
-?>
