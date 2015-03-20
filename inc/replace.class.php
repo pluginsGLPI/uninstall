@@ -133,7 +133,7 @@ class PluginUninstallReplace {
 
             // Attach & Create new document to current item
             $doc   = new Document();
-            $input = array('name'                  => __('Archive of old material', 'uninstall'),
+            $input = array('name'                  => addslashes(__('Archive of old material', 'uninstall')),
                            'upload_file'           => $name_out,
                            'comment'               => addslashes($comment),
                            'add'                   => __('Add'),
