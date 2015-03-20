@@ -18,6 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+msgid "Delete software history (computers)"
+msgstr "Delete software history (computers)"
+
 #: hook.php:44 inc/uninstall.class.php:53 inc/uninstall.class.php:596
 msgid "Uninstall"
 msgstr ""
