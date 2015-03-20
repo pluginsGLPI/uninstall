@@ -701,7 +701,9 @@ class PluginUninstallReplace {
             data: 'searchText=' + searchText + '&newItems_id=$id&table=$table&itemtype=$type&current_item=$id',
             success: function(msg) {
                $('#results_ID'+$rand).after(msg);
-               $('#results_ID$rand + select').select2();
+               $('#results_ID$rand + select').select2({
+                  width: '80%',
+               });
             }
          });
       });
