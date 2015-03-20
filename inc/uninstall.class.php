@@ -666,8 +666,7 @@ class PluginUninstallUninstall {
       global $UNINSTALL_TYPES;
 
       if (in_array($item->getType(), $UNINSTALL_TYPES)) {
-         $uninst = new self();
-         $uninst->showFormUninstallation($item->fields['id'], $item, Session::getLoginUserID());
+         self::showFormUninstallation($item->fields['id'], $item, Session::getLoginUserID());
       }
       return true;
    }

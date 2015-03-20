@@ -128,8 +128,8 @@ class PluginUninstallReplace {
             fwrite ($open_file, $out);
             fclose($open_file);
             // Compute comment text
-            $comment  = __('This document is the archive of this replaced item', 'uninstall');
-            $comment .= " ".self::getCommentsForReplacement($olditem, false, false);
+            $comment  = __('This document is the archive of this replaced item', 'uninstall')." ".
+                        self::getCommentsForReplacement($olditem, false, false);
 
             // Attach & Create new document to current item
             $doc   = new Document();
@@ -360,7 +360,7 @@ class PluginUninstallReplace {
          }
 
          // Location
-         if ($location != 0 && $olditem->isField('locations_id')){
+         if ($location != 0 && $olditem->isField('locations_id')) {
             $olditem->getFromDB($olditem_id);
             switch ($location) {
                case -1:
@@ -526,20 +526,15 @@ class PluginUninstallReplace {
       echo "<td>".self::coloredYN($model->fields["overwrite"])."</td>";
       echo "<td colspan='2'>" . __('Archiving method of the old material', 'uninstall') . "</td>";
       echo "<td>";
-      if ($model->fields["replace_method"] == self::METHOD_PURGE) {
-         // Compute archive method
-         $plug = new Plugin();
-         $archive_method = "";
-         if ($plug->isActivated('PDF')) {
-            $archive_method = " - ".__('PDF Archiving', 'uninstall');
-         } else {
-            $archive_method = " - ".__('CSV Archiving', 'uninstall');
-         }
-
-         echo "<span class='red b'>".__('Purge', 'uninstall') .$archive_method ."</span>";
-
-      } else if ($model->fields["replace_method"] == self::METHOD_DELETE_AND_COMMENT) {
-         echo "<span class='green b'>".__('Delete + Comment', 'uninstall')."</span>";
+      $methods = PluginUninstallModel::getReplacementMethods();
+      $methods[self::METHOD_PURGE];
+      switch ($model->fields["replace_method"]) {
+         case self::METHOD_PURGE :
+            echo "<span class='red b'>". $methods[self::METHOD_PURGE] ."</span>";
+            break;
+         case self::METHOD_DELETE_AND_COMMENT :
+            echo "<span class='green b'>". $methods[self::METHOD_DELETE_AND_COMMENT] ."</span>";
+            break;
       }
       echo "</td></tr>";
 
@@ -564,13 +559,15 @@ class PluginUninstallReplace {
       }
 
       echo "<td>" . __('New status of the computer', 'uninstall') . "</td>";
+      echo "<td>";
       if ($model->fields['states_id'] == 0) {
-         echo "<td><span class='red b'>".__('Status') . "</span></td>";
+         echo "<span class='red b'>".__('Status')."</span>";
       } else {
-         echo "<td><span class='green b'>";
+         echo "<span class='green b'>";
          echo Dropdown::getDropdownName('glpi_states', $model->fields['states_id']);
-         echo "</span></td>";
+         echo "</span>";
       }
+      echo "</td>";
       echo "<td></td></tr>";
 
       echo "</table>";
@@ -646,8 +643,8 @@ class PluginUninstallReplace {
       echo "<th>" . __('New item', 'uninstall') . "</th>";
       echo "</tr>";
 
+      $commonitem = new $type();
       foreach($tab_ids[$type] as $id => $value) {
-         $commonitem = new $type();
          $commonitem->getFromDB($id);
 
          echo "<tr class='tab_bg_1 center'>";
@@ -702,7 +699,7 @@ class PluginUninstallReplace {
             type: 'POST',
             url: '../ajax/dropdownReplaceFindDevice.php',
             data: 'searchText=' + searchText + '&newItems_id=$id&table=$table&itemtype=$type&current_item=$id',
-            success: function(msg){
+            success: function(msg) {
                $('#results_ID'+$rand).after(msg);
                $('#results_ID$rand + select').select2();
             }
@@ -792,13 +789,13 @@ class PluginUninstallReplace {
    static function getAssociatedContracts(CommonDBTM $item) {
       global $DB;
 
+      if (!Session::haveRight("contract", READ) || !$item->can($ID, READ)) {
+         return false;
+      }
+      
       $itemtype  = $item->getType();
       $ID        = $item->fields['id'];
       $contracts = array();
-
-      if (!Session::haveRight("contract","r") || !$item->can($ID, "r")) {
-         return false;
-      }
 
       $query = "SELECT `glpi_contracts_items`.*
                 FROM `glpi_contracts_items`,
@@ -842,7 +839,7 @@ class PluginUninstallReplace {
                    AND `itemtype` = '".$itemtype."') ".
                    getEntitiesRestrictRequest("AND", "glpi_tickets");
       foreach ($DB->request('glpi_tickets', $query) as $data) {
-            $tickets[] = $data;
+         $tickets[] = $data;
       }
       return $tickets;
 
@@ -862,7 +859,7 @@ class PluginUninstallReplace {
          return false;
       }
 
-      if (!Session::haveRight('networking','r') || !$item->can($ID, 'r')) {
+      if (!Session::haveRight('networking', READ) || !$item->can($ID, READ)) {
          return false;
       }
 

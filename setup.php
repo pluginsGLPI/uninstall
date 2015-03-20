@@ -56,10 +56,10 @@ function plugin_init_uninstall() {
             // Add link in GLPI plugins list :
             $PLUGIN_HOOKS['config_page']['uninstall'] = "front/model.php";
             
-            //if (Session::haveRight('config', READ)) {
+            if (Session::haveRight('config', READ)) {
                // add to 'Admin' menu :
                $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = array('admin' => 'PluginUninstallModel');
-            //}
+            }
             
             //Item actions
             $PLUGIN_HOOKS['item_update']['uninstall']

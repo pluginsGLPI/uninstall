@@ -56,7 +56,7 @@ class PluginUninstallModel extends CommonDBTM {
    
    static function canCreate() {
       return true;
-      //return plugin_uninstall_haveRight('use', 'w');
+      //return plugin_uninstall_haveRight('use', 'w'); //TODO
    }
 
 
@@ -291,7 +291,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "</tr>";
 
       if (!Session::isMultiEntitiesMode()
-          && Session::haveRight("transfer", "r")) {
+          && Session::haveRight("transfer", READ)) {
          echo "<tr class='tab_bg_1'>";
          echo "<td colspan='2'>";
          echo "<a href='" . $CFG_GLPI["root_doc"] .
