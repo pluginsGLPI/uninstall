@@ -131,7 +131,7 @@ class PluginUninstallReplace {
             $comment  = __('This document is the archive of this replaced item', 'uninstall')." ".
                         self::getCommentsForReplacement($olditem, false, false);
 
-            // Attach & Create new document to current item
+            // Create & Attach new document to current item
             $doc   = new Document();
             $input = array('name'                  => addslashes(__('Archive of old material', 'uninstall')),
                            'upload_file'           => $name_out,
@@ -148,10 +148,13 @@ class PluginUninstallReplace {
             $document_added = $doc->add($input);
 
             //Attach the document to the new item, once the document's name is correct
-            //TODO : FAIL
-            $doc->update(array('id'       => $document_added,
-                               'items_id' => $newitem_id),
-                         false);
+            
+            $docItem = new Document_Item();
+            $docItemId = $docItem->add(array(
+                  'documents_id' => $document_added,
+                  'itemtype'     => $type,
+                  'items_id'     => (int) $newitem_id,
+            ));
          }
 
          // General Informations - NAME
