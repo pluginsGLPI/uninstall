@@ -148,6 +148,7 @@ class PluginUninstallReplace {
             $document_added = $doc->add($input);
 
             //Attach the document to the new item, once the document's name is correct
+            //TODO : FAIL
             $doc->update(array('id'       => $document_added,
                                'items_id' => $newitem_id),
                          false);
@@ -314,7 +315,7 @@ class PluginUninstallReplace {
              && in_array($type, $CFG_GLPI["ticket_types"])) {
 
             $ticket_item = new Ticket();
-            foreach(self::getAssociatedTickets($type,$olditem_id) as $ticket) {
+            foreach (self::getAssociatedTickets($type, $olditem_id) as $ticket) {
                $ticket_item->update(array('id'       => $ticket['id'],
                                           'itemtype' => $type,
                                           'items_id' => $newitem_id),
@@ -791,21 +792,19 @@ class PluginUninstallReplace {
    static function getAssociatedContracts(CommonDBTM $item) {
       global $DB;
 
-      if (!Session::haveRight("contract", READ) || !$item->can($ID, READ)) {
-         return false;
-      }
-      
-      $itemtype  = $item->getType();
-      $ID        = $item->fields['id'];
       $contracts = array();
+      
+      if (!Session::haveRight("contract", READ) || !$item->can($item->fields['id'], READ)) {
+         return array();
+      }
 
       $query = "SELECT `glpi_contracts_items`.*
                 FROM `glpi_contracts_items`,
                      `glpi_contracts`
                 LEFT JOIN `glpi_entities` ON (`glpi_contracts`.`entities_id`=`glpi_entities`.`id`)
                 WHERE `glpi_contracts`.`id`=`glpi_contracts_items`.`contracts_id`
-                      AND `glpi_contracts_items`.`items_id` = '".$ID."'
-                      AND `glpi_contracts_items`.`itemtype` = '".$itemtype."'".
+                      AND `glpi_contracts_items`.`items_id` = '".$item->fields['id']."'
+                      AND `glpi_contracts_items`.`itemtype` = '".$item->getType()."'".
                       getEntitiesRestrictRequest(" AND","glpi_contracts",'','',true)."
                ORDER BY `glpi_contracts`.`name`";
       foreach ($DB->request($query) as $data) {
@@ -827,13 +826,13 @@ class PluginUninstallReplace {
    static function getAssociatedTickets($itemtype, $items_id) {
       global $DB;
 
-      if (!Session::haveRight("show_all_ticket", "1")
+      if (!Session::haveRight("ticket", Ticket::READALL)
           || !($item = getItemForItemtype($itemtype))) {
-         return false;
+         return array();
       }
 
       if (!$item->getFromDB($items_id)) {
-         return false;
+         return array();
       }
 
       $tickets = array();
