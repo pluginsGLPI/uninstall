@@ -738,12 +738,11 @@ class PluginUninstallReplace {
    static function getAssociatedDocuments(CommonDBTM $item, $withtemplate='') {
       global $DB, $CFG_GLPI;
 
-      $ID = $item->getField('id');
       if (!(($item instanceof KnowbaseItem)
             && $CFG_GLPI["use_public_faq"]
             && !$item->getEntityID())) {
 
-         if ($item->isNewID($ID)) {
+         if ($item->isNewID($item->getField('id'))) {
             return false;
          }
 
@@ -764,7 +763,7 @@ class PluginUninstallReplace {
                 LEFT JOIN `glpi_documents`
                           ON (`glpi_documents_items`.`documents_id`=`glpi_documents`.`id`)
                 LEFT JOIN `glpi_entities` ON (`glpi_documents`.`entities_id`=`glpi_entities`.`id`)
-                WHERE `glpi_documents_items`.`items_id` = '".$ID."'
+                WHERE `glpi_documents_items`.`items_id` = '".$item->getField('id')."'
                       AND `glpi_documents_items`.`itemtype` = '".$item->getType()."' ";
 
       if (Session::getLoginUserID()) {

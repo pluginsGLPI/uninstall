@@ -40,14 +40,19 @@ function plugin_uninstall_postinit() {
 
 function plugin_uninstall_MassiveActions($type) {
    global $UNINSTALL_TYPES;
+   
+   // Like GLPI 0.84, this plugin don't support massive actions in Global item page.
+   if (isset($_REQUEST['container']) && $_REQUEST['container'] == 'massformAllAssets') {
+      return array();
+   }
 
    if (in_array($type, $UNINSTALL_TYPES)) {
-      return array ("plugin_uninstall" => __("Uninstall", 'uninstall'));
+      return array("PluginUninstallUninstall:uninstall" => __("Uninstall", 'uninstall'));
    }
-   return array ();
+   return array();
 }
 
-
+// old 0.84 code
 function plugin_uninstall_MassiveActionsDisplay($options=array()) {
    global $UNINSTALL_TYPES;
 
@@ -62,7 +67,7 @@ function plugin_uninstall_MassiveActionsDisplay($options=array()) {
 
 }
 
-
+// old 0.84 code
 function plugin_uninstall_MassiveActionsProcess($data) {
    global $CFG_GLPI;
 
@@ -71,7 +76,7 @@ function plugin_uninstall_MassiveActionsProcess($data) {
                 'noright' => 0);
 
    switch ($data["action"]) {
-      case "plugin_uninstall" :
+      case "PluginUninstallUninstall:uninstall" :
          foreach ($data["item"] as $key => $val) {
             if ($val == 1) {
                $_SESSION['glpi_uninstalllist'][$data['itemtype']][$key] = $key;

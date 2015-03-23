@@ -36,7 +36,83 @@ class PluginUninstallUninstall {
       return __("Item's uninstallation", 'uninstall');
    }
 
-
+   /**
+    * @since version 0.85
+    *
+    * @see CommonDBTM::getSpecificMassiveActions()
+    **/
+   /*
+   function getSpecificMassiveActions($checkitem=NULL) {
+   
+      $actions = parent::getSpecificMassiveActions($checkitem);
+   
+      return $actions;
+   }
+   */
+   
+   /*
+   function getForbiddenStandardMassiveAction() {
+   
+      $forbidden   = parent::getForbiddenStandardMassiveAction();
+      $forbidden[] = 'update'; //"uninstall"
+      return $forbidden;
+   }
+   */
+   /**
+    * @since version 0.85
+    *
+    * @see CommonDBTM::showMassiveActionsSubForm()
+    **/
+   static function showMassiveActionsSubForm(MassiveAction $ma) {
+      global $UNINSTALL_TYPES;
+      
+      foreach ($ma->getItems() as $itemtype => $data) {
+         if (!in_array($itemtype, $UNINSTALL_TYPES)) {
+            return "";
+         }
+      }
+      
+      switch ($ma->getAction()) {
+         case 'uninstall':
+            $uninst = new PluginUninstallUninstall();
+            $uninst->dropdownUninstallModels("model_id", $_SESSION["glpiID"],
+                  $_SESSION["glpiactive_entity"]);
+            echo "&nbsp;".
+                  Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
+                  return true;
+      }
+      return "";
+   }
+   
+   
+   /**
+    * @since version 0.85
+    *
+    * @see CommonDBTM::processMassiveActionsForOneItemtype()
+    **/
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids) {
+      global $CFG_GLPI;
+      
+      switch ($ma->getAction()) {
+         case "uninstall":
+            
+            $itemtype = $ma->getItemtype(false);
+            
+            foreach ($ids as $id) {
+               if ($item->getFromDB($id)) {
+                  //Session::addMessageAfterRedirect(sprintf(__('Form duplicated: %s', 'formcreator'), $item->getName()));
+                  $_SESSION['glpi_uninstalllist'][$itemtype][$id] = $id;
+                  $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
+               }
+            }
+            Html::redirect($CFG_GLPI["root_doc"] . '/plugins/uninstall/front/action.php?device_type=' .
+                  $itemtype . "&model_id=" . $_POST["model_id"]);
+            return;
+            break;
+      }
+      return;
+   }
+   
    static function uninstall($type, $model_id, $tab_ids, $location) {
       global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
       //Get the model
