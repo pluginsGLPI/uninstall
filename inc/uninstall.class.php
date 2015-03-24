@@ -41,14 +41,12 @@ class PluginUninstallUninstall {
     *
     * @see CommonDBTM::getSpecificMassiveActions()
     **/
-   /*
    function getSpecificMassiveActions($checkitem=NULL) {
    
       $actions = parent::getSpecificMassiveActions($checkitem);
    
       return $actions;
    }
-   */
    
    /*
    function getForbiddenStandardMassiveAction() {
