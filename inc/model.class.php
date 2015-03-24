@@ -1113,6 +1113,24 @@ class PluginUninstallModel extends CommonDBTM {
       }
    }
 
+   /**
+    * @since version 0.85
+    *
+    * @see CommonDBTM::showMassiveActionsSubForm()
+    **/
+   static function showMassiveActionsSubForm(MassiveAction $ma) {
+      global $UNINSTALL_TYPES;
+   
+      switch ($ma->getAction()) {
+         case 'transfert':
+            Entity::dropdown();
+            echo "&nbsp;".
+                  Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
+            return true;
+      }
+      return "";
+   }
+   
    function getSpecificMassiveActions($checkitem=NULL) {
 
       $isadmin = static::canUpdate();
@@ -1121,55 +1139,40 @@ class PluginUninstallModel extends CommonDBTM {
       if ($isadmin) {
          if (Session::haveRight('transfer', READ)
              && Session::isMultiEntitiesMode()) {
-            $actions['Transfert'] = __('Transfer');
+            $actions['PluginUninstallModel:transfert'] = __('Transfer');
          }
       }
 
       return $actions;
    }
 
-
-   function showSpecificMassiveActionsParameters($input=array()) {
-
-      switch ($input['action']) {
-         case "Transfert" :
-            Entity::dropdown();
-            echo "&nbsp;<input type='submit' name='massiveaction' class='submit' value='" .
-                         _sx('button','Post'). "'>";
-            return true;
-
-         default :
-            return parent::showSpecificMassiveActionsParameters($input);
-      }
-      return false;
-   }
-
-
-   function doSpecificMassiveActions($input=array()) {
-
-      $res = array('ok'     => 0,
-                  'ko'      => 0,
-                  'noright' => 0);
-
-      switch ($input['action']) {
-         case "Transfert" :
-            foreach ($input["item"] as $key => $val) {
-               if ($val == 1) {
-                  $values["id"]          = $key;
-                  $values["entities_id"] = $input['entities_id'];
-                  if ($this->update($values)) {
-                     $res['ok']++;
-                  } else {
-                     $res['ko']++;
-                  }
+   /**
+    * @since version 0.85
+    *
+    * @see CommonDBTM::processMassiveActionsForOneItemtype()
+    **/
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids) {
+      global $CFG_GLPI;
+   
+      switch ($ma->getAction()) {
+         case "transfert":
+            $input = $ma->getInput();
+            $entities_id = $input['entities_id'];
+   
+            foreach ($ids as $id) {
+               if ($item->getFromDB($id)) {
+                  $item->update(array(
+                        "id" => $id,
+                        "entities_id" => $entities_id,
+                        "update" => __('Update'),
+                  ));
+                  $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
                }
             }
-            break;
-
-         default :
-            return parent::doSpecificMassiveActions($input);
+            return;
+               break;
       }
-      return $res;
+      return;
    }
 
 }

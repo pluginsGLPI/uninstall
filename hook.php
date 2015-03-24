@@ -52,47 +52,6 @@ function plugin_uninstall_MassiveActions($type) {
    return array();
 }
 
-// old 0.84 code
-function plugin_uninstall_MassiveActionsDisplay($options=array()) {
-   global $UNINSTALL_TYPES;
-
-   if (in_array($options['itemtype'], $UNINSTALL_TYPES)) {
-      $uninst = new PluginUninstallUninstall();
-      $uninst->dropdownUninstallModels("model_id", $_SESSION["glpiID"],
-                                       $_SESSION["glpiactive_entity"]);
-      echo "&nbsp;<input type='submit' name='massiveaction' class='submit' value=\"" .
-                   _sx('button','Post'). "\" >";
-   }
-   return "";
-
-}
-
-// old 0.84 code
-function plugin_uninstall_MassiveActionsProcess($data) {
-   global $CFG_GLPI;
-
-   $res = array('ok'      => 0,
-                'ko'      => 0,
-                'noright' => 0);
-
-   switch ($data["action"]) {
-      case "PluginUninstallUninstall:uninstall" :
-         foreach ($data["item"] as $key => $val) {
-            if ($val == 1) {
-               $_SESSION['glpi_uninstalllist'][$data['itemtype']][$key] = $key;
-            }
-         }
-         // TODO review this to avoid action launch by GET
-         $res['ok']++;
-         $REDIRECT = $CFG_GLPI["root_doc"] . '/plugins/uninstall/front/action.php?device_type=' .
-                     $data["itemtype"] . "&model_id=" . $data["model_id"];
-         break;
-   }
-
-   Html::redirect($REDIRECT);
-   return $res;
-}
-
 // ** Search **
 
 function plugin_uninstall_addDefaultWhere($itemtype) {
