@@ -48,6 +48,7 @@ class PluginUninstallProfile extends Profile {
       if ($canedit = Session::haveRightsOr(self::$rightname, array(CREATE, UPDATE, PURGE))) {
          $options['colspan'] = 1;
          $options['target'] = $profile->getFormURL();
+         $this->fields["id"] = $ID;
          $this->showFormHeader($options);
       }
       
@@ -59,15 +60,29 @@ class PluginUninstallProfile extends Profile {
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".PluginUninstallUninstall::getTypeName()."</td><td>";
-      Profile::dropdownNoneReadWrite("_plugin_uninstall_use", $effective_rights['plugin_uninstall_use'], 1, 1, 1);
+      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[0_0]',
+         'checked' => ($effective_rights['plugin_uninstall_use'] == '0'),
+         'id' => 'checkbox_noaccess',
+      ));
+      echo " <label for='checkbox_noaccess'>".__('No access')."</label><br>";
+      
+      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[1_0]',
+         'checked' => ($effective_rights['plugin_uninstall_use'] == READ),
+         'id' => 'checkbox_read'
+      ));
+      echo " <label for='checkbox_read'>".__('Read')."</label><br>";
+      
+      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[2_0]',
+         'checked' => ($effective_rights['plugin_uninstall_use'] == UPDATE),
+         'id' => 'checkbox_write'
+      ));
+      echo " <label for='checkbox_write'>".__('Write')."</label><br>";
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".PluginUninstallReplace::getTypeName()."</td><td>";
       Dropdown::showYesNo("_plugin_uninstall_replace", $effective_rights['plugin_uninstall_replace']);
       echo "</td></tr>";
-
-      echo Html::hidden('id', array('value' => $ID));
 
       if ($canedit) {
          $options['candel'] = false;
@@ -246,10 +261,9 @@ class PluginUninstallProfile extends Profile {
             $migration->addField($table, 'replace', "bool");
             $migration->migrationOneTable($table);
             // UPDATE replace access for current user
-            $prof             = new self();
-            $input['id']      = $_SESSION['glpiactiveprofile']['id'];
-            $input['replace'] = 1;
-            $prof->update($input);
+            $query = "UPDATE `glpi_plugin_uninstall_profiles` SET `replace` = 1 
+             WHERE `id` = ".$_SESSION['glpiactiveprofile']['id'];
+            $DB->query($query);
          }
 
       // plugin never installed
