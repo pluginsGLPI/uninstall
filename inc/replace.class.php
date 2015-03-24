@@ -32,6 +32,8 @@ class PluginUninstallReplace {
 
    const METHOD_PURGE = 1;
    const METHOD_DELETE_AND_COMMENT = 2;
+   
+   static $rightname = "plugin_uninstall";
 
    static function getTypeName($nb=0) {
       return __("Item's replacement", 'uninstall');
@@ -456,11 +458,12 @@ class PluginUninstallReplace {
    **/
    static function getCommentsForReplacement(CommonDBTM $item, $new=true, $display_message=true) {
 
-      $string = "";
-
       if (!empty($item->fields['comment'])) {
          $string = stripslashes($item->fields['comment']);
+      } else {
+         $string = "";
       }
+      
       if ($display_message) {
          if ($new) {
             $string.= "\n" . __('This item is a replacement for item', 'uninstall')." ";
@@ -531,7 +534,6 @@ class PluginUninstallReplace {
       echo "<td colspan='2'>" . __('Archiving method of the old material', 'uninstall') . "</td>";
       echo "<td>";
       $methods = PluginUninstallModel::getReplacementMethods();
-      $methods[self::METHOD_PURGE];
       switch ($model->fields["replace_method"]) {
          case self::METHOD_PURGE :
             echo "<span class='red b'>". $methods[self::METHOD_PURGE] ."</span>";
@@ -625,9 +627,8 @@ class PluginUninstallReplace {
       echo "</tr></table></div>";
 
       // Show form for selecting new items
-      $target = "../front/action.php";
-
-      echo "<form action='$target' method='post'>";
+      
+      echo "<form action='../front/action.php' method='post'>";
       echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
       echo "<tr class='tab_bg_1 center'>";
@@ -749,10 +750,14 @@ class PluginUninstallReplace {
             return false;
          }
 
-         if ($item->getType() != 'Ticket'
-             && $item->getType() != 'KnowbaseItem'
-             && !Session::haveRight('document', READ)) {
-            return false;
+         switch ($item->getType()) {
+            case 'Ticket':
+            case 'KnowbaseItem' :
+               break;
+            default :
+               if (Session::haveRight('document', READ)) {
+                  return false;
+               }
          }
 
          if (!$item->can($item->fields['id'], READ)) {

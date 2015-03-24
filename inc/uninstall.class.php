@@ -31,6 +31,8 @@
 class PluginUninstallUninstall {
 
    const PLUGIN_UNINSTALL_TRANSFER_NAME = "plugin_uninstall";
+   
+   static $rightname = "plugin_uninstall";
 
    static function getTypeName($nb=0) {
       return __("Item's uninstallation", 'uninstall');
@@ -521,7 +523,8 @@ class PluginUninstallUninstall {
 
    /**
     * @param $create (true by default)
-   **/
+    * @return int
+    */
    static function getUninstallTransferModelID($create = true) {
       global $DB;
 
@@ -559,11 +562,11 @@ class PluginUninstallUninstall {
    static function getInfocomPresentForDevice($type, $ID) {
       global $DB;
 
-      $sql = "SELECT `id`
+      $query = "SELECT `id`
               FROM `glpi_infocoms`
               WHERE `itemtype` = '".$type."'
                     AND `items_id` = '" . $ID . "'";
-      $result = $DB->query($sql);
+      $result = $DB->query($query);
 
       if ($DB->numrows($result) > 0) {
          return $DB->result($result, 0, "id");

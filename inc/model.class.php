@@ -32,6 +32,8 @@ class PluginUninstallModel extends CommonDBTM {
 
    public $dohistory = true;
    
+   static $rightname = "plugin_uninstall";
+   
    public $first_level_menu  = "plugins";
    public $second_level_menu = "uninstall";
    
@@ -55,20 +57,17 @@ class PluginUninstallModel extends CommonDBTM {
    }
    
    static function canCreate() {
-      return true;
-      //return plugin_uninstall_haveRight('use', 'w'); //TODO
+      return Session::haveRight("plugin_uninstall_use", UPDATE);
    }
 
 
    static function canView() {
-      return true;
-      //return plugin_uninstall_haveRight('use', 'r');
+      return Session::haveRight("plugin_uninstall_use", READ);
    }
 
 
    static function canReplace() {
-      return true;
-      //return plugin_uninstall_haveRight('replace', '1');
+      return Session::haveRight("plugin_uninstall_replace", "1");
    }
    
    static function getMenuContent() {

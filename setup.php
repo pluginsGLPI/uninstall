@@ -40,7 +40,7 @@ function plugin_init_uninstall() {
 
    Plugin::registerClass('PluginUninstallProfile', array('addtabon' => array('Profile')));
 
-   $PLUGIN_HOOKS['change_profile']['uninstall'] = array('PluginUninstallProfile', 'changeProfile');
+   $PLUGIN_HOOKS['change_profile']['uninstall'] = array('PluginUninstallProfile', 'initProfile');
 
    $plugin = new Plugin();
    if ($plugin->isActivated('uninstall')) {
@@ -50,7 +50,7 @@ function plugin_init_uninstall() {
 
 
       if (Session::getLoginUserID()) {
-         if (true || plugin_uninstall_haveRight("use", READ)) { //DEBUG
+         if (Session::haveRight("plugin_uninstall_use", READ)) {
             $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
             
             // Add link in GLPI plugins list :
@@ -99,18 +99,4 @@ function plugin_uninstall_check_prerequisites() {
 
 function plugin_uninstall_check_config($verbose=false) {
    return true;
-}
-
-function plugin_uninstall_haveRight($module, $right) {
-   $matches = array (""  => array ("","r","w"),
-                     "r" => array ("r","w"),
-                     "w" => array ("w"),
-                     "1" => array ("1"),
-                     "0" => array ("0","1"));
-
-   if (isset ($_SESSION["glpi_plugin_uninstall_profile"][$module])
-      && in_array($_SESSION["glpi_plugin_uninstall_profile"][$module], $matches[$right])) {
-      return true;
-   }
-   return false;
 }

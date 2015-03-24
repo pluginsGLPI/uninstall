@@ -28,118 +28,141 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-class PluginUninstallProfile extends CommonDBTM {
+class PluginUninstallProfile extends Profile {
 
-
-   static function getTypeName($nb=0) {
-      return __('Rights management', 'uninstall');
-   }
-
-   /**
-    * @see CommonDBTM::can()
-    */
-   function can($ID, $right, array &$input=NULL) {
-      switch ($right) {
-         case UPDATE:
-            return self::canUpdate();
-      }
-      
-      return parent::can($ID, $right);
-   }
-
-   static function canCreate() {
-      return Session::haveRight('profile', CREATE);
-   }
-
-   static function canUpdate() {
-      return Session::haveRight('profile', UPDATE);
-   }
-   
-   static function canView() {
-      return Session::haveRight('profile', READ);
-   }
-
-
-   static function cleanProfiles(Profile $prof) {
-
-      $profile = new self();
-      $profile->deleteByCriteria(array('id' => $prof->getField("id")));
-   }
+   static $rightname = "profile";
 
 
    function showForm($ID, $options=array()) {
       global $DB;
-
-      if (!Session::haveRight("profile", READ)) {
-         //return false;
-      }
-      
-      if (isset($options['target'])) {
-        $target = $options['target'];
-      } else {
-         $target = $this->getFormURL();
-      }
       
       $profile = new Profile();
-
+      
       if ($ID) {
          $this->getFromDB($ID);
          $profile->getFromDB($ID);
       } else {
          $this->getEmpty();
       }
-      $options['colspan'] = 1;
-      $this->showFormHeader($options);
+      
+      if ($canedit = Session::haveRightsOr(self::$rightname, array(CREATE, UPDATE, PURGE))) {
+         $options['colspan'] = 1;
+         $options['target'] = $profile->getFormURL();
+         $this->showFormHeader($options);
+      }
+      
+      $effective_rights = ProfileRight::getProfileRights($ID, array('plugin_uninstall_use', 
+         'plugin_uninstall_replace'));
 
       echo "<tr><th colspan='2' class='center b'>".sprintf(__('%1$s - %2$s'), self::getTypeName(),
          $profile->fields["name"])."</th></tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".PluginUninstallUninstall::getTypeName()."</td><td>";
-      Profile::dropdownNoneReadWrite("use", $this->fields["use"], 1, 1, 1);
+      Profile::dropdownNoneReadWrite("_plugin_uninstall_use", $effective_rights['plugin_uninstall_use'], 1, 1, 1);
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".PluginUninstallReplace::getTypeName()."</td><td>";
-      Dropdown::showYesNo("replace", $this->fields["replace"]);
+      Dropdown::showYesNo("_plugin_uninstall_replace", $effective_rights['plugin_uninstall_replace']);
       echo "</td></tr>";
 
-      echo "<input type='hidden' name='id' value=".$this->fields["id"].">";
+      echo Html::hidden('id', array('value' => $ID));
 
-      $options['candel'] = false;
-      $this->showFormButtons($options);
-   }
-
-
-   function createUserAccess($profile) {
-
-      return $this->add(array('id'      => $profile->getField('id'),
-                              'profile' => addslashes($profile->getField('name'))));
-   }
-
-
-   static function createFirstAccess($ID) {
-
-      $firstProf = new self();
-      if (!$firstProf->getFromDB($ID)) {
-         $profile = new Profile();
-         $profile->getFromDB($ID);
-
-         $firstProf->add(array('id'       => $ID,
-                               'profile'  => addslashes($profile->fields["name"]),
-                               'use'      => 'w',
-                               'replace'  => 1));
+      if ($canedit) {
+         $options['candel'] = false;
+         $this->showFormButtons($options);
       }
    }
 
+   static function createFirstAccess($ID) {
+      self::addDefaultProfileInfos($ID,
+            array('plugin_uninstall_use'     => UPDATE,
+                  'plugin_uninstall_replace' => 1), true);
+   }
 
-   static function changeProfile() {
+   /**
+    * Init profiles
+    *
+    **/
+   
+   static function translateARight($old_right) {
+      switch ($old_right) {
+         case '':
+            return 0;
+         case 'r' :
+            return READ;
+         case 'w':
+            return UPDATE;
+         case '0':
+         case '1':
+            return $old_right;
+   
+         default :
+            return 0;
+      }
+   }
 
-      $prof = new self();
-      if ($prof->getFromDB($_SESSION['glpiactiveprofile']['id'])) {
-         $_SESSION["glpi_plugin_uninstall_profile"] = $prof->fields;
-      } else {
-         unset ($_SESSION["glpi_plugin_uninstall_profile"]);
+   /**
+    * @since 0.85
+    * Migration rights from old system to the new one for one profile
+    * @param $profiles_id the profile ID
+    */
+   static function migrateOneProfile($profiles_id) {
+      global $DB;
+      //Cannot launch migration if there's nothing to migrate...
+      if (!TableExists('glpi_plugin_uninstall_profiles')) {
+         return true;
+      }
+   
+      foreach ($DB->request('glpi_plugin_uninstall_profiles',
+                           "`profiles_id`='$profiles_id'") as $profile_data) {
+   
+         $matching = array('use'       => 'plugin_uninstall_use',
+                           'replace'   => 'plugin_uninstall_replace');
+         $current_rights = ProfileRight::getProfileRights($profiles_id, array_values($matching));
+         foreach ($matching as $old => $new) {
+            if (!isset($current_rights[$old])) {
+               $query = "UPDATE `glpi_profilerights`
+                  SET `rights`='".self::translateARight($profile_data[$old])."'
+                  WHERE `name`='$new' AND `profiles_id`='$profiles_id'";
+                  $DB->query($query);
+            }
+         }
+      }
+   }
+   
+   /**
+    * Initialize profiles, and migrate it necessary
+    */
+   static function initProfile() {
+      global $DB;
+      $profile = new self();
+      
+      //Add new rights in glpi_profilerights table
+      foreach (array('plugin_uninstall_use', 'plugin_uninstall_replace') as $field) {
+         if (countElementsInTable("glpi_profilerights", "`name` = '".$field."'") == 0) {
+            ProfileRight::addProfileRights(array($field));
+         }
+      }
+   
+      //Migration old rights in new ones
+      foreach ($DB->request("SELECT `id` FROM `glpi_profiles`") as $prof) {
+         self::migrateOneProfile($prof['id']);
+      }
+      foreach ($DB->request("SELECT *
+                           FROM `glpi_profilerights`
+                           WHERE `profiles_id`='".$_SESSION['glpiactiveprofile']['id']."'
+                              AND `name` LIKE '%plugin_uninstall%'") as $prof) {
+                                 $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
+      }
+   }
+   
+   static function removeRightsFromSession() {
+      foreach (array('plugin_uninstall_use', 'plugin_uninstall_replace') as $field) {
+         if (isset($_SESSION['glpiactiveprofile'][$field])) {
+            unset($_SESSION['glpiactiveprofile'][$field]);
+         }
       }
    }
 
@@ -154,15 +177,37 @@ class PluginUninstallProfile extends CommonDBTM {
       return '';
    }
 
+   static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false) {
+      global $DB;
+   
+      $profileRight = new ProfileRight();
+      foreach ($rights as $right => $value) {
+         if (countElementsInTable('glpi_profilerights',
+               "`profiles_id`='$profiles_id' AND `name`='$right'") && $drop_existing) {
+               $profileRight->deleteByCriteria(array('profiles_id' => $profiles_id, 'name' => $right));
+         }
+         if (!countElementsInTable('glpi_profilerights',
+               "`profiles_id`='$profiles_id' AND `name`='$right'")) {
+               $myright['profiles_id'] = $profiles_id;
+               $myright['name']        = $right;
+               $myright['rights']      = $value;
+               $profileRight->add($myright);
+   
+               //Add right to the current session
+               $_SESSION['glpiactiveprofile'][$right] = $value;
+         }
+      }
+   }
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
 
       if ($item->getType() == 'Profile') {
+         $ID = $item->getID();
          $prof = new self();
-         $ID = $item->getField('id');
-         if (!$prof->getFromDB($ID)) {
-            $prof->createUserAccess($item);
-         }
+         
+         self::addDefaultProfileInfos($ID,
+               array('plugin_uninstall_use'     => 0,
+                     'plugin_uninstall_replace' => 0));
          $prof->showForm($ID);
       }
       return true;
@@ -217,7 +262,6 @@ class PluginUninstallProfile extends CommonDBTM {
                     PRIMARY KEY (`id`)
                   ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->queryOrDie($query, $DB->error());
-
          self::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
       }
       return true;
