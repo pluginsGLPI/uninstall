@@ -41,12 +41,15 @@ class PluginUninstallUninstall {
     *
     * @see CommonDBTM::getSpecificMassiveActions()
     **/
+   //Note : this function can be activate
+   /*
    function getSpecificMassiveActions($checkitem=NULL) {
    
       $actions = parent::getSpecificMassiveActions($checkitem);
    
       return $actions;
    }
+   */
    
    /*
    function getForbiddenStandardMassiveAction() {
@@ -294,9 +297,11 @@ class PluginUninstallUninstall {
                }
 
                //Delete registrykeys
+               /*
                if ($model->fields["raz_ocs_registrykeys"]) {
                   self::deleteRegistryKeys($id);
                }
+               */
             }
             //Should never happend that transfer_id = 0, but just in case
             if ($model->fields["transfers_id"] > 0) {
