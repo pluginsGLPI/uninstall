@@ -233,7 +233,6 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<td>";
          if ($ID == -1) {
             $value = PluginUninstallUninstall::getUninstallTransferModelid();
-            echo $value;
          } else {
             $value = $this->fields["transfers_id"];
          }
