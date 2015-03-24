@@ -883,12 +883,12 @@ class PluginUninstallReplace {
     * @return Nothing (call to classes members)
    **/
    static function getAssociatedItems(Computer $comp) {
-      global $DB;
+      global $DB, $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
       $ID = $comp->fields['id'];
 
       $data  = array();
-      foreach (array('Monitor', 'Peripheral', 'Phone', 'Printer') as $itemtype) {
+      foreach ($UNINSTALL_DIRECT_CONNECTIONS_TYPE as $itemtype) {
          $item = new $itemtype();
          if ($item->canView()) {
             $datas = getAllDatasFromTable('glpi_computers_items',
