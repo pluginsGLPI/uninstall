@@ -72,8 +72,8 @@ class PluginUninstallProfile extends Profile {
       ));
       echo " <label for='checkbox_read'>".__('Read')."</label><br>";
       
-      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[2_0]',
-         'checked' => ($effective_rights['plugin_uninstall_use'] == UPDATE),
+      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[3_0]',
+         'checked' => ($effective_rights['plugin_uninstall_use'] == (UPDATE + READ)),
          'id' => 'checkbox_write'
       ));
       echo " <label for='checkbox_write'>".__('Write')."</label><br>";
@@ -92,7 +92,7 @@ class PluginUninstallProfile extends Profile {
 
    static function createFirstAccess($ID) {
       self::addDefaultProfileInfos($ID,
-            array('plugin_uninstall_use'     => UPDATE,
+            array('plugin_uninstall_use'     => UPDATE + READ,
                   'plugin_uninstall_replace' => 1), true);
    }
 
@@ -108,7 +108,7 @@ class PluginUninstallProfile extends Profile {
          case 'r' :
             return READ;
          case 'w':
-            return UPDATE;
+            return UPDATE + READ;
          case '0':
          case '1':
             return $old_right;

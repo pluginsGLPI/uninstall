@@ -57,17 +57,17 @@ class PluginUninstallModel extends CommonDBTM {
    }
    
    static function canCreate() {
-      return Session::haveRight("plugin_uninstall_use", UPDATE);
+      return Session::haveRight("plugin_uninstall_use", UPDATE) ? true : false;
    }
 
 
    static function canView() {
-      return Session::haveRight("plugin_uninstall_use", READ);
+      return Session::haveRight("plugin_uninstall_use", READ) ? true : false;
    }
 
 
    static function canReplace() {
-      return Session::haveRight("plugin_uninstall_replace", "1");
+      return Session::haveRight("plugin_uninstall_replace", "1") ? true : false;
    }
    
    static function getMenuContent() {
@@ -86,7 +86,7 @@ class PluginUninstallModel extends CommonDBTM {
          $menu['options']['model']['page'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
          $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
       
-         if (Session::haveRight('config', UPDATE)) {
+         if (Session::haveRight("config", UPDATE) || Session::haveRight("profile", READ)) {
             $menu['options']['model']['links']['add'] = Toolbox::getItemTypeFormUrl('PluginUninstallModel', false);
          }
    
@@ -200,7 +200,7 @@ class PluginUninstallModel extends CommonDBTM {
       return true;
    }
    
-   function defineTabs($options=array()){
+   function defineTabs($options=array()) {
       $ong = array();
       $this->addStandardTab(__CLASS__, $ong, $options);
       $this->addStandardTab('Log', $ong, $options);

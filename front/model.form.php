@@ -59,10 +59,14 @@ if (isset ($_POST["add"])) {
 
    Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'], "admin",
       "PluginUninstallModel", "model");
-
-   $model->display(array('id'           => $id,
-                        'withtemplate' => $_GET["withtemplate"])
-   );
+   
+   if (PluginUninstallModel::canCreate()) {
+      $model->display(array('id'           => $id,
+            'withtemplate' => $_GET["withtemplate"])
+      );
+   } else {
+      Html::displayRightError();
+   }
 
    Html::footer();
 }
