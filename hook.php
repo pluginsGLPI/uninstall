@@ -77,6 +77,7 @@ function plugin_uninstall_install() {
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/profile.class.php");
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/preference.class.php");
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/model.class.php");
+   require_once (GLPI_ROOT . "/plugins/uninstall/inc/replace.class.php");
 
    PluginUninstallProfile::install($migration);
    PluginUninstallModel::install($migration);
@@ -91,6 +92,7 @@ function plugin_uninstall_uninstall() {
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/profile.class.php");
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/preference.class.php");
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/model.class.php");
+   require_once (GLPI_ROOT . "/plugins/uninstall/inc/replace.class.php");
 
    PluginUninstallProfile::uninstall();
    PluginUninstallModel::uninstall();
