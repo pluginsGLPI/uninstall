@@ -60,20 +60,14 @@ class PluginUninstallProfile extends Profile {
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".PluginUninstallUninstall::getTypeName()."</td><td>";
-      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[0_0]',
-         'checked' => ($effective_rights['plugin_uninstall_use'] == '0'),
-         'id' => 'checkbox_noaccess',
-      ));
-      echo " <label for='checkbox_noaccess'>".__('No access')."</label><br>";
-      
       Html::showCheckbox(array('name'    => '_plugin_uninstall_use[1_0]',
-         'checked' => ($effective_rights['plugin_uninstall_use'] == READ),
+         'checked' => ($effective_rights['plugin_uninstall_use'] & READ),
          'id' => 'checkbox_read'
       ));
       echo " <label for='checkbox_read'>".__('Read')."</label><br>";
       
-      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[3_0]',
-         'checked' => ($effective_rights['plugin_uninstall_use'] == (UPDATE + READ)),
+      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[2_0]',
+         'checked' => ($effective_rights['plugin_uninstall_use'] & (UPDATE)),
          'id' => 'checkbox_write'
       ));
       echo " <label for='checkbox_write'>".__('Write')."</label><br>";
