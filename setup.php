@@ -89,8 +89,7 @@ function plugin_version_uninstall() {
 }
 
 function plugin_uninstall_check_prerequisites() {
-   if (version_compare(GLPI_VERSION,'0.85','lt')
-       || version_compare(GLPI_VERSION,'0.86','ge')) {
+   if (version_compare(GLPI_VERSION,'0.85','lt')) {
       _e('This plugin requires GLPI >= 0.85', 'uninstall');
       return false;
    }
