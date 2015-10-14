@@ -55,8 +55,8 @@ class PluginUninstallProfile extends Profile {
       $effective_rights = ProfileRight::getProfileRights($ID, array('plugin_uninstall_use', 
          'plugin_uninstall_replace'));
 
-      echo "<tr><th colspan='2' class='center b'>".sprintf(__('%1$s - %2$s'), self::getTypeName(),
-         $profile->fields["name"])."</th></tr>";
+//       echo "<tr><th colspan='2' class='center b'>".sprintf(__('%1$s - %2$s'), self::getTypeName(),
+//          $profile->fields["name"])."</th></tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".PluginUninstallUninstall::getTypeName()."</td><td>";
