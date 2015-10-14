@@ -57,12 +57,12 @@ class PluginUninstallModel extends CommonDBTM {
    }
    
    static function canCreate() {
-      return Session::haveRight("plugin_uninstall_use", UPDATE) ? true : false;
+      return Session::haveRight(PluginUninstallProfile::$rightname, UPDATE) ? true : false;
    }
 
 
    static function canView() {
-      return Session::haveRight("plugin_uninstall_use", READ) ? true : false;
+      return Session::haveRight(PluginUninstallProfile::$rightname, READ) ? true : false;
    }
 
 

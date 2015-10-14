@@ -33,7 +33,8 @@ class PluginUninstallReplace {
    const METHOD_PURGE = 1;
    const METHOD_DELETE_AND_COMMENT = 2;
    
-   static $rightname = "plugin_uninstall";
+   //static $rightname = "plugin_uninstall";
+   static $rightname = "uninstall:replace";
 
    static function getTypeName($nb=0) {
       return __("Item's replacement", 'uninstall');

@@ -31,7 +31,27 @@
 class PluginUninstallProfile extends Profile {
 
    static $rightname = "profile";
+   
+   const RIGHT_REPLACE = 128;
 
+   /**
+    *
+    * Get rights matrix for plugin
+    *
+    * @return array:array:string rights matrix
+    */
+   function getGeneralRights() {
+      $rights = array(
+         array(
+               'itemtype'  => 'PluginUninstallProfile',
+               'label'     => PluginUninstallUninstall::getTypeName(),
+               'field'     => self::$rightname,
+               'rights'    => array(READ => __('Read'), UPDATE => __('Update'), self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName())
+         ),
+      );
+      return $rights;
+   }
+   
    function showForm($ID, $options=array()) {
       global $DB;
       
@@ -44,12 +64,16 @@ class PluginUninstallProfile extends Profile {
          $this->getEmpty();
       }
       
-      if ($canedit = Session::haveRightsOr(self::$rightname, array(CREATE, UPDATE, PURGE))) {
+      if ($canedit = self::canUpdate()) {
          $options['colspan'] = 1;
          $options['target'] = $profile->getFormURL();
          $this->fields["id"] = $ID;
          $this->showFormHeader($options);
       }
+      
+      $rights = $this->getGeneralRights();
+      $profile->displayRightsChoiceMatrix($rights, array('canedit'       => $canedit,
+                                                         'default_class' => 'tab_bg_2'));
       
       $effective_rights = ProfileRight::getProfileRights($ID, array('plugin_uninstall_use', 
          'plugin_uninstall_replace'));
@@ -82,7 +106,7 @@ class PluginUninstallProfile extends Profile {
 
    static function createFirstAccess($ID) {
       self::addDefaultProfileInfos($ID,
-            array('plugin_uninstall_use'     => UPDATE + READ,
+            array(PluginUninstallProfile::$rightname     => UPDATE | READ | RIGHT_REPLACE,
                   'plugin_uninstall_replace' => 1), true);
    }
 
@@ -120,18 +144,40 @@ class PluginUninstallProfile extends Profile {
       }
    
       foreach ($DB->request('glpi_plugin_uninstall_profiles',
-                           "`profiles_id`='$profiles_id'") as $profile_data) {
+                           "`id`='$profiles_id'") as $profile_data) {
    
-         $matching = array('use'       => 'plugin_uninstall_use',
-                           'replace'   => 'plugin_uninstall_replace');
-         $current_rights = ProfileRight::getProfileRights($profiles_id, array_values($matching));
+//          $matching = array('use'       => 'plugin_uninstall_use',
+//                            'replace'   => 'plugin_uninstall_replace');
+//          $current_rights = ProfileRight::getProfileRights($profiles_id, array_values($matching));
+//          foreach ($matching as $old => $new) {
+//             if (!isset($current_rights[$old])) {
+//                $query = "UPDATE `glpi_profilerights`
+//                   SET `rights`='".self::translateARight($profile_data[$old])."'
+//                   WHERE `name`='$new' AND `profiles_id`='$profiles_id'";
+//                   $DB->query($query);
+//             }
+//          }
+
+         // The two rights have been merged into one bit fields. The previous translation (commented out)
+         // is obsolete, but kept here for reference.
+         $matching = array('use'       => PluginUninstallProfile::$rightname,
+                           'replace'   => PluginUninstallProfile::$rightname);
+         $current_rights = ProfileRight::getProfileRights(PluginUninstallProfile::$rightname);
+         $translatedRight = 0;
          foreach ($matching as $old => $new) {
             if (!isset($current_rights[$old])) {
+               $translatedRight = $translatedRight | self::translateARight($profile_data[$old]);
                $query = "UPDATE `glpi_profilerights`
                   SET `rights`='".self::translateARight($profile_data[$old])."'
                   WHERE `name`='$new' AND `profiles_id`='$profiles_id'";
                   $DB->query($query);
             }
+         }
+         if ($translatedRight != 0) {
+            $query = "UPDATE `glpi_profilerights`
+                  SET `rights`='".$translatedRight."'
+                              WHERE `name`='" . PluginUninstallProfile::$rightname . "' AND `profiles_id`='$profiles_id'";
+            $DB->query($query);
          }
       }
    }
@@ -144,7 +190,7 @@ class PluginUninstallProfile extends Profile {
       $profile = new self();
       
       //Add new rights in glpi_profilerights table
-      foreach (array('plugin_uninstall_use', 'plugin_uninstall_replace') as $field) {
+      foreach (array(PluginUninstallProfile::$rightname) as $field) {
          if (countElementsInTable("glpi_profilerights", "`name` = '".$field."'") == 0) {
             ProfileRight::addProfileRights(array($field));
          }
@@ -163,11 +209,12 @@ class PluginUninstallProfile extends Profile {
    }
    
    static function removeRightsFromSession() {
-      foreach (array('plugin_uninstall_use', 'plugin_uninstall_replace') as $field) {
-         if (isset($_SESSION['glpiactiveprofile'][$field])) {
-            unset($_SESSION['glpiactiveprofile'][$field]);
-         }
-      }
+      // should be obsolete, kept for reference
+//       foreach (array('plugin_uninstall_use', 'plugin_uninstall_replace') as $field) {
+//          if (isset($_SESSION['glpiactiveprofile'][$field])) {
+//             unset($_SESSION['glpiactiveprofile'][$field]);
+//          }
+//       }
    }
 
 
@@ -210,8 +257,7 @@ class PluginUninstallProfile extends Profile {
          $prof = new self();
          
          self::addDefaultProfileInfos($ID,
-               array('plugin_uninstall_use'     => 0,
-                     'plugin_uninstall_replace' => 0));
+               array(PluginUninstallProfile::$rightname     => 0));
          $prof->showForm($ID);
       }
       return true;
