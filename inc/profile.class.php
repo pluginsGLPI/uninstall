@@ -75,28 +75,28 @@ class PluginUninstallProfile extends Profile {
       $profile->displayRightsChoiceMatrix($rights, array('canedit'       => $canedit,
                                                          'default_class' => 'tab_bg_2'));
       
-      $effective_rights = ProfileRight::getProfileRights($ID, array('plugin_uninstall_use', 
-         'plugin_uninstall_replace'));
+//       $effective_rights = ProfileRight::getProfileRights($ID, array('plugin_uninstall_use', 
+//          'plugin_uninstall_replace'));
       
-      echo "<tr class='tab_bg_1'>";
-      echo "<td>".PluginUninstallUninstall::getTypeName()."</td><td>";
-      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[1_0]',
-         'checked' => ($effective_rights['plugin_uninstall_use'] & READ),
-         'id' => 'checkbox_read'
-      ));
-      echo " <label for='checkbox_read'>".__('Read')."</label><br>";
+//       echo "<tr class='tab_bg_1'>";
+//       echo "<td>".PluginUninstallUninstall::getTypeName()."</td><td>";
+//       Html::showCheckbox(array('name'    => '_plugin_uninstall_use[1_0]',
+//          'checked' => ($effective_rights['plugin_uninstall_use'] & READ),
+//          'id' => 'checkbox_read'
+//       ));
+//       echo " <label for='checkbox_read'>".__('Read')."</label><br>";
       
-      Html::showCheckbox(array('name'    => '_plugin_uninstall_use[2_0]',
-         'checked' => ($effective_rights['plugin_uninstall_use'] & (UPDATE)),
-         'id' => 'checkbox_write'
-      ));
-      echo " <label for='checkbox_write'>".__('Write')."</label><br>";
-      echo "</td></tr>";
+//       Html::showCheckbox(array('name'    => '_plugin_uninstall_use[2_0]',
+//          'checked' => ($effective_rights['plugin_uninstall_use'] & (UPDATE)),
+//          'id' => 'checkbox_write'
+//       ));
+//       echo " <label for='checkbox_write'>".__('Write')."</label><br>";
+//       echo "</td></tr>";
 
-      echo "<tr class='tab_bg_1'>";
-      echo "<td>".PluginUninstallReplace::getTypeName()."</td><td>";
-      Dropdown::showYesNo("_plugin_uninstall_replace", $effective_rights['plugin_uninstall_replace']);
-      echo "</td></tr>";
+//       echo "<tr class='tab_bg_1'>";
+//       echo "<td>".PluginUninstallReplace::getTypeName()."</td><td>";
+//       Dropdown::showYesNo("_plugin_uninstall_replace", $effective_rights['plugin_uninstall_replace']);
+//       echo "</td></tr>";
 
       if ($canedit) {
          $options['candel'] = false;
