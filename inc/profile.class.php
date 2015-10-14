@@ -46,7 +46,7 @@ class PluginUninstallProfile extends Profile {
                'itemtype'  => 'PluginUninstallProfile',
                'label'     => PluginUninstallUninstall::getTypeName(),
                'field'     => self::$rightname,
-               'rights'    => array(READ => __('Read'), UPDATE => __('Update'), self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName())
+               'rights'    => array(READ => __('Read'), UPDATE => __('Write'), self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName())
          ),
       );
       return $rights;
