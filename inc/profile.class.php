@@ -32,7 +32,6 @@ class PluginUninstallProfile extends Profile {
 
    static $rightname = "profile";
 
-
    function showForm($ID, $options=array()) {
       global $DB;
       
@@ -54,10 +53,7 @@ class PluginUninstallProfile extends Profile {
       
       $effective_rights = ProfileRight::getProfileRights($ID, array('plugin_uninstall_use', 
          'plugin_uninstall_replace'));
-
-//       echo "<tr><th colspan='2' class='center b'>".sprintf(__('%1$s - %2$s'), self::getTypeName(),
-//          $profile->fields["name"])."</th></tr>";
-
+      
       echo "<tr class='tab_bg_1'>";
       echo "<td>".PluginUninstallUninstall::getTypeName()."</td><td>";
       Html::showCheckbox(array('name'    => '_plugin_uninstall_use[1_0]',
@@ -94,7 +90,6 @@ class PluginUninstallProfile extends Profile {
     * Init profiles
     *
     **/
-   
    static function translateARight($old_right) {
       switch ($old_right) {
          case '':
@@ -222,7 +217,6 @@ class PluginUninstallProfile extends Profile {
       return true;
    }
 
-
    static function install($migration) {
       global $DB;
 
@@ -274,7 +268,6 @@ class PluginUninstallProfile extends Profile {
       }
       return true;
    }
-
 
    static function uninstall() {
       global $DB;
