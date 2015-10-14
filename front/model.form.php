@@ -29,6 +29,7 @@
  ---------------------------------------------------------------------- */
 
 include ('../../../inc/includes.php');
+Session::checkRight(PluginUninstallProfile::$rightname, UPDATE);
 
 if (!isset ($_GET["withtemplate"]))
    $_GET["withtemplate"] = "";
@@ -61,6 +62,14 @@ if (isset ($_POST["add"])) {
       "PluginUninstallModel", "model");
    
    if (PluginUninstallModel::canCreate()) {
+      if ($model->getFromDB($id)) {
+         if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT) {
+            if (!PluginUninstallModel::canReplace()) {
+               Html::displayRightError();
+            }
+         }
+      }
+      
       $model->display(array('id'           => $id,
             'withtemplate' => $_GET["withtemplate"])
       );

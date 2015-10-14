@@ -67,7 +67,7 @@ class PluginUninstallModel extends CommonDBTM {
 
 
    static function canReplace() {
-      return Session::haveRight("plugin_uninstall_replace", "1") ? true : false;
+      return Session::haveRight(PluginUninstallProfile::$rightname, PluginUninstallProfile::RIGHT_REPLACE) ? true : false;
    }
    
    static function getMenuContent() {
