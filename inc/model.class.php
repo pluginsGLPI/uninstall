@@ -45,26 +45,24 @@ class PluginUninstallModel extends CommonDBTM {
    }
 
    static function canUpdate() {
-      return true;
+      return self::canCreate();
    }
    
    static function canDelete() {
-      return true;
+      return self::canCreate();
    }
    
    static function canPurge() {
-      return true;
+      return self::canCreate();
    }
    
    static function canCreate() {
       return Session::haveRight(PluginUninstallProfile::$rightname, UPDATE) ? true : false;
    }
 
-
    static function canView() {
       return Session::haveRight(PluginUninstallProfile::$rightname, READ) ? true : false;
    }
-
 
    static function canReplace() {
       return Session::haveRight(PluginUninstallProfile::$rightname, PluginUninstallProfile::RIGHT_REPLACE) ? true : false;
@@ -80,13 +78,13 @@ class PluginUninstallModel extends CommonDBTM {
       
       $menu['page']  = '/plugins/uninstall/front/model.php';
    
-      if (Session::haveRight('config', READ)) {
+      if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
    
          $menu['options']['model']['title'] = self::getTypeName(1);
          $menu['options']['model']['page'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
          $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
       
-         if (Session::haveRight("config", UPDATE) || Session::haveRight("profile", READ)) {
+         if (Session::haveRight(PluginUninstallProfile::$rightname, UPDATE)) {
             $menu['options']['model']['links']['add'] = Toolbox::getItemTypeFormUrl('PluginUninstallModel', false);
          }
    
@@ -210,6 +208,7 @@ class PluginUninstallModel extends CommonDBTM {
    function showForm($ID, $options=array()) {
       global $DB, $CFG_GLPI;
 
+      $this->initForm($ID, $options);
       $this->showFormHeader($options);
 
       $entities = (isset($_SESSION['glpiparententities']) ? $_SESSION['glpiparententities'] : 0);

@@ -29,7 +29,7 @@
  ---------------------------------------------------------------------- */
 
 include ('../../../inc/includes.php');
-Session::checkRight(PluginUninstallProfile::$rightname, UPDATE);
+Session::checkRight(PluginUninstallProfile::$rightname, READ);
 
 if (!isset ($_GET["withtemplate"]))
    $_GET["withtemplate"] = "";
@@ -45,14 +45,17 @@ if (isset ($_GET["id"])) {
 $model = new PluginUninstallModel();
 
 if (isset ($_POST["add"])) {
+   $model->check(-1, UPDATE, $_POST);
    $model->add($_POST);
    Html::back();
 
 } else if (isset ($_POST["update"])) {
+   $model->check($_POST['id'], UPDATE);
    $model->update($_POST);
    Html::back();
 
 } else if (isset ($_POST["delete"])) {
+   $model->check($_POST['id'], DELETE);
    $model->delete($_POST);
    $model->redirectToList();
 
@@ -61,21 +64,17 @@ if (isset ($_POST["add"])) {
    Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'], "admin",
       "PluginUninstallModel", "model");
    
-   if (PluginUninstallModel::canCreate()) {
-      if ($model->getFromDB($id)) {
-         if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT) {
-            if (!PluginUninstallModel::canReplace()) {
-               Html::displayRightError();
-            }
+   if ($model->getFromDB($id)) {
+      if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT) {
+         if (!Session::haveRight(PluginUninstallProfile::$rightname, PluginUninstallProfile::RIGHT_REPLACE)) {
+            Html::displayRightError();
          }
       }
-      
-      $model->display(array('id'           => $id,
-            'withtemplate' => $_GET["withtemplate"])
-      );
-   } else {
-      Html::displayRightError();
    }
+      
+   $model->display(array('id'           => $id,
+         'withtemplate' => $_GET["withtemplate"])
+   );
 
    Html::footer();
 }
