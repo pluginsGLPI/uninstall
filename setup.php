@@ -83,7 +83,7 @@ function plugin_version_uninstall() {
    return array('name'           => __("Item's uninstallation", 'uninstall'),
                 'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
                 'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
-                'homepage'       => 'https://forge.indepnet.net/projects/uninstall',
+                'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
                 'minGlpiVersion' => '0.85',
                 'version'        => '2.2');
 }
