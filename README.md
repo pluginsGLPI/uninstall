@@ -1,0 +1,1 @@
+# Uninstall plugin for GLPI
