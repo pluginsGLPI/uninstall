@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+   <name>Uninstall</name>
+   <key>uninstall</key>
+   <state>stable</state>
+   <logo>https://raw.githubusercontent.com/pluginsglpi/uninstall/master/uninstall.png</logo>
+   <description>
+      <short>
+         <fr><![CDATA[Désinstallez facilement les objets obsolètes de votre inventaire]]></fr>
+         <en><![CDATA[Easy uninstall of obsolete assets in your inventory]]></en>
+      </short>
+      <long>
+	 <fr><![CDATA[Ce plugin vous permet de classer ou supprimer facilement et proprement les objets en fin de vie de votre parc]]></fr>
+         <en><![CDATA[This plugin let you to archive easily assets which reached their end of life]]></en>
+      </long>
+   </description>
+   <homepage>https://github.com/pluginsglpi/uninstall</homepage>
+   <download>https://github.com/pluginsglpi/uninstall/releases</download>
+   <issues>https://github.com/pluginsglpi/uninstall/issues</issues>
+   <readme>https://raw.githubusercontent.com/pluginsglpi/uninstall/master/README.md</readme>
+   <authors>
+      <author>Walid Nouh</author>
+      <author>François Legastelois</author>
+      <author>Remi Collet</author>
+   </authors>
+   <versions>
+       <version>
+          <num>0.90-1.1</num>
+          <compatibility>0.90</compatibility>
+       </version>
+       <version>
+          <num>0.90-1.0</num>
+          <compatibility>0.90</compatibility>
+       </version>
+   </versions>
+   <langs>
+      <lang>fr_FR</lang>
+      <lang>en_GB</lang>
+   </langs>
+   <category></category>
+   <tags>
+         <fr>
+            <tag>inventaire</tag>
+            <tag>objets</tag>
+            <tag>desinstaller</tag>
+            <tag>supprimer</tag>
+            <tag>nettoyer</tag>
+            <tag>archiver</tag>
+         </fr>
+         <en>
+            <tag>inventory</tag>
+            <tag>objects</tag>
+            <tag>uninstall</tag>
+            <tag>remove</tag>
+            <tag>clean</tag>
+            <tag>archive</tag>
+         </en>
+   </tags>
+   <license>GPL v2+</license>
+</root>
