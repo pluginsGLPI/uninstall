@@ -30,7 +30,7 @@
 
 class PluginUninstallProfile extends Profile {
 
-   static $rightname = "profile";
+   static $rightname = "uninstall:profile";
    
    const RIGHT_REPLACE = 128;
 
@@ -185,7 +185,7 @@ class PluginUninstallProfile extends Profile {
    /**
     * Initialize profiles, and migrate it necessary
     */
-   static function initProfile() {
+   static function migrateAllProfiles() {
       global $DB;
       $profile = new self();
       
@@ -299,6 +299,11 @@ class PluginUninstallProfile extends Profile {
              WHERE `id` = ".$_SESSION['glpiactiveprofile']['id'];
             $DB->query($query);
          }
+         
+         self::migrateAllProfiles();
+         
+         //Disabled until the migration process gives accurate results
+         //$migration->dropTable($table);
 
       // plugin never installed
       } else {

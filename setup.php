@@ -40,7 +40,7 @@ function plugin_init_uninstall() {
 
    Plugin::registerClass('PluginUninstallProfile', array('addtabon' => array('Profile')));
 
-   $PLUGIN_HOOKS['change_profile']['uninstall'] = array('PluginUninstallProfile', 'initProfile');
+   //$PLUGIN_HOOKS['change_profile']['uninstall'] = array('PluginUninstallProfile', 'initProfile');
 
    $plugin = new Plugin();
    if ($plugin->isActivated('uninstall')) {
