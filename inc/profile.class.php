@@ -174,7 +174,7 @@ class PluginUninstallProfile extends Profile {
 //            }
 //         }
          $translatedRight = self::translateARight($profile_data["use"]);
-         $translatedRight = $translatedRight | (translateARight($profile_data["replace"]) ? RIGHT_REPLACE : 0);
+         $translatedRight = $translatedRight | (self::translateARight($profile_data["replace"]) ? RIGHT_REPLACE : 0);
          ProfileRight::updateProfileRights($profiles_id, array(PluginUninstallProfile::$rightname => $translatedRight));
          
 //          if ($translatedRight != 0) {
