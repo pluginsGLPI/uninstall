@@ -160,25 +160,29 @@ class PluginUninstallProfile extends Profile {
 
          // The two rights have been merged into one bit fields. The previous translation (commented out)
          // is obsolete, but kept here for reference.
-         $matching = array('use'       => PluginUninstallProfile::$rightname,
-                           'replace'   => PluginUninstallProfile::$rightname);
-         $current_rights = ProfileRight::getProfileRights(PluginUninstallProfile::$rightname);
-         $translatedRight = 0;
-         foreach ($matching as $old => $new) {
-            if (!isset($current_rights[$old])) {
-               $translatedRight = $translatedRight | self::translateARight($profile_data[$old]);
-               $query = "UPDATE `glpi_profilerights`
-                  SET `rights`='".self::translateARight($profile_data[$old])."'
-                  WHERE `name`='$new' AND `profiles_id`='$profiles_id'";
-                  $DB->query($query);
-            }
-         }
-         if ($translatedRight != 0) {
-            $query = "UPDATE `glpi_profilerights`
-                  SET `rights`='".$translatedRight."'
-                              WHERE `name`='" . PluginUninstallProfile::$rightname . "' AND `profiles_id`='$profiles_id'";
-            $DB->query($query);
-         }
+//          $matching = array('use'       => PluginUninstallProfile::$rightname,
+//                            'replace'   => PluginUninstallProfile::$rightname);
+//         $current_rights = ProfileRight::getProfileRights(PluginUninstallProfile::$rightname);
+//         $translatedRight = 0;
+//         foreach ($matching as $old => $new) {
+//             if (!isset($current_rights[$old])) {
+//                $translatedRight = $translatedRight | self::translateARight($profile_data[$old]);
+//                $query = "UPDATE `glpi_profilerights`
+//                   SET `rights`='".self::translateARight($profile_data[$old])."'
+//                   WHERE `name`='$new' AND `profiles_id`='$profiles_id'";
+//                   $DB->query($query);
+//            }
+//         }
+         $translatedRight = translateARight($profile_data["use"]);
+         $translatedRight = $translatedRight | (translateARight($profile_data["replace"]) ? RIGHT_REPLACE : 0);
+         ProfileRight::updateProfileRights($profiles_id, array(PluginUninstallProfile::$rightname => $translatedRight));
+         
+//          if ($translatedRight != 0) {
+//             $query = "UPDATE `glpi_profilerights`
+//                   SET `rights`='".$translatedRight."'
+//                               WHERE `name`='" . PluginUninstallProfile::$rightname . "' AND `profiles_id`='$profiles_id'";
+//             $DB->query($query);
+//          }
       }
    }
    
@@ -187,7 +191,6 @@ class PluginUninstallProfile extends Profile {
     */
    static function migrateAllProfiles() {
       global $DB;
-      $profile = new self();
       
       //Add new rights in glpi_profilerights table
       foreach (array(PluginUninstallProfile::$rightname) as $field) {
