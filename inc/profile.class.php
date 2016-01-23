@@ -31,7 +31,7 @@
 class PluginUninstallProfile extends Profile {
 
    static $rightname = "uninstall:profile";
-   
+
    const RIGHT_REPLACE = 128;
 
    /**
@@ -46,58 +46,36 @@ class PluginUninstallProfile extends Profile {
                'itemtype'  => 'PluginUninstallProfile',
                'label'     => PluginUninstallUninstall::getTypeName(),
                'field'     => self::$rightname,
-               'rights'    => array(READ => __('Read'), UPDATE => __('Write'), self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName())
+               'rights'    => array(READ => __('Read'),
+                                    UPDATE => __('Write'),
+                                    self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName())
          ),
       );
       return $rights;
    }
-   
+
    function showForm($ID, $options=array()) {
       global $DB;
-      
+
       $profile = new Profile();
-      
+
       if ($ID) {
          $this->getFromDB($ID);
          $profile->getFromDB($ID);
       } else {
          $this->getEmpty();
       }
-      
+
       if ($canedit = self::canUpdate()) {
          $options['colspan'] = 1;
          $options['target'] = $profile->getFormURL();
          $this->fields["id"] = $ID;
          $this->showFormHeader($options);
       }
-      
+
       $rights = $this->getGeneralRights();
       $profile->displayRightsChoiceMatrix($rights, array('canedit'       => $canedit,
                                                          'default_class' => 'tab_bg_2'));
-      
-//       $effective_rights = ProfileRight::getProfileRights($ID, array('plugin_uninstall_use', 
-//          'plugin_uninstall_replace'));
-      
-//       echo "<tr class='tab_bg_1'>";
-//       echo "<td>".PluginUninstallUninstall::getTypeName()."</td><td>";
-//       Html::showCheckbox(array('name'    => '_plugin_uninstall_use[1_0]',
-//          'checked' => ($effective_rights['plugin_uninstall_use'] & READ),
-//          'id' => 'checkbox_read'
-//       ));
-//       echo " <label for='checkbox_read'>".__('Read')."</label><br>";
-      
-//       Html::showCheckbox(array('name'    => '_plugin_uninstall_use[2_0]',
-//          'checked' => ($effective_rights['plugin_uninstall_use'] & (UPDATE)),
-//          'id' => 'checkbox_write'
-//       ));
-//       echo " <label for='checkbox_write'>".__('Write')."</label><br>";
-//       echo "</td></tr>";
-
-//       echo "<tr class='tab_bg_1'>";
-//       echo "<td>".PluginUninstallReplace::getTypeName()."</td><td>";
-//       Dropdown::showYesNo("_plugin_uninstall_replace", $effective_rights['plugin_uninstall_replace']);
-//       echo "</td></tr>";
-
       if ($canedit) {
          $options['candel'] = false;
          $this->showFormButtons($options);
@@ -125,7 +103,7 @@ class PluginUninstallProfile extends Profile {
          case '0':
          case '1':
             return $old_right;
-   
+
          default :
             return 0;
       }
@@ -142,10 +120,10 @@ class PluginUninstallProfile extends Profile {
       if (!TableExists('glpi_plugin_uninstall_profiles')) {
          return true;
       }
-   
+
       foreach ($DB->request('glpi_plugin_uninstall_profiles',
                            "`id`='$profiles_id'") as $profile_data) {
-   
+
 //          $matching = array('use'       => 'plugin_uninstall_use',
 //                            'replace'   => 'plugin_uninstall_replace');
 //          $current_rights = ProfileRight::getProfileRights($profiles_id, array_values($matching));
@@ -176,7 +154,7 @@ class PluginUninstallProfile extends Profile {
          $translatedRight = self::translateARight($profile_data["use"]);
          $translatedRight = $translatedRight | (self::translateARight($profile_data["replace"]) ? self::RIGHT_REPLACE : 0);
          ProfileRight::updateProfileRights($profiles_id, array(PluginUninstallProfile::$rightname => $translatedRight));
-         
+
 //          if ($translatedRight != 0) {
 //             $query = "UPDATE `glpi_profilerights`
 //                   SET `rights`='".$translatedRight."'
@@ -185,20 +163,20 @@ class PluginUninstallProfile extends Profile {
 //          }
       }
    }
-   
+
    /**
     * Initialize profiles, and migrate it necessary
     */
    static function migrateAllProfiles() {
       global $DB;
-      
+
       //Add new rights in glpi_profilerights table
       foreach (array(PluginUninstallProfile::$rightname) as $field) {
          if (countElementsInTable("glpi_profilerights", "`name` = '".$field."'") == 0) {
             ProfileRight::addProfileRights(array($field));
          }
       }
-   
+
       //Migration old rights in new ones
       foreach ($DB->request("SELECT `id` FROM `glpi_profiles`") as $prof) {
          self::migrateOneProfile($prof['id']);
@@ -210,7 +188,7 @@ class PluginUninstallProfile extends Profile {
                                  $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
       }
    }
-   
+
    static function removeRightsFromSession() {
       // should be obsolete, kept for reference
 //       foreach (array('plugin_uninstall_use', 'plugin_uninstall_replace') as $field) {
@@ -233,7 +211,7 @@ class PluginUninstallProfile extends Profile {
 
    static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false) {
       global $DB;
-   
+
       $profileRight = new ProfileRight();
       foreach ($rights as $right => $value) {
          if (countElementsInTable('glpi_profilerights',
@@ -246,7 +224,7 @@ class PluginUninstallProfile extends Profile {
                $myright['name']        = $right;
                $myright['rights']      = $value;
                $profileRight->add($myright);
-   
+
                //Add right to the current session
                $_SESSION['glpiactiveprofile'][$right] = $value;
          }
@@ -258,7 +236,7 @@ class PluginUninstallProfile extends Profile {
       if ($item->getType() == 'Profile') {
          $ID = $item->getID();
          $prof = new self();
-         
+
          self::addDefaultProfileInfos($ID,
                array(PluginUninstallProfile::$rightname     => 0));
          $prof->showForm($ID);
@@ -298,15 +276,14 @@ class PluginUninstallProfile extends Profile {
             $migration->addField($table, 'replace', "bool");
             $migration->migrationOneTable($table);
             // UPDATE replace access for current user
-            $query = "UPDATE `glpi_plugin_uninstall_profiles` SET `replace` = 1 
+            $query = "UPDATE `glpi_plugin_uninstall_profiles` SET `replace` = 1
              WHERE `id` = ".$_SESSION['glpiactiveprofile']['id'];
             $DB->query($query);
          }
-         
+
          self::migrateAllProfiles();
-         
-         //Disabled until the migration process gives accurate results
-         //$migration->dropTable($table);
+
+         $migration->dropTable($table);
 
       // plugin never installed
       } else {
