@@ -52,15 +52,15 @@ function plugin_init_uninstall() {
       if (Session::getLoginUserID()) {
          if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
             $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
-            
+
             // Add link in GLPI plugins list :
             $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = array('admin' => 'PluginUninstallModel');
-            
+
             if (Session::haveRight('config', READ)) {
                // add to 'Admin' menu :
                $PLUGIN_HOOKS['config_page']['uninstall'] = "front/model.php";
             }
-            
+
             //Item actions
             $PLUGIN_HOOKS['item_update']['uninstall']
                = array('PluginUninstallModel' => array('PluginUninstallPreference',
@@ -73,7 +73,7 @@ function plugin_init_uninstall() {
             $PLUGIN_HOOKS['pre_item_purge']['uninstall']
                = array('User' => array('PluginUninstallPreference', 'beforeItemPurge'));
          }
-         
+
       }
       $PLUGIN_HOOKS['post_init']['uninstall'] = 'plugin_uninstall_postinit';
    }
@@ -85,7 +85,7 @@ function plugin_version_uninstall() {
                 'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
                 'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
                 'minGlpiVersion' => '0.85',
-                'version'        => '2.2');
+                'version'        => '0.90-1.2');
 }
 
 function plugin_uninstall_check_prerequisites() {

@@ -31,7 +31,7 @@
 class PluginUninstallUninstall {
 
    const PLUGIN_UNINSTALL_TRANSFER_NAME = "plugin_uninstall";
-   
+
    static $rightname = "plugin_uninstall";
 
    static function getTypeName($nb=0) {
@@ -46,16 +46,16 @@ class PluginUninstallUninstall {
    //Note : this function can be activate
    /*
    function getSpecificMassiveActions($checkitem=NULL) {
-   
+
       $actions = parent::getSpecificMassiveActions($checkitem);
-   
+
       return $actions;
    }
    */
-   
+
    /*
    function getForbiddenStandardMassiveAction() {
-   
+
       $forbidden   = parent::getForbiddenStandardMassiveAction();
       $forbidden[] = 'update'; //"uninstall"
       return $forbidden;
@@ -68,13 +68,13 @@ class PluginUninstallUninstall {
     **/
    static function showMassiveActionsSubForm(MassiveAction $ma) {
       global $UNINSTALL_TYPES;
-      
+
       foreach ($ma->getItems() as $itemtype => $data) {
          if (!in_array($itemtype, $UNINSTALL_TYPES)) {
             return "";
          }
       }
-      
+
       switch ($ma->getAction()) {
          case 'uninstall':
             $uninst = new PluginUninstallUninstall();
@@ -86,8 +86,8 @@ class PluginUninstallUninstall {
       }
       return "";
    }
-   
-   
+
+
    /**
     * @since version 0.85
     *
@@ -95,12 +95,12 @@ class PluginUninstallUninstall {
     **/
    static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids) {
       global $CFG_GLPI;
-      
+
       switch ($ma->getAction()) {
          case "uninstall":
-            
+
             $itemtype = $ma->getItemtype(false);
-            
+
             foreach ($ids as $id) {
                if ($item->getFromDB($id)) {
                   //Session::addMessageAfterRedirect(sprintf(__('Form duplicated: %s', 'formcreator'), $item->getName()));
@@ -115,7 +115,7 @@ class PluginUninstallUninstall {
       }
       return;
    }
-   
+
    static function uninstall($type, $model_id, $tab_ids, $location) {
       global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
       //Get the model
@@ -297,19 +297,16 @@ class PluginUninstallUninstall {
                if ($model->fields["delete_ocs_link"] || $model->fields["remove_from_ocs"]) {
                   self::deleteOcsLink($id);
                }
-
-               //Delete registrykeys
-               /*
-               if ($model->fields["raz_ocs_registrykeys"]) {
-                  self::deleteRegistryKeys($id);
-               }
-               */
             }
             //Should never happend that transfer_id = 0, but just in case
             if ($model->fields["transfers_id"] > 0) {
                $transfer->moveItems(array($type => array($id => $id)),
                                     $entity, $transfer->fields);
             }
+         }
+
+         if ($model->fields['raz_fusioninventory'] == 1) {
+            self::deleteFusionInventoryLink($type, $id);
          }
 
          //Plugin hook after uninstall
@@ -349,7 +346,7 @@ class PluginUninstallUninstall {
 
    static function deleteRegistryKeys($computers_id) {
      $key = new RegistryKey();
-     $key->deleteByCriteria(array('computers_id' => $computers_id)); 
+     $key->deleteByCriteria(array('computers_id' => $computers_id));
    }
 
    /**
@@ -390,7 +387,7 @@ class PluginUninstallUninstall {
             "download_history", "download_servers", "groups_cache", "inputs",
             "memories", "modems", "monitors", "networks", "ports", "printers",
             "registry", "slots", "softwares", "sounds", "storages", "videos");
-      
+
       foreach ($tables as $table) {
          if (self::OcsTableExists($table)) {
             $query = "DELETE
@@ -424,6 +421,25 @@ class PluginUninstallUninstall {
       return false;
    }
 
+   /**
+    * Function to uninstall an object
+    *
+    * @param $computers_id the computer's ID in GLPI
+    *
+    * @return nothing
+   **/
+   static function deleteFusionInventoryLink($itemtype, $items_id) {
+      if (function_exists('plugin_pre_item_purge_fusioninventory')) {
+         $item = new $itemtype();
+         $item->getFromDB($items_id);
+         plugin_pre_item_purge_fusioninventory($item);
+
+         if ($itemtype == 'Computer') {
+            $agent = new PluginFusioninventoryAgent();
+            $agent->deleteByCriteria(array('id' => $items_id), true);
+         }
+      }
+   }
 
    static function purgeComputerVolumes($computers_id) {
 

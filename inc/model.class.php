@@ -31,12 +31,12 @@
 class PluginUninstallModel extends CommonDBTM {
 
    public $dohistory = true;
-   
+
    static $rightname = "plugin_uninstall";
-   
+
    public $first_level_menu  = "plugins";
    public $second_level_menu = "uninstall";
-   
+
    const TYPE_MODEL_UNINSTALL    = 1;
    const TYPE_MODEL_REPLACEMENT  = 2;
 
@@ -47,15 +47,15 @@ class PluginUninstallModel extends CommonDBTM {
    static function canUpdate() {
       return self::canCreate();
    }
-   
+
    static function canDelete() {
       return self::canCreate();
    }
-   
+
    static function canPurge() {
       return self::canCreate();
    }
-   
+
    static function canCreate() {
       return Session::haveRight(PluginUninstallProfile::$rightname, UPDATE) ? true : false;
    }
@@ -67,35 +67,35 @@ class PluginUninstallModel extends CommonDBTM {
    static function canReplace() {
       return Session::haveRight(PluginUninstallProfile::$rightname, PluginUninstallProfile::RIGHT_REPLACE) ? true : false;
    }
-   
+
    static function getMenuContent() {
       global $CFG_GLPI;
       $menu          = array();
-      
+
       // get Menu name :
       $tab = plugin_version_uninstall();
       $menu['title'] = $tab["name"];
-      
+
       $menu['page']  = '/plugins/uninstall/front/model.php';
-   
+
       if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
-   
+
          $menu['options']['model']['title'] = self::getTypeName(1);
          $menu['options']['model']['page'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
          $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
-      
+
          if (Session::haveRight(PluginUninstallProfile::$rightname, UPDATE)) {
             $menu['options']['model']['links']['add'] = Toolbox::getItemTypeFormUrl('PluginUninstallModel', false);
          }
-   
+
       }
-   
+
       return $menu;
    }
-   
+
    function prepareInputForAdd($input) {
 
-      if (isset($input['_groups_id_action']) 
+      if (isset($input['_groups_id_action'])
             && ($input['_groups_id_action'] == 'old')) {
           $input['groups_id'] = -1;
       }
@@ -166,11 +166,11 @@ class PluginUninstallModel extends CommonDBTM {
     * Définition du nom de l'onglet
     **/
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-     
+
       switch ($item->getType()) {
          case 'Preference' :
             return PluginUninstallUninstall::getTypeName(1);
-   
+
          case __CLASS__ :
             $tab = array();
             $tab[1] = self::getTypeName(1);
@@ -179,7 +179,7 @@ class PluginUninstallModel extends CommonDBTM {
       }
       return '';
    }
-   
+
    /**
     * Définition du contenu de l'onglet
     **/
@@ -197,7 +197,7 @@ class PluginUninstallModel extends CommonDBTM {
       }
       return true;
    }
-   
+
    function defineTabs($options=array()) {
       $ong = array();
       $this->addStandardTab(__CLASS__, $ong, $options);
@@ -303,7 +303,7 @@ class PluginUninstallModel extends CommonDBTM {
 
       return true;
    }
-   
+
    function showPartFormUninstall() {
       echo "<tr class='tab_bg_1 center'>";
       echo "<th colspan='4'>" . __('Erase datas', 'uninstall') . "</th></tr>";
@@ -375,17 +375,6 @@ class PluginUninstallModel extends CommonDBTM {
                           (isset($this->fields["raz_budget"])
                            ? $this->fields["raz_budget"] : 0));
       echo "</td></tr>";
-
-      /*
-      echo "<tr class='tab_bg_1 center'>";
-      echo "<td>".'unknown'."</td>"; //unknown name on 0.85
-      echo "<td>";
-      Dropdown::showYesNo("raz_ocs_registrykeys", (isset($this->fields["raz_ocs_registrykeys"])
-                                     ? $this->fields["raz_ocs_registrykeys"] : 1));
-      echo "</td>";
-      echo "<td colspan='2'></td>";
-      echo "</tr>";
-      */
    }
 
    function showPartFormRemplacement() {
@@ -527,7 +516,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "<td colspan='2'></td>";
       echo "</tr>";
    }
-   
+
    /**
     * @param $item
    **/
@@ -565,7 +554,7 @@ class PluginUninstallModel extends CommonDBTM {
          // if Replacement is selected
          self::showPartFormRemplacement();
       }
-      
+
       $plug = new Plugin();
       if ($plug->isActivated('ocsinventoryng')) {
          echo "<tr class='tab_bg_1 center'>";
@@ -589,6 +578,22 @@ class PluginUninstallModel extends CommonDBTM {
          echo "</td></tr>";
       }
 
+      if ($plug->isActivated('fusioninventory')) {
+         echo "<tr class='tab_bg_1 center'>";
+         echo "<th colspan='4'>" . __('FusionInventory').
+              "</th></tr>";
+
+         echo "<tr class='tab_bg_1 center'>";
+         echo "<td>" . __('Delete computer in FusionInventory', 'uninstall') . "</td>";
+         echo "<td>";
+         Dropdown::showYesNo("raz_fusioninventory",
+                             (isset($this->fields["raz_fusioninventory"])
+                              ? $this->fields["raz_fusioninventory"] : 0), -1, array('width' => '100%'));
+         echo "</td>";
+         echo "<td colspan='2'></td>";
+         echo "</tr>";
+      }
+
       if ($canedit) {
          echo "<tr class='tab_bg_1 center'>";
          echo "<td colspan='4' class='center'>";
@@ -601,7 +606,7 @@ class PluginUninstallModel extends CommonDBTM {
 
       echo "<input type='hidden' name='entities_id' value='".$this->fields["entities_id"]."'>";
       Html::closeForm();
-      
+
       return true;
    }
 
@@ -843,7 +848,7 @@ class PluginUninstallModel extends CommonDBTM {
             return __('None');
          }
          return Dropdown::getDropdownName('glpi_groups', $values['groups_id']);
-         
+
          break;
 
       }
@@ -889,7 +894,7 @@ class PluginUninstallModel extends CommonDBTM {
       }
       return parent::getSpecificValueToSelect($field, $name, $values, $options);
    }
-   
+
    /**
     * Get the standard massive actions which are forbidden
     *
@@ -990,6 +995,11 @@ class PluginUninstallModel extends CommonDBTM {
             $migration->addField($table, 'raz_ocs_registrkeys', "integer");
          }
 
+         if (!FieldExists($table, 'raz_fusioninventory')) {
+            $migration->addField($table, 'raz_fusioninventory', "integer");
+         }
+         $migration->migrationOneTable($table);
+
       // plugin never installed
       } else {
          $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType(__CLASS__)."` (
@@ -1029,6 +1039,7 @@ class PluginUninstallModel extends CommonDBTM {
                     `replace_direct_connections` tinyint(1) NOT NULL DEFAULT '0',
                     `overwrite` tinyint(1) NOT NULL DEFAULT '0',
                     `replace_method` int(11) NOT NULL DEFAULT '2',
+                    `raz_fusioninventory` int(1) NOT NULL DEFAULT '1',
                     PRIMARY KEY (`id`)
                   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
@@ -1084,6 +1095,7 @@ class PluginUninstallModel extends CommonDBTM {
          $tmp['raz_budget']                 = 1;
          $tmp['raz_user']                   = 1;
          $tmp['raz_ocs_registrykeys']       = 1;
+         $tmp['raz_fusioninventory']        = 1;
          $tmp['comment']                    = '';
          $tmp['groups_id']                  = 0;
          $tmp['remove_from_ocs']            = 0;
@@ -1118,7 +1130,7 @@ class PluginUninstallModel extends CommonDBTM {
     **/
    static function showMassiveActionsSubForm(MassiveAction $ma) {
       global $UNINSTALL_TYPES;
-   
+
       switch ($ma->getAction()) {
          case 'transfert':
             Entity::dropdown();
@@ -1128,7 +1140,7 @@ class PluginUninstallModel extends CommonDBTM {
       }
       return "";
    }
-   
+
    function getSpecificMassiveActions($checkitem=NULL) {
 
       $isadmin = static::canUpdate();
@@ -1151,12 +1163,12 @@ class PluginUninstallModel extends CommonDBTM {
     **/
    static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids) {
       global $CFG_GLPI;
-   
+
       switch ($ma->getAction()) {
          case "transfert":
             $input = $ma->getInput();
             $entities_id = $input['entities_id'];
-   
+
             foreach ($ids as $id) {
                if ($item->getFromDB($id)) {
                   $item->update(array(
