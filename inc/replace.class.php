@@ -32,7 +32,7 @@ class PluginUninstallReplace {
 
    const METHOD_PURGE = 1;
    const METHOD_DELETE_AND_COMMENT = 2;
-   
+
    //static $rightname = "plugin_uninstall";
    static $rightname = "uninstall:replace";
 
@@ -74,7 +74,7 @@ class PluginUninstallReplace {
          //Hook to perform actions before item is being replaced
          $olditem->fields['_newid'] = $newitem_id;
          $olditem->fields['_uninstall_event'] = $model_id;
-         $olditem->fields['_action'] = 'replace'; 
+         $olditem->fields['_action'] = 'replace';
          Plugin::doHook("plugin_uninstall_replace_before", $olditem);
 
          // Retrieve informations
@@ -90,7 +90,7 @@ class PluginUninstallReplace {
          if ($model->fields['replace_method'] == self::METHOD_PURGE) {
 
             $name_out = str_shuffle(Toolbox::getRandomString(5).time());
-            
+
             $plugin = new Plugin();
             if ($plugin->isActivated('PDF')) {
 
@@ -102,9 +102,9 @@ class PluginUninstallReplace {
 
                //Tell PDF to also export item's main tab, and in first position
                array_unshift($tab, "_main_");
-               
+
                $itempdf = new $PLUGIN_HOOKS['plugin_pdf'][$type]($olditem);
-               
+
                $out = $itempdf->generatePDF(array($olditem_id), $tab, 1, false);
                $name_out .= ".pdf";
             } else {
@@ -151,7 +151,7 @@ class PluginUninstallReplace {
             $document_added = $doc->add($input);
 
             //Attach the document to the new item, once the document's name is correct
-            
+
             $docItem = new Document_Item();
             $docItemId = $docItem->add(array(
                   'documents_id' => $document_added,
@@ -320,10 +320,9 @@ class PluginUninstallReplace {
          if ($model->fields["replace_tickets"]
              && in_array($type, $CFG_GLPI["ticket_types"])) {
 
-            $ticket_item = new Ticket();
+            $ticket_item = new Item_Ticket();
             foreach (self::getAssociatedTickets($type, $olditem_id) as $ticket) {
                $ticket_item->update(array('id'       => $ticket['id'],
-                                          'itemtype' => $type,
                                           'items_id' => $newitem_id),
                                     false);
             }
@@ -391,6 +390,12 @@ class PluginUninstallReplace {
             //Delete link in glpi_ocs_link
             if ($model->fields["delete_ocs_link"] || $model->fields["remove_from_ocs"]) {
                PluginUninstallUninstall::deleteOcsLink($olditem_id);
+            }
+         }
+
+         if ($plug->isActivated('fusioninventory')) {
+            if ($model->fields['raz_fusioninventory']) {
+               PluginUninstallUninstall::deleteFusionInventoryLink(get_class($olditem), $olditem_id);
             }
          }
 
@@ -464,7 +469,7 @@ class PluginUninstallReplace {
       } else {
          $string = "";
       }
-      
+
       if ($display_message) {
          if ($new) {
             $string.= "\n" . __('This item is a replacement for item', 'uninstall')." ";
@@ -628,7 +633,7 @@ class PluginUninstallReplace {
       echo "</tr></table></div>";
 
       // Show form for selecting new items
-      
+
       echo "<form action='../front/action.php' method='post'>";
       echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
@@ -686,21 +691,21 @@ class PluginUninstallReplace {
 
    /**
     * @since version 0.85
-    * 
+    *
     * @param unknown $id
     * @param unknown $type
     */
    static function showNewItemDropdown($id, $type) {
       $rand = mt_rand();
       $table = getTableForItemType($type);
-      
+
       echo "<span id='results_ID$rand'></span>";
-      
+
       echo "<script>
       $('results_ID$rand').ready(function() {
          var searchText = '';
          var myname = 'newItems[$id]';
-        
+
          $.ajax({
             type: 'POST',
             url: '../ajax/dropdownReplaceFindDevice.php',
@@ -748,7 +753,7 @@ class PluginUninstallReplace {
             && !$item->getEntityID())) {
 
          if ($item->isNewID($item->getField('id'))) {
-            return false;
+            return array();
          }
 
          switch ($item->getType()) {
@@ -757,12 +762,12 @@ class PluginUninstallReplace {
                break;
             default :
                if (Session::haveRight('document', READ)) {
-                  return false;
+                  return array();
                }
          }
 
          if (!$item->can($item->fields['id'], READ)) {
-            return false;
+            return array();
          }
       }
 
@@ -801,7 +806,7 @@ class PluginUninstallReplace {
       global $DB;
 
       $contracts = array();
-      
+
       if (!Session::haveRight("contract", READ) || !$item->can($item->fields['id'], READ)) {
          return array();
       }
@@ -847,7 +852,7 @@ class PluginUninstallReplace {
       $query   = "(`items_id` = '".$items_id."'
                    AND `itemtype` = '".$itemtype."') ".
                    getEntitiesRestrictRequest("AND", "glpi_tickets");
-      foreach ($DB->request('glpi_tickets', $query) as $data) {
+      foreach ($DB->request('glpi_items_tickets', $query) as $data) {
          $tickets[] = $data;
       }
       return $tickets;
