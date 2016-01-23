@@ -371,9 +371,8 @@ class PluginUninstallUninstall {
 
 
    static function deleteComputerInOCS($ocs_id, $ocs_server_id) {
-      global $PluginOcsinventoryngDBocs;
 
-      PluginOcsinventoryngOcsServer::checkOCSconnection($ocs_server_id);
+      $DBocs = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id)->getDB();
 
       //First try to remove all the network ports
       $query = "DELETE
@@ -381,7 +380,7 @@ class PluginUninstallUninstall {
                 WHERE `MAC` IN (SELECT `MACADDR`
                                 FROM `networks`
                                 WHERE `networks`.`HARDWARE_ID` = '".$ocs_id."')";
-      $PluginOcsinventoryngDBocs->query($query);
+      $DBocs->query($query);
 
       $tables = array ("accesslog", "accountinfo", "bios", "controllers", "devices", "drives",
             "download_history", "download_servers", "groups_cache", "inputs",
@@ -389,35 +388,35 @@ class PluginUninstallUninstall {
             "registry", "slots", "softwares", "sounds", "storages", "videos");
 
       foreach ($tables as $table) {
-         if (self::OcsTableExists($table)) {
+         if (self::OcsTableExists($ocs_server_id, $table)) {
             $query = "DELETE
                       FROM `" . $table . "`
                       WHERE `hardware_id` = '".$ocs_id."'";
-            $PluginOcsinventoryngDBocs->query($query);
+            $DBocs->query($query);
          }
       }
 
       $query = "DELETE
                 FROM `hardware`
                 WHERE `ID` = '".$ocs_id."'";
-      $PluginOcsinventoryngDBocs->query($query);
+      $DBocs->query($query);
 
    }
 
 
-   static function OcsTableExists($tablename) {
-      global $PluginOcsinventoryngDBocs;
+   static function OcsTableExists($ocs_server_id, $tablename) {
+      $DBocs = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id)->getDB();
 
       // Get a list of tables contained within the database.
-      $result = $PluginOcsinventoryngDBocs->list_tables("%".$tablename."%");
-      if ($rcount = $PluginOcsinventoryngDBocs->numrows($result)) {
-         while ($data = $PluginOcsinventoryngDBocs->fetch_row($result)) {
+      $result = $DBocs->list_tables("%".$tablename."%");
+      if ($rcount = $DBocs->numrows($result)) {
+         while ($data = $DBocs->fetch_row($result)) {
             if ($data[0] === $tablename) {
                return true;
             }
          }
       }
-      $PluginOcsinventoryngDBocs->free_result($result);
+      $DBocs->free_result($result);
       return false;
    }
 
@@ -474,13 +473,6 @@ class PluginUninstallUninstall {
       foreach ($DB->request("glpi_logs", $where) as $row) {
          $log->delete($row);
       }
-
-      //$log->deleteByCriteria($crit);
-
-      //$sql = "DELETE
-      //        FROM `glpi_logs`
-      //        $where ";
-      //$result = $DB->query($sql);
    }
 
 
