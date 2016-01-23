@@ -186,6 +186,9 @@ class PluginUninstallUninstall {
          }
 
          if ($item->isField('locations_id')) {
+            if ($location == '') {
+               $location = 0;
+            }
             switch ($location) {
                case -1 :
                   break;
