@@ -4,7 +4,7 @@ This plugin, called "uninstall", can remove inventory equipment. It was designed
 
 * designate inventory materials as scrap
 * removing inventory due to a temporary hardware failure
-* replace material by another in the warranty process for example (See [[Replace_manual_in_english|Asset replacement]])
+* replace material by another in the warranty process for example.
 
 The plugin includes:
 
