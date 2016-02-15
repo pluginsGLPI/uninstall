@@ -12,4 +12,4 @@ The plugin includes:
 * a menu "Uninstall materials" in "Plugins"
 * a menu "deinstallation" in user preferences
 
-SEE [Wiki] for manuals
+SEE [Wiki](https://github.com/pluginsGLPI/uninstall/wiki) for manuals
