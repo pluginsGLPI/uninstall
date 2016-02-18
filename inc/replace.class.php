@@ -483,7 +483,7 @@ class PluginUninstallReplace {
       }
 
       if ($item->isField('serial')) {
-         $string.= "\n ".sprintf(__('%1$s: %2$s'), __('Serial Number'), $item->getField('serial'));
+         $string.= "\n ".sprintf(__('%1$s: %2$s'), __('Serial number'), $item->getField('serial'));
       }
 
       if ($item->isField('otherserial')) {
@@ -525,7 +525,7 @@ class PluginUninstallReplace {
       echo "<tr class='tab_bg_1 center'>";
       echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_name"])."</td>";
-      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),__('Serial Number')) . "</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),__('Serial number')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_serial"])."</td>";
       echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_otherserial"]) . "</td>";

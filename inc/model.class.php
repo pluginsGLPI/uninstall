@@ -390,7 +390,7 @@ class PluginUninstallModel extends CommonDBTM {
                            ? $this->fields["replace_name"]: 1),
                            -1, array('width' => '100%'));
       echo "</td>";
-      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Serial Number')) . "</td><td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number')) . "</td><td>";
       Dropdown::showYesNo("replace_serial",
                           (isset($this->fields["replace_serial"])
                            ? $this->fields["replace_serial"]: 1));
@@ -758,7 +758,7 @@ class PluginUninstallModel extends CommonDBTM {
 
       $tab[26]['table']          = $this->getTable();
       $tab[26]['field']          = 'replace_serial';
-      $tab[26]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Serial Number'));
+      $tab[26]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number'));
       $tab[26]['datatype']       = 'bool';
 
       $tab[27]['table']          = $this->getTable();
