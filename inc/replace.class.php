@@ -395,10 +395,6 @@ class PluginUninstallReplace {
          if ($plug->isActivated('fusioninventory')) {
             if ($model->fields['raz_fusioninventory']) {
                PluginUninstallUninstall::deleteFusionInventoryLink(get_class($olditem), $olditem_id);
-               PluginUninstallUninstall::deleteFusionInventoryLock(get_class($olditem), $olditem_id);
-               PluginUninstallUninstall::deleteFusionInventoryRuleMatches(get_class($olditem), $olditem_id);
-               PluginUninstallUninstall::deleteFusioninventoryMisc(get_class($olditem), $olditem_id);
-               PluginUninstallUninstall::deleteFusioninventoryTaskJobs(get_class($olditem), $olditem_id);
             }
          }
 
