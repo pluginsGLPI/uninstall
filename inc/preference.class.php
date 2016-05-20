@@ -67,7 +67,7 @@ class PluginUninstallPreference extends CommonDBTM {
             echo "<td>";
             $value = (isset($this->fields["locations_id"]) ? $this->fields["locations_id"] : 0);
 
-            Location::dropdown(array('name'       => "id[$pref_ID][locations_id]",
+            Location::dropdown(array('name'      => "id[$pref_ID][locations_id]",
                                      'value'     => ($value == '' ? 0 : $value),
                                      'comments'  => 1,
                                      'entity'    => $entity,

@@ -46,8 +46,8 @@ class PluginUninstallProfile extends Profile {
                'itemtype'  => 'PluginUninstallProfile',
                'label'     => PluginUninstallUninstall::getTypeName(),
                'field'     => self::$rightname,
-               'rights'    => array(READ => __('Read'),
-                                    UPDATE => __('Write'),
+               'rights'    => array(READ                => __('Read'),
+                                    UPDATE              => __('Write'),
                                     self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName())
          ),
       );
@@ -68,7 +68,7 @@ class PluginUninstallProfile extends Profile {
 
       if ($canedit = self::canUpdate()) {
          $options['colspan'] = 1;
-         $options['target'] = $profile->getFormURL();
+         $options['target']  = $profile->getFormURL();
          $this->fields["id"] = $ID;
          $this->showFormHeader($options);
       }
@@ -84,8 +84,8 @@ class PluginUninstallProfile extends Profile {
 
    static function createFirstAccess($ID) {
       self::addDefaultProfileInfos($ID,
-            array(PluginUninstallProfile::$rightname     => UPDATE | READ | self::RIGHT_REPLACE,
-                  'plugin_uninstall_replace' => 1), true);
+            array(PluginUninstallProfile::$rightname => UPDATE | READ | self::RIGHT_REPLACE,
+                  'plugin_uninstall_replace'         => 1), true);
    }
 
    /**

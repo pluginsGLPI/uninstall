@@ -37,8 +37,8 @@ class PluginUninstallModel extends CommonDBTM {
    public $first_level_menu  = "plugins";
    public $second_level_menu = "uninstall";
 
-   const TYPE_MODEL_UNINSTALL    = 1;
-   const TYPE_MODEL_REPLACEMENT  = 2;
+   const TYPE_MODEL_UNINSTALL   = 1;
+   const TYPE_MODEL_REPLACEMENT = 2;
 
    static function getTypeName($nb=0) {
       return __("Uninstallation template", 'uninstall');
@@ -709,15 +709,15 @@ class PluginUninstallModel extends CommonDBTM {
       $plug = new Plugin();
       if ($plug->isActivated('ocsinventoryng')) {
 
-         $tab[18]['table']          = $this->getTable();
-         $tab[18]['field']          = 'remove_from_ocs';
-         $tab[18]['name']           = __('Delete computer in OCSNG', 'ocsinventoryng');
-         $tab[18]['datatype']       = 'bool';
+         $tab[18]['table']       = $this->getTable();
+         $tab[18]['field']       = 'remove_from_ocs';
+         $tab[18]['name']        = __('Delete computer in OCSNG', 'ocsinventoryng');
+         $tab[18]['datatype']    = 'bool';
 
-         $tab[19]['table']          = $this->getTable();
-         $tab[19]['field']          = 'delete_ocs_link';
-         $tab[19]['name']           = __('Delete link with computer in OCSNG', 'uninstall');
-         $tab[19]['datatype']       ='bool';
+         $tab[19]['table']       = $this->getTable();
+         $tab[19]['field']       = 'delete_ocs_link';
+         $tab[19]['name']        = __('Delete link with computer in OCSNG', 'uninstall');
+         $tab[19]['datatype']    ='bool';
       }
 
       $tab[20]['table']          = $this->getTable();
@@ -834,22 +834,22 @@ class PluginUninstallModel extends CommonDBTM {
             return Dropdown::EMPTY_VALUE;
             break;
 
-      case 'types_id' :
+         case 'types_id' :
             if ($values['types_id'] == self::TYPE_MODEL_UNINSTALL) {
                return __('Uninstallation', 'uninstall');
             }
             return __('Replacement', 'uninstall');
             break;
 
-      case 'groups_id' :
-         if ($values['groups_id'] < 0) {
-            return __('Keep in the current group', 'uninstall');
-         } else if (!$values['groups_id']) {
-            return __('None');
-         }
-         return Dropdown::getDropdownName('glpi_groups', $values['groups_id']);
+         case 'groups_id' :
+            if ($values['groups_id'] < 0) {
+               return __('Keep in the current group', 'uninstall');
+            } else if (!$values['groups_id']) {
+               return __('None');
+            }
+            return Dropdown::getDropdownName('glpi_groups', $values['groups_id']);
 
-         break;
+            break;
 
       }
       return parent::getSpecificValueToDisplay($field, $values, $options);

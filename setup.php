@@ -64,8 +64,7 @@ function plugin_init_uninstall() {
             //Item actions
             $PLUGIN_HOOKS['item_update']['uninstall']
                = array('PluginUninstallModel' => array('PluginUninstallPreference',
-                                                       'afterUpdateModel')
-               );
+                                                       'afterUpdateModel'));
             $PLUGIN_HOOKS['item_delete']['uninstall']
                = array('PluginUninstallModel' => array('PluginUninstallPreference',
                                                        'beforeItemPurge'));
