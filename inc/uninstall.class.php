@@ -287,6 +287,10 @@ class PluginUninstallUninstall {
 
          if ($model->fields['raz_fusioninventory'] == 1) {
             self::deleteFusionInventoryLink($type, $id);
+            self::deleteFusionInventoryLock($type, $id);
+            self::deleteFusionInventoryRuleMatches($type, $id);
+            self::deleteFusioninventoryMisc($type, $id);
+            self::deleteFusioninventoryTaskJobs($type, $id);
          }
 
          //Plugin hook after uninstall
@@ -416,6 +420,97 @@ class PluginUninstallUninstall {
          if ($itemtype == 'Computer') {
             $agent = new PluginFusioninventoryAgent();
             $agent->deleteByCriteria(array('id' => $items_id), true);
+         }
+      }
+   }
+
+   /**
+     * Delete all locks of the Computer
+     */
+   function deleteFusionInventoryLock($itemtype, $items_id) {
+      global $DB;
+
+      $table = getTableForItemType($itemtype);
+      return $DB->query("DELETE FROM `glpi_plugin_fusioninventory_locks`
+                         WHERE `tablename` = '$table'
+                           AND `items_id`  = $item_id");
+   }
+
+   function deleteFusionInventoryRuleMatches($itemtype, $items_id) {
+      global $DB;
+
+      return $DB->query("DELETE FROM `glpi_plugin_fusioninventory_rulematchedlogs
+                         WHERE `items_id` = $item_id
+                           AND `itemtype` = '$itemtype'");
+   }
+
+   /**
+     * Clean de toutes les informations de l'itemtype désinstallé dans les tables de FusionInventory
+     */
+   function deleteFusioninventoryMisc($itemtype, $items_id) {
+      global $DB;
+
+      deleteRuleMatches($item_id, $itemtype);
+      deleteItemInActionTaskJobs($item_id, $itemtype);
+
+      switch ($itemtype) {
+         case 'Computer' :
+            $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
+            $pfComputerLicenseInfo->deleteByCriteria(array('computers_id' => $item_id));
+
+            $pfInventoryComputerAntivirus = new PluginFusioninventoryInventoryComputerAntivirus();
+            $pfInventoryComputerAntivirus->deleteByCriteria(array('computers_id' => $item_id));
+
+            $pfInventoryComputerBatteries = new PluginFusioninventoryInventoryComputerBatteries();
+            $pfInventoryComputerBatteries->deleteByCriteria(array('computers_id' => $item_id));
+
+            $pfInventoryComputerComputer = new PluginFusioninventoryInventoryComputerComputer();
+            $pfInventoryComputerComputer->deleteByCriteria(array('computers_id' => $item_id));
+
+            // ** Delete link betweet two computerstorages **
+            $pfInventoryComputerStorageStorageStorage = new PluginFusioninventoryInventoryComputerStorage_Storage();
+            $tab_ids = $pfInventoryComputerStorageStorageStorage->getOpposites($item_id);
+            if (!empty($tab_ids)) { //because getOpposites can return 0
+               foreach ($tab_ids as $inventorycomputerstorages_id) {
+                  $storage->deleteByCriteria(array(
+                     'plugin_fusioninventory_inventorycomputerstorages_id_1' => $inventorycomputerstorages_id));
+                  $storage->deleteByCriteria(array(
+                     'plugin_fusioninventory_inventorycomputerstorages_id_2' => $inventorycomputerstorages_id));
+               }
+            }
+
+            $pfInventoryComputerStorage = new PluginFusioninventoryInventoryComputerStorage();
+            $pfInventoryComputerStorage->deleteByCriteria(array('computers_id' => $item_id));
+            break;
+      }
+   }
+
+   /**
+     * Search in database colomn 'action' the itemtype and item_id for remove if exist.
+     */
+   function deleteFusioninventoryTaskJobs($itemtype, $items_id) {
+      global $DB;
+
+      $result = $DB->query("SELECT * FROM `glpi_plugin_fusioninventory_taskjobs`");
+      if ($DB->numrows($result) > 0) {
+         while ($datas = $DB->fetch_assoc($result)) {
+            $json       = $datas['action'];
+            $taskjob_id = $datas['id'];
+
+            $a_listact  = array();
+            foreach (json_decode($json) as $obj) {
+               foreach ($obj as $key => $value) {
+                  if ($key != $type || $item_id != $value) {
+                     $a_listact[] = array($key=>$value);
+                  }
+               }
+            }
+            $new_json = exportArrayToDB($a_listact);
+            if ($new_json != $json) {
+               $DB->query("UPDATE `glpi_plugin_fusioninventory_taskjobs`
+                           SET `action` = '$new_json'
+                           WHERE `id` = $taskjob_id");
+            }
          }
       }
    }
