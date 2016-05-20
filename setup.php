@@ -53,10 +53,11 @@ function plugin_init_uninstall() {
          if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
             $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
 
-            // Add link in GLPI plugins list :
-            $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = array('admin' => 'PluginUninstallModel');
 
-            if (Session::haveRight('config', READ)) {
+            if (Session::haveRight('uninstall:profile', READ)) {
+               // Add link in GLPI plugins list :
+               $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = array('admin' => 'PluginUninstallModel');
+
                // add to 'Admin' menu :
                $PLUGIN_HOOKS['config_page']['uninstall'] = "front/model.php";
             }

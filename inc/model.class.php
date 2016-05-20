@@ -30,10 +30,8 @@
 
 class PluginUninstallModel extends CommonDBTM {
 
-   public $dohistory = true;
-
-   static $rightname = "plugin_uninstall";
-
+   static $rightname         = "uninstall:profile";
+   public $dohistory         = true;
    public $first_level_menu  = "plugins";
    public $second_level_menu = "uninstall";
 
@@ -44,28 +42,20 @@ class PluginUninstallModel extends CommonDBTM {
       return __("Uninstallation template", 'uninstall');
    }
 
-   static function canUpdate() {
-      return self::canCreate();
-   }
-
    static function canDelete() {
-      return self::canCreate();
+      return self::canUpdate();
    }
 
    static function canPurge() {
-      return self::canCreate();
+      return self::canUpdate();
    }
 
    static function canCreate() {
-      return Session::haveRight(PluginUninstallProfile::$rightname, UPDATE) ? true : false;
-   }
-
-   static function canView() {
-      return Session::haveRight(PluginUninstallProfile::$rightname, READ) ? true : false;
+      return self::canUpdate();
    }
 
    static function canReplace() {
-      return Session::haveRight(PluginUninstallProfile::$rightname, PluginUninstallProfile::RIGHT_REPLACE) ? true : false;
+      return Session::haveRight(self::$rightname, PluginUninstallProfile::RIGHT_REPLACE) ? true : false;
    }
 
    static function getMenuContent() {

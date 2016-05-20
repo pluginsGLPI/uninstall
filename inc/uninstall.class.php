@@ -32,35 +32,12 @@ class PluginUninstallUninstall {
 
    const PLUGIN_UNINSTALL_TRANSFER_NAME = "plugin_uninstall";
 
-   static $rightname = "plugin_uninstall";
+   static $rightname = "uninstall:profile";
 
    static function getTypeName($nb=0) {
       return __("Item's uninstallation", 'uninstall');
    }
 
-   /**
-    * @since version 0.85
-    *
-    * @see CommonDBTM::getSpecificMassiveActions()
-    **/
-   //Note : this function can be activate
-   /*
-   function getSpecificMassiveActions($checkitem=NULL) {
-
-      $actions = parent::getSpecificMassiveActions($checkitem);
-
-      return $actions;
-   }
-   */
-
-   /*
-   function getForbiddenStandardMassiveAction() {
-
-      $forbidden   = parent::getForbiddenStandardMassiveAction();
-      $forbidden[] = 'update'; //"uninstall"
-      return $forbidden;
-   }
-   */
    /**
     * @since version 0.85
     *
