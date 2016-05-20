@@ -32,7 +32,7 @@
 class PluginUninstallPreference extends CommonDBTM {
 
    static $rightname = "plugin_uninstall";
-   
+
    function showFormUserPreferences() {
       global $DB;
 

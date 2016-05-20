@@ -63,7 +63,7 @@ if (isset ($_POST["add"])) {
 
    Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'], "admin",
       "PluginUninstallModel", "model");
-   
+
    if ($model->getFromDB($id)) {
       if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT) {
          if (!Session::haveRight(PluginUninstallProfile::$rightname, PluginUninstallProfile::RIGHT_REPLACE)) {
@@ -71,7 +71,7 @@ if (isset ($_POST["add"])) {
          }
       }
    }
-      
+
    $model->display(array('id'           => $id,
          'withtemplate' => $_GET["withtemplate"])
    );
