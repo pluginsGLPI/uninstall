@@ -411,11 +411,42 @@ class PluginUninstallUninstall {
       if (function_exists('plugin_pre_item_purge_fusioninventory')) {
          $item = new $itemtype();
          $item->getFromDB($items_id);
+         $agent = new PluginFusioninventoryAgent();
+         $agents = $agent->getAgentsFromComputers(array($items_id));
+
+         // clean item associated to agents
          plugin_pre_item_purge_fusioninventory($item);
 
          if ($itemtype == 'Computer') {
-            $agent = new PluginFusioninventoryAgent();
-            $agent->deleteByCriteria(array('id' => $items_id), true);
+            // remove agent(s)
+            foreach($agents as $current_agent) {
+               $agent->deleteByCriteria(array('id' => $current_agent['id']), true);
+            }
+
+            // remove licences
+            $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
+            $pfComputerLicenseInfo->deleteByCriteria(array('computers_id' => $items_id));
+
+            // remove batteries
+            $pfInventoryComputerBatteries = new PluginFusioninventoryInventoryComputerBatteries();
+            $pfInventoryComputerBatteries->deleteByCriteria(array('computers_id' => $items_id));
+
+
+            // Delete links between two computerstorages
+            $pfInventoryComputerStorageStorageStorage = new PluginFusioninventoryInventoryComputerStorage_Storage();
+            $tab_ids = $pfInventoryComputerStorageStorageStorage->getOpposites($items_id);
+            if (!empty($tab_ids)) { //because getOpposites can return 0
+               foreach ($tab_ids as $inventorycomputerstorages_id) {
+                  $storage->deleteByCriteria(array(
+                     'plugin_fusioninventory_inventorycomputerstorages_id_1' => $inventorycomputerstorages_id));
+                  $storage->deleteByCriteria(array(
+                     'plugin_fusioninventory_inventorycomputerstorages_id_2' => $inventorycomputerstorages_id));
+               }
+            }
+
+            // ** Delete computerstorages **
+            $pfInventoryComputerStorage = new PluginFusioninventoryInventoryComputerStorage();
+            $pfInventoryComputerStorage->deleteByCriteria(array('computers_id' => $items_id));
          }
       }
    }
