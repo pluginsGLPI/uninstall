@@ -32,17 +32,23 @@ include ('../../../inc/includes.php');
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
-// Security
-if (!TableExists($_POST['table'])) {
-   exit();
-}
-
 $itemtypeisplugin = isPluginItemType($_POST['itemtype']);
 $item             = new $_POST['itemtype']();
+$table            = getTableForItemType($_POST['itemtype']);
+$options          = array();
+$count            = 0;
+$datastoadd       = array();
+
+$displaywith = false;
+if (isset($_POST['displaywith'])) {
+   if (is_array($_POST['displaywith']) && count($_POST['displaywith'])) {
+      $displaywith = true;
+   }
+}
 
 if ($item->isEntityAssign()) {
    // allow opening ticket on recursive object (printer, software, ...)
-   $where = getEntitiesRestrictRequest("WHERE", $_POST['table'], '',
+   $where = getEntitiesRestrictRequest("WHERE", $table, '',
                                          $_SESSION['glpiactiveentities'], $item->maybeRecursive());
 
 } else {
@@ -83,44 +89,45 @@ if ($_POST['searchText'] == $CFG_GLPI["ajax_wildcard"]) {
 }
 
 $query = "SELECT *
-          FROM `".$_POST['table']."`
+          FROM $table
           $where
           ORDER BY `name`
           $LIMIT";
 $result = $DB->query($query);
+while ($data = $DB->fetch_assoc($result)) {
+   $outputval = Toolbox::unclean_cross_side_scripting_deep($data["name"]);
 
-echo "<select name='newItems[\"".$_POST['newItems_id']."\"]' size='1'>";
-
-if (($_POST['searchText'] != $CFG_GLPI["ajax_wildcard"])
-    && ($DB->numrows($result) == $NBMAX)) {
-   echo "<option value='0'>--".__('Limited view')."--</option>";
-}
-
-echo "<option value='0'>".Dropdown::EMPTY_VALUE."</option>";
-
-if ($DB->numrows($result)) {
-   while ($data = $DB->fetch_array($result)) {
-      $output = $data['name'];
-
-      if (($_POST['table'] != "glpi_softwares")
-          && !$itemtypeisplugin) {
-         if (!empty($data['contact'])) {
-            $output .= " - ".$data['contact'];
-         }
-         if (!empty($data['serial'])) {
-            $output .= " - ".$data['serial'];
-         }
-         if (!empty($data['otherserial'])) {
-            $output .= " - ".$data['otherserial'];
+   if ($displaywith) {
+      foreach ($_POST['displaywith'] as $key) {
+         if (isset($data[$key])) {
+            $withoutput = $data[$key];
+            if (isForeignKeyField($key)) {
+               $withoutput = Dropdown::getDropdownName(getTableNameForForeignKeyField($key),
+                                                       $data[$key]);
+            }
+            if ((strlen($withoutput) > 0) && ($withoutput != '&nbsp;')) {
+               $outputval = sprintf(__('%1$s - %2$s'), $outputval, $withoutput);
+            }
          }
       }
-
-      if (empty($output) || $_SESSION['glpiis_ids_visible']) {
-         $output = sprintf(__('%1$s (%2$s)'), $output, $data['id']);
-      }
-      echo "<option value='".$data['id']."' title=\"".Html::cleanInputText($output)."\">".
-            Toolbox::substr($output, 0, $_SESSION["glpidropdown_chars_limit"])."</option>";
    }
+   $ID         = $data['id'];
+   $addcomment = "";
+   $title      = $outputval;
+   if (isset($data["comment"])) {
+      $addcomment .= $data["comment"];
+      $title = sprintf(__('%1$s - %2$s'), $title, $addcomment);
+   }
+   if ($_SESSION["glpiis_ids_visible"]
+       || (strlen($outputval) == 0)) {
+      $outputval = sprintf(__('%1$s (%2$s)'), $outputval, $ID);
+   }
+   array_push($options, array('id'     => $ID,
+                               'text'  => $outputval,
+                               'title' => $title));
+   $count++;
 }
 
-echo "</select>";
+
+echo json_encode(array('results' => $options,
+                      'count'    => $count));

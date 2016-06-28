@@ -670,6 +670,9 @@ class PluginUninstallReplace {
 
          echo "<td>";
          self::showNewItemDropdown($id, $type);
+         $type::dropdown(array('name'        => "newItems[$id]",
+                               'displaywith' => array('serial', 'otherserial'),
+                               'url'         => $CFG_GLPI['root_doc']."/plugins/uninstall/ajax/dropdownReplaceFindDevice.php"));
          echo "</td></tr>";
       }
 
@@ -686,35 +689,6 @@ class PluginUninstallReplace {
 
       echo "</table>";
       Html::closeForm();
-   }
-
-   /**
-    * @since version 0.85
-    *
-    * @param unknown $id
-    * @param unknown $type
-    */
-   static function showNewItemDropdown($id, $type) {
-      $rand = mt_rand();
-      $table = getTableForItemType($type);
-      echo "<span id='results_ID$rand'></span>";
-      echo "<script>
-      $('results_ID$rand').ready(function() {
-         var searchText = '';
-         var myname = 'newItems[$id]';
-         $.ajax({
-            type: 'POST',
-            url: '../ajax/dropdownReplaceFindDevice.php',
-            data: 'searchText=' + searchText + '&newItems_id=$id&table=$table&itemtype=$type&current_item=$id',
-            success: function(msg) {
-               $('#results_ID'+$rand).after(msg);
-               $('#results_ID$rand + select').select2({
-                  width: '80%',
-               });
-            }
-         });
-      });
-      </script>";
    }
 
    /**
