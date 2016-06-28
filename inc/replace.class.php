@@ -697,14 +697,11 @@ class PluginUninstallReplace {
    static function showNewItemDropdown($id, $type) {
       $rand = mt_rand();
       $table = getTableForItemType($type);
-
       echo "<span id='results_ID$rand'></span>";
-
       echo "<script>
       $('results_ID$rand').ready(function() {
          var searchText = '';
          var myname = 'newItems[$id]';
-
          $.ajax({
             type: 'POST',
             url: '../ajax/dropdownReplaceFindDevice.php',

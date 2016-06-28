@@ -40,7 +40,7 @@ function plugin_uninstall_postinit() {
 
 function plugin_uninstall_MassiveActions($type) {
    global $UNINSTALL_TYPES;
-   
+
    // Like GLPI 0.84, this plugin don't support massive actions in Global item page.
    if (isset($_REQUEST['container']) && $_REQUEST['container'] == 'massformAllAssets') {
       return array();

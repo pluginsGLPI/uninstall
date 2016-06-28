@@ -755,7 +755,8 @@ class PluginUninstallUninstall {
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       global $UNINSTALL_TYPES;
 
-      if (in_array($item->getType(), $UNINSTALL_TYPES)) {
+      if (PluginUninstallProfile::canView()
+         && in_array($item->getType(), $UNINSTALL_TYPES)) {
          if (!$withtemplate) {
             return __('Uninstall', 'uninstall');
          }
