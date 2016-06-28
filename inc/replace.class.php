@@ -669,7 +669,6 @@ class PluginUninstallReplace {
          }
 
          echo "<td>";
-         self::showNewItemDropdown($id, $type);
          $type::dropdown(array('name'        => "newItems[$id]",
                                'displaywith' => array('serial', 'otherserial'),
                                'url'         => $CFG_GLPI['root_doc']."/plugins/uninstall/ajax/dropdownReplaceFindDevice.php"));
