@@ -32,16 +32,16 @@ include ('../../../inc/includes.php');
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
-$itemtypeisplugin = isPluginItemType($_POST['itemtype']);
-$item             = new $_POST['itemtype']();
-$table            = getTableForItemType($_POST['itemtype']);
+$itemtypeisplugin = isPluginItemType($_REQUEST['itemtype']);
+$item             = new $_REQUEST['itemtype']();
+$table            = getTableForItemType($_REQUEST['itemtype']);
 $options          = array();
 $count            = 0;
 $datastoadd       = array();
 
 $displaywith = false;
-if (isset($_POST['displaywith'])) {
-   if (is_array($_POST['displaywith']) && count($_POST['displaywith'])) {
+if (isset($_REQUEST['displaywith'])) {
+   if (is_array($_REQUEST['displaywith']) && count($_REQUEST['displaywith'])) {
       $displaywith = true;
    }
 }
@@ -62,29 +62,29 @@ if ($item->maybeTemplate()) {
    $where .= " AND `is_template` = '0' ";
 }
 
-if ((strlen($_POST['searchText']) > 0)
-    && ($_POST['searchText'] != $CFG_GLPI["ajax_wildcard"])) {
-   $search = Search::makeTextSearch($_POST['searchText']);
+if ((strlen($_REQUEST['searchText']) > 0)
+    && ($_REQUEST['searchText'] != $CFG_GLPI["ajax_wildcard"])) {
+   $search = Search::makeTextSearch($_REQUEST['searchText']);
 
    $where .= " AND (`name` ".$search."
-                    OR `id` = '".$_POST['searchText']."'
+                    OR `id` = '".$_REQUEST['searchText']."'
                     OR `serial` ".$search."
                     OR `otherserial` ".$search.")";
 }
 
 //If software or plugins : filter to display only the objects that are allowed to be visible in Helpdesk
-if (in_array($_POST['itemtype'], $CFG_GLPI["helpdesk_visible_types"])) {
+if (in_array($_REQUEST['itemtype'], $CFG_GLPI["helpdesk_visible_types"])) {
    $where .= " AND `is_helpdesk_visible` = '1' ";
 }
 
-if (isset($_POST['current_item']) && ($_POST['current_item'] > 0)) {
-   $where .= " AND `id` != " . $_POST['current_item'];
+if (isset($_REQUEST['current_item']) && ($_REQUEST['current_item'] > 0)) {
+   $where .= " AND `id` != " . $_REQUEST['current_item'];
 }
 
 $NBMAX = $CFG_GLPI["dropdown_max"];
 $LIMIT = "LIMIT 0,$NBMAX";
 
-if ($_POST['searchText'] == $CFG_GLPI["ajax_wildcard"]) {
+if ($_REQUEST['searchText'] == $CFG_GLPI["ajax_wildcard"]) {
    $LIMIT = "";
 }
 
@@ -98,7 +98,7 @@ while ($data = $DB->fetch_assoc($result)) {
    $outputval = Toolbox::unclean_cross_side_scripting_deep($data["name"]);
 
    if ($displaywith) {
-      foreach ($_POST['displaywith'] as $key) {
+      foreach ($_REQUEST['displaywith'] as $key) {
          if (isset($data[$key])) {
             $withoutput = $data[$key];
             if (isForeignKeyField($key)) {
