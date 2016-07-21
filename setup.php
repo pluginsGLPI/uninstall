@@ -84,7 +84,7 @@ function plugin_version_uninstall() {
                 'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
                 'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
                 'minGlpiVersion' => '0.85',
-                'version'        => '0.90-1.2');
+                'version'        => '0.90-1.3');
 }
 
 function plugin_uninstall_check_prerequisites() {
