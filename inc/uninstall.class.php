@@ -124,6 +124,9 @@ class PluginUninstallUninstall {
          $input["entities_id"] = $entity;
          $fields               = array();
 
+         //Hook to perform actions before item is being uninstalled
+         $item->fields['_uninstall_event'] = $model->getID();
+         $item->fields['_action']          = 'uninstall';
          Plugin::doHook("plugin_uninstall_before", $item);
 
          //--------------------//
