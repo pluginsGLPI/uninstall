@@ -28,6 +28,8 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
+define ('PLUGIN_UNINSTALL_VERSION', '0.90-1.4');
+
 /**
  * Function Init
  */
@@ -84,7 +86,7 @@ function plugin_version_uninstall() {
                 'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
                 'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
                 'minGlpiVersion' => '0.85',
-                'version'        => '0.90-1.4');
+                'version'        => PLUGIN_UNINSTALL_VERSION);
 }
 
 function plugin_uninstall_check_prerequisites() {
