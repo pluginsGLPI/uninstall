@@ -134,7 +134,8 @@ class PluginUninstallUninstall {
          //------------------//
          if (in_array($type,$UNINSTALL_DIRECT_CONNECTIONS_TYPE)) {
             $conn = new Computer_Item();
-            $conn->deleteByCriteria(array('computers_id' => $id), true);
+            $conn->deleteByCriteria(array('itemtype' => $type,
+                                          'items_id' => $id), true);
          }
 
          //--------------------//
