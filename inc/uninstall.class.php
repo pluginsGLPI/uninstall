@@ -141,10 +141,13 @@ class PluginUninstallUninstall {
          //-- Common fields --//
          //------------------//
 
-         //RAZ contact and contactnumber
+         //RAZ contact
          if ($item->isField('contact') && ($model->fields["raz_contact"] == 1)) {
             $fields["contact"] = '';
+         }
 
+         //RAZ contact number
+         if ($item->isField('contact') && ($model->fields["raz_contact_num"] == 1)) {
             if ($item->isField('contact_num')) {
                $fields["contact_num"] = '';
             }
