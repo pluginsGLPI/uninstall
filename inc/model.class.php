@@ -122,8 +122,9 @@ class PluginUninstallModel extends CommonDBTM {
          $archive_method = " - ".__('CSV Archiving', 'uninstall');
       }
 
-      return array(PluginUninstallReplace::METHOD_PURGE => __('Purge', 'uninstall') . $archive_method,
-                   PluginUninstallReplace::METHOD_DELETE_AND_COMMENT => __('Delete + Comment', 'uninstall'));
+      return [PluginUninstallReplace::METHOD_PURGE => __('Purge', 'uninstall') . $archive_method,
+              PluginUninstallReplace::METHOD_DELETE_AND_COMMENT => __('Delete + Comment', 'uninstall'),
+              PluginUninstallReplace::METHOD_KEEP_AND_COMMENT => __('Keep + Comment', 'uninstall')];
    }
 
 
