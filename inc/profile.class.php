@@ -31,8 +31,6 @@
 class PluginUninstallProfile extends Profile {
    const RIGHT_REPLACE = 128;
 
-   public static $rightname = "uninstall:profile";
-
    /**
     *
     * Get rights matrix for plugin
