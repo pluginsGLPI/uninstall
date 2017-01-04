@@ -420,13 +420,13 @@ class PluginUninstallReplace {
             case self::METHOD_DELETE_AND_COMMENT:
             case self::METHOD_KEEP_AND_COMMENT:
                //Add comment on the new item first
-               $comment = self::getCommentsForReplacement($olditem, true);
+               $comment = self::getCommentsForReplacement($newitem, true);
                $newitem->update(['id'      => $newitem_id,
                                  'comment' => Toolbox::addslashes_deep($comment)],
                                 false);
 
                // Retrieve, Compute && Update OLD comment field
-               $comment = self::getCommentsForReplacement($newitem, false);
+               $comment = self::getCommentsForReplacement($olditem, false);
 
                $olditem->update(['id'      => $olditem_id,
                                  'comment' => Toolbox::addslashes_deep($comment)],
