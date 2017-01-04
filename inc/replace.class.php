@@ -280,24 +280,26 @@ class PluginUninstallReplace {
          }
 
          // User
-         if ($model->fields["replace_users"]
-             && in_array($type, $CFG_GLPI["linkuser_types"])) {
+         if (in_array($type, $CFG_GLPI["linkuser_types"])) {
 
             $data        = array();
             $data['id']  = $newitem->getID();
 
-            if ($newitem->isField('users_id')
-                && ($overwrite || empty($data['users_id']))) {
+            if ($model->fields["replace_users"]
+               && $newitem->isField('users_id')
+                  && ($overwrite || empty($data['users_id']))) {
                   $data['users_id'] = $olditem->getField('users_id');
             }
 
-            if ($newitem->isField('contact')
-                && ($overwrite || empty($data['contact']))) {
+            if ($model->fields["replace_contact"]
+               && $newitem->isField('contact')
+                  && ($overwrite || empty($data['contact']))) {
                   $data['contact'] = $olditem->getField('contact');
             }
 
-            if ($newitem->isField('contact_num')
-                && ($overwrite || empty($data['contact_num']))) {
+            if ($model->fields["replace_contact_num"]
+               && $newitem->isField('contact_num')
+                  && ($overwrite || empty($data['contact_num']))) {
                   $data['contact_num'] = $olditem->getField('contact_num');
             }
 

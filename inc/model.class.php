@@ -317,12 +317,20 @@ class PluginUninstallModel extends CommonDBTM {
                           (isset($this->fields["raz_name"])
                            ? $this->fields["raz_name"] : 1));
       echo "</td>";
-      echo "<td>" .sprintf(__('%1$s %2$s'),  __('Blank'), __('Contact')) . "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'),  __('Blank'), __('Alternate username')) . "</td>";
       echo "<td>";
       Dropdown::showYesNo("raz_contact",
                           (isset($this->fields["raz_contact"])
                            ? $this->fields["raz_contact"] : 1));
       echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'),  __('Blank'), __('Alternate username number')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_contact_num",
+                          (isset($this->fields["raz_contact_num"])
+                           ? $this->fields["raz_contact_num"] : 1));
+      echo "</td><td colspan='2'></td></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('User')) . "</td>";
@@ -503,8 +511,28 @@ class PluginUninstallModel extends CommonDBTM {
                            ? $this->fields["replace_direct_connections"] : 1),
                            -1, array('width' => '100%'));
       echo "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Alternate username'));
+      echo "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("replace_contact",
+                          (isset($this->fields["replace_contact"])
+                           ? $this->fields["replace_contact"] : 1),
+                           -1, array('width' => '100%'));
+      echo "</td>";
+      echo "</tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Alternate username number'));
+      echo "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("replace_contact_num",
+                          (isset($this->fields["replace_contact_num"])
+                           ? $this->fields["replace_contact_num"] : 1),
+                           -1, array('width' => '100%'));
+      echo "</td>";
       echo "<td colspan='2'></td>";
       echo "</tr>";
+
    }
 
    /**
@@ -640,8 +668,13 @@ class PluginUninstallModel extends CommonDBTM {
 
       $tab[5]['table']           = $this->getTable();
       $tab[5]['field']           = 'raz_contact';
-      $tab[5]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Contact'));
+      $tab[5]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username'));
       $tab[5]['datatype']        = 'bool';
+
+      $tab[33]['table']           = $this->getTable();
+      $tab[33]['field']           = 'raz_contact_num';
+      $tab[33]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username number'));
+      $tab[33]['datatype']        = 'bool';
 
       $tab[6]['table']           = $this->getTable();
       $tab[6]['field']           = 'raz_user';
@@ -988,6 +1021,26 @@ class PluginUninstallModel extends CommonDBTM {
          if (!FieldExists($table, 'raz_fusioninventory')) {
             $migration->addField($table, 'raz_fusioninventory', "integer");
          }
+         if ($migration->addField($table, 'raz_contact_num', "bool")) {
+            $migration->migrationOneTable($table);
+            $query = "UPDATE `glpi_plugin_uninstall_models`
+                      SET `raz_contact_num`=`raz_contact`";
+            $DB->queryOrDie($query, "Fill raz_contact_num");
+         }
+
+         if ($migration->addField($table, 'replace_contact', "bool")) {
+            $migration->migrationOneTable($table);
+            $query = "UPDATE `glpi_plugin_uninstall_models`
+                      SET `replace_contact`=`replace_users`";
+            $DB->queryOrDie($query, "Fill replace_contact");
+         }
+
+         if ($migration->addField($table, 'replace_contact_num', "bool")) {
+            $migration->migrationOneTable($table);
+            $query = "UPDATE `glpi_plugin_uninstall_models`
+                      SET `replace_contact_num`=`replace_contact`";
+            $DB->queryOrDie($query, "Fill replace_contact_num");
+         }
          $migration->migrationOneTable($table);
 
       // plugin never installed
@@ -1001,6 +1054,7 @@ class PluginUninstallModel extends CommonDBTM {
                     `states_id` int(11) NOT NULL,
                     `raz_name` int(1) NOT NULL DEFAULT '1',
                     `raz_contact` int(1) NOT NULL DEFAULT '1',
+                    `raz_contact_num` int(1) NOT NULL DEFAULT '1',
                     `raz_ip` int(1) NOT NULL DEFAULT '1',
                     `raz_os` int(1) NOT NULL DEFAULT '1',
                     `raz_domain` int(1) NOT NULL DEFAULT '1',
@@ -1030,6 +1084,8 @@ class PluginUninstallModel extends CommonDBTM {
                     `overwrite` tinyint(1) NOT NULL DEFAULT '0',
                     `replace_method` int(11) NOT NULL DEFAULT '2',
                     `raz_fusioninventory` int(1) NOT NULL DEFAULT '1',
+                    `replace_contact` tinyint(1) NOT NULL DEFAULT '0',
+                    `replace_contact_num` tinyint(1) NOT NULL DEFAULT '0',
                     PRIMARY KEY (`id`)
                   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
@@ -1077,6 +1133,7 @@ class PluginUninstallModel extends CommonDBTM {
          $tmp['states_id']                  = 0;
          $tmp['raz_name']                   = 1;
          $tmp['raz_contact']                = 1;
+         $tmp['raz_contact_num']            = 1;
          $tmp['raz_ip']                     = 1;
          $tmp['raz_os']                     = 1;
          $tmp['raz_domain']                 = 1;
@@ -1103,6 +1160,8 @@ class PluginUninstallModel extends CommonDBTM {
          $tmp['replace_infocoms']           = 1;
          $tmp['replace_reservations']       = 1;
          $tmp['replace_users']              = 1;
+         $tmp['replace_contact']            = 1;
+         $tmp['replace_contact_num']        = 1;
          $tmp['replace_groups']             = 1;
          $tmp['replace_tickets']            = 1;
          $tmp['replace_netports']           = 1;
