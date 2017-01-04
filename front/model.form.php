@@ -36,7 +36,7 @@ if (!isset ($_GET["withtemplate"]))
 
 if (isset ($_GET["id"])) {
    $id = $_GET["id"];
-} els eif (isset ($_POST["id"])) {
+} else if (isset ($_POST["id"])) {
    $id = $_POST["id"];
 } else {
    $id = -1;

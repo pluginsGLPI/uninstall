@@ -30,8 +30,9 @@
 
 class PluginUninstallReplace {
 
-   const METHOD_PURGE = 1;
+   const METHOD_PURGE              = 1;
    const METHOD_DELETE_AND_COMMENT = 2;
+   const METHOD_KEEP_AND_COMMENT   = 3;
 
    static $rightname = "uninstall:profile";
 
@@ -400,42 +401,43 @@ class PluginUninstallReplace {
          }
 
          // METHOD REPLACEMENT 1 : Purge
-         if ($model->fields['replace_method'] == self::METHOD_PURGE) {
+         switch ($model->fields['replace_method']) {
+            case self::METHOD_PURGE:
+               // Retrieve, Compute && Update NEW comment field
+               $comment = self::getCommentsForReplacement($olditem, true);
+               $comment.="\n- " . __('See attached document', 'uninstall');
+               $newitem->update(['id'      => $newitem_id,
+                                 'comment' => addslashes($comment)],
+                                false);
 
-            // Retrieve, Compute && Update NEW comment field
-            $comment = self::getCommentsForReplacement($olditem, true);
-            $comment.="\n- " . __('See attached document', 'uninstall');
-            $newitem->update(array('id'      => $newitem_id,
-                                   'comment' => addslashes($comment)),
-                             false);
+               // If old item is attached in PDF/CSV
+               // Delete AND Purge it in DB
+               if ($document_added) {
+                  $olditem->delete(['id' => $olditem_id], true);
+               }
+               break;
 
-            // If old item is attached in PDF/CSV
-            // Delete AND Purge it in DB
-            if ($document_added) {
-               $olditem->delete(array('id' => $olditem_id), true);
-            }
-         }
+            case self::METHOD_DELETE_AND_COMMENT:
+            case self::METHOD_KEEP_AND_COMMENT:
+               //Add comment on the new item first
+               $comment = self::getCommentsForReplacement($olditem, true);
+               $newitem->update(['id'      => $newitem_id,
+                                 'comment' => Toolbox::addslashes_deep($comment)],
+                                false);
 
-         // METHOD REPLACEMENT 2 : Delete AND Comment
-         if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
+               // Retrieve, Compute && Update OLD comment field
+               $comment = self::getCommentsForReplacement($newitem, false);
 
-            //Add comment on the new item first
-            $comment = self::getCommentsForReplacement($olditem, true);
+               $olditem->update(['id'      => $olditem_id,
+                                 'comment' => Toolbox::addslashes_deep($comment)],
+                                false);
 
-            $newitem->update(array('id'      => $newitem_id,
-                                   'comment' => Toolbox::addslashes_deep($comment)),
-                             false);
-
-            // Retrieve, Compute && Update OLD comment field
-            $comment = self::getCommentsForReplacement($newitem, false);
-
-            $olditem->update(array('id'      => $olditem_id,
-                                   'comment' => Toolbox::addslashes_deep($comment)),
-                             false);
-
-            // Delete OLD item from DB (not PURGE)
-            PluginUninstallUninstall::addUninstallLog($type, $olditem_id, 'replaced_by');
-            $olditem->delete(array('id' => $olditem_id), 0, false);
+               // Delete OLD item from DB (not PURGE) only if delete is requested
+               PluginUninstallUninstall::addUninstallLog($type, $olditem_id, 'replaced_by');
+               if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
+                  $olditem->delete(['id' => $olditem_id], 0, false);
+               }
+               break;
          }
 
          //Plugin hook after replacement
@@ -446,7 +448,8 @@ class PluginUninstallReplace {
          Html::changeProgressBarPosition($count,$tot+1);
       }
 
-      Html::changeProgressBarPosition($count,$tot,__('Replacement successful', 'uninstall'));
+      Html::changeProgressBarPosition($count, $tot,
+                                      __('Replacement successful', 'uninstall'));
 
       echo "</td></tr>";
       echo "</table></div>";
@@ -547,6 +550,9 @@ class PluginUninstallReplace {
          case self::METHOD_DELETE_AND_COMMENT :
             echo "<span class='green b'>". $methods[self::METHOD_DELETE_AND_COMMENT] ."</span>";
             break;
+            case self::METHOD_KEEP_AND_COMMENT :
+               echo "<span class='green b'>". $methods[self::METHOD_KEEP_AND_COMMENT] ."</span>";
+               break;
       }
       echo "</td></tr>";
 
