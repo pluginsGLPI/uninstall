@@ -550,9 +550,9 @@ class PluginUninstallReplace {
          case self::METHOD_DELETE_AND_COMMENT :
             echo "<span class='green b'>". $methods[self::METHOD_DELETE_AND_COMMENT] ."</span>";
             break;
-            case self::METHOD_KEEP_AND_COMMENT :
-               echo "<span class='green b'>". $methods[self::METHOD_KEEP_AND_COMMENT] ."</span>";
-               break;
+         case self::METHOD_KEEP_AND_COMMENT :
+            echo "<span class='green b'>". $methods[self::METHOD_KEEP_AND_COMMENT] ."</span>";
+            break;
       }
       echo "</td></tr>";
 
