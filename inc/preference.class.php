@@ -109,7 +109,7 @@ class PluginUninstallPreference extends CommonDBTM {
    static function beforeItemPurge($item) {
 
       switch ($item->getType()) {
-           case 'User' :
+         case 'User' :
             self::deleteUserPreferences($item->fields["id"]);
             break;
 
@@ -249,8 +249,8 @@ class PluginUninstallPreference extends CommonDBTM {
             $migration->changeField($table, 'location', 'locations_id', "integer");
          }
 
-      // plugin nevers installed
       } else {
+         // plugin nevers installed
          $query = "CREATE TABLE `".$table."` (
                      `id` int(11) NOT NULL AUTO_INCREMENT,
                      `users_id` int(11) NOT NULL,

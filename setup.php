@@ -43,18 +43,15 @@ function plugin_init_uninstall() {
 
    Plugin::registerClass('PluginUninstallProfile', ['addtabon' => ['Profile']]);
 
-
    $plugin = new Plugin();
    if ($plugin->isActivated('uninstall')) {
       $UNINSTALL_TYPES                    = ['Computer', 'Monitor', 'NetworkEquipment',
                                              'Peripheral', 'Phone', 'Printer'];
       $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = ['Monitor', 'Peripheral', 'Phone', 'Printer'];
 
-
       if (Session::getLoginUserID()) {
          if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
             $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
-
 
             if (Session::haveRight('uninstall:profile', READ)) {
                // Add link in GLPI plugins list :

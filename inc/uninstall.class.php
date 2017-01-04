@@ -272,7 +272,6 @@ class PluginUninstallUninstall {
                self::deleteHistory($id, true);
             }
 
-
             $plug = new Plugin();
             if ($plug->isActivated('ocsinventoryng')) {
                //Delete computer from OCS
@@ -331,8 +330,8 @@ class PluginUninstallUninstall {
 
 
    static function deleteRegistryKeys($computers_id) {
-     $key = new RegistryKey();
-     $key->deleteByCriteria(array('computers_id' => $computers_id));
+      $key = new RegistryKey();
+      $key->deleteByCriteria(array('computers_id' => $computers_id));
    }
 
    /**
@@ -436,7 +435,6 @@ class PluginUninstallUninstall {
             // remove batteries
             $pfInventoryComputerBatteries = new PluginFusioninventoryInventoryComputerBatteries();
             $pfInventoryComputerBatteries->deleteByCriteria(array('computers_id' => $items_id));
-
 
             // Delete links between two computerstorages
             $pfInventoryComputerStorageStorageStorage = new PluginFusioninventoryInventoryComputerStorage_Storage();
@@ -685,15 +683,15 @@ class PluginUninstallUninstall {
       $used = array();
 
       if (!PluginUninstallModel::canReplace()) {
-          foreach ($DB->request('glpi_plugin_uninstall_models', "`types_id` = '2'") as $data) {
-             $used[] = $data['id'];
-          }
+         foreach ($DB->request('glpi_plugin_uninstall_models', "`types_id` = '2'") as $data) {
+            $used[] = $data['id'];
+         }
       }
 
       return PluginUninstallModel::dropdown(array('name'   => $name,
-                                                    'value'  => 0,
-                                                    'entity' => $entity,
-                                                    'used'   => $used));
+                                                  'value'  => 0,
+                                                  'entity' => $entity,
+                                                  'used'   => $used));
    }
 
 
@@ -781,4 +779,3 @@ class PluginUninstallUninstall {
    }
 
 }
-?>

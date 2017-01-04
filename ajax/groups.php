@@ -47,5 +47,3 @@ if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
          break;
    }
 }
-
-?>

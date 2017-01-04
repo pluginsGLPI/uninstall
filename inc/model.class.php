@@ -1043,8 +1043,8 @@ class PluginUninstallModel extends CommonDBTM {
          }
          $migration->migrationOneTable($table);
 
-      // plugin never installed
       } else {
+         // plugin never installed
          $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType(__CLASS__)."` (
                     `id` int(11) NOT NULL AUTO_INCREMENT,
                     `entities_id` int(11) DEFAULT '0',
@@ -1235,4 +1235,3 @@ class PluginUninstallModel extends CommonDBTM {
    }
 
 }
-?>

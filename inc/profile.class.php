@@ -32,7 +32,7 @@ class PluginUninstallProfile extends Profile {
    const RIGHT_REPLACE = 128;
 
    public static $rightname = "uninstall:profile";
-   
+
    /**
     *
     * Get rights matrix for plugin
@@ -153,16 +153,6 @@ class PluginUninstallProfile extends Profile {
       }
    }
 
-   static function removeRightsFromSession() {
-      // should be obsolete, kept for reference
-//       foreach (array('plugin_uninstall_use', 'plugin_uninstall_replace') as $field) {
-//          if (isset($_SESSION['glpiactiveprofile'][$field])) {
-//             unset($_SESSION['glpiactiveprofile'][$field]);
-//          }
-//       }
-   }
-
-
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
       if ($item->getType() == 'Profile') {
@@ -225,7 +215,6 @@ class PluginUninstallProfile extends Profile {
          $migration->renameTable($table, 'glpi_plugin_uninstall_profiles');
       }
 
-
       $table = 'glpi_plugin_uninstall_profiles';
       // Plugin already installed
       if (TableExists($table)) {
@@ -249,8 +238,8 @@ class PluginUninstallProfile extends Profile {
 
          $migration->dropTable($table);
 
-      // plugin never installed
       } else {
+         // plugin never installed
          $query = "CREATE TABLE `".$table."` (
                     `id` int(11) NOT NULL DEFAULT '0',
                     `profile` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',

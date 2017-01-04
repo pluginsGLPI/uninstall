@@ -80,7 +80,7 @@ if (isset($_REQUEST["uninstall"])) {
                                        array($_REQUEST["device_type"]
                                              => array($_REQUEST["id"] => $_REQUEST["id"])),
                                        $location);
-    Html::footer();
+      Html::footer();
    }
 
 } else {
@@ -108,4 +108,3 @@ if (isset($_REQUEST["uninstall"])) {
       Html::footer();
    }
 }
-?>

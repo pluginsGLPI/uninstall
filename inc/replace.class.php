@@ -373,14 +373,13 @@ class PluginUninstallReplace {
                case -1:
                   break;
 
-                default:
-                   $olditem->update(array('id'           => $olditem_id,
-                                          'locations_id' => $location),
-                                    false);
-                   break;
+               default:
+                  $olditem->update(array('id'           => $olditem_id,
+                                        'locations_id' => $location),
+                                  false);
+                  break;
             }
          }
-
 
          $plug = new Plugin();
          if ($plug->isActivated('ocsinventoryng')) {
@@ -885,4 +884,3 @@ class PluginUninstallReplace {
    }
 
 }
-?>
