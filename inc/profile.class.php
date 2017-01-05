@@ -81,7 +81,7 @@ class PluginUninstallProfile extends Profile {
 
    static function createFirstAccess($ID) {
       self::addDefaultProfileInfos($ID,
-            array(PluginUninstallProfile::$rightname => UPDATE | READ | self::RIGHT_REPLACE,
+            array('uninstall:profile' => UPDATE | READ | self::RIGHT_REPLACE,
                   'plugin_uninstall_replace'         => 1), true);
    }
 
