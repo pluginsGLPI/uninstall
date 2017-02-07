@@ -404,7 +404,13 @@ class PluginUninstallReplace {
          switch ($model->fields['replace_method']) {
             case self::METHOD_PURGE:
                // Retrieve, Compute && Update NEW comment field
-               $comment = self::getCommentsForReplacement($olditem, true);
+               if (!empty($newitem->fields['comment'])) {
+                  $comment = stripslashes($newitem->fields['comment']);
+               } else {
+                  $comment = "";
+               }
+
+               $comment.= self::getCommentsForReplacement($olditem, true);
                $comment.="\n- " . __('See attached document', 'uninstall');
                $newitem->update(['id'      => $newitem_id,
                                  'comment' => addslashes($comment)],
@@ -419,17 +425,30 @@ class PluginUninstallReplace {
 
             case self::METHOD_DELETE_AND_COMMENT:
             case self::METHOD_KEEP_AND_COMMENT:
-               //Add comment on the new item first
-               $comment = self::getCommentsForReplacement($newitem, true);
+               // Retrieve && Compute comment for newitem (with olditem)
+               if (!empty($newitem->fields['comment'])) {
+                  $commentnew = stripslashes($newitem->fields['comment']);
+               } else {
+                  $commentnew = "";
+               }
+               $commentnew.= self::getCommentsForReplacement($olditem, true);
+
+               // Retrieve && Compute comment for olditem (with newitem)
+               if (!empty($olditem->fields['comment'])) {
+                  $commentold = stripslashes($olditem->fields['comment']);
+               } else {
+                  $commentold = "";
+               }
+               $commentold.= self::getCommentsForReplacement($newitem, false);
+
+               // Update comment for newitem
                $newitem->update(['id'      => $newitem_id,
-                                 'comment' => Toolbox::addslashes_deep($comment)],
+                                 'comment' => Toolbox::addslashes_deep($commentnew)],
                                 false);
 
-               // Retrieve, Compute && Update OLD comment field
-               $comment = self::getCommentsForReplacement($olditem, false);
-
+               // Update comment for olditem
                $olditem->update(['id'      => $olditem_id,
-                                 'comment' => Toolbox::addslashes_deep($comment)],
+                                 'comment' => Toolbox::addslashes_deep($commentold)],
                                 false);
 
                // Delete OLD item from DB (not PURGE) only if delete is requested
@@ -467,11 +486,7 @@ class PluginUninstallReplace {
    **/
    static function getCommentsForReplacement(CommonDBTM $item, $new=true, $display_message=true) {
 
-      if (!empty($item->fields['comment'])) {
-         $string = stripslashes($item->fields['comment']);
-      } else {
-         $string = "";
-      }
+      $string = "";
 
       if ($display_message) {
          if ($new) {
@@ -479,6 +494,10 @@ class PluginUninstallReplace {
          } else {
             $string.= "\n" . __('This item was replaced by', 'uninstall')." ";
          }
+      }
+
+      if ($item->isField('id')) {
+         $string.= "\n ".sprintf(__('%1$s: %2$s'), __('ID'), $item->getField('id'));
       }
 
       if ($item->isField('name')) {
