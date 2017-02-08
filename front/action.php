@@ -30,7 +30,7 @@
 
 include ('../../../inc/includes.php');
 
-Html::header(__('Transfer'),$_SERVER['PHP_SELF'], "admin", "transfer");
+Html::header(__('Transfer'), $_SERVER['PHP_SELF'], "admin", "transfer");
 
 if (!isset($_REQUEST["device_type"])
     || !isset($_REQUEST["model_id"])
@@ -87,7 +87,7 @@ if (isset($_REQUEST["uninstall"])) {
 
    if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL) {
       //Massive uninstallation
-      if (isset($_SESSION['glpi_uninstalllist'])){
+      if (isset($_SESSION['glpi_uninstalllist'])) {
          PluginUninstallUninstall::uninstall($_REQUEST["device_type"], $_REQUEST["model_id"],
                                              $_SESSION['glpi_uninstalllist'], $location);
       }

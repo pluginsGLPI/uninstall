@@ -33,8 +33,9 @@ include ('../../../inc/includes.php');
 Session::checkSeveralRightsOr(['uninstall:profile' => READ,
                                'uninstall:profile' => PluginUninstallProfile::RIGHT_REPLACE]);
 
-if (!isset ($_GET["withtemplate"]))
+if (!isset ($_GET["withtemplate"])) {
    $_GET["withtemplate"] = "";
+}
 
 if (isset ($_GET["id"])) {
    $id = $_GET["id"];
@@ -63,7 +64,7 @@ if (isset ($_POST["add"])) {
 
 } else {
 
-   Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'], "admin",
+   Html::header(PluginUninstallModel::getTypeName(), $_SERVER['PHP_SELF'], "admin",
                 "PluginUninstallModel", "model");
 
    if ($model->getFromDB($id)) {
