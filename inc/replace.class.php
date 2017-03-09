@@ -96,7 +96,7 @@ class PluginUninstallReplace {
 
                // USE PDF EXPORT
                $plugin->load('pdf', true);
-               include_once (GLPI_ROOT . "/lib/ezpdf/class.ezpdf.php");
+
                //Get all item's tabs
                $tab = array_keys($olditem->defineTabs());
 
@@ -126,7 +126,7 @@ class PluginUninstallReplace {
             }
 
             // Write document
-            $out_file  = GLPI_DOC_DIR."/_uploads/".$name_out;
+            $out_file  = GLPI_UPLOAD_DIR."/".$name_out;
             $open_file = fopen($out_file, 'a');
             fwrite ($open_file, $out);
             fclose($open_file);
