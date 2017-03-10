@@ -613,6 +613,23 @@ class PluginUninstallModel extends CommonDBTM {
          echo "</tr>";
       }
 
+      if ($plug->isActivated('fields')) {
+         echo "<tr class='tab_bg_1 center'>";
+         echo "<th colspan='4'>" . __("Additionnal fields", "fields").
+              "</th></tr>";
+
+         echo "<tr class='tab_bg_1 center'>";
+         echo "<td>" . __('Delete Fields plugin informations', 'uninstall') . "</td>";
+         echo "<td>";
+         Dropdown::showYesNo("raz_plugin_fields",
+                             (isset($this->fields["raz_plugin_fields"])
+                              ? $this->fields["raz_plugin_fields"] : 1),
+                                -1, array('width' => '100%'));
+         echo "</td>";
+         echo "<td colspan='2'></td>";
+         echo "</tr>";
+      }
+
       if ($canedit) {
          echo "<tr class='tab_bg_1 center'>";
          echo "<td colspan='4' class='center'>";
@@ -1042,6 +1059,10 @@ class PluginUninstallModel extends CommonDBTM {
                       SET `replace_contact_num`=`replace_contact`";
             $DB->queryOrDie($query, "Fill replace_contact_num");
          }
+         if (!FieldExists($table, 'raz_plugin_fields')) {
+            $migration->addField($table, 'raz_plugin_fields', "bool");
+         }
+
          $migration->migrationOneTable($table);
 
       } else {
@@ -1085,6 +1106,7 @@ class PluginUninstallModel extends CommonDBTM {
                     `overwrite` tinyint(1) NOT NULL DEFAULT '0',
                     `replace_method` int(11) NOT NULL DEFAULT '2',
                     `raz_fusioninventory` int(1) NOT NULL DEFAULT '1',
+                    `raz_plugin_fields` tinyint(1) NOT NULL DEFAULT '1',
                     `replace_contact` tinyint(1) NOT NULL DEFAULT '0',
                     `replace_contact_num` tinyint(1) NOT NULL DEFAULT '0',
                     PRIMARY KEY (`id`)
@@ -1144,6 +1166,7 @@ class PluginUninstallModel extends CommonDBTM {
          $tmp['raz_user']                   = 1;
          $tmp['raz_ocs_registrykeys']       = 1;
          $tmp['raz_fusioninventory']        = 1;
+         $tmp['raz_plugin_fields']          = 1;
          $tmp['comment']                    = '';
          $tmp['groups_id']                  = 0;
          $tmp['remove_from_ocs']            = 0;

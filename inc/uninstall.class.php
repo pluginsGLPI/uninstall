@@ -295,6 +295,10 @@ class PluginUninstallUninstall {
             self::deleteFusionInventoryLink($type, $id);
          }
 
+         if ($model->fields['raz_plugin_fields'] == 1) {
+            self::deletePluginFieldsLink($type, $id);
+         }
+
          //Plugin hook after uninstall
          Plugin::doHook("plugin_uninstall_after", $item);
 
@@ -407,9 +411,23 @@ class PluginUninstallUninstall {
    }
 
    /**
-    * Function to uninstall an object
+   * Delete informations related to the Fields plugin
+   *
+   * @param $itemtype the asset type
+   * @param $items_id the asset's ID in GLPI
+   *
+   */
+   static function deletePluginFieldsLink($itemtype, $items_id) {
+      $item = new $itemtype();
+      $item->getFromDB($items_id);
+      PluginFieldsContainer::preItemPurge($item);
+   }
+
+   /**
+    * Function to remove FusionInventory informations for an asset
     *
-    * @param $computers_id the computer's ID in GLPI
+    * @param $itemtype the asset type
+    * @param $items_id the asset's ID in GLPI
     *
     * @return nothing
    **/
