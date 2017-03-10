@@ -97,12 +97,7 @@ class PluginUninstallReplace {
                // USE PDF EXPORT
                $plugin->load('pdf', true);
 
-               //Get all item's tabs
-               $tab = array_keys($olditem->defineTabs());
-
-               //Tell PDF to also export item's main tab, and in first position
-               array_unshift($tab, "_main_");
-
+               $tab = self::getPdfUserPreference($olditem);
                $itempdf = new $PLUGIN_HOOKS['plugin_pdf'][$type]($olditem);
 
                $out = $itempdf->generatePDF(array($olditem_id), $tab, 1, false);
@@ -889,4 +884,31 @@ class PluginUninstallReplace {
       return $data;
    }
 
+   /**
+   * Get tabs to export in PDF, as defined in user's preferences
+   * @param $itemtype itemtype to export in PDF
+   * @return an array of tabs to export
+   */
+   static function getPdfUserPreference($item) {
+      global $DB;
+
+      $iterator = $DB->request('glpi_plugin_pdf_preferences',
+                               ['users_ID' => $_SESSION['glpiID'],
+                                'itemtype' => $item->getType()]);
+      if (!$iterator->numrows()) {
+         //Get all item's tabs
+         $tab = array_keys($item->defineTabs());
+
+         //Tell PDF to also export item's main tab, and in first position
+         array_unshift($tab, "_main_");
+
+         return $tab;
+      } else {
+         $tabs = [];
+         foreach ($iterator as $data) {
+            $tabs[] = $data['tabref'];
+         }
+         return $tabs;
+      }
+   }
 }
