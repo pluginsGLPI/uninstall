@@ -114,7 +114,7 @@ class PluginUninstallProfile extends Profile {
    static function migrateOneProfile($profiles_id) {
       global $DB;
       //Cannot launch migration if there's nothing to migrate...
-      if (!TableExists('glpi_plugin_uninstall_profiles')) {
+      if (!$DB->tableExists('glpi_plugin_uninstall_profiles')) {
          return true;
       }
 
@@ -201,7 +201,7 @@ class PluginUninstallProfile extends Profile {
 
       // From 0.2 to 1.0.0
       $table = 'glpi_plugin_uninstallcomputer_profiles';
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          $migration->changeField($table, 'use', 'use', "char", array('value' => '0'));
          $migration->migrationOneTable($table);
 
@@ -215,15 +215,15 @@ class PluginUninstallProfile extends Profile {
 
       $table = 'glpi_plugin_uninstall_profiles';
       // Plugin already installed
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          // From 1.0.0 to 1.3.0
-         if (FieldExists($table, 'ID')) {
+         if ($DB->fieldExists($table, 'ID')) {
             $migration->changeField($table, 'ID', 'id', 'autoincrement');
             $migration->changeField($table, 'use', 'use', "varchar(1) DEFAULT ''");
          }
 
          // From 1.3.0 to 2.0.0
-         if (!FieldExists($table, 'replace')) {
+         if (!$DB->fieldExists($table, 'replace')) {
             $migration->addField($table, 'replace', "bool");
             $migration->migrationOneTable($table);
             // UPDATE replace access for current user
