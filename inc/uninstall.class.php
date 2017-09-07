@@ -58,7 +58,7 @@ class PluginUninstallUninstall {
             $uninst->dropdownUninstallModels("model_id", $_SESSION["glpiID"],
                   $_SESSION["glpiactive_entity"]);
             echo "&nbsp;".
-                  Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
+                  Html::submit(_x('button', 'Post'), array('name' => 'massiveaction'));
                   return true;
       }
       return "";
@@ -132,7 +132,7 @@ class PluginUninstallUninstall {
          //--------------------//
          //Direct connections //
          //------------------//
-         if (in_array($type,$UNINSTALL_DIRECT_CONNECTIONS_TYPE)) {
+         if (in_array($type, $UNINSTALL_DIRECT_CONNECTIONS_TYPE)) {
             $conn = new Computer_Item();
             $conn->deleteByCriteria(array('itemtype' => $type,
                                           'items_id' => $id), true);
@@ -302,13 +302,13 @@ class PluginUninstallUninstall {
          //Plugin hook after uninstall
          Plugin::doHook("plugin_uninstall_after", $item);
 
-         Html::changeProgressBarPosition($count,$tot+1);
+         Html::changeProgressBarPosition($count, $tot+1);
       }
 
       //Add line in machine's history to say that machine was uninstalled
       self::addUninstallLog($type, $id);
 
-      Html::changeProgressBarPosition($count,$tot,__('Uninstallation successful', 'uninstall'));
+      Html::changeProgressBarPosition($count, $tot, __('Uninstallation successful', 'uninstall'));
 
       echo "</td></tr>";
       echo "</table></div>";
@@ -443,7 +443,7 @@ class PluginUninstallUninstall {
 
          if ($itemtype == 'Computer') {
             // remove agent(s)
-            foreach($agents as $current_agent) {
+            foreach ($agents as $current_agent) {
                $agent->deleteByCriteria(array('id' => $current_agent['id']), true);
             }
 
@@ -556,7 +556,7 @@ class PluginUninstallUninstall {
    **/
    static function getHistoryEntry($data) {
 
-      switch($data['linked_action'] - Log::HISTORY_PLUGIN) {
+      switch ($data['linked_action'] - Log::HISTORY_PLUGIN) {
          case 0:
             return $data['new_value'];
       }
