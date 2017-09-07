@@ -278,7 +278,7 @@ class PluginUninstallReplace {
          // User
          if (in_array($type, $CFG_GLPI["linkuser_types"])) {
 
-            $data        = array();
+            $data        = [];
             $data['id']  = $newitem->getID();
 
             if ($model->fields["replace_users"]
@@ -697,10 +697,12 @@ class PluginUninstallReplace {
     * @param $field     (default '')
    **/
    static function searchFieldInSearchOptions($itemtype, $field='') {
-
       if ($item = getItemForItemtype($itemtype)) {
-         foreach ($item->getSearchOptions() as $searchOption) {
-            if (is_array($searchOption) && $searchOption['field']==$field) {
+
+         foreach ($item->getSearchOptionsNew() as $id => $searchOption) {
+            if (is_array($searchOption)
+               && isset($searchOption['field'])
+                  && $searchOption['field']==$field) {
                return true;
             }
          }
@@ -724,7 +726,7 @@ class PluginUninstallReplace {
             && !$item->getEntityID())) {
 
          if ($item->isNewID($item->getField('id'))) {
-            return array();
+            return [];
          }
 
          switch ($item->getType()) {
@@ -733,12 +735,12 @@ class PluginUninstallReplace {
                break;
             default :
                if (Session::haveRight('document', READ)) {
-                  return array();
+                  return [];
                }
          }
 
          if (!$item->can($item->fields['id'], READ)) {
-            return array();
+            return [];
          }
       }
 
@@ -758,7 +760,7 @@ class PluginUninstallReplace {
          $query .= " AND `glpi_documents`.`entities_id`= '0' ";
       }
 
-      $docs = array();
+      $docs = [];
       foreach ($DB->request($query) as $data) {
          $docs[] = $data;
       }
@@ -776,10 +778,10 @@ class PluginUninstallReplace {
    static function getAssociatedContracts(CommonDBTM $item) {
       global $DB;
 
-      $contracts = array();
+      $contracts = [];
 
       if (!Session::haveRight("contract", READ) || !$item->can($item->fields['id'], READ)) {
-         return array();
+         return [];
       }
 
       $query = "SELECT `glpi_contracts_items`.*
@@ -812,14 +814,14 @@ class PluginUninstallReplace {
 
       if (!Session::haveRight("ticket", Ticket::READALL)
           || !($item = getItemForItemtype($itemtype))) {
-         return array();
+         return [];
       }
 
       if (!$item->getFromDB($items_id)) {
-         return array();
+         return [];
       }
 
-      $tickets = array();
+      $tickets = [];
       $query   = "(`items_id` = '".$items_id."'
                    AND `itemtype` = '".$itemtype."') ".
                    getEntitiesRestrictRequest("AND", "glpi_tickets");
@@ -848,7 +850,7 @@ class PluginUninstallReplace {
          return false;
       }
 
-      $netports = array();
+      $netports = [];
       foreach ($DB->request('glpi_networkports',
                             "`items_id` = '".$ID."' AND `itemtype` = '".$itemtype."'") as $data) {
          $netports[] = $data;
@@ -869,7 +871,7 @@ class PluginUninstallReplace {
 
       $ID = $comp->fields['id'];
 
-      $data  = array();
+      $data  = [];
       foreach ($UNINSTALL_DIRECT_CONNECTIONS_TYPE as $itemtype) {
          $item = new $itemtype();
          if ($item->canView()) {

@@ -119,10 +119,10 @@ class PluginUninstallUninstall {
 
          //First clean object and change location and status if needed
          $entity               = $item->fields["entities_id"];
-         $input                = array();
+         $input                = [];
          $input["id"]          = $id;
          $input["entities_id"] = $entity;
-         $fields               = array();
+         $fields               = [];
 
          //Hook to perform actions before item is being uninstalled
          $item->fields['_uninstall_event'] = $model->getID();
@@ -199,13 +199,13 @@ class PluginUninstallUninstall {
 
          if ($type == 'Computer') {
             //RAZ all OS related informations
-            if ($model->fields["raz_os"] == 1) {
-               $fields["operatingsystems_id"]            = 0;
-               $fields["operatingsystemversions_id"]     = 0;
-               $fields["operatingsystemservicepacks_id"] = 0;
-               $fields["os_licenseid"]                   = '';
-               $fields["os_license_number"]              = '';
-               $fields["autoupdatesystems_id"]           = 0;
+            if ($model->fields["raz_os"] == 1
+               && Item_OperatingSystem::countForItem($item)) {
+               $os = new Item_OperatingSystem();
+               $os->deleteByCriteria(['itemtype' => 'Computer',
+                                      'items_id' => $item->fields['id']
+                                     ], true);
+               $fields["autoupdatesystems_id"] = 0;
             }
 
             $plug = new Plugin();
@@ -326,17 +326,17 @@ class PluginUninstallUninstall {
 
       $link = new PluginOcsinventoryngOcslink();
       $link->dohistory = false;
-      $link->deleteByCriteria(array('computers_id' => $computers_id));
+      $link->deleteByCriteria(['computers_id' => $computers_id]);
 
       $reg = new PluginOcsinventoryngRegistryKey();
-      $reg->deleteByCriteria(array('computers_id' => $computers_id));
+      $reg->deleteByCriteria(['computers_id' => $computers_id]);
 
    }
 
 
    static function deleteRegistryKeys($computers_id) {
       $key = new RegistryKey();
-      $key->deleteByCriteria(array('computers_id' => $computers_id));
+      $key->deleteByCriteria(['computers_id' => $computers_id]);
    }
 
    /**
@@ -436,7 +436,7 @@ class PluginUninstallUninstall {
          $item = new $itemtype();
          $item->getFromDB($items_id);
          $agent = new PluginFusioninventoryAgent();
-         $agents = $agent->getAgentsFromComputers(array($items_id));
+         $agents = $agent->getAgentsFromComputers([$items_id]);
 
          // clean item associated to agents
          plugin_pre_item_purge_fusioninventory($item);
@@ -450,26 +450,6 @@ class PluginUninstallUninstall {
             // remove licences
             $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
             $pfComputerLicenseInfo->deleteByCriteria(array('computers_id' => $items_id));
-
-            // remove batteries
-            $pfInventoryComputerBatteries = new PluginFusioninventoryInventoryComputerBatteries();
-            $pfInventoryComputerBatteries->deleteByCriteria(array('computers_id' => $items_id));
-
-            // Delete links between two computerstorages
-            $pfInventoryComputerStorageStorageStorage = new PluginFusioninventoryInventoryComputerStorage_Storage();
-            $tab_ids = $pfInventoryComputerStorageStorageStorage->getOpposites($items_id);
-            if (!empty($tab_ids)) { //because getOpposites can return 0
-               foreach ($tab_ids as $inventorycomputerstorages_id) {
-                  $storage->deleteByCriteria(array(
-                     'plugin_fusioninventory_inventorycomputerstorages_id_1' => $inventorycomputerstorages_id));
-                  $storage->deleteByCriteria(array(
-                     'plugin_fusioninventory_inventorycomputerstorages_id_2' => $inventorycomputerstorages_id));
-               }
-            }
-
-            // ** Delete computerstorages **
-            $pfInventoryComputerStorage = new PluginFusioninventoryInventoryComputerStorage();
-            $pfInventoryComputerStorage->deleteByCriteria(array('computers_id' => $items_id));
          }
       }
    }
@@ -576,7 +556,7 @@ class PluginUninstallUninstall {
 
       if (!$iterator->numrows()) {
          if ($create) {
-            $transfer = new Transfer();
+            $transfer                   = new Transfer();
             $input["name"]              = self::PLUGIN_UNINSTALL_TRANSFER_NAME;
             $input["keep_networklink"]  = 2;
             $input["keep_history"]      = 1;
@@ -586,13 +566,13 @@ class PluginUninstallUninstall {
             $input["keep_contacts"]     = 1;
             $input["keep_contracts"]    = 1;
             $input["keep_documents"]    = 1;
-            $id = $transfer->add($input);
+            $id                         = $transfer->add($input);
          } else {
             $id = 0;
          }
       } else {
          $data = $iterator->next();
-         $id = $data['id'];
+         $id   = $data['id'];
       }
       return $id;
    }
@@ -672,8 +652,9 @@ class PluginUninstallUninstall {
       $nn   = new NetworkName();
       $conn = new NetworkPort_NetworkPort();
       $vlan = new NetworkPort_Vlan();
-      $crit = array('items_id' => $items_id,
-                    'itemtype' => $type);
+      $crit = ['items_id' => $items_id,
+               'itemtype' => $type
+              ];
 
       foreach ($DB->request('glpi_networkports', $crit) as $data) {
 
@@ -681,11 +662,11 @@ class PluginUninstallUninstall {
 
          if ($conn->getFromDBForNetworkPort($data['id'])) {
             $conn->dohistory = false;
-            $conn->delete(array('id' => $conn->fields['id']));
+            $conn->delete(['id' => $conn->fields['id']]);
          }
 
          //Delete vlan to port connection
-         $crit = array('networkports_id' => $data['id']);
+         $crit = ['networkports_id' => $data['id']];
          $vlan->deleteByCriteria($crit);
       }
    }
@@ -699,7 +680,7 @@ class PluginUninstallUninstall {
    static function dropdownUninstallModels($name, $user, $entity) {
       global $DB;
 
-      $used = array();
+      $used = [];
 
       if (!PluginUninstallModel::canReplace()) {
          foreach ($DB->request('glpi_plugin_uninstall_models', "`types_id` = '2'") as $data) {
@@ -720,7 +701,7 @@ class PluginUninstallUninstall {
     * @param $entity_sons  array
     * @param $value                 (default -1)
     */
-   static function dropdownFieldAction($name, $entity=0, $entity_sons=array(), $value=-1) {
+   static function dropdownFieldAction($name, $entity=0, $entity_sons=[], $value=-1) {
       global $CFG_GLPI;
 
       if ($value == -1) {
@@ -729,18 +710,19 @@ class PluginUninstallUninstall {
          $action = 'set';
       }
 
-      $tabactions = array ('old' => __('Keep in the current group', 'uninstall'), // Keep the current value
-                           'set' => __('Affect to a new group', 'uninstall')); // Affect a new value
+      $tabactions = ['old' => __('Keep in the current group', 'uninstall'), // Keep the current value
+                     'set' => __('Affect to a new group', 'uninstall')
+                    ]; // Affect a new value
 
       preg_match('/(.*)_id/', $name, $results);
       $ajax_page = $results[1];
       $rand      = Dropdown::showFromArray("_" . $name . "_action", $tabactions,
-                                           array('value' => $action));
+                                           ['value' => $action]);
 
-      $params    = array('id'          => '__VALUE__',
-                         $name         => $value,
-                         'entities_id' => $entity,
-                         'entity_sons' => $entity_sons);
+      $params    = ['id'          => '__VALUE__',
+                    $name         => $value,
+                    'entities_id' => $entity,
+                    'entity_sons' => $entity_sons];
 
       Ajax::updateItemOnSelectEvent("dropdown__" . $name . "_action".$rand, "show_".$ajax_page,
                                     $CFG_GLPI["root_doc"]."/plugins/uninstall/ajax/$ajax_page.php",
@@ -756,7 +738,7 @@ class PluginUninstallUninstall {
    static function getAllTemplatesByEntity($entity, $add_entity=false) {
       global $DB, $CFG_GLPI;
 
-      $templates = array();
+      $templates = [];
       $query = "SELECT `entities_id`, `id`, `name`
                 FROM `glpi_plugin_uninstall_models`".
                 getEntitiesRestrictRequest(" WHERE", "glpi_plugin_uninstall_models", "entities_id",

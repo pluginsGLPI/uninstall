@@ -231,7 +231,7 @@ class PluginUninstallPreference extends CommonDBTM {
 
       // From 0.2 to 1.0.0
       $table = 'glpi_plugin_uninstallcomputer_preference';
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          $migration->changeField($table, 'user_id', 'FK_users', "integer");
          $migration->addField($table, 'FK_template', 'integer');
          $migration->renameTable($table, getTableForItemType(__CLASS__));
@@ -239,9 +239,9 @@ class PluginUninstallPreference extends CommonDBTM {
 
       $table = getTableForItemType(__CLASS__);
       // plugin already installed
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          // from 1.0.0 to 1.3.0
-         if (FieldExists($table, 'ID')) {
+         if ($DB->fieldExists($table, 'ID')) {
             $migration->changeField($table, 'ID', 'id', 'autoincrement');
             $migration->changeField($table, 'FK_users', 'users_id', 'integer');
             $migration->changeField($table, 'FK_entities', 'entities_id', 'integer');

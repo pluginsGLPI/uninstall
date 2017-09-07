@@ -60,7 +60,7 @@ class PluginUninstallModel extends CommonDBTM {
 
    static function getMenuContent() {
       global $CFG_GLPI;
-      $menu          = array();
+      $menu = [];
 
       // get Menu name :
       $tab = plugin_version_uninstall();
@@ -163,7 +163,7 @@ class PluginUninstallModel extends CommonDBTM {
             return PluginUninstallUninstall::getTypeName(1);
 
          case __CLASS__ :
-            $tab = array();
+            $tab = [];
             $tab[1] = self::getTypeName(1);
             $tab[2] = __('Replacing data', 'uninstall');
             return $tab;
@@ -189,14 +189,14 @@ class PluginUninstallModel extends CommonDBTM {
       return true;
    }
 
-   function defineTabs($options=array()) {
-      $ong = array();
+   function defineTabs($options=[]) {
+      $ong = [];
       $this->addStandardTab(__CLASS__, $ong, $options);
       $this->addStandardTab('Log', $ong, $options);
       return $ong;
    }
 
-   function showForm($ID, $options=array()) {
+   function showForm($ID, $options=[]) {
       global $DB, $CFG_GLPI;
 
       $this->initForm($ID, $options);
@@ -652,7 +652,7 @@ class PluginUninstallModel extends CommonDBTM {
    **/
    function getConfig($model_id) {
       if (! $this->getFromDB($model_id)) {
-         $this->fields = array();
+         $this->fields = [];
       }
    }
 
@@ -664,7 +664,7 @@ class PluginUninstallModel extends CommonDBTM {
 
    function getSearchOptions() {
 
-      $tab                       = array();
+      $tab                       = [];
 
       $tab['common']             = self::getTypeName();
 
@@ -861,7 +861,7 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $values
     * @param $options   array
    **/
-   static function getSpecificValueToDisplay($field, $values, array $options=array()) {
+   static function getSpecificValueToDisplay($field, $values, array $options=[]) {
 
       if (!is_array($values)) {
          $values = array($field => $values);
@@ -905,7 +905,7 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $values             (defaut '')
     * @param $options   array
    **/
-   static function getSpecificValueToSelect($field, $name='', $values='', array $options=array()) {
+   static function getSpecificValueToSelect($field, $name='', $values='', array $options=[]) {
 
       if (!is_array($values)) {
          $values = array($field => $values);
@@ -955,7 +955,7 @@ class PluginUninstallModel extends CommonDBTM {
       global $DB;
 
       // From 0.2 to 1.0.0
-      if (TableExists('glpi_plugin_uninstallcomputer_config')) {
+      if ($DB->tableExists('glpi_plugin_uninstallcomputer_config')) {
          $table = 'glpi_plugin_uninstall_models';
          $migration->renameTable('glpi_plugin_uninstallcomputer_config', $table);
          $migration->addField($table, 'FK_entities', 'integer');
@@ -975,20 +975,20 @@ class PluginUninstallModel extends CommonDBTM {
 
       // Plugin already installed
       $table = 'glpi_plugin_uninstall_models';
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          // From 1.0.0 to 1.1.0
-         if (!FieldExists($table, 'group')) {
+         if (!$DB->fieldExists($table, 'group')) {
             $migration->addField($table, 'group', 'integer');
             $migration->addField($table, 'remove_from_ocs', 'int(1) NOT NULL DEFAULT 0');
          }
 
          // From 1.1.0 to 1.2.1
-         if (!FieldExists($table, 'delete_ocs_link')) {
+         if (!$DB->fieldExists($table, 'delete_ocs_link')) {
             $migration->addField($table, 'delete_ocs_link', 'int(1) NOT NULL DEFAULT 0');
          }
 
          // from 1.2.1 to 1.3.0
-         if (FieldExists($table, 'ID')) {
+         if ($DB->fieldExists($table, 'ID')) {
             $migration->changeField($table, 'ID', 'id', 'autoincrement');
             $migration->changeField($table, 'FK_entities', 'entities_id', 'integer');
             $migration->changeField($table, 'recursive', 'is_recursive', "bool",
@@ -999,7 +999,7 @@ class PluginUninstallModel extends CommonDBTM {
          }
 
          // from 1.3.0 to 2.0.0
-         if (!FieldExists($table, 'types_id')) {
+         if (!$DB->fieldExists($table, 'types_id')) {
 
             $migration->addField($table, 'types_id', 'integer');
             $migration->migrationOneTable($table);
@@ -1028,15 +1028,15 @@ class PluginUninstallModel extends CommonDBTM {
          }
 
          // from 2.0.0 to 2.0.1
-         if (!FieldExists($table, 'raz_history')) {
+         if (!$DB->fieldExists($table, 'raz_history')) {
             $migration->addField($table, 'raz_history', 'integer', array('after' => 'raz_network'));
          }
 
-         if (!FieldExists($table, 'raz_ocs_registrykeys')) {
+         if (!$DB->fieldExists($table, 'raz_ocs_registrykeys')) {
             $migration->addField($table, 'raz_ocs_registrkeys', "integer");
          }
 
-         if (!FieldExists($table, 'raz_fusioninventory')) {
+         if (!$DB->fieldExists($table, 'raz_fusioninventory')) {
             $migration->addField($table, 'raz_fusioninventory', "integer");
          }
          if ($migration->addField($table, 'raz_contact_num', "bool")) {

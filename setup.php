@@ -40,14 +40,15 @@ function plugin_init_uninstall() {
    $PLUGIN_HOOKS['csrf_compliant']['uninstall'] = true;
 
    Plugin::registerClass('PluginUninstallPreference', ['addtabon' => ['Preference']]);
-
    Plugin::registerClass('PluginUninstallProfile', ['addtabon' => ['Profile']]);
 
    $plugin = new Plugin();
    if ($plugin->isActivated('uninstall')) {
-      $UNINSTALL_TYPES                    = ['Computer', 'Monitor', 'NetworkEquipment',
+      $UNINSTALL_TYPES                    = ['Computer', 'Monitor',
+                                             'NetworkEquipment',
                                              'Peripheral', 'Phone', 'Printer'];
-      $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = ['Monitor', 'Peripheral', 'Phone', 'Printer'];
+      $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = ['Monitor', 'Peripheral', 'Phone',
+                                             'Printer'];
 
       if (Session::getLoginUserID()) {
          if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
@@ -79,17 +80,27 @@ function plugin_init_uninstall() {
 }
 
 function plugin_version_uninstall() {
-   return array('name'           => __("Item's uninstallation", 'uninstall'),
-                'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
-                'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
-                'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
-                'minGlpiVersion' => '0.85',
-                'version'        => PLUGIN_UNINSTALL_VERSION);
+   return ['name'           => __("Item's uninstallation", 'uninstall'),
+           'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
+           'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
+           'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
+           'minGlpiVersion' => '9.2',
+           'version'        => PLUGIN_UNINSTALL_VERSION,
+           'license'        => 'GPLv2+',
+           'requirements'   => [
+              'glpi' => [
+                 'min' => '9.2',
+                 'max' => '9.3',
+                 'dev' => true
+              ]
+           ]
+         ];
 }
 
 function plugin_uninstall_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '0.85', 'lt')) {
-      _e('This plugin requires GLPI >= 0.85', 'uninstall');
+   $version = rtrim(GLPI_VERSION, '-dev');
+   if (version_compare($version, '9.2', 'lt')) {
+      echo "This plugin requires GLPI 9.2";
       return false;
    }
    return true;
