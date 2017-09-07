@@ -699,7 +699,7 @@ class PluginUninstallReplace {
    static function searchFieldInSearchOptions($itemtype, $field='') {
       if ($item = getItemForItemtype($itemtype)) {
 
-         foreach($item->getSearchOptionsNew() as $id => $searchOption) {
+         foreach ($item->getSearchOptionsNew() as $id => $searchOption) {
             if (is_array($searchOption)
                && isset($searchOption['field'])
                   && $searchOption['field']==$field) {

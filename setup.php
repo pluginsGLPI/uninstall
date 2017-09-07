@@ -86,16 +86,23 @@ function plugin_version_uninstall() {
            'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
            'minGlpiVersion' => '9.2',
            'version'        => PLUGIN_UNINSTALL_VERSION,
+           'license'        => 'GPLv2+',
            'requirements'   => [
               'glpi' => [
                  'min' => '9.2',
+                 'max' => '9.3',
                  'dev' => true
               ]
-                ]
+           ]
          ];
 }
 
 function plugin_uninstall_check_prerequisites() {
+   $version = rtrim(GLPI_VERSION, '-dev');
+   if (version_compare($version, '9.2', 'lt')) {
+      echo "This plugin requires GLPI 9.2";
+      return false;
+   }
    return true;
 }
 

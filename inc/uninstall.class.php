@@ -666,7 +666,7 @@ class PluginUninstallUninstall {
          }
 
          //Delete vlan to port connection
-      $crit = ['networkports_id' => $data['id']];
+         $crit = ['networkports_id' => $data['id']];
          $vlan->deleteByCriteria($crit);
       }
    }
