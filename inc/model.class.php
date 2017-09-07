@@ -207,7 +207,7 @@ class PluginUninstallModel extends CommonDBTM {
 
       echo "<tr class='tab_bg_1'><td>" . __('Name') . "</td>";
       echo "<td>";
-      Html::autocompletionTextField($this,'name');
+      Html::autocompletionTextField($this, 'name');
       echo "</td>";
       echo "<td>" . __('Type of template', 'uninstall')."</td>";
       echo "<td>";
@@ -318,7 +318,7 @@ class PluginUninstallModel extends CommonDBTM {
                           (isset($this->fields["raz_name"])
                            ? $this->fields["raz_name"] : 1));
       echo "</td>";
-      echo "<td>" .sprintf(__('%1$s %2$s'),  __('Blank'), __('Alternate username')) . "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username')) . "</td>";
       echo "<td>";
       Dropdown::showYesNo("raz_contact",
                           (isset($this->fields["raz_contact"])
@@ -326,7 +326,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>" .sprintf(__('%1$s %2$s'),  __('Blank'), __('Alternate username number')) . "</td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username number')) . "</td>";
       echo "<td>";
       Dropdown::showYesNo("raz_contact_num",
                           (isset($this->fields["raz_contact_num"])
@@ -361,7 +361,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>".sprintf(__('%1$s %2$s'),__('Blank'),
+      echo "<td>".sprintf(__('%1$s %2$s'), __('Blank'),
                           __('IP')." & " . __('Subnet mask') . " & " . __('Gateway')." & ".
                            __('Subnet')) . "</td>";
       echo "<td>";
@@ -396,7 +396,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td><td>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Inventory number')) . "</td><td>";
       Dropdown::showYesNo("replace_otherserial",
                           (isset($this->fields["replace_otherserial"])
                            ? $this->fields["replace_otherserial"]: 1),
@@ -957,7 +957,7 @@ class PluginUninstallModel extends CommonDBTM {
       // From 0.2 to 1.0.0
       if ($DB->tableExists('glpi_plugin_uninstallcomputer_config')) {
          $table = 'glpi_plugin_uninstall_models';
-         $migration->renameTable('glpi_plugin_uninstallcomputer_config',  $table);
+         $migration->renameTable('glpi_plugin_uninstallcomputer_config', $table);
          $migration->addField($table, 'FK_entities', 'integer');
          $migration->addField($table, 'recursive', 'int(1) NOT NULL DEFAULT 1');
          $migration->addField($table, 'name', 'string');
@@ -1208,7 +1208,7 @@ class PluginUninstallModel extends CommonDBTM {
          case 'transfert':
             Entity::dropdown();
             echo "&nbsp;".
-                  Html::submit(_x('button','Post'), array('name' => 'massiveaction'));
+                  Html::submit(_x('button', 'Post'), array('name' => 'massiveaction'));
             return true;
       }
       return "";

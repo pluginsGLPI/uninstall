@@ -81,7 +81,7 @@ class PluginUninstallPreference extends CommonDBTM {
 
          echo "<tr class='tab_bg_1'><td colspan='2' class='center'>";
          echo "<input type='submit' name='update_user_preferences_uninstall' value='" .
-                _sx('button','Post'). "' class='submit'>";
+                _sx('button', 'Post'). "' class='submit'>";
          echo "</td></tr>";
 
       }

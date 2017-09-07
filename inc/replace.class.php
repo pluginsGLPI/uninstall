@@ -108,11 +108,11 @@ class PluginUninstallReplace {
 
                $datas = $olditem->fields;
                unset($datas['comment']);
-               foreach($datas as $k => $v) {
+               foreach ($datas as $k => $v) {
                   $out.= $k.";";
                }
                $out.= "\r\n";
-               foreach($datas as $k => $v) {
+               foreach ($datas as $k => $v) {
                   $out.= $v.";";
                }
 
@@ -337,7 +337,7 @@ class PluginUninstallReplace {
              && in_array($type, $netport_types)) {
 
             $netport_item = new NetworkPort();
-            foreach(self::getAssociatedNetports($type,$olditem_id) as $netport) {
+            foreach (self::getAssociatedNetports($type, $olditem_id) as $netport) {
                $netport_item->update(array('id'       => $netport['id'],
                                            'itemtype' => $type,
                                            'items_id' => $newitem_id),
@@ -440,7 +440,7 @@ class PluginUninstallReplace {
 
          //Add history
          PluginUninstallUninstall::addUninstallLog($type, $newitem_id, 'replace');
-         Html::changeProgressBarPosition($count,$tot+1);
+         Html::changeProgressBarPosition($count, $tot+1);
       }
 
       Html::changeProgressBarPosition($count, $tot,
@@ -523,9 +523,9 @@ class PluginUninstallReplace {
       echo "<tr class='tab_bg_1 center'>";
       echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_name"])."</td>";
-      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),__('Serial number')) . "</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_serial"])."</td>";
-      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Inventory number')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_otherserial"]) . "</td>";
       echo "</tr>";
 
@@ -566,7 +566,7 @@ class PluginUninstallReplace {
 
          default :
             echo "<td><span class='green b'>";
-            echo Dropdown::getDropdownName('glpi_locations',$location);
+            echo Dropdown::getDropdownName('glpi_locations', $location);
             echo "</span></td>";
             break;
       }
@@ -597,7 +597,7 @@ class PluginUninstallReplace {
            "</th></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>" . sprintf(__('%1$s %2$s'),  __('Copy'), _n('Document', 'Documents', 2)) . "</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Document', 'Documents', 2)) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_documents"])."</td>";
       echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2)) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_contracts"])."</td>";
@@ -607,7 +607,7 @@ class PluginUninstallReplace {
       echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),
                            __('Financial and administratives information')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_infocoms"])."</td>";
-      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),_n('Reservation', 'Reservations', 2))."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2))."</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_reservations"])."</td>";
       echo "</tr>";
 
@@ -656,7 +656,7 @@ class PluginUninstallReplace {
       echo "</tr>";
 
       $commonitem = new $type();
-      foreach($tab_ids[$type] as $id => $value) {
+      foreach ($tab_ids[$type] as $id => $value) {
          $commonitem->getFromDB($id);
 
          echo "<tr class='tab_bg_1 center'>";
@@ -754,7 +754,7 @@ class PluginUninstallReplace {
                       AND `glpi_documents_items`.`itemtype` = '".$item->getType()."' ";
 
       if (Session::getLoginUserID()) {
-         $query .= getEntitiesRestrictRequest(" AND","glpi_documents",'','',true);
+         $query .= getEntitiesRestrictRequest(" AND", "glpi_documents", '', '', true);
       } else {
          // Anonymous access from FAQ
          $query .= " AND `glpi_documents`.`entities_id`= '0' ";
@@ -791,7 +791,7 @@ class PluginUninstallReplace {
                 WHERE `glpi_contracts`.`id`=`glpi_contracts_items`.`contracts_id`
                       AND `glpi_contracts_items`.`items_id` = '".$item->fields['id']."'
                       AND `glpi_contracts_items`.`itemtype` = '".$item->getType()."'".
-                      getEntitiesRestrictRequest(" AND","glpi_contracts",'','',true)."
+                      getEntitiesRestrictRequest(" AND", "glpi_contracts", '', '', true)."
                ORDER BY `glpi_contracts`.`name`";
       foreach ($DB->request($query) as $data) {
          $contracts[] = $data;
