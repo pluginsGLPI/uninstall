@@ -28,7 +28,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-class PluginUninstallReplace {
+class PluginUninstallReplace extends CommonDBTM {
 
    const METHOD_PURGE              = 1;
    const METHOD_DELETE_AND_COMMENT = 2;
