@@ -50,6 +50,8 @@ class PluginUninstallReplace {
    static function replace($type, $model_id, $tab_ids, $location) {
       global $DB, $CFG_GLPI, $PLUGIN_HOOKS;
 
+      $plug = new Plugin();
+
       $model = new PluginUninstallModel();
       $model->getConfig($model_id);
 
@@ -91,11 +93,10 @@ class PluginUninstallReplace {
 
             $name_out = str_shuffle(Toolbox::getRandomString(5).time());
 
-            $plugin = new Plugin();
-            if ($plugin->isActivated('PDF')) {
+            if ($plug->isActivated('PDF')) {
 
                // USE PDF EXPORT
-               $plugin->load('pdf', true);
+               $plug->load('pdf', true);
 
                $tab = self::getPdfUserPreference($olditem);
                $itempdf = new $PLUGIN_HOOKS['plugin_pdf'][$type]($olditem);
@@ -377,7 +378,6 @@ class PluginUninstallReplace {
             }
          }
 
-         $plug = new Plugin();
          if ($plug->isActivated('ocsinventoryng')) {
             //Delete computer from OCS
             if ($model->fields["remove_from_ocs"] == 1) {
