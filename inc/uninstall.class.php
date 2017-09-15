@@ -95,8 +95,10 @@ class PluginUninstallUninstall {
 
    static function uninstall($type, $model_id, $tab_ids, $location) {
       global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
-      //Get the model
 
+      $plug = new Plugin();
+
+      //Get the model
       $model = new PluginUninstallModel();
       $model->getConfig($model_id);
 
@@ -208,7 +210,6 @@ class PluginUninstallUninstall {
                $fields["autoupdatesystems_id"] = 0;
             }
 
-            $plug = new Plugin();
             if ($plug->isActivated('ocsinventoryng')) {
                if ($item->fields["is_dynamic"]
                    && ($model->fields["remove_from_ocs"] || $model->fields["delete_ocs_link"])) {
@@ -273,7 +274,6 @@ class PluginUninstallUninstall {
                self::deleteHistory($id, true);
             }
 
-            $plug = new Plugin();
             if ($plug->isActivated('ocsinventoryng')) {
                //Delete computer from OCS
                if ($model->fields["remove_from_ocs"] == 1) {
@@ -291,12 +291,16 @@ class PluginUninstallUninstall {
             }
          }
 
-         if ($model->fields['raz_fusioninventory'] == 1) {
-            self::deleteFusionInventoryLink($type, $id);
+         if ($plug->isActivated('fusioninventory')) {
+            if ($model->fields['raz_fusioninventory'] == 1) {
+               self::deleteFusionInventoryLink($type, $id);
+            }
          }
 
-         if ($model->fields['raz_plugin_fields'] == 1) {
-            self::deletePluginFieldsLink($type, $id);
+         if ($plug->isActivated('fields')) {
+            if ($model->fields['raz_plugin_fields'] == 1) {
+               self::deletePluginFieldsLink($type, $id);
+            }
          }
 
          //Plugin hook after uninstall
