@@ -266,6 +266,9 @@ class PluginUninstallUninstall extends CommonDBTM {
             //Delete computer's volumes
             self::purgeComputerVolumes($id);
 
+            //Delete computer antivirus
+            self::purgeComputerAntivirus($id);
+
             if ($model->fields["raz_history"] == 1) {
                //Delete history related to software
                self::deleteHistory($id, false);
@@ -460,12 +463,23 @@ class PluginUninstallUninstall extends CommonDBTM {
 
 
    static function purgeComputerVolumes($computers_id) {
-
       $computerdisk            = new ComputerDisk();
       $computerdisk->dohistory = false;
-      $computerdisk->deleteByCriteria(array('computers_id' => $computers_id));
+      $computerdisk->deleteByCriteria(['computers_id' => $computers_id]);
    }
 
+
+   /**
+   * Remove antivirus informations
+   * @since 2.3.0
+   *
+   * @param integer $computers_id the computer ID
+   */
+   static function purgeComputerAntivirus($computers_id) {
+      $antivirus            = new ComputerAntivirus();
+      $antivirus->dohistory = false;
+      $antivirus->deleteByCriteria(['computers_id' => $computers_id], true);
+   }
 
    /**
     * Remove all the computer software's history
