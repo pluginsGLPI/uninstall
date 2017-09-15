@@ -28,7 +28,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-class PluginUninstallUninstall {
+class PluginUninstallUninstall extends CommonDBTM {
 
    const PLUGIN_UNINSTALL_TRANSFER_NAME = "plugin_uninstall";
 
@@ -764,7 +764,7 @@ class PluginUninstallUninstall {
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       global $UNINSTALL_TYPES;
 
-      if (PluginUninstallProfile::canView()
+      if (self::canView()
          && in_array($item->getType(), $UNINSTALL_TYPES)) {
          if (!$withtemplate) {
             return __('Uninstall', 'uninstall');
