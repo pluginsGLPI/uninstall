@@ -1,6 +1,10 @@
-<?php
-/*
- * @version $Id: groups.php 148 2013-07-10 09:30:56Z yllen $
+ -------------------------------------------------------------------------
+ Uninstall plugin for GLPI
+ Copyright (C) 2016 by the Uninstall Plugin Development Team.
+
+ https://github.com/pluginsGLPI/uninstall
+ -------------------------------------------------------------------------
+
  LICENSE
 
  This file is part of the uninstall plugin.
@@ -27,23 +31,3 @@
  @link      http://www.glpi-project.org/
  @since     2009
  ---------------------------------------------------------------------- */
-
-include ('../../../inc/includes.php');
-header("Content-Type: text/html; charset=UTF-8");
-Html::header_nocache();
-
-if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
-   switch ($_POST["id"]) {
-      case 'old' :
-         echo "<input type='hidden' name='groups_id' value='-1'>";
-         echo Dropdown::EMPTY_VALUE;
-         break;
-
-      case 'set' :
-         Group::dropdown(array('value'       => $_POST["groups_id"],
-                               'entity'      => $_POST["entities_id"],
-                               'entity_sons' => $_POST["entity_sons"],
-                               'emptylabel'  => __('None')));
-         break;
-   }
-}

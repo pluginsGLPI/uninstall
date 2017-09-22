@@ -29,14 +29,17 @@
  ---------------------------------------------------------------------- */
 
 include ('../../../inc/includes.php');
-Session::checkRight(PluginUninstallProfile::$rightname, READ);
 
-if (!isset ($_GET["withtemplate"]))
+Session::checkSeveralRightsOr(['uninstall:profile' => READ,
+                               'uninstall:profile' => PluginUninstallProfile::RIGHT_REPLACE]);
+
+if (!isset ($_GET["withtemplate"])) {
    $_GET["withtemplate"] = "";
+}
 
 if (isset ($_GET["id"])) {
    $id = $_GET["id"];
-} elseif (isset ($_POST["id"])) {
+} else if (isset ($_POST["id"])) {
    $id = $_POST["id"];
 } else {
    $id = -1;
@@ -61,20 +64,20 @@ if (isset ($_POST["add"])) {
 
 } else {
 
-   Html::header(PluginUninstallModel::getTypeName(),$_SERVER['PHP_SELF'], "admin",
-      "PluginUninstallModel", "model");
+   Html::header(PluginUninstallModel::getTypeName(), $_SERVER['PHP_SELF'], "admin",
+                "PluginUninstallModel", "model");
 
    if ($model->getFromDB($id)) {
       if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT) {
-         if (!Session::haveRight(PluginUninstallProfile::$rightname, PluginUninstallProfile::RIGHT_REPLACE)) {
+         if (!Session::haveRight('uninstall:profile',
+                                 PluginUninstallProfile::RIGHT_REPLACE)) {
             Html::displayRightError();
          }
       }
    }
 
-   $model->display(array('id'           => $id,
-         'withtemplate' => $_GET["withtemplate"])
-   );
+   $model->display(['id'           => $id,
+                    'withtemplate' => $_GET["withtemplate"]]);
 
    Html::footer();
 }

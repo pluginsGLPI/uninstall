@@ -31,8 +31,6 @@
 class PluginUninstallProfile extends Profile {
    const RIGHT_REPLACE = 128;
 
-   public static $rightname = "uninstall:profile";
-   
    /**
     *
     * Get rights matrix for plugin
@@ -83,7 +81,7 @@ class PluginUninstallProfile extends Profile {
 
    static function createFirstAccess($ID) {
       self::addDefaultProfileInfos($ID,
-            array(PluginUninstallProfile::$rightname => UPDATE | READ | self::RIGHT_REPLACE,
+            array('uninstall:profile' => UPDATE | READ | self::RIGHT_REPLACE,
                   'plugin_uninstall_replace'         => 1), true);
    }
 
@@ -116,7 +114,7 @@ class PluginUninstallProfile extends Profile {
    static function migrateOneProfile($profiles_id) {
       global $DB;
       //Cannot launch migration if there's nothing to migrate...
-      if (!TableExists('glpi_plugin_uninstall_profiles')) {
+      if (!$DB->tableExists('glpi_plugin_uninstall_profiles')) {
          return true;
       }
 
@@ -152,16 +150,6 @@ class PluginUninstallProfile extends Profile {
                                  $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
       }
    }
-
-   static function removeRightsFromSession() {
-      // should be obsolete, kept for reference
-//       foreach (array('plugin_uninstall_use', 'plugin_uninstall_replace') as $field) {
-//          if (isset($_SESSION['glpiactiveprofile'][$field])) {
-//             unset($_SESSION['glpiactiveprofile'][$field]);
-//          }
-//       }
-   }
-
 
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
@@ -213,7 +201,7 @@ class PluginUninstallProfile extends Profile {
 
       // From 0.2 to 1.0.0
       $table = 'glpi_plugin_uninstallcomputer_profiles';
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          $migration->changeField($table, 'use', 'use', "char", array('value' => '0'));
          $migration->migrationOneTable($table);
 
@@ -225,18 +213,17 @@ class PluginUninstallProfile extends Profile {
          $migration->renameTable($table, 'glpi_plugin_uninstall_profiles');
       }
 
-
       $table = 'glpi_plugin_uninstall_profiles';
       // Plugin already installed
-      if (TableExists($table)) {
+      if ($DB->tableExists($table)) {
          // From 1.0.0 to 1.3.0
-         if (FieldExists($table, 'ID')) {
+         if ($DB->fieldExists($table, 'ID')) {
             $migration->changeField($table, 'ID', 'id', 'autoincrement');
             $migration->changeField($table, 'use', 'use', "varchar(1) DEFAULT ''");
          }
 
          // From 1.3.0 to 2.0.0
-         if (!FieldExists($table, 'replace')) {
+         if (!$DB->fieldExists($table, 'replace')) {
             $migration->addField($table, 'replace', "bool");
             $migration->migrationOneTable($table);
             // UPDATE replace access for current user
@@ -249,8 +236,8 @@ class PluginUninstallProfile extends Profile {
 
          $migration->dropTable($table);
 
-      // plugin never installed
       } else {
+         // plugin never installed
          $query = "CREATE TABLE `".$table."` (
                     `id` int(11) NOT NULL DEFAULT '0',
                     `profile` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',

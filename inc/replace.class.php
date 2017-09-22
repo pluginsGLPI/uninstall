@@ -28,10 +28,11 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-class PluginUninstallReplace {
+class PluginUninstallReplace extends CommonDBTM {
 
-   const METHOD_PURGE = 1;
+   const METHOD_PURGE              = 1;
    const METHOD_DELETE_AND_COMMENT = 2;
+   const METHOD_KEEP_AND_COMMENT   = 3;
 
    static $rightname = "uninstall:profile";
 
@@ -48,6 +49,8 @@ class PluginUninstallReplace {
    **/
    static function replace($type, $model_id, $tab_ids, $location) {
       global $DB, $CFG_GLPI, $PLUGIN_HOOKS;
+
+      $plug = new Plugin();
 
       $model = new PluginUninstallModel();
       $model->getConfig($model_id);
@@ -90,18 +93,12 @@ class PluginUninstallReplace {
 
             $name_out = str_shuffle(Toolbox::getRandomString(5).time());
 
-            $plugin = new Plugin();
-            if ($plugin->isActivated('PDF')) {
+            if ($plug->isActivated('PDF')) {
 
                // USE PDF EXPORT
-               $plugin->load('pdf', true);
-               include_once (GLPI_ROOT . "/lib/ezpdf/class.ezpdf.php");
-               //Get all item's tabs
-               $tab = array_keys($olditem->defineTabs());
+               $plug->load('pdf', true);
 
-               //Tell PDF to also export item's main tab, and in first position
-               array_unshift($tab, "_main_");
-
+               $tab = self::getPdfUserPreference($olditem);
                $itempdf = new $PLUGIN_HOOKS['plugin_pdf'][$type]($olditem);
 
                $out = $itempdf->generatePDF(array($olditem_id), $tab, 1, false);
@@ -112,11 +109,11 @@ class PluginUninstallReplace {
 
                $datas = $olditem->fields;
                unset($datas['comment']);
-               foreach($datas as $k => $v) {
+               foreach ($datas as $k => $v) {
                   $out.= $k.";";
                }
                $out.= "\r\n";
-               foreach($datas as $k => $v) {
+               foreach ($datas as $k => $v) {
                   $out.= $v.";";
                }
 
@@ -125,7 +122,7 @@ class PluginUninstallReplace {
             }
 
             // Write document
-            $out_file  = GLPI_DOC_DIR."/_uploads/".$name_out;
+            $out_file  = GLPI_UPLOAD_DIR."/".$name_out;
             $open_file = fopen($out_file, 'a');
             fwrite ($open_file, $out);
             fclose($open_file);
@@ -280,24 +277,26 @@ class PluginUninstallReplace {
          }
 
          // User
-         if ($model->fields["replace_users"]
-             && in_array($type, $CFG_GLPI["linkuser_types"])) {
+         if (in_array($type, $CFG_GLPI["linkuser_types"])) {
 
-            $data        = array();
+            $data        = [];
             $data['id']  = $newitem->getID();
 
-            if ($newitem->isField('users_id')
-                && ($overwrite || empty($data['users_id']))) {
+            if ($model->fields["replace_users"]
+               && $newitem->isField('users_id')
+                  && ($overwrite || empty($data['users_id']))) {
                   $data['users_id'] = $olditem->getField('users_id');
             }
 
-            if ($newitem->isField('contact')
-                && ($overwrite || empty($data['contact']))) {
+            if ($model->fields["replace_contact"]
+               && $newitem->isField('contact')
+                  && ($overwrite || empty($data['contact']))) {
                   $data['contact'] = $olditem->getField('contact');
             }
 
-            if ($newitem->isField('contact_num')
-                && ($overwrite || empty($data['contact_num']))) {
+            if ($model->fields["replace_contact_num"]
+               && $newitem->isField('contact_num')
+                  && ($overwrite || empty($data['contact_num']))) {
                   $data['contact_num'] = $olditem->getField('contact_num');
             }
 
@@ -339,7 +338,7 @@ class PluginUninstallReplace {
              && in_array($type, $netport_types)) {
 
             $netport_item = new NetworkPort();
-            foreach(self::getAssociatedNetports($type,$olditem_id) as $netport) {
+            foreach (self::getAssociatedNetports($type, $olditem_id) as $netport) {
                $netport_item->update(array('id'       => $netport['id'],
                                            'itemtype' => $type,
                                            'items_id' => $newitem_id),
@@ -371,16 +370,14 @@ class PluginUninstallReplace {
                case -1:
                   break;
 
-                default:
-                   $olditem->update(array('id'           => $olditem_id,
-                                          'locations_id' => $location),
-                                    false);
-                   break;
+               default:
+                  $olditem->update(array('id'           => $olditem_id,
+                                        'locations_id' => $location),
+                                  false);
+                  break;
             }
          }
 
-
-         $plug = new Plugin();
          if ($plug->isActivated('ocsinventoryng')) {
             //Delete computer from OCS
             if ($model->fields["remove_from_ocs"] == 1) {
@@ -399,42 +396,43 @@ class PluginUninstallReplace {
          }
 
          // METHOD REPLACEMENT 1 : Purge
-         if ($model->fields['replace_method'] == self::METHOD_PURGE) {
+         switch ($model->fields['replace_method']) {
+            case self::METHOD_PURGE:
+               // Retrieve, Compute && Update NEW comment field
+               $comment = self::getCommentsForReplacement($olditem, true);
+               $comment.="\n- " . __('See attached document', 'uninstall');
+               $newitem->update(['id'      => $newitem_id,
+                                 'comment' => addslashes($comment)],
+                                false);
 
-            // Retrieve, Compute && Update NEW comment field
-            $comment = self::getCommentsForReplacement($olditem, true);
-            $comment.="\n- " . __('See attached document', 'uninstall');
-            $newitem->update(array('id'      => $newitem_id,
-                                   'comment' => addslashes($comment)),
-                             false);
+               // If old item is attached in PDF/CSV
+               // Delete AND Purge it in DB
+               if ($document_added) {
+                  $olditem->delete(['id' => $olditem_id], true);
+               }
+               break;
 
-            // If old item is attached in PDF/CSV
-            // Delete AND Purge it in DB
-            if ($document_added) {
-               $olditem->delete(array('id' => $olditem_id), true);
-            }
-         }
+            case self::METHOD_DELETE_AND_COMMENT:
+            case self::METHOD_KEEP_AND_COMMENT:
+               //Add comment on the new item first
+               $comment = self::getCommentsForReplacement($newitem, true);
+               $newitem->update(['id'      => $newitem_id,
+                                 'comment' => Toolbox::addslashes_deep($comment)],
+                                false);
 
-         // METHOD REPLACEMENT 2 : Delete AND Comment
-         if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
+               // Retrieve, Compute && Update OLD comment field
+               $comment = self::getCommentsForReplacement($olditem, false);
 
-            //Add comment on the new item first
-            $comment = self::getCommentsForReplacement($olditem, true);
+               $olditem->update(['id'      => $olditem_id,
+                                 'comment' => Toolbox::addslashes_deep($comment)],
+                                false);
 
-            $newitem->update(array('id'      => $newitem_id,
-                                   'comment' => Toolbox::addslashes_deep($comment)),
-                             false);
-
-            // Retrieve, Compute && Update OLD comment field
-            $comment = self::getCommentsForReplacement($newitem, false);
-
-            $olditem->update(array('id'      => $olditem_id,
-                                   'comment' => Toolbox::addslashes_deep($comment)),
-                             false);
-
-            // Delete OLD item from DB (not PURGE)
-            PluginUninstallUninstall::addUninstallLog($type, $olditem_id, 'replaced_by');
-            $olditem->delete(array('id' => $olditem_id), 0, false);
+               // Delete OLD item from DB (not PURGE) only if delete is requested
+               PluginUninstallUninstall::addUninstallLog($type, $olditem_id, 'replaced_by');
+               if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
+                  $olditem->delete(['id' => $olditem_id], 0, false);
+               }
+               break;
          }
 
          //Plugin hook after replacement
@@ -442,10 +440,11 @@ class PluginUninstallReplace {
 
          //Add history
          PluginUninstallUninstall::addUninstallLog($type, $newitem_id, 'replace');
-         Html::changeProgressBarPosition($count,$tot+1);
+         Html::changeProgressBarPosition($count, $tot+1);
       }
 
-      Html::changeProgressBarPosition($count,$tot,__('Replacement successful', 'uninstall'));
+      Html::changeProgressBarPosition($count, $tot,
+                                      __('Replacement successful', 'uninstall'));
 
       echo "</td></tr>";
       echo "</table></div>";
@@ -524,9 +523,9 @@ class PluginUninstallReplace {
       echo "<tr class='tab_bg_1 center'>";
       echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_name"])."</td>";
-      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),__('Serial number')) . "</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_serial"])."</td>";
-      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),__('Inventory number')) . "</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Inventory number')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_otherserial"]) . "</td>";
       echo "</tr>";
 
@@ -546,6 +545,9 @@ class PluginUninstallReplace {
          case self::METHOD_DELETE_AND_COMMENT :
             echo "<span class='green b'>". $methods[self::METHOD_DELETE_AND_COMMENT] ."</span>";
             break;
+         case self::METHOD_KEEP_AND_COMMENT :
+            echo "<span class='green b'>". $methods[self::METHOD_KEEP_AND_COMMENT] ."</span>";
+            break;
       }
       echo "</td></tr>";
 
@@ -564,7 +566,7 @@ class PluginUninstallReplace {
 
          default :
             echo "<td><span class='green b'>";
-            echo Dropdown::getDropdownName('glpi_locations',$location);
+            echo Dropdown::getDropdownName('glpi_locations', $location);
             echo "</span></td>";
             break;
       }
@@ -595,7 +597,7 @@ class PluginUninstallReplace {
            "</th></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<td>" . sprintf(__('%1$s %2$s'),  __('Copy'), _n('Document', 'Documents', 2)) . "</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Document', 'Documents', 2)) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_documents"])."</td>";
       echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2)) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_contracts"])."</td>";
@@ -605,7 +607,7 @@ class PluginUninstallReplace {
       echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),
                            __('Financial and administratives information')) . "</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_infocoms"])."</td>";
-      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'),_n('Reservation', 'Reservations', 2))."</td>";
+      echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2))."</td>";
       echo "<td>" . self::coloredYN($model->fields["replace_reservations"])."</td>";
       echo "</tr>";
 
@@ -654,7 +656,7 @@ class PluginUninstallReplace {
       echo "</tr>";
 
       $commonitem = new $type();
-      foreach($tab_ids[$type] as $id => $value) {
+      foreach ($tab_ids[$type] as $id => $value) {
          $commonitem->getFromDB($id);
 
          echo "<tr class='tab_bg_1 center'>";
@@ -695,10 +697,12 @@ class PluginUninstallReplace {
     * @param $field     (default '')
    **/
    static function searchFieldInSearchOptions($itemtype, $field='') {
-
       if ($item = getItemForItemtype($itemtype)) {
-         foreach($item->getSearchOptions() as $searchOption) {
-            if (is_array($searchOption) && $searchOption['field']==$field) {
+
+         foreach ($item->getSearchOptionsNew() as $id => $searchOption) {
+            if (is_array($searchOption)
+               && isset($searchOption['field'])
+                  && $searchOption['field']==$field) {
                return true;
             }
          }
@@ -722,7 +726,7 @@ class PluginUninstallReplace {
             && !$item->getEntityID())) {
 
          if ($item->isNewID($item->getField('id'))) {
-            return array();
+            return [];
          }
 
          switch ($item->getType()) {
@@ -731,12 +735,12 @@ class PluginUninstallReplace {
                break;
             default :
                if (Session::haveRight('document', READ)) {
-                  return array();
+                  return [];
                }
          }
 
          if (!$item->can($item->fields['id'], READ)) {
-            return array();
+            return [];
          }
       }
 
@@ -750,13 +754,13 @@ class PluginUninstallReplace {
                       AND `glpi_documents_items`.`itemtype` = '".$item->getType()."' ";
 
       if (Session::getLoginUserID()) {
-         $query .= getEntitiesRestrictRequest(" AND","glpi_documents",'','',true);
+         $query .= getEntitiesRestrictRequest(" AND", "glpi_documents", '', '', true);
       } else {
          // Anonymous access from FAQ
          $query .= " AND `glpi_documents`.`entities_id`= '0' ";
       }
 
-      $docs = array();
+      $docs = [];
       foreach ($DB->request($query) as $data) {
          $docs[] = $data;
       }
@@ -774,10 +778,10 @@ class PluginUninstallReplace {
    static function getAssociatedContracts(CommonDBTM $item) {
       global $DB;
 
-      $contracts = array();
+      $contracts = [];
 
       if (!Session::haveRight("contract", READ) || !$item->can($item->fields['id'], READ)) {
-         return array();
+         return [];
       }
 
       $query = "SELECT `glpi_contracts_items`.*
@@ -787,7 +791,7 @@ class PluginUninstallReplace {
                 WHERE `glpi_contracts`.`id`=`glpi_contracts_items`.`contracts_id`
                       AND `glpi_contracts_items`.`items_id` = '".$item->fields['id']."'
                       AND `glpi_contracts_items`.`itemtype` = '".$item->getType()."'".
-                      getEntitiesRestrictRequest(" AND","glpi_contracts",'','',true)."
+                      getEntitiesRestrictRequest(" AND", "glpi_contracts", '', '', true)."
                ORDER BY `glpi_contracts`.`name`";
       foreach ($DB->request($query) as $data) {
          $contracts[] = $data;
@@ -810,14 +814,14 @@ class PluginUninstallReplace {
 
       if (!Session::haveRight("ticket", Ticket::READALL)
           || !($item = getItemForItemtype($itemtype))) {
-         return array();
+         return [];
       }
 
       if (!$item->getFromDB($items_id)) {
-         return array();
+         return [];
       }
 
-      $tickets = array();
+      $tickets = [];
       $query   = "(`items_id` = '".$items_id."'
                    AND `itemtype` = '".$itemtype."') ".
                    getEntitiesRestrictRequest("AND", "glpi_tickets");
@@ -846,7 +850,7 @@ class PluginUninstallReplace {
          return false;
       }
 
-      $netports = array();
+      $netports = [];
       foreach ($DB->request('glpi_networkports',
                             "`items_id` = '".$ID."' AND `itemtype` = '".$itemtype."'") as $data) {
          $netports[] = $data;
@@ -867,7 +871,7 @@ class PluginUninstallReplace {
 
       $ID = $comp->fields['id'];
 
-      $data  = array();
+      $data  = [];
       foreach ($UNINSTALL_DIRECT_CONNECTIONS_TYPE as $itemtype) {
          $item = new $itemtype();
          if ($item->canView()) {
@@ -882,5 +886,31 @@ class PluginUninstallReplace {
       return $data;
    }
 
+   /**
+   * Get tabs to export in PDF, as defined in user's preferences
+   * @param $itemtype itemtype to export in PDF
+   * @return an array of tabs to export
+   */
+   static function getPdfUserPreference($item) {
+      global $DB;
+
+      $iterator = $DB->request('glpi_plugin_pdf_preferences',
+                               ['users_ID' => $_SESSION['glpiID'],
+                                'itemtype' => $item->getType()]);
+      if (!$iterator->numrows()) {
+         //Get all item's tabs
+         $tab = array_keys($item->defineTabs());
+
+         //Tell PDF to also export item's main tab, and in first position
+         array_unshift($tab, "_main_");
+
+         return $tab;
+      } else {
+         $tabs = [];
+         foreach ($iterator as $data) {
+            $tabs[] = $data['tabref'];
+         }
+         return $tabs;
+      }
+   }
 }
-?>
