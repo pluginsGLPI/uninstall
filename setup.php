@@ -28,7 +28,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_UNINSTALL_VERSION', '2.3.0');
+define ('PLUGIN_UNINSTALL_VERSION', '2.3.1');
 
 /**
  * Function Init
