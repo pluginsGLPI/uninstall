@@ -51,10 +51,10 @@ function plugin_init_uninstall() {
                                              'Printer'];
 
       if (Session::getLoginUserID()) {
-         if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
+         if (Session::haveRight('uninstall:profile', READ)) {
             $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
 
-            if (Session::haveRight('uninstall:profile', READ)) {
+            if (Session::haveRight('uninstall:profile', UPDATE)) {
                // Add link in GLPI plugins list :
                $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = ['admin' => 'PluginUninstallModel'];
 
