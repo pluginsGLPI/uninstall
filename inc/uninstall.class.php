@@ -267,7 +267,9 @@ class PluginUninstallUninstall extends CommonDBTM {
             self::purgeComputerVolumes($id);
 
             //Delete computer antivirus
-            self::purgeComputerAntivirus($id);
+            if ($model->fields["raz_antivirus"] == 1) {
+               self::purgeComputerAntivirus($id);
+            }
 
             if ($model->fields["raz_history"] == 1) {
                //Delete history related to software
