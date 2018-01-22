@@ -94,7 +94,7 @@ class PluginUninstallUninstall extends CommonDBTM {
    }
 
    static function uninstall($type, $model_id, $tab_ids, $location) {
-      global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
+      global $UNINSTALL_DIRECT_CONNECTIONS_TYPE, $DB;
 
       $plug = new Plugin();
 
@@ -267,7 +267,9 @@ class PluginUninstallUninstall extends CommonDBTM {
             self::purgeComputerVolumes($id);
 
             //Delete computer antivirus
-            self::purgeComputerAntivirus($id);
+            if ($model->fields["raz_antivirus"] == 1) {
+               self::purgeComputerAntivirus($id);
+            }
 
             if ($model->fields["raz_history"] == 1) {
                //Delete history related to software
@@ -478,7 +480,9 @@ class PluginUninstallUninstall extends CommonDBTM {
    static function purgeComputerAntivirus($computers_id) {
       $antivirus            = new ComputerAntivirus();
       $antivirus->dohistory = false;
-      $antivirus->deleteByCriteria(['computers_id' => $computers_id], true);
+      $antivirus->deleteByCriteria([
+         'computers_id' => $computers_id
+      ], true);
    }
 
    /**
