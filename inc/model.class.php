@@ -1159,7 +1159,7 @@ class PluginUninstallModel extends CommonDBTM {
                       SET `replace_contact_num`=`replace_contact`";
             $DB->queryOrDie($query, "Fill replace_contact_num");
          }
-         if (!FieldExists($table, 'raz_plugin_fields')) {
+         if (!$DB->fieldExists($table, 'raz_plugin_fields')) {
             $migration->addField($table, 'raz_plugin_fields', "bool");
          }
 
