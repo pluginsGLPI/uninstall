@@ -84,13 +84,11 @@ function plugin_version_uninstall() {
            'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
            'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
            'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
-           'minGlpiVersion' => '9.2',
            'version'        => PLUGIN_UNINSTALL_VERSION,
            'license'        => 'GPLv2+',
            'requirements'   => [
               'glpi' => [
-                 'min' => '9.2',
-                 'max' => '9.3',
+                 'min' => '9.3',
                  'dev' => true
               ]
            ]
@@ -99,8 +97,8 @@ function plugin_version_uninstall() {
 
 function plugin_uninstall_check_prerequisites() {
    $version = rtrim(GLPI_VERSION, '-dev');
-   if (version_compare($version, '9.2', 'lt')) {
-      echo "This plugin requires GLPI 9.2";
+   if (version_compare($version, '9.3', 'lt')) {
+      echo "This plugin requires GLPI 9.3";
       return false;
    }
    return true;
