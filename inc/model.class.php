@@ -662,193 +662,293 @@ class PluginUninstallModel extends CommonDBTM {
    }
 
 
-   function getSearchOptions() {
+   function rawSearchOptions() {
 
-      $tab                       = [];
+      $tab = [];
 
-      $tab['common']             = self::getTypeName();
+      $tab[] = [
+         'id'                 => 'common',
+         'name'               => self::getTypeName(),
+      ];
 
-      $tab[1]['table']           = $this->getTable();
-      $tab[1]['field']           = 'name';
-      $tab[1]['name']            = __('Name');
-      $tab[1]['datatype']        = 'itemlink';
-      $tab[1]['itemlink_type']   = $this->getType();
+      $tab[] = [
+         'id'                 => '1',
+         'table'              => $this->getTable(),
+         'field'              => 'name',
+         'name'               => __('Name'),
+         'datatype'           => 'itemlink',
+         'itemlink_type'      => $this->getType(),
+      ];
 
-      $tab[3]['table']           = $this->getTable();
-      $tab[3]['field']           = 'raz_name';
-      $tab[3]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Name'));
-      $tab[3]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '3',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_name',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Name')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[4]['table']           = $this->getTable();
-      $tab[4]['field']           = 'raz_soft_history';
-      $tab[4]['name']            = __('Delete software history (computers)', 'uninstall');
-      $tab[4]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '4',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_soft_history',
+         'name'               => __('Delete software history (computers)', 'uninstall'),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[5]['table']           = $this->getTable();
-      $tab[5]['field']           = 'raz_contact';
-      $tab[5]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username'));
-      $tab[5]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '5',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_contact',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[33]['table']           = $this->getTable();
-      $tab[33]['field']           = 'raz_contact_num';
-      $tab[33]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username number'));
-      $tab[33]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '33',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_contact_num',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username number')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[6]['table']           = $this->getTable();
-      $tab[6]['field']           = 'raz_user';
-      $tab[6]['name']             = sprintf(__('%1$s %2$s'), __('Blank'), __('User'));
-      $tab[6]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '6',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_user',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('User')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[7]['table']           = 'glpi_states';
-      $tab[7]['field']           = 'name';
-      $tab[7]['name']            = __('Status');
-      $tab[7]['datatype']        = 'dropdown';
+      $tab[] = [
+         'id'                 => '7',
+         'table'              => 'glpi_states',
+         'field'              => 'name',
+         'name'               => __('Status'),
+         'datatype'           => 'dropdown',
+      ];
 
-      $tab[8]['table']           = $this->getTable();
-      $tab[8]['field']           = 'raz_os';
-      $tab[8]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Operating system'));
-      $tab[8]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '8',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_os',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Operating system')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[9]['table']           = $this->getTable();
-      $tab[9]['field']           = 'raz_network';
-      $tab[9]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Network'));
-      $tab[9]['datatype']        ='bool';
+      $tab[] = [
+         'id'                 => '9',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_network',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Network')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[10]['table']          = $this->getTable();
-      $tab[10]['field']          = 'raz_domain';
-      $tab[10]['name']           = sprintf(__('%1$s %2$s'), __('Blank'), __('Domain'));
-      $tab[10]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '10',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_domain',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Domain')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[11]['table']          = $this->getTable();
-      $tab[11]['field']          = 'raz_ip';
-      $tab[11]['name']           = sprintf(__('%1$s %2$s'), __('Blank'),
-                                           __('IP')." & ".__('Subnet mask')." & ".__('Gateway').
-                                           " & ".__('Subnet'));
-      $tab[11]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '11',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_ip',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Blank'),
+            __('IP') . " & " . __('Subnet mask') . " & " . __('Gateway') . " & " . __('Subnet')
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[12]['table']          = $this->getTable();
-      $tab[12]['field']          = 'raz_budget';
-      $tab[12]['name']           = sprintf(__('%1$s %2$s'), __('Blank'), __('Budget'));
-      $tab[12]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '12',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_budget',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Budget')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[13]['table']          = $this->getTable();
-      $tab[13]['field']          = 'is_recursive';
-      $tab[13]['name']           = __('Child entities');
-      $tab[13]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '13',
+         'table'              => $this->getTable(),
+         'field'              => 'is_recursive',
+         'name'               => __('Child entities'),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[15]['table']          = 'glpi_transfers';
-      $tab[15]['field']          = 'name';
-      $tab[15]['name']           = __("Transfer's model to use", "uninstall");
-      $tab[15]['datatype']       = 'itemlink';
-      $tab[15]['itemlink_type']  = 'Transfer';
+      $tab[] = [
+         'id'                 => '15',
+         'table'              => 'glpi_transfers',
+         'field'              => 'name',
+         'name'               => __('Transfer\'s model to use', 'uninstall'),
+         'datatype'           => 'itemlink',
+         'itemlink_type'      => 'Transfer',
+      ];
 
-      $tab[17]['table']          = $this->getTable();
-      $tab[17]['field']          = 'comment';
-      $tab[17]['name']           = __('Comments');
-      $tab[17]['datatype']       = 'text';
+      $tab[] = [
+         'id'                 => '17',
+         'table'              => $this->getTable(),
+         'field'              => 'comment',
+         'name'               => __('Comments'),
+         'datatype'           => 'text',
+      ];
 
       $plug = new Plugin();
       if ($plug->isActivated('ocsinventoryng')) {
+         $tab[] = [
+            'id'                 => '18',
+            'table'              => $this->getTable(),
+            'field'              => 'remove_from_ocs',
+            'name'               => __('Delete computer in OCSNG', 'ocsinventoryng'),
+            'datatype'           => 'bool',
+         ];
 
-         $tab[18]['table']       = $this->getTable();
-         $tab[18]['field']       = 'remove_from_ocs';
-         $tab[18]['name']        = __('Delete computer in OCSNG', 'ocsinventoryng');
-         $tab[18]['datatype']    = 'bool';
-
-         $tab[19]['table']       = $this->getTable();
-         $tab[19]['field']       = 'delete_ocs_link';
-         $tab[19]['name']        = __('Delete link with computer in OCSNG', 'uninstall');
-         $tab[19]['datatype']    ='bool';
+         $tab[] = [
+            'id'                 => '19',
+            'table'              => $this->getTable(),
+            'field'              => 'delete_ocs_link',
+            'name'               => __('Delete link with computer in OCSNG', 'uninstall'),
+            'datatype'           => 'bool',
+         ];
       }
 
-      $tab[20]['table']          = $this->getTable();
-      $tab[20]['field']          = 'types_id';
-      $tab[20]['name']           = __('Type of template', 'uninstall');
-      $tab[20]['linkfield']      = '';
-      $tab[20]['datatype']       = 'specific';
-      $tab[20]['searchtype']     = 'equals';
+      $tab[] = [
+         'id'                 => '20',
+         'table'              => $this->getTable(),
+         'field'              => 'types_id',
+         'name'               => __('Type of template', 'uninstall'),
+         'linkfield'          => '',
+         'datatype'           => 'specific',
+         'searchtype'         => 'equals',
+      ];
 
-      $tab[21]['table']          = $this->getTable();
-      $tab[21]['field']          = 'groups_id';
-      $tab[21]['linkfield']      = '';
-      $tab[21]['name']           = __('Action on group', 'uninstall');
-      $tab[21]['datatype']       = 'specific';
-      $tab[21]['searchtype']     = 'equals';
+      $tab[] = [
+         'id'                 => '21',
+         'table'              => $this->getTable(),
+         'field'              => 'groups_id',
+         'name'               => __('Action on group', 'uninstall'),
+         'linkfield'          => '',
+         'datatype'           => 'specific',
+         'searchtype'         => 'equals',
+      ];
 
-      $tab[22]['table']          = $this->getTable();
-      $tab[22]['field']          = 'replace_method';
-      $tab[22]['linkfield']      = '';
-      $tab[22]['name']           = __('Archiving method of the old material', 'uninstall');
-      $tab[22]['datatype']       = 'specific';
-      $tab[22]['searchtype']     = 'equals';
+      $tab[] = [
+         'id'                 => '22',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_method',
+         'name'               => __('Archiving method of the old material', 'uninstall'),
+         'linkfield'          => '',
+         'datatype'           => 'specific',
+         'searchtype'         => 'equals',
+      ];
 
-      $tab[23]['table']          = $this->getTable();
-      $tab[23]['field']          = 'raz_history';
-      $tab[23]['name']           = __('Delete the whole history', 'uninstall');
-      $tab[23]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '23',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_history',
+         'name'               => __('Delete the whole history', 'uninstall'),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[24]['table']          = $this->getTable();
-      $tab[24]['field']          = 'replace_users';
-      $tab[24]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('User'));
-      $tab[24]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '24',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_users',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('User')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[25]['table']          = $this->getTable();
-      $tab[25]['field']          = 'replace_name';
-      $tab[25]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Name'));
-      $tab[25]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '25',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_name',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('Name')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[26]['table']          = $this->getTable();
-      $tab[26]['field']          = 'replace_serial';
-      $tab[26]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number'));
-      $tab[26]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '26',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_serial',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[27]['table']          = $this->getTable();
-      $tab[27]['field']          = 'replace_otherserial';
-      $tab[27]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Inventory number'));
-      $tab[27]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '27',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_otherserial',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('Inventory number')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[28]['table']          = $this->getTable();
-      $tab[28]['field']          = 'replace_documents';
-      $tab[28]['name']           = sprintf(__('%1$s %2$s'), __('Copy'),
-                                           _n('Document', 'Documents', 2));
-      $tab[28]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '28',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_documents',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Copy'),
+            _n('Document', 'Documents', 2)
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[29]['table']          = $this->getTable();
-      $tab[29]['field']          = 'replace_contracts';
-      $tab[29]['name']           = sprintf(__('%1$s %2$s'), __('Copy'),
-                                           _n('Contract', 'Contracts', 2));
-      $tab[29]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '29',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_contracts',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Copy'),
+            _n('Contract', 'Contracts', 2)
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[30]['table']          = $this->getTable();
-      $tab[30]['field']          = 'replace_infocoms';
-      $tab[30]['name']           = sprintf(__('%1$s %2$s'), __('Copy'),
-                                           __('Financial and administratives information'));
-      $tab[30]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '30',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_infocoms',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Copy'),
+            __('Financial and administratives information')
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[31]['table']          = $this->getTable();
-      $tab[31]['field']          = 'replace_reservations';
-      $tab[31]['name']           = sprintf(__('%1$s %2$s'), __('Copy'),
-                                           _n('Reservation', 'Reservations', 2));
-      $tab[31]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '31',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_reservations',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Copy'),
+            _n('Reservation', 'Reservations', 2)
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[32]['table']          = $this->getTable();
-      $tab[32]['field']          = 'replace_groups';
-      $tab[32]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Group'));
-      $tab[32]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '32',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_groups',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('Group')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[80]['table']          = 'glpi_entities';
-      $tab[80]['field']          = 'completename';
-      $tab[80]['name']           = __('Entity');
-      $tab[80]['datatype']       = 'dropdown';
-
-      /*
-      $tab[33]['table']      = $this->getTable();
-      $tab[33]['field']      = 'raz_ocs_registrkeys';
-      $tab[33]['linkfield']  = 'raz_ocs_registrykeys';
-      $tab[33]['name']       = 'unknown'; //unknown name on 0.85
-      $tab[33]['datatype']   = 'bool';
-      $tab[33]['searchtype'] = 'equals';
-      */
+      $tab[] = [
+         'id'                 => '80',
+         'table'              => 'glpi_entities',
+         'field'              => 'completename',
+         'name'               => __('Entity'),
+         'datatype'           => 'dropdown',
+      ];
 
       return $tab;
    }

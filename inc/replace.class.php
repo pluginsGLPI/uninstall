@@ -718,7 +718,7 @@ class PluginUninstallReplace extends CommonDBTM {
    static function searchFieldInSearchOptions($itemtype, $field='') {
       if ($item = getItemForItemtype($itemtype)) {
 
-         foreach ($item->getSearchOptionsNew() as $id => $searchOption) {
+         foreach ($item->rawSearchOptions() as $searchOption) {
             if (is_array($searchOption)
                && isset($searchOption['field'])
                   && $searchOption['field']==$field) {
