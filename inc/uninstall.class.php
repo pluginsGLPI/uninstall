@@ -402,19 +402,14 @@ class PluginUninstallUninstall extends CommonDBTM {
 
 
    static function OcsTableExists($ocs_server_id, $tablename) {
-      $DBocs = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id)->getDB();
+      $dbClient = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id);
 
-      // Get a list of tables contained within the database.
-      $result = $DBocs->list_tables("%".$tablename."%");
-      if ($rcount = $DBocs->numrows($result)) {
-         while ($data = $DBocs->fetch_row($result)) {
-            if ($data[0] === $tablename) {
-               return true;
-            }
-         }
+      if (!($dbClient instanceof PluginOcsinventoryngOcsDbClient)) {
+         return false;
       }
-      $DBocs->free_result($result);
-      return false;
+
+      $DBocs = $dbClient->getDB();
+      return $DBocs->tableExists($tablename);
    }
 
    /**
