@@ -458,9 +458,9 @@ class PluginUninstallUninstall extends CommonDBTM {
 
 
    static function purgeComputerVolumes($computers_id) {
-      $computerdisk            = new ComputerDisk();
-      $computerdisk->dohistory = false;
-      $computerdisk->deleteByCriteria(['computers_id' => $computers_id]);
+      $disk = new Item_Disk();
+      $disk->dohistory = false;
+      $disk->deleteByCriteria(['items_id' => $computers_id, 'itemtype' => 'Computer']);
    }
 
 
