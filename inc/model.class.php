@@ -374,6 +374,13 @@ class PluginUninstallModel extends CommonDBTM {
                           (isset($this->fields["raz_budget"])
                            ? $this->fields["raz_budget"] : 0));
       echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Antivirus')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_antivirus",
+                          (isset($this->fields["raz_antivirus"]) ? $this->fields["raz_antivirus"] : 1));
+      echo "</td></tr>";
    }
 
    function showPartFormRemplacement() {
@@ -1063,6 +1070,10 @@ class PluginUninstallModel extends CommonDBTM {
             $migration->addField($table, 'raz_plugin_fields', "bool");
          }
 
+         if (!FieldExists($table, 'raz_antivirus')) {
+            $migration->addField($table, 'raz_antivirus', "bool");
+         }
+
          $migration->migrationOneTable($table);
 
       } else {
@@ -1084,6 +1095,7 @@ class PluginUninstallModel extends CommonDBTM {
                     `raz_history` int(1) NOT NULL DEFAULT '1',
                     `raz_soft_history` int(1) NOT NULL DEFAULT '1',
                     `raz_budget` int(1) NOT NULL DEFAULT '1',
+                    `raz_antivirus` int(1) NOT NULL DEFAULT '1',
                     `raz_user` int(1) NOT NULL DEFAULT '1',
                     `raz_ocs_registrykeys` int(1) NOT NULL DEFAULT '1',
                     `comment` text COLLATE utf8_unicode_ci NOT NULL,
