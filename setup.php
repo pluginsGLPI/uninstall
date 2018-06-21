@@ -30,6 +30,11 @@
 
 define ('PLUGIN_UNINSTALL_VERSION', '2.3.1');
 
+// Minimal GLPI version, inclusive
+define("PLUGIN_UNINSTALL_MIN_GLPI", "9.2");
+// Maximum GLPI version, exclusive
+define("PLUGIN_UNINSTALL_MAX_GLPI", "9.3");
+
 /**
  * Function Init
  */
@@ -80,29 +85,43 @@ function plugin_init_uninstall() {
 }
 
 function plugin_version_uninstall() {
-   return ['name'           => __("Item's uninstallation", 'uninstall'),
-           'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
-           'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
-           'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
-           'minGlpiVersion' => '9.2',
-           'version'        => PLUGIN_UNINSTALL_VERSION,
-           'license'        => 'GPLv2+',
-           'requirements'   => [
-              'glpi' => [
-                 'min' => '9.2',
-                 'max' => '9.3',
-                 'dev' => true
-              ]
-           ]
-         ];
+   return [
+      'name'           => __("Item's uninstallation", 'uninstall'),
+      'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
+      'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
+      'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
+      'version'        => PLUGIN_UNINSTALL_VERSION,
+      'license'        => 'GPLv2+',
+      'requirements'   => [
+         'glpi' => [
+            'min' => PLUGIN_UNINSTALL_MIN_GLPI,
+            'max' => PLUGIN_UNINSTALL_MAX_GLPI,
+            'dev' => true, //Required to allow 9.2-dev
+         ]
+      ]
+   ];
 }
 
 function plugin_uninstall_check_prerequisites() {
-   $version = rtrim(GLPI_VERSION, '-dev');
-   if (version_compare($version, '9.2', 'lt')) {
-      echo "This plugin requires GLPI 9.2";
-      return false;
+
+   //Version check is not done by core in GLPI < 9.2 but has to be delegated to core in GLPI >= 9.2.
+   if (!method_exists('Plugin', 'checkGlpiVersion')) {
+      $version = preg_replace('/^((\d+\.?)+).*$/', '$1', GLPI_VERSION);
+      $matchMinGlpiReq = version_compare($version, PLUGIN_UNINSTALL_MIN_GLPI, '>=');
+      $matchMaxGlpiReq = version_compare($version, PLUGIN_UNINSTALL_MAX_GLPI, '<');
+
+      if (!$matchMinGlpiReq || !$matchMaxGlpiReq) {
+         echo vsprintf(
+            'This plugin requires GLPI >= %1$s and < %2$s.',
+            [
+               PLUGIN_UNINSTALL_MIN_GLPI,
+               PLUGIN_UNINSTALL_MAX_GLPI,
+            ]
+         );
+         return false;
+      }
    }
+
    return true;
 }
 
