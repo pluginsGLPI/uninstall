@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: tr_TR\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: front/action.php:55 inc/replace.class.php:447
 msgid "Replacement successful"
@@ -153,6 +153,7 @@ msgstr "Doğrudan bağlantılar"
 msgid "OCSNG link"
 msgid_plural "OCSNG links"
 msgstr[0] "OCSNG bağlantısı"
+msgstr[1] "OCSNG bağlantısı"
 
 #: inc/model.class.php:582
 msgid "These options only apply to computers coming from OCSNG"
@@ -173,11 +174,11 @@ msgstr "FusionInventory üzerinden bilgisayar sil"
 
 #: inc/model.class.php:618
 msgid "Additionnal fields"
-msgstr ""
+msgstr "Ek alanlar"
 
 #: inc/model.class.php:622
 msgid "Delete Fields plugin informations"
-msgstr ""
+msgstr "Alanlar uygulama eki bilgilerini sil"
 
 #: inc/model.class.php:887 inc/uninstall.class.php:717
 msgid "Keep in the current group"
