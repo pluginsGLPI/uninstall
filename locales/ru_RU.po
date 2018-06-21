@@ -1,0 +1,272 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-22 12:03+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Nikolay <techobsl@yandex.ru>, 2018\n"
+"Language-Team: Russian (Russia) (https://www.transifex.com/teclib/teams/28042/ru_RU/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: front/action.php:55 inc/replace.class.php:447
+msgid "Replacement successful"
+msgstr "Успешная замена"
+
+#: front/action.php:96 inc/uninstall.class.php:315
+msgid "Uninstallation successful"
+msgstr "Успешное удаление"
+
+#: hook.php:50 inc/uninstall.class.php:110 inc/uninstall.class.php:770
+msgid "Uninstall"
+msgstr "Удалить"
+
+#: ajax/locations.php:43 inc/replace.class.php:560 inc/preference.class.php:74
+msgid "Keep previous location"
+msgstr "Сохранить предыдущее местоположение"
+
+#: ajax/locations.php:44 inc/replace.class.php:564 inc/preference.class.php:76
+msgid "Empty location"
+msgstr "Пустое местоположение"
+
+#: inc/model.class.php:42
+msgid "Uninstallation template"
+msgstr "Шаблон удаления"
+
+#: inc/model.class.php:108 inc/model.class.php:880 inc/model.class.php:922
+msgid "Uninstallation"
+msgstr "Удаление"
+
+#: inc/model.class.php:110 inc/model.class.php:882 inc/model.class.php:924
+#: inc/replace.class.php:61 inc/replace.class.php:108
+msgid "Replacement"
+msgstr "Замена"
+
+#: inc/model.class.php:120
+msgid "PDF Archiving"
+msgstr "PDF Архивирование"
+
+#: inc/model.class.php:122
+msgid "CSV Archiving"
+msgstr " CSV Архивирование"
+
+#: inc/model.class.php:125
+msgid "Purge"
+msgstr "Очистить"
+
+#: inc/model.class.php:126
+msgid "Delete + Comment"
+msgstr "Удалить + Комментарий"
+
+#: inc/model.class.php:127
+msgid "Keep + Comment"
+msgstr "Сохранить + Комментарий"
+
+#: inc/model.class.php:168
+msgid "Replacing data"
+msgstr "Замена данных"
+
+#: inc/model.class.php:212 inc/model.class.php:766
+msgid "Type of template"
+msgstr "Тип шаблона"
+
+#: inc/model.class.php:221 inc/model.class.php:741
+msgid "Transfer's model to use"
+msgstr "Модель переноса для использования"
+
+#: inc/model.class.php:241 inc/replace.class.php:574
+msgid "New status of the computer"
+msgstr "Новый статус компьютера"
+
+#: inc/model.class.php:253 inc/model.class.php:774
+msgid "Action on group"
+msgstr "Действие по группе"
+
+#: inc/model.class.php:265
+msgid "New group"
+msgstr "Новая группа"
+
+#: inc/model.class.php:286
+msgid "Add template"
+msgstr "Добавить шаблон"
+
+#: inc/model.class.php:289
+msgid "Manage templates"
+msgstr "Управление шаблонами"
+
+#: inc/model.class.php:300
+msgid "Erase datas"
+msgstr "Сбросить даты"
+
+#: inc/model.class.php:303 inc/model.class.php:684
+msgid "Delete software history (computers)"
+msgstr "Удалить историю ПО (компьютеры)"
+
+#: inc/model.class.php:308 inc/model.class.php:787
+msgid "Delete the whole history"
+msgstr "Удалить всю историю"
+
+#: inc/model.class.php:382 inc/model.class.php:432
+msgid "Informations replacement"
+msgstr "Замена информации"
+
+#: inc/model.class.php:383 inc/replace.class.php:520
+msgid "General informations"
+msgstr "Общая информация"
+
+#: inc/model.class.php:405 inc/replace.class.php:535
+msgid "Overwrite informations (from old item to the new)"
+msgstr ""
+
+#: inc/model.class.php:412 inc/model.class.php:781 inc/replace.class.php:538
+msgid "Archiving method of the old material"
+msgstr ""
+
+#: inc/model.class.php:422
+msgid "Plugin PDF is installed and activated"
+msgstr ""
+
+#: inc/model.class.php:425
+msgid ""
+"Plugin PDF is not installed, you won't be able to use PDF format for "
+"archiving"
+msgstr ""
+"Плагин PDF не установлен, вы не сможете использовать формат PDF для "
+"архивации"
+
+#: inc/model.class.php:433 inc/replace.class.php:596
+msgid "Connections with other materials"
+msgstr ""
+
+#: inc/model.class.php:507 inc/replace.class.php:631
+msgid "Direct connections"
+msgstr ""
+
+#: inc/model.class.php:580
+msgid "OCSNG link"
+msgid_plural "OCSNG links"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: inc/model.class.php:582
+msgid "These options only apply to computers coming from OCSNG"
+msgstr ""
+
+#: inc/model.class.php:586 inc/model.class.php:755
+msgid "Delete computer in OCSNG"
+msgstr ""
+
+#: inc/model.class.php:592 inc/model.class.php:760
+msgid "Delete link with computer in OCSNG"
+msgstr ""
+
+#: inc/model.class.php:606
+msgid "Delete computer in FusionInventory"
+msgstr ""
+
+#: inc/model.class.php:618
+msgid "Additionnal fields"
+msgstr ""
+
+#: inc/model.class.php:622
+msgid "Delete Fields plugin informations"
+msgstr ""
+
+#: inc/model.class.php:887 inc/uninstall.class.php:717
+msgid "Keep in the current group"
+msgstr ""
+
+#: inc/replace.class.php:40
+msgid "Item's replacement"
+msgstr ""
+
+#: inc/replace.class.php:65
+msgid "Please wait, replacement is running..."
+msgstr ""
+
+#: inc/replace.class.php:130
+msgid "This document is the archive of this replaced item"
+msgstr ""
+
+#: inc/replace.class.php:135
+msgid "Archive of old material"
+msgstr ""
+
+#: inc/replace.class.php:403
+msgid "See attached document"
+msgstr ""
+
+#: inc/replace.class.php:473
+msgid "This item is a replacement for item"
+msgstr ""
+
+#: inc/replace.class.php:475
+msgid "This item was replaced by"
+msgstr ""
+
+#: inc/replace.class.php:519 inc/replace.class.php:595
+msgid "Reminder of the replacement model"
+msgstr ""
+
+#: inc/replace.class.php:557
+msgid "New location of item"
+msgstr ""
+
+#: inc/replace.class.php:642
+msgid "Choices for item to replace"
+msgstr ""
+
+#: inc/replace.class.php:645
+msgid "Old item"
+msgstr ""
+
+#: inc/replace.class.php:655
+msgid "New item"
+msgstr ""
+
+#: inc/replace.class.php:687
+msgid "Replace"
+msgstr ""
+
+#: inc/uninstall.class.php:38 setup.php:83
+msgid "Item's uninstallation"
+msgstr "Удаление элемента"
+
+#: inc/uninstall.class.php:114
+msgid "Please wait, uninstallation is running..."
+msgstr "Пожалуйста, ожидайте, удаление запущено..."
+
+#: inc/uninstall.class.php:511
+msgid "Item is now uninstalled"
+msgstr ""
+
+#: inc/uninstall.class.php:515
+msgid "Item replaced by a new one"
+msgstr ""
+
+#: inc/uninstall.class.php:519
+msgid "Item replacing an old one"
+msgstr ""
+
+#: inc/uninstall.class.php:524
+msgid "Removed from OCSNG with ID"
+msgstr ""
+
+#: inc/uninstall.class.php:635 inc/preference.class.php:54
+msgid "Item's location after uninstall"
+msgstr ""
+
+#: inc/uninstall.class.php:718
+msgid "Affect to a new group"
+msgstr ""
