@@ -28,7 +28,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_UNINSTALL_VERSION', '2.3.1');
+define ('PLUGIN_UNINSTALL_VERSION', '2.3.2');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_UNINSTALL_MIN_GLPI", "9.2");
