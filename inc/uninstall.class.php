@@ -34,7 +34,7 @@ class PluginUninstallUninstall extends CommonDBTM {
 
    static $rightname = "uninstall:profile";
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __("Item's uninstallation", 'uninstall');
    }
 
@@ -58,7 +58,7 @@ class PluginUninstallUninstall extends CommonDBTM {
             $uninst->dropdownUninstallModels("model_id", $_SESSION["glpiID"],
                   $_SESSION["glpiactive_entity"]);
             echo "&nbsp;".
-                  Html::submit(_x('button', 'Post'), array('name' => 'massiveaction'));
+                  Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
                   return true;
       }
       return "";
@@ -136,8 +136,8 @@ class PluginUninstallUninstall extends CommonDBTM {
          //------------------//
          if (in_array($type, $UNINSTALL_DIRECT_CONNECTIONS_TYPE)) {
             $conn = new Computer_Item();
-            $conn->deleteByCriteria(array('itemtype' => $type,
-                                          'items_id' => $id), true);
+            $conn->deleteByCriteria(['itemtype' => $type,
+                                          'items_id' => $id], true);
          }
 
          //--------------------//
@@ -289,7 +289,7 @@ class PluginUninstallUninstall extends CommonDBTM {
             }
             //Should never happend that transfer_id = 0, but just in case
             if ($model->fields["transfers_id"] > 0) {
-               $transfer->moveItems(array($type => array($id => $id)),
+               $transfer->moveItems([$type => [$id => $id]],
                                     $entity, $transfer->fields);
             }
          }
@@ -379,10 +379,10 @@ class PluginUninstallUninstall extends CommonDBTM {
                                 WHERE `networks`.`HARDWARE_ID` = '".$ocs_id."')";
       $DBocs->query($query);
 
-      $tables = array ("accesslog", "accountinfo", "bios", "controllers", "devices", "drives",
+      $tables =  ["accesslog", "accountinfo", "bios", "controllers", "devices", "drives",
             "download_history", "download_servers", "groups_cache", "inputs",
             "memories", "modems", "monitors", "networks", "ports", "printers",
-            "registry", "slots", "softwares", "sounds", "storages", "videos");
+            "registry", "slots", "softwares", "sounds", "storages", "videos"];
 
       foreach ($tables as $table) {
          if (self::OcsTableExists($ocs_server_id, $table)) {
@@ -446,12 +446,12 @@ class PluginUninstallUninstall extends CommonDBTM {
          if ($itemtype == 'Computer') {
             // remove agent(s)
             foreach ($agents as $current_agent) {
-               $agent->deleteByCriteria(array('id' => $current_agent['id']), true);
+               $agent->deleteByCriteria(['id' => $current_agent['id']], true);
             }
 
             // remove licences
             $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
-            $pfComputerLicenseInfo->deleteByCriteria(array('computers_id' => $items_id));
+            $pfComputerLicenseInfo->deleteByCriteria(['computers_id' => $items_id]);
          }
       }
    }
@@ -484,7 +484,7 @@ class PluginUninstallUninstall extends CommonDBTM {
     *
     * @return nothing
    **/
-   static function deleteHistory($computer_id, $only_history=true) {
+   static function deleteHistory($computer_id, $only_history = true) {
       global $DB;
 
       $where = "`itemtype` = 'Computer'
@@ -510,7 +510,7 @@ class PluginUninstallUninstall extends CommonDBTM {
     * @param $action          (default 'uninstall'
     * @param $ocs_id          (default '')
    **/
-   static function addUninstallLog($type, $computer_id, $action='uninstall', $ocs_id='') {
+   static function addUninstallLog($type, $computer_id, $action = 'uninstall', $ocs_id = '') {
 
       $changes[0] = 0;
       $changes[1] = "";
@@ -633,9 +633,9 @@ class PluginUninstallUninstall extends CommonDBTM {
                                             $item->fields["entities_id"]);
       echo "</td></tr>";
 
-      $params = array('templates_id' => '__VALUE__',
+      $params = ['templates_id' => '__VALUE__',
                        'entity'       => $item->fields["entities_id"],
-                       'users_id'     => $_SESSION["glpiID"]);
+                       'users_id'     => $_SESSION["glpiID"]];
 
       Ajax::updateItemOnSelectEvent("dropdown_model_id$rand", "show_objects",
                                     $CFG_GLPI["root_doc"] . "/plugins/uninstall/ajax/locations.php",
@@ -701,10 +701,10 @@ class PluginUninstallUninstall extends CommonDBTM {
          }
       }
 
-      return PluginUninstallModel::dropdown(array('name'   => $name,
+      return PluginUninstallModel::dropdown(['name'   => $name,
                                                   'value'  => 0,
                                                   'entity' => $entity,
-                                                  'used'   => $used));
+                                                  'used'   => $used]);
    }
 
 
@@ -714,7 +714,7 @@ class PluginUninstallUninstall extends CommonDBTM {
     * @param $entity_sons  array
     * @param $value                 (default -1)
     */
-   static function dropdownFieldAction($name, $entity=0, $entity_sons=[], $value=-1) {
+   static function dropdownFieldAction($name, $entity = 0, $entity_sons = [], $value = -1) {
       global $CFG_GLPI;
 
       if ($value == -1) {
@@ -748,7 +748,7 @@ class PluginUninstallUninstall extends CommonDBTM {
     * @param $entity
     * @param $add_entity   (false by default)
    **/
-   static function getAllTemplatesByEntity($entity, $add_entity=false) {
+   static function getAllTemplatesByEntity($entity, $add_entity = false) {
       global $DB, $CFG_GLPI;
 
       $templates = [];
@@ -770,7 +770,7 @@ class PluginUninstallUninstall extends CommonDBTM {
    }
 
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       global $UNINSTALL_TYPES;
 
       if (self::canView()
@@ -783,7 +783,7 @@ class PluginUninstallUninstall extends CommonDBTM {
    }
 
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       global $UNINSTALL_TYPES;
 
       if (in_array($item->getType(), $UNINSTALL_TYPES)) {

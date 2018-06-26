@@ -47,7 +47,7 @@ function plugin_uninstall_MassiveActions($type) {
    }
 
    if (in_array($type, $UNINSTALL_TYPES)) {
-      return array("PluginUninstallUninstall:uninstall" => __("Uninstall", 'uninstall'));
+      return ["PluginUninstallUninstall:uninstall" => __("Uninstall", 'uninstall')];
    }
    return [];
 }

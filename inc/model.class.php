@@ -38,7 +38,7 @@ class PluginUninstallModel extends CommonDBTM {
    const TYPE_MODEL_UNINSTALL   = 1;
    const TYPE_MODEL_REPLACEMENT = 2;
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __("Uninstallation template", 'uninstall');
    }
 
@@ -103,13 +103,13 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $name   select name (default 'types_id')
     * @param $value  default value (default '')
    **/
-   static function dropdownType($name='types_id', $value='') {
+   static function dropdownType($name = 'types_id', $value = '') {
 
       $values[1] = __('Uninstallation', 'uninstall');
       if (self::canReplace()) {
          $values[2] = __('Replacement', 'uninstall');
       }
-      Dropdown::showFromArray($name, $values, array('value' => $value));
+      Dropdown::showFromArray($name, $values, ['value' => $value]);
    }
 
 
@@ -134,17 +134,17 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $name   select name
     * @param $value  default value (default '')
    **/
-   static function dropdownMethodReplacement($name, $value='') {
+   static function dropdownMethodReplacement($name, $value = '') {
 
       Dropdown::showFromArray($name, self::getReplacementMethods(),
-                              array('value' => $value));
+                              ['value' => $value]);
    }
 
 
    /**
     * @param $value  (default 0)
    **/
-   static function getMethodReplacement($value=0) {
+   static function getMethodReplacement($value = 0) {
 
       $values = self::getReplacementMethods();
       if (isset($values[$value])) {
@@ -156,7 +156,7 @@ class PluginUninstallModel extends CommonDBTM {
    /**
     * Définition du nom de l'onglet
     **/
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       switch ($item->getType()) {
          case 'Preference' :
@@ -174,7 +174,7 @@ class PluginUninstallModel extends CommonDBTM {
    /**
     * Définition du contenu de l'onglet
     **/
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       switch ($item->getType()) {
          case __CLASS__ :
             switch ($tabnum) {
@@ -189,14 +189,14 @@ class PluginUninstallModel extends CommonDBTM {
       return true;
    }
 
-   function defineTabs($options=[]) {
+   function defineTabs($options = []) {
       $ong = [];
       $this->addStandardTab(__CLASS__, $ong, $options);
       $this->addStandardTab('Log', $ong, $options);
       return $ong;
    }
 
-   function showForm($ID, $options=[]) {
+   function showForm($ID, $options = []) {
       global $DB, $CFG_GLPI;
 
       $this->initForm($ID, $options);
@@ -225,8 +225,8 @@ class PluginUninstallModel extends CommonDBTM {
          } else {
             $value = $this->fields["transfers_id"];
          }
-         Transfer::dropdown(array('value'               => $value,
-                                  'display_emptychoice' => false));
+         Transfer::dropdown(['value'               => $value,
+                                  'display_emptychoice' => false]);
       } else {
          echo "<td></td>";
          echo "<td></td>";
@@ -240,8 +240,8 @@ class PluginUninstallModel extends CommonDBTM {
 
       echo "<tr class='tab_bg_1'><td>" . __('New status of the computer', 'uninstall') ."</td>";
       echo "<td>";
-      State::dropdown(array('value'       => $this->fields['states_id'],
-                            'emptylabel'  => __('None')));
+      State::dropdown(['value'       => $this->fields['states_id'],
+                            'emptylabel'  => __('None')]);
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
@@ -265,10 +265,10 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<td>" . __('New group', 'uninstall') . "</td><td>";
          echo "<span id='show_groups' name='show_groups'>";
          if ($this->fields['groups_id'] != -1) {
-            Group::dropdown(array('value'       => $this->fields["groups_id"],
+            Group::dropdown(['value'       => $this->fields["groups_id"],
                                   'entity'      => $this->fields["entities_id"],
                                   'entity_sons' => $entities,
-                                  'emptylabel'  => __('None')));
+                                  'emptylabel'  => __('None')]);
          } else {
             echo Dropdown::EMPTY_VALUE;
          }
@@ -387,7 +387,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_name",
                           (isset($this->fields["replace_name"])
                            ? $this->fields["replace_name"]: 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number')) . "</td><td>";
       Dropdown::showYesNo("replace_serial",
@@ -400,7 +400,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_otherserial",
                           (isset($this->fields["replace_otherserial"])
                            ? $this->fields["replace_otherserial"]: 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>".__('Overwrite informations (from old item to the new)', 'uninstall')."</td>";
       echo "<td>";
@@ -439,7 +439,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_documents",
                           (isset($this->fields["replace_documents"])
                            ? $this->fields["replace_documents"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2))."</td>";
       echo "<td>";
@@ -455,7 +455,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_infocoms",
                           (isset($this->fields["replace_infocoms"])
                            ? $this->fields["replace_infocoms"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2));
       echo "</td>";
@@ -476,7 +476,7 @@ class PluginUninstallModel extends CommonDBTM {
       } else {
          $user = 1;
       }
-      Dropdown::showYesNo("replace_users", $user, -1, array('width' => '100%'));
+      Dropdown::showYesNo("replace_users", $user, -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
       echo "<td>";
@@ -492,7 +492,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_tickets",
                           (isset ($this->fields["replace_tickets"])
                            ? $this->fields["replace_tickets"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),
                            sprintf(__('%1$s %2$s'), _n('Connection', 'Connections', 2),
@@ -510,7 +510,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_direct_connections",
                           (isset($this->fields["replace_direct_connections"])
                            ? $this->fields["replace_direct_connections"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Alternate username'));
       echo "</td>";
@@ -518,7 +518,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_contact",
                           (isset($this->fields["replace_contact"])
                            ? $this->fields["replace_contact"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "</tr>";
 
@@ -529,7 +529,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_contact_num",
                           (isset($this->fields["replace_contact_num"])
                            ? $this->fields["replace_contact_num"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td colspan='2'></td>";
       echo "</tr>";
@@ -587,7 +587,7 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<td>";
          Dropdown::showYesNo("remove_from_ocs",
                              (isset($this->fields["remove_from_ocs"])
-                              ? $this->fields["remove_from_ocs"] : 0), -1, array('width' => '100%'));
+                              ? $this->fields["remove_from_ocs"] : 0), -1, ['width' => '100%']);
          echo "</td>";
          echo "<td>" . __('Delete link with computer in OCSNG', 'uninstall') . "</td>";
          echo "<td>";
@@ -607,7 +607,7 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<td>";
          Dropdown::showYesNo("raz_fusioninventory",
                              (isset($this->fields["raz_fusioninventory"])
-                              ? $this->fields["raz_fusioninventory"] : 0), -1, array('width' => '100%'));
+                              ? $this->fields["raz_fusioninventory"] : 0), -1, ['width' => '100%']);
          echo "</td>";
          echo "<td colspan='2'></td>";
          echo "</tr>";
@@ -624,7 +624,7 @@ class PluginUninstallModel extends CommonDBTM {
          Dropdown::showYesNo("raz_plugin_fields",
                              (isset($this->fields["raz_plugin_fields"])
                               ? $this->fields["raz_plugin_fields"] : 1),
-                                -1, array('width' => '100%'));
+                                -1, ['width' => '100%']);
          echo "</td>";
          echo "<td colspan='2'></td>";
          echo "</tr>";
@@ -961,10 +961,10 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $values
     * @param $options   array
    **/
-   static function getSpecificValueToDisplay($field, $values, array $options=[]) {
+   static function getSpecificValueToDisplay($field, $values, array $options = []) {
 
       if (!is_array($values)) {
-         $values = array($field => $values);
+         $values = [$field => $values];
       }
       switch ($field) {
 
@@ -1005,10 +1005,10 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $values             (defaut '')
     * @param $options   array
    **/
-   static function getSpecificValueToSelect($field, $name='', $values='', array $options=[]) {
+   static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = []) {
 
       if (!is_array($values)) {
-         $values = array($field => $values);
+         $values = [$field => $values];
       }
       $options['display'] = false;
       switch ($field) {
@@ -1061,7 +1061,7 @@ class PluginUninstallModel extends CommonDBTM {
          $migration->addField($table, 'FK_entities', 'integer');
          $migration->addField($table, 'recursive', 'int(1) NOT NULL DEFAULT 1');
          $migration->addField($table, 'name', 'string');
-         $migration->addField($table, `comments`, 'text', array('value' => 'NOT NULL'));
+         $migration->addField($table, `comments`, 'text', ['value' => 'NOT NULL']);
 
          $migration->migrationOneTable($table);
          $ID = PluginUninstallUninstall::getUninstallTransferModelID();
@@ -1092,7 +1092,7 @@ class PluginUninstallModel extends CommonDBTM {
             $migration->changeField($table, 'ID', 'id', 'autoincrement');
             $migration->changeField($table, 'FK_entities', 'entities_id', 'integer');
             $migration->changeField($table, 'recursive', 'is_recursive', "bool",
-                                    array('value' => 1));
+                                    ['value' => 1]);
             $migration->changeField($table, 'transfer_id', 'transfers_id', "integer");
             $migration->changeField($table, 'state', 'states_id', "integer");
             $migration->changeField($table, 'group', 'groups_id', "integer");
@@ -1121,7 +1121,7 @@ class PluginUninstallModel extends CommonDBTM {
             $migration->addField($table, 'replace_netports', "bool");
             $migration->addField($table, 'replace_direct_connections', "bool");
             $migration->addField($table, 'overwrite', "bool");
-            $migration->addField($table, 'replace_method', "integer", array('value' => 2));
+            $migration->addField($table, 'replace_method', "integer", ['value' => 2]);
 
             $migration->migrationOneTable($table);
             self::createTransferModel('Replace');
@@ -1129,7 +1129,7 @@ class PluginUninstallModel extends CommonDBTM {
 
          // from 2.0.0 to 2.0.1
          if (!$DB->fieldExists($table, 'raz_history')) {
-            $migration->addField($table, 'raz_history', 'integer', array('after' => 'raz_network'));
+            $migration->addField($table, 'raz_history', 'integer', ['after' => 'raz_network']);
          }
 
          if (!$DB->fieldExists($table, 'raz_ocs_registrykeys')) {
@@ -1230,20 +1230,20 @@ class PluginUninstallModel extends CommonDBTM {
       $transfer_id     = PluginUninstallUninstall::getUninstallTransferModelID(false);
       if ($transfer_id) {
          $tr = new Transfer();
-         $tr->delete(array('id' => $transfer_id), true);
+         $tr->delete(['id' => $transfer_id], true);
       }
 
       //Delete history
       $log = new Log();
       $log->dohistory = false;
-      $log->deleteByCriteria(array('itemtype' => __CLASS__));
+      $log->deleteByCriteria(['itemtype' => __CLASS__]);
    }
 
 
    /**
     * @param $name   (default 'Uninstall')
    **/
-   static function createTransferModel($name='Uninstall') {
+   static function createTransferModel($name = 'Uninstall') {
 
       $transfers_id = PluginUninstallUninstall::getUninstallTransferModelID();
 
@@ -1308,13 +1308,13 @@ class PluginUninstallModel extends CommonDBTM {
          case 'transfert':
             Entity::dropdown();
             echo "&nbsp;".
-                  Html::submit(_x('button', 'Post'), array('name' => 'massiveaction'));
+                  Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
             return true;
       }
       return "";
    }
 
-   function getSpecificMassiveActions($checkitem=NULL) {
+   function getSpecificMassiveActions($checkitem = null) {
 
       $isadmin = static::canUpdate();
       $actions = parent::getSpecificMassiveActions($checkitem);
@@ -1344,11 +1344,11 @@ class PluginUninstallModel extends CommonDBTM {
 
             foreach ($ids as $id) {
                if ($item->getFromDB($id)) {
-                  $item->update(array(
+                  $item->update([
                         "id" => $id,
                         "entities_id" => $entities_id,
                         "update" => __('Update'),
-                  ));
+                  ]);
                   $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
                }
             }
