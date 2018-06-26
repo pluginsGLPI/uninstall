@@ -123,11 +123,11 @@ while ($data = $DB->fetch_assoc($result)) {
       $outputval = sprintf(__('%1$s (%2$s)'), $outputval, $ID);
    }
    array_push($options, ['id'     => $ID,
-                               'text'  => $outputval,
-                               'title' => $title]);
+                         'text'  => $outputval,
+                         'title' => $title]);
    $count++;
 }
 
 
 echo json_encode(['results' => $options,
-                      'count'    => $count]);
+                  'count'    => $count]);

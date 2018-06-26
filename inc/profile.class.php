@@ -40,12 +40,12 @@ class PluginUninstallProfile extends Profile {
    function getGeneralRights() {
       $rights = [
          [
-               'itemtype'  => 'PluginUninstallProfile',
-               'label'     => PluginUninstallUninstall::getTypeName(),
-               'field'     => "uninstall:profile",
-               'rights'    => [READ                => __('Read'),
-                                    UPDATE              => __('Write'),
-                                    self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName()]
+            'itemtype'  => 'PluginUninstallProfile',
+            'label'     => PluginUninstallUninstall::getTypeName(),
+            'field'     => "uninstall:profile",
+            'rights'    => [READ                => __('Read'),
+                            UPDATE              => __('Write'),
+                            self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName()]
          ],
       ];
       return $rights;
@@ -72,7 +72,7 @@ class PluginUninstallProfile extends Profile {
 
       $rights = $this->getGeneralRights();
       $profile->displayRightsChoiceMatrix($rights, ['canedit'       => $canedit,
-                                                         'default_class' => 'tab_bg_2']);
+                                                    'default_class' => 'tab_bg_2']);
       if ($canedit) {
          $options['candel'] = false;
          $this->showFormButtons($options);
@@ -82,7 +82,7 @@ class PluginUninstallProfile extends Profile {
    static function createFirstAccess($ID) {
       self::addDefaultProfileInfos($ID,
             ['uninstall:profile' => UPDATE | READ | self::RIGHT_REPLACE,
-                  'plugin_uninstall_replace'         => 1], true);
+             'plugin_uninstall_replace'         => 1], true);
    }
 
    /**

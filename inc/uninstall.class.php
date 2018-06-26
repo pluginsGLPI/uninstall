@@ -137,7 +137,7 @@ class PluginUninstallUninstall extends CommonDBTM {
          if (in_array($type, $UNINSTALL_DIRECT_CONNECTIONS_TYPE)) {
             $conn = new Computer_Item();
             $conn->deleteByCriteria(['itemtype' => $type,
-                                          'items_id' => $id], true);
+                                     'items_id' => $id], true);
          }
 
          //--------------------//
@@ -634,8 +634,8 @@ class PluginUninstallUninstall extends CommonDBTM {
       echo "</td></tr>";
 
       $params = ['templates_id' => '__VALUE__',
-                       'entity'       => $item->fields["entities_id"],
-                       'users_id'     => $_SESSION["glpiID"]];
+                 'entity'       => $item->fields["entities_id"],
+                 'users_id'     => $_SESSION["glpiID"]];
 
       Ajax::updateItemOnSelectEvent("dropdown_model_id$rand", "show_objects",
                                     $CFG_GLPI["root_doc"] . "/plugins/uninstall/ajax/locations.php",

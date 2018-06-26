@@ -38,8 +38,8 @@ if (Session::haveRight(PluginUninstallProfile::$rightname, READ)
                                                                     $_POST["templates_id"],
                                                                     $_POST["entity"]);
    Location::dropdown(['value'     => ($location == '' ? 0 : $location),
-                            'comments'  => 1,
-                            'entity'    => $_POST["entity"],
-                            'toadd'     => [-1 => __('Keep previous location', 'uninstall'),
-                                                 0  => __('Empty location', 'uninstall')]]);
+                       'comments'  => 1,
+                       'entity'    => $_POST["entity"],
+                       'toadd'     => [-1 => __('Keep previous location', 'uninstall'),
+                                       0  => __('Empty location', 'uninstall')]]);
 }

@@ -226,7 +226,7 @@ class PluginUninstallModel extends CommonDBTM {
             $value = $this->fields["transfers_id"];
          }
          Transfer::dropdown(['value'               => $value,
-                                  'display_emptychoice' => false]);
+                             'display_emptychoice' => false]);
       } else {
          echo "<td></td>";
          echo "<td></td>";
@@ -241,7 +241,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "<tr class='tab_bg_1'><td>" . __('New status of the computer', 'uninstall') ."</td>";
       echo "<td>";
       State::dropdown(['value'       => $this->fields['states_id'],
-                            'emptylabel'  => __('None')]);
+                       'emptylabel'  => __('None')]);
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
@@ -266,9 +266,9 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<span id='show_groups' name='show_groups'>";
          if ($this->fields['groups_id'] != -1) {
             Group::dropdown(['value'       => $this->fields["groups_id"],
-                                  'entity'      => $this->fields["entities_id"],
-                                  'entity_sons' => $entities,
-                                  'emptylabel'  => __('None')]);
+                             'entity'      => $this->fields["entities_id"],
+                             'entity_sons' => $entities,
+                             'emptylabel'  => __('None')]);
          } else {
             echo Dropdown::EMPTY_VALUE;
          }

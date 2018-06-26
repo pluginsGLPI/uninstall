@@ -68,12 +68,11 @@ class PluginUninstallPreference extends CommonDBTM {
             $value = (isset($this->fields["locations_id"]) ? $this->fields["locations_id"] : 0);
 
             Location::dropdown(['name'      => "id[$pref_ID][locations_id]",
-                                     'value'     => ($value == '' ? 0 : $value),
-                                     'comments'  => 1,
-                                     'entity'    => $entity,
-                                     'toadd'     => [-1 => __('Keep previous location',
-                                                                   'uninstall'),
-                                                          0  => __('Empty location', 'uninstall')]]);
+                                'value'     => ($value == '' ? 0 : $value),
+                                'comments'  => 1,
+                                'entity'    => $entity,
+                                'toadd'     => [-1 => __('Keep previous location', 'uninstall'),
+                                                0  => __('Empty location', 'uninstall')]]);
 
             echo "<input type='hidden' name='id[".$pref_ID."][id]' value='" . $pref_ID . "'>";
             echo "</td></tr>";
