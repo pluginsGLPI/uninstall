@@ -37,9 +37,9 @@ if (Session::haveRight(PluginUninstallProfile::$rightname, READ)
    $location = PluginUninstallPreference::getLocationByUserByEntity($_POST["users_id"],
                                                                     $_POST["templates_id"],
                                                                     $_POST["entity"]);
-   Location::dropdown(array('value'     => ($location == '' ? 0 : $location),
+   Location::dropdown(['value'     => ($location == '' ? 0 : $location),
                             'comments'  => 1,
                             'entity'    => $_POST["entity"],
-                            'toadd'     => array(-1 => __('Keep previous location', 'uninstall'),
-                                                 0  => __('Empty location', 'uninstall'))));
+                            'toadd'     => [-1 => __('Keep previous location', 'uninstall'),
+                                                 0  => __('Empty location', 'uninstall')]]);
 }

@@ -125,6 +125,6 @@ function plugin_uninstall_check_prerequisites() {
    return true;
 }
 
-function plugin_uninstall_check_config($verbose=false) {
+function plugin_uninstall_check_config($verbose = false) {
    return true;
 }

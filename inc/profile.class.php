@@ -38,20 +38,20 @@ class PluginUninstallProfile extends Profile {
     * @return array:array:string rights matrix
     */
    function getGeneralRights() {
-      $rights = array(
-         array(
+      $rights = [
+         [
                'itemtype'  => 'PluginUninstallProfile',
                'label'     => PluginUninstallUninstall::getTypeName(),
                'field'     => "uninstall:profile",
-               'rights'    => array(READ                => __('Read'),
+               'rights'    => [READ                => __('Read'),
                                     UPDATE              => __('Write'),
-                                    self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName())
-         ),
-      );
+                                    self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName()]
+         ],
+      ];
       return $rights;
    }
 
-   function showForm($ID, $options=array()) {
+   function showForm($ID, $options = []) {
       global $DB;
 
       $profile = new Profile();
@@ -71,8 +71,8 @@ class PluginUninstallProfile extends Profile {
       }
 
       $rights = $this->getGeneralRights();
-      $profile->displayRightsChoiceMatrix($rights, array('canedit'       => $canedit,
-                                                         'default_class' => 'tab_bg_2'));
+      $profile->displayRightsChoiceMatrix($rights, ['canedit'       => $canedit,
+                                                         'default_class' => 'tab_bg_2']);
       if ($canedit) {
          $options['candel'] = false;
          $this->showFormButtons($options);
@@ -81,8 +81,8 @@ class PluginUninstallProfile extends Profile {
 
    static function createFirstAccess($ID) {
       self::addDefaultProfileInfos($ID,
-            array('uninstall:profile' => UPDATE | READ | self::RIGHT_REPLACE,
-                  'plugin_uninstall_replace'         => 1), true);
+            ['uninstall:profile' => UPDATE | READ | self::RIGHT_REPLACE,
+                  'plugin_uninstall_replace'         => 1], true);
    }
 
    /**
@@ -122,7 +122,7 @@ class PluginUninstallProfile extends Profile {
                            "`id`='$profiles_id'") as $profile_data) {
          $translatedRight = self::translateARight($profile_data["use"]);
          $translatedRight = $translatedRight | (self::translateARight($profile_data["replace"]) ? self::RIGHT_REPLACE : 0);
-         ProfileRight::updateProfileRights($profiles_id, array(PluginUninstallProfile::$rightname => $translatedRight));
+         ProfileRight::updateProfileRights($profiles_id, [PluginUninstallProfile::$rightname => $translatedRight]);
       }
    }
 
@@ -133,9 +133,9 @@ class PluginUninstallProfile extends Profile {
       global $DB;
 
       //Add new rights in glpi_profilerights table
-      foreach (array(PluginUninstallProfile::$rightname) as $field) {
+      foreach ([PluginUninstallProfile::$rightname] as $field) {
          if (countElementsInTable("glpi_profilerights", "`name` = '".$field."'") == 0) {
-            ProfileRight::addProfileRights(array($field));
+            ProfileRight::addProfileRights([$field]);
          }
       }
 
@@ -151,7 +151,7 @@ class PluginUninstallProfile extends Profile {
       }
    }
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       if ($item->getType() == 'Profile') {
          if ($item->getField('interface') == 'central') {
@@ -168,7 +168,7 @@ class PluginUninstallProfile extends Profile {
       foreach ($rights as $right => $value) {
          if (countElementsInTable('glpi_profilerights',
                "`profiles_id`='$profiles_id' AND `name`='$right'") && $drop_existing) {
-               $profileRight->deleteByCriteria(array('profiles_id' => $profiles_id, 'name' => $right));
+               $profileRight->deleteByCriteria(['profiles_id' => $profiles_id, 'name' => $right]);
          }
          if (!countElementsInTable('glpi_profilerights',
                "`profiles_id`='$profiles_id' AND `name`='$right'")) {
@@ -183,14 +183,14 @@ class PluginUninstallProfile extends Profile {
       }
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
 
       if ($item->getType() == 'Profile') {
          $ID = $item->getID();
          $prof = new self();
 
          self::addDefaultProfileInfos($ID,
-               array(PluginUninstallProfile::$rightname     => 0));
+               [PluginUninstallProfile::$rightname     => 0]);
          $prof->showForm($ID);
       }
       return true;
@@ -202,7 +202,7 @@ class PluginUninstallProfile extends Profile {
       // From 0.2 to 1.0.0
       $table = 'glpi_plugin_uninstallcomputer_profiles';
       if ($DB->tableExists($table)) {
-         $migration->changeField($table, 'use', 'use', "char", array('value' => '0'));
+         $migration->changeField($table, 'use', 'use', "char", ['value' => '0']);
          $migration->migrationOneTable($table);
 
          $query = "UPDATE `".$table."`
