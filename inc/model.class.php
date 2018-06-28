@@ -38,7 +38,7 @@ class PluginUninstallModel extends CommonDBTM {
    const TYPE_MODEL_UNINSTALL   = 1;
    const TYPE_MODEL_REPLACEMENT = 2;
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __("Uninstallation template", 'uninstall');
    }
 
@@ -103,13 +103,13 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $name   select name (default 'types_id')
     * @param $value  default value (default '')
    **/
-   static function dropdownType($name='types_id', $value='') {
+   static function dropdownType($name = 'types_id', $value = '') {
 
       $values[1] = __('Uninstallation', 'uninstall');
       if (self::canReplace()) {
          $values[2] = __('Replacement', 'uninstall');
       }
-      Dropdown::showFromArray($name, $values, array('value' => $value));
+      Dropdown::showFromArray($name, $values, ['value' => $value]);
    }
 
 
@@ -134,17 +134,17 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $name   select name
     * @param $value  default value (default '')
    **/
-   static function dropdownMethodReplacement($name, $value='') {
+   static function dropdownMethodReplacement($name, $value = '') {
 
       Dropdown::showFromArray($name, self::getReplacementMethods(),
-                              array('value' => $value));
+                              ['value' => $value]);
    }
 
 
    /**
     * @param $value  (default 0)
    **/
-   static function getMethodReplacement($value=0) {
+   static function getMethodReplacement($value = 0) {
 
       $values = self::getReplacementMethods();
       if (isset($values[$value])) {
@@ -156,7 +156,7 @@ class PluginUninstallModel extends CommonDBTM {
    /**
     * Définition du nom de l'onglet
     **/
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       switch ($item->getType()) {
          case 'Preference' :
@@ -174,7 +174,7 @@ class PluginUninstallModel extends CommonDBTM {
    /**
     * Définition du contenu de l'onglet
     **/
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       switch ($item->getType()) {
          case __CLASS__ :
             switch ($tabnum) {
@@ -189,14 +189,14 @@ class PluginUninstallModel extends CommonDBTM {
       return true;
    }
 
-   function defineTabs($options=[]) {
+   function defineTabs($options = []) {
       $ong = [];
       $this->addStandardTab(__CLASS__, $ong, $options);
       $this->addStandardTab('Log', $ong, $options);
       return $ong;
    }
 
-   function showForm($ID, $options=[]) {
+   function showForm($ID, $options = []) {
       global $DB, $CFG_GLPI;
 
       $this->initForm($ID, $options);
@@ -225,8 +225,8 @@ class PluginUninstallModel extends CommonDBTM {
          } else {
             $value = $this->fields["transfers_id"];
          }
-         Transfer::dropdown(array('value'               => $value,
-                                  'display_emptychoice' => false));
+         Transfer::dropdown(['value'               => $value,
+                             'display_emptychoice' => false]);
       } else {
          echo "<td></td>";
          echo "<td></td>";
@@ -240,8 +240,8 @@ class PluginUninstallModel extends CommonDBTM {
 
       echo "<tr class='tab_bg_1'><td>" . __('New status of the computer', 'uninstall') ."</td>";
       echo "<td>";
-      State::dropdown(array('value'       => $this->fields['states_id'],
-                            'emptylabel'  => __('None')));
+      State::dropdown(['value'       => $this->fields['states_id'],
+                       'emptylabel'  => __('None')]);
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
@@ -265,10 +265,10 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<td>" . __('New group', 'uninstall') . "</td><td>";
          echo "<span id='show_groups' name='show_groups'>";
          if ($this->fields['groups_id'] != -1) {
-            Group::dropdown(array('value'       => $this->fields["groups_id"],
-                                  'entity'      => $this->fields["entities_id"],
-                                  'entity_sons' => $entities,
-                                  'emptylabel'  => __('None')));
+            Group::dropdown(['value'       => $this->fields["groups_id"],
+                             'entity'      => $this->fields["entities_id"],
+                             'entity_sons' => $entities,
+                             'emptylabel'  => __('None')]);
          } else {
             echo Dropdown::EMPTY_VALUE;
          }
@@ -374,6 +374,14 @@ class PluginUninstallModel extends CommonDBTM {
                           (isset($this->fields["raz_budget"])
                            ? $this->fields["raz_budget"] : 0));
       echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1 center'>";
+      echo "<td>" .sprintf(__('%1$s %2$s'), __('Blank'), __('Antivirus')) . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_antivirus",
+                          (isset($this->fields["raz_antivirus"])
+                           ? $this->fields["raz_antivirus"] : 1));
+      echo "</td></tr>";
    }
 
    function showPartFormRemplacement() {
@@ -387,7 +395,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_name",
                           (isset($this->fields["replace_name"])
                            ? $this->fields["replace_name"]: 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number')) . "</td><td>";
       Dropdown::showYesNo("replace_serial",
@@ -400,7 +408,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_otherserial",
                           (isset($this->fields["replace_otherserial"])
                            ? $this->fields["replace_otherserial"]: 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>".__('Overwrite informations (from old item to the new)', 'uninstall')."</td>";
       echo "<td>";
@@ -439,7 +447,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_documents",
                           (isset($this->fields["replace_documents"])
                            ? $this->fields["replace_documents"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2))."</td>";
       echo "<td>";
@@ -455,7 +463,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_infocoms",
                           (isset($this->fields["replace_infocoms"])
                            ? $this->fields["replace_infocoms"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>".sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2));
       echo "</td>";
@@ -476,7 +484,7 @@ class PluginUninstallModel extends CommonDBTM {
       } else {
          $user = 1;
       }
-      Dropdown::showYesNo("replace_users", $user, -1, array('width' => '100%'));
+      Dropdown::showYesNo("replace_users", $user, -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
       echo "<td>";
@@ -492,7 +500,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_tickets",
                           (isset ($this->fields["replace_tickets"])
                            ? $this->fields["replace_tickets"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'),
                            sprintf(__('%1$s %2$s'), _n('Connection', 'Connections', 2),
@@ -510,7 +518,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_direct_connections",
                           (isset($this->fields["replace_direct_connections"])
                            ? $this->fields["replace_direct_connections"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td>" .sprintf(__('%1$s %2$s'), __('Copy'), __('Alternate username'));
       echo "</td>";
@@ -518,7 +526,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_contact",
                           (isset($this->fields["replace_contact"])
                            ? $this->fields["replace_contact"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "</tr>";
 
@@ -529,7 +537,7 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("replace_contact_num",
                           (isset($this->fields["replace_contact_num"])
                            ? $this->fields["replace_contact_num"] : 1),
-                           -1, array('width' => '100%'));
+                           -1, ['width' => '100%']);
       echo "</td>";
       echo "<td colspan='2'></td>";
       echo "</tr>";
@@ -587,7 +595,7 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<td>";
          Dropdown::showYesNo("remove_from_ocs",
                              (isset($this->fields["remove_from_ocs"])
-                              ? $this->fields["remove_from_ocs"] : 0), -1, array('width' => '100%'));
+                              ? $this->fields["remove_from_ocs"] : 0), -1, ['width' => '100%']);
          echo "</td>";
          echo "<td>" . __('Delete link with computer in OCSNG', 'uninstall') . "</td>";
          echo "<td>";
@@ -607,7 +615,7 @@ class PluginUninstallModel extends CommonDBTM {
          echo "<td>";
          Dropdown::showYesNo("raz_fusioninventory",
                              (isset($this->fields["raz_fusioninventory"])
-                              ? $this->fields["raz_fusioninventory"] : 0), -1, array('width' => '100%'));
+                              ? $this->fields["raz_fusioninventory"] : 0), -1, ['width' => '100%']);
          echo "</td>";
          echo "<td colspan='2'></td>";
          echo "</tr>";
@@ -624,7 +632,7 @@ class PluginUninstallModel extends CommonDBTM {
          Dropdown::showYesNo("raz_plugin_fields",
                              (isset($this->fields["raz_plugin_fields"])
                               ? $this->fields["raz_plugin_fields"] : 1),
-                                -1, array('width' => '100%'));
+                                -1, ['width' => '100%']);
          echo "</td>";
          echo "<td colspan='2'></td>";
          echo "</tr>";
@@ -662,193 +670,293 @@ class PluginUninstallModel extends CommonDBTM {
    }
 
 
-   function getSearchOptions() {
+   function rawSearchOptions() {
 
-      $tab                       = [];
+      $tab = [];
 
-      $tab['common']             = self::getTypeName();
+      $tab[] = [
+         'id'                 => 'common',
+         'name'               => self::getTypeName(),
+      ];
 
-      $tab[1]['table']           = $this->getTable();
-      $tab[1]['field']           = 'name';
-      $tab[1]['name']            = __('Name');
-      $tab[1]['datatype']        = 'itemlink';
-      $tab[1]['itemlink_type']   = $this->getType();
+      $tab[] = [
+         'id'                 => '1',
+         'table'              => $this->getTable(),
+         'field'              => 'name',
+         'name'               => __('Name'),
+         'datatype'           => 'itemlink',
+         'itemlink_type'      => $this->getType(),
+      ];
 
-      $tab[3]['table']           = $this->getTable();
-      $tab[3]['field']           = 'raz_name';
-      $tab[3]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Name'));
-      $tab[3]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '3',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_name',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Name')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[4]['table']           = $this->getTable();
-      $tab[4]['field']           = 'raz_soft_history';
-      $tab[4]['name']            = __('Delete software history (computers)', 'uninstall');
-      $tab[4]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '4',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_soft_history',
+         'name'               => __('Delete software history (computers)', 'uninstall'),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[5]['table']           = $this->getTable();
-      $tab[5]['field']           = 'raz_contact';
-      $tab[5]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username'));
-      $tab[5]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '5',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_contact',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[33]['table']           = $this->getTable();
-      $tab[33]['field']           = 'raz_contact_num';
-      $tab[33]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username number'));
-      $tab[33]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '33',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_contact_num',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Alternate username number')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[6]['table']           = $this->getTable();
-      $tab[6]['field']           = 'raz_user';
-      $tab[6]['name']             = sprintf(__('%1$s %2$s'), __('Blank'), __('User'));
-      $tab[6]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '6',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_user',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('User')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[7]['table']           = 'glpi_states';
-      $tab[7]['field']           = 'name';
-      $tab[7]['name']            = __('Status');
-      $tab[7]['datatype']        = 'dropdown';
+      $tab[] = [
+         'id'                 => '7',
+         'table'              => 'glpi_states',
+         'field'              => 'name',
+         'name'               => __('Status'),
+         'datatype'           => 'dropdown',
+      ];
 
-      $tab[8]['table']           = $this->getTable();
-      $tab[8]['field']           = 'raz_os';
-      $tab[8]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Operating system'));
-      $tab[8]['datatype']        = 'bool';
+      $tab[] = [
+         'id'                 => '8',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_os',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Operating system')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[9]['table']           = $this->getTable();
-      $tab[9]['field']           = 'raz_network';
-      $tab[9]['name']            = sprintf(__('%1$s %2$s'), __('Blank'), __('Network'));
-      $tab[9]['datatype']        ='bool';
+      $tab[] = [
+         'id'                 => '9',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_network',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Network')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[10]['table']          = $this->getTable();
-      $tab[10]['field']          = 'raz_domain';
-      $tab[10]['name']           = sprintf(__('%1$s %2$s'), __('Blank'), __('Domain'));
-      $tab[10]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '10',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_domain',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Domain')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[11]['table']          = $this->getTable();
-      $tab[11]['field']          = 'raz_ip';
-      $tab[11]['name']           = sprintf(__('%1$s %2$s'), __('Blank'),
-                                           __('IP')." & ".__('Subnet mask')." & ".__('Gateway').
-                                           " & ".__('Subnet'));
-      $tab[11]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '11',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_ip',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Blank'),
+            __('IP') . " & " . __('Subnet mask') . " & " . __('Gateway') . " & " . __('Subnet')
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[12]['table']          = $this->getTable();
-      $tab[12]['field']          = 'raz_budget';
-      $tab[12]['name']           = sprintf(__('%1$s %2$s'), __('Blank'), __('Budget'));
-      $tab[12]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '12',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_budget',
+         'name'               => sprintf(__('%1$s %2$s'), __('Blank'), __('Budget')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[13]['table']          = $this->getTable();
-      $tab[13]['field']          = 'is_recursive';
-      $tab[13]['name']           = __('Child entities');
-      $tab[13]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '13',
+         'table'              => $this->getTable(),
+         'field'              => 'is_recursive',
+         'name'               => __('Child entities'),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[15]['table']          = 'glpi_transfers';
-      $tab[15]['field']          = 'name';
-      $tab[15]['name']           = __("Transfer's model to use", "uninstall");
-      $tab[15]['datatype']       = 'itemlink';
-      $tab[15]['itemlink_type']  = 'Transfer';
+      $tab[] = [
+         'id'                 => '15',
+         'table'              => 'glpi_transfers',
+         'field'              => 'name',
+         'name'               => __('Transfer\'s model to use', 'uninstall'),
+         'datatype'           => 'itemlink',
+         'itemlink_type'      => 'Transfer',
+      ];
 
-      $tab[17]['table']          = $this->getTable();
-      $tab[17]['field']          = 'comment';
-      $tab[17]['name']           = __('Comments');
-      $tab[17]['datatype']       = 'text';
+      $tab[] = [
+         'id'                 => '17',
+         'table'              => $this->getTable(),
+         'field'              => 'comment',
+         'name'               => __('Comments'),
+         'datatype'           => 'text',
+      ];
 
       $plug = new Plugin();
       if ($plug->isActivated('ocsinventoryng')) {
+         $tab[] = [
+            'id'                 => '18',
+            'table'              => $this->getTable(),
+            'field'              => 'remove_from_ocs',
+            'name'               => __('Delete computer in OCSNG', 'ocsinventoryng'),
+            'datatype'           => 'bool',
+         ];
 
-         $tab[18]['table']       = $this->getTable();
-         $tab[18]['field']       = 'remove_from_ocs';
-         $tab[18]['name']        = __('Delete computer in OCSNG', 'ocsinventoryng');
-         $tab[18]['datatype']    = 'bool';
-
-         $tab[19]['table']       = $this->getTable();
-         $tab[19]['field']       = 'delete_ocs_link';
-         $tab[19]['name']        = __('Delete link with computer in OCSNG', 'uninstall');
-         $tab[19]['datatype']    ='bool';
+         $tab[] = [
+            'id'                 => '19',
+            'table'              => $this->getTable(),
+            'field'              => 'delete_ocs_link',
+            'name'               => __('Delete link with computer in OCSNG', 'uninstall'),
+            'datatype'           => 'bool',
+         ];
       }
 
-      $tab[20]['table']          = $this->getTable();
-      $tab[20]['field']          = 'types_id';
-      $tab[20]['name']           = __('Type of template', 'uninstall');
-      $tab[20]['linkfield']      = '';
-      $tab[20]['datatype']       = 'specific';
-      $tab[20]['searchtype']     = 'equals';
+      $tab[] = [
+         'id'                 => '20',
+         'table'              => $this->getTable(),
+         'field'              => 'types_id',
+         'name'               => __('Type of template', 'uninstall'),
+         'linkfield'          => '',
+         'datatype'           => 'specific',
+         'searchtype'         => 'equals',
+      ];
 
-      $tab[21]['table']          = $this->getTable();
-      $tab[21]['field']          = 'groups_id';
-      $tab[21]['linkfield']      = '';
-      $tab[21]['name']           = __('Action on group', 'uninstall');
-      $tab[21]['datatype']       = 'specific';
-      $tab[21]['searchtype']     = 'equals';
+      $tab[] = [
+         'id'                 => '21',
+         'table'              => $this->getTable(),
+         'field'              => 'groups_id',
+         'name'               => __('Action on group', 'uninstall'),
+         'linkfield'          => '',
+         'datatype'           => 'specific',
+         'searchtype'         => 'equals',
+      ];
 
-      $tab[22]['table']          = $this->getTable();
-      $tab[22]['field']          = 'replace_method';
-      $tab[22]['linkfield']      = '';
-      $tab[22]['name']           = __('Archiving method of the old material', 'uninstall');
-      $tab[22]['datatype']       = 'specific';
-      $tab[22]['searchtype']     = 'equals';
+      $tab[] = [
+         'id'                 => '22',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_method',
+         'name'               => __('Archiving method of the old material', 'uninstall'),
+         'linkfield'          => '',
+         'datatype'           => 'specific',
+         'searchtype'         => 'equals',
+      ];
 
-      $tab[23]['table']          = $this->getTable();
-      $tab[23]['field']          = 'raz_history';
-      $tab[23]['name']           = __('Delete the whole history', 'uninstall');
-      $tab[23]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '23',
+         'table'              => $this->getTable(),
+         'field'              => 'raz_history',
+         'name'               => __('Delete the whole history', 'uninstall'),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[24]['table']          = $this->getTable();
-      $tab[24]['field']          = 'replace_users';
-      $tab[24]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('User'));
-      $tab[24]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '24',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_users',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('User')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[25]['table']          = $this->getTable();
-      $tab[25]['field']          = 'replace_name';
-      $tab[25]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Name'));
-      $tab[25]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '25',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_name',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('Name')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[26]['table']          = $this->getTable();
-      $tab[26]['field']          = 'replace_serial';
-      $tab[26]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number'));
-      $tab[26]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '26',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_serial',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[27]['table']          = $this->getTable();
-      $tab[27]['field']          = 'replace_otherserial';
-      $tab[27]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Inventory number'));
-      $tab[27]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '27',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_otherserial',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('Inventory number')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[28]['table']          = $this->getTable();
-      $tab[28]['field']          = 'replace_documents';
-      $tab[28]['name']           = sprintf(__('%1$s %2$s'), __('Copy'),
-                                           _n('Document', 'Documents', 2));
-      $tab[28]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '28',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_documents',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Copy'),
+            _n('Document', 'Documents', 2)
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[29]['table']          = $this->getTable();
-      $tab[29]['field']          = 'replace_contracts';
-      $tab[29]['name']           = sprintf(__('%1$s %2$s'), __('Copy'),
-                                           _n('Contract', 'Contracts', 2));
-      $tab[29]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '29',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_contracts',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Copy'),
+            _n('Contract', 'Contracts', 2)
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[30]['table']          = $this->getTable();
-      $tab[30]['field']          = 'replace_infocoms';
-      $tab[30]['name']           = sprintf(__('%1$s %2$s'), __('Copy'),
-                                           __('Financial and administratives information'));
-      $tab[30]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '30',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_infocoms',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Copy'),
+            __('Financial and administratives information')
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[31]['table']          = $this->getTable();
-      $tab[31]['field']          = 'replace_reservations';
-      $tab[31]['name']           = sprintf(__('%1$s %2$s'), __('Copy'),
-                                           _n('Reservation', 'Reservations', 2));
-      $tab[31]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '31',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_reservations',
+         'name'               => sprintf(
+            __('%1$s %2$s'),
+            __('Copy'),
+            _n('Reservation', 'Reservations', 2)
+         ),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[32]['table']          = $this->getTable();
-      $tab[32]['field']          = 'replace_groups';
-      $tab[32]['name']           = sprintf(__('%1$s %2$s'), __('Copy'), __('Group'));
-      $tab[32]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '32',
+         'table'              => $this->getTable(),
+         'field'              => 'replace_groups',
+         'name'               => sprintf(__('%1$s %2$s'), __('Copy'), __('Group')),
+         'datatype'           => 'bool',
+      ];
 
-      $tab[80]['table']          = 'glpi_entities';
-      $tab[80]['field']          = 'completename';
-      $tab[80]['name']           = __('Entity');
-      $tab[80]['datatype']       = 'dropdown';
-
-      /*
-      $tab[33]['table']      = $this->getTable();
-      $tab[33]['field']      = 'raz_ocs_registrkeys';
-      $tab[33]['linkfield']  = 'raz_ocs_registrykeys';
-      $tab[33]['name']       = 'unknown'; //unknown name on 0.85
-      $tab[33]['datatype']   = 'bool';
-      $tab[33]['searchtype'] = 'equals';
-      */
+      $tab[] = [
+         'id'                 => '80',
+         'table'              => 'glpi_entities',
+         'field'              => 'completename',
+         'name'               => __('Entity'),
+         'datatype'           => 'dropdown',
+      ];
 
       return $tab;
    }
@@ -861,10 +969,10 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $values
     * @param $options   array
    **/
-   static function getSpecificValueToDisplay($field, $values, array $options=[]) {
+   static function getSpecificValueToDisplay($field, $values, array $options = []) {
 
       if (!is_array($values)) {
-         $values = array($field => $values);
+         $values = [$field => $values];
       }
       switch ($field) {
 
@@ -905,10 +1013,10 @@ class PluginUninstallModel extends CommonDBTM {
     * @param $values             (defaut '')
     * @param $options   array
    **/
-   static function getSpecificValueToSelect($field, $name='', $values='', array $options=[]) {
+   static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = []) {
 
       if (!is_array($values)) {
-         $values = array($field => $values);
+         $values = [$field => $values];
       }
       $options['display'] = false;
       switch ($field) {
@@ -961,7 +1069,7 @@ class PluginUninstallModel extends CommonDBTM {
          $migration->addField($table, 'FK_entities', 'integer');
          $migration->addField($table, 'recursive', 'int(1) NOT NULL DEFAULT 1');
          $migration->addField($table, 'name', 'string');
-         $migration->addField($table, `comments`, 'text', array('value' => 'NOT NULL'));
+         $migration->addField($table, `comments`, 'text', ['value' => 'NOT NULL']);
 
          $migration->migrationOneTable($table);
          $ID = PluginUninstallUninstall::getUninstallTransferModelID();
@@ -992,7 +1100,7 @@ class PluginUninstallModel extends CommonDBTM {
             $migration->changeField($table, 'ID', 'id', 'autoincrement');
             $migration->changeField($table, 'FK_entities', 'entities_id', 'integer');
             $migration->changeField($table, 'recursive', 'is_recursive', "bool",
-                                    array('value' => 1));
+                                    ['value' => 1]);
             $migration->changeField($table, 'transfer_id', 'transfers_id', "integer");
             $migration->changeField($table, 'state', 'states_id', "integer");
             $migration->changeField($table, 'group', 'groups_id', "integer");
@@ -1021,7 +1129,7 @@ class PluginUninstallModel extends CommonDBTM {
             $migration->addField($table, 'replace_netports', "bool");
             $migration->addField($table, 'replace_direct_connections', "bool");
             $migration->addField($table, 'overwrite', "bool");
-            $migration->addField($table, 'replace_method', "integer", array('value' => 2));
+            $migration->addField($table, 'replace_method', "integer", ['value' => 2]);
 
             $migration->migrationOneTable($table);
             self::createTransferModel('Replace');
@@ -1029,7 +1137,7 @@ class PluginUninstallModel extends CommonDBTM {
 
          // from 2.0.0 to 2.0.1
          if (!$DB->fieldExists($table, 'raz_history')) {
-            $migration->addField($table, 'raz_history', 'integer', array('after' => 'raz_network'));
+            $migration->addField($table, 'raz_history', 'integer', ['after' => 'raz_network']);
          }
 
          if (!$DB->fieldExists($table, 'raz_ocs_registrykeys')) {
@@ -1063,6 +1171,10 @@ class PluginUninstallModel extends CommonDBTM {
             $migration->addField($table, 'raz_plugin_fields', "bool");
          }
 
+         if (!$DB->fieldExists($table, 'raz_antivirus')) {
+            $migration->addField($table, 'raz_antivirus', "bool");
+         }
+
          $migration->migrationOneTable($table);
 
       } else {
@@ -1084,6 +1196,7 @@ class PluginUninstallModel extends CommonDBTM {
                     `raz_history` int(1) NOT NULL DEFAULT '1',
                     `raz_soft_history` int(1) NOT NULL DEFAULT '1',
                     `raz_budget` int(1) NOT NULL DEFAULT '1',
+                    `raz_antivirus` int(1) NOT NULL DEFAULT '1',
                     `raz_user` int(1) NOT NULL DEFAULT '1',
                     `raz_ocs_registrykeys` int(1) NOT NULL DEFAULT '1',
                     `comment` text COLLATE utf8_unicode_ci NOT NULL,
@@ -1130,20 +1243,20 @@ class PluginUninstallModel extends CommonDBTM {
       $transfer_id     = PluginUninstallUninstall::getUninstallTransferModelID(false);
       if ($transfer_id) {
          $tr = new Transfer();
-         $tr->delete(array('id' => $transfer_id), true);
+         $tr->delete(['id' => $transfer_id], true);
       }
 
       //Delete history
       $log = new Log();
       $log->dohistory = false;
-      $log->deleteByCriteria(array('itemtype' => __CLASS__));
+      $log->deleteByCriteria(['itemtype' => __CLASS__]);
    }
 
 
    /**
     * @param $name   (default 'Uninstall')
    **/
-   static function createTransferModel($name='Uninstall') {
+   static function createTransferModel($name = 'Uninstall') {
 
       $transfers_id = PluginUninstallUninstall::getUninstallTransferModelID();
 
@@ -1208,13 +1321,13 @@ class PluginUninstallModel extends CommonDBTM {
          case 'transfert':
             Entity::dropdown();
             echo "&nbsp;".
-                  Html::submit(_x('button', 'Post'), array('name' => 'massiveaction'));
+                  Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
             return true;
       }
       return "";
    }
 
-   function getSpecificMassiveActions($checkitem=NULL) {
+   function getSpecificMassiveActions($checkitem = null) {
 
       $isadmin = static::canUpdate();
       $actions = parent::getSpecificMassiveActions($checkitem);
@@ -1244,11 +1357,11 @@ class PluginUninstallModel extends CommonDBTM {
 
             foreach ($ids as $id) {
                if ($item->getFromDB($id)) {
-                  $item->update(array(
+                  $item->update([
                         "id" => $id,
                         "entities_id" => $entities_id,
                         "update" => __('Update'),
-                  ));
+                  ]);
                   $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
                }
             }

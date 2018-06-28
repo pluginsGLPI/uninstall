@@ -71,14 +71,14 @@ if (isset($_REQUEST["uninstall"])) {
       //Massive uninstallation
 
       PluginUninstallUninstall::uninstall($_REQUEST["device_type"], $_REQUEST["model_id"],
-                                          array($_REQUEST["device_type"]
-                                                => array($_REQUEST["id"] => $_REQUEST["id"])),
+                                          [$_REQUEST["device_type"]
+                                                => [$_REQUEST["id"] => $_REQUEST["id"]]],
                                           $location);
       Html::back();
    } else {
       PluginUninstallReplace::showForm($_REQUEST["device_type"], $_REQUEST["model_id"],
-                                       array($_REQUEST["device_type"]
-                                             => array($_REQUEST["id"] => $_REQUEST["id"])),
+                                       [$_REQUEST["device_type"]
+                                             => [$_REQUEST["id"] => $_REQUEST["id"]]],
                                        $location);
       Html::footer();
    }

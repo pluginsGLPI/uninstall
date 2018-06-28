@@ -35,9 +35,9 @@ Html::header_nocache();
 $itemtypeisplugin = isPluginItemType($_REQUEST['itemtype']);
 $item             = new $_REQUEST['itemtype']();
 $table            = getTableForItemType($_REQUEST['itemtype']);
-$options          = array();
+$options          = [];
 $count            = 0;
-$datastoadd       = array();
+$datastoadd       = [];
 
 $displaywith = false;
 if (isset($_REQUEST['displaywith'])) {
@@ -122,12 +122,12 @@ while ($data = $DB->fetch_assoc($result)) {
        || (strlen($outputval) == 0)) {
       $outputval = sprintf(__('%1$s (%2$s)'), $outputval, $ID);
    }
-   array_push($options, array('id'     => $ID,
-                               'text'  => $outputval,
-                               'title' => $title));
+   array_push($options, ['id'     => $ID,
+                         'text'  => $outputval,
+                         'title' => $title]);
    $count++;
 }
 
 
-echo json_encode(array('results' => $options,
-                      'count'    => $count));
+echo json_encode(['results' => $options,
+                  'count'    => $count]);

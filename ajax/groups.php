@@ -40,10 +40,10 @@ if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
          break;
 
       case 'set' :
-         Group::dropdown(array('value'       => $_POST["groups_id"],
-                               'entity'      => $_POST["entities_id"],
-                               'entity_sons' => $_POST["entity_sons"],
-                               'emptylabel'  => __('None')));
+         Group::dropdown(['value'       => $_POST["groups_id"],
+                          'entity'      => $_POST["entities_id"],
+                          'entity_sons' => $_POST["entity_sons"],
+                          'emptylabel'  => __('None')]);
          break;
    }
 }
