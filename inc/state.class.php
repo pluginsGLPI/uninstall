@@ -32,8 +32,8 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }
 
-class PluginUninstallStatus {
-   static function replaceStatus($params = []) {
+class PluginUninstallState {
+   static function replaceState($params = []) {
       global $UNINSTALL_TYPES;
 
       if (!in_array(get_class($params['item']), $UNINSTALL_TYPES)

@@ -69,7 +69,7 @@ function plugin_init_uninstall() {
 
          if ($uninstallconfig['replace_status_dropdown']) {
             $PLUGIN_HOOKS['post_item_form']['uninstall'] = [
-               'PluginUninstallStatus', 'replaceStatus'
+               'PluginUninstallState', 'replaceState'
             ];
          }
 
