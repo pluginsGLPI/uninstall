@@ -447,7 +447,12 @@ class PluginUninstallReplace extends CommonDBTM {
                                 false);
 
                // Delete OLD item from DB (not PURGE) only if delete is requested
-               PluginUninstallUninstall::addUninstallLog($type, $olditem_id, 'replaced_by');
+               PluginUninstallUninstall::addUninstallLog([
+                  'itemtype'  => $type,
+                  'items_id'  => $olditem_idn,
+                  'action'    => 'replaced_by',
+                  'models_id' => $model_id,
+               ]);
                if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
                   $olditem->delete(['id' => $olditem_id], 0, false);
                }
@@ -458,7 +463,12 @@ class PluginUninstallReplace extends CommonDBTM {
          Plugin::doHook("plugin_uninstall_replace_after", $olditem);
 
          //Add history
-         PluginUninstallUninstall::addUninstallLog($type, $newitem_id, 'replace');
+         PluginUninstallUninstall::addUninstallLog([
+            'itemtype'  => $type,
+            'items_id'  => $newitem_id,
+            'action'    => 'replace',
+            'models_id' => $model_id,
+         ]);
          Html::changeProgressBarPosition($count, $tot+1);
       }
 

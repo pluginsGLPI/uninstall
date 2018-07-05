@@ -315,7 +315,11 @@ class PluginUninstallUninstall extends CommonDBTM {
       }
 
       //Add line in machine's history to say that machine was uninstalled
-      self::addUninstallLog($type, $id);
+      self::addUninstallLog([
+         'itemtype'  => $type,
+         'items_id'  => $id,
+         'models_id' => $model_id,
+      ]);
 
       Html::changeProgressBarPosition($count, $tot, __('Uninstallation successful', 'uninstall'));
 
@@ -364,7 +368,12 @@ class PluginUninstallUninstall extends CommonDBTM {
       if ($iterator->numrows() == 1) {
          $data = $iterator->next();
          self::deleteComputerInOCS($data["ocsid"], $data["plugin_ocsinventoryng_ocsservers_id"]);
-         self::addUninstallLog('Computer', $computer_id, 'removeFromOCS', $data["ocsid"]);
+         self::addUninstallLog([
+            'itemtype'  => 'Computer',
+            'items_id'  => $computer_id,
+            'action'    => 'removeFromOCS',
+            'ocs_id'    => $data["ocsid"],
+         ]);
       }
    }
 
@@ -505,25 +514,47 @@ class PluginUninstallUninstall extends CommonDBTM {
       }
    }
 
-
    /**
-    * @param type
-    * @param $computer_id
-    * @param $action          (default 'uninstall'
-    * @param $ocs_id          (default '')
+    * @param $params array with theses options
+    *          - 'itemtype'
+    *          - 'items_id'
+    *          - 'action'          (default 'uninstall'
+    *          - 'ocs_id'          (default null)
+    *          - 'models_id'
    **/
-   static function addUninstallLog($type, $computer_id, $action = 'uninstall', $ocs_id = '') {
+   static function addUninstallLog($params = []) {
+      // merge default paramaters
+      $params = array_merge([
+         'itemtype'  => null,
+         'items_id'  => null,
+         'action'    => 'uninstall',
+         'ocs_id'    => null,
+         'models_id' => null,
+      ], $params);
 
       $changes[0] = 0;
       $changes[1] = "";
 
-      switch ($action) {
+      if (isset($params['models_id'])) {
+         $model = new PluginUninstallModel();
+         $model->getConfig($params['models_id']);
+      }
+
+      switch ($params['action']) {
          case 'uninstall' :
             $changes[2] = __('Item is now uninstalled', 'uninstall');
+            if (isset($params['models_id'])) {
+               $changes[2] = sprintf(__('Item is now uninstalled with model %s', 'uninstall'),
+                                     $model->getName());
+            }
             break;
 
          case 'replaced_by':
             $changes[2] = __('Item replaced by a new one', 'uninstall');
+            if (isset($params['models_id'])) {
+               $changes[2] = sprintf(__('Item replaced by a new one with model %s', 'uninstall'),
+                                     $model->getName());
+            }
             break;
 
          case 'replace':
@@ -533,12 +564,15 @@ class PluginUninstallUninstall extends CommonDBTM {
          case 'removeFromOCS' :
             $changes[2] = addslashes(sprintf(__('%1$s %2$s'),
                                              __('Removed from OCSNG with ID', 'uninstall'),
-                                             $ocs_id));
+                                             $params['ocs_id']));
             break;
       }
-      Log::history($computer_id, $type, $changes, __CLASS__, Log::HISTORY_PLUGIN);
+      Log::history($params['items_id'],
+                   $params['itemtype'],
+                   $changes,
+                   __CLASS__,
+                   Log::HISTORY_PLUGIN);
    }
-
 
    /**
     * Get an history entry message
