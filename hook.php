@@ -28,14 +28,6 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-function plugin_uninstall_postinit() {
-   global $UNINSTALL_TYPES;
-
-   foreach ($UNINSTALL_TYPES as $type) {
-      CommonGLPI::registerStandardTab($type, 'PluginUninstallUninstall');
-   }
-}
-
 // ** Massive actions **
 
 function plugin_uninstall_MassiveActions($type) {

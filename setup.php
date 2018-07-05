@@ -68,9 +68,17 @@ function plugin_init_uninstall() {
          ];
 
          if ($uninstallconfig['replace_status_dropdown']) {
+            // replace item state by uninstall list
             $PLUGIN_HOOKS['post_item_form']['uninstall'] = [
                'PluginUninstallState', 'replaceState'
             ];
+         } else {
+            // add tabs to items
+            foreach ($UNINSTALL_TYPES as $type) {
+               Plugin::registerClass('PluginUninstallUninstall', [
+                  'addtabon' => $type
+               ]);
+            }
          }
 
          if (Session::haveRight('uninstall:profile', READ)) {
