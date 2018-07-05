@@ -75,6 +75,13 @@ class PluginUninstallState {
          // actions
          $("#uninstall_actions").dialog({
             autoOpen: false,
+            position: {
+               my: "center center",
+               at: "center center",
+               of: $("#uninstall_actions_open")
+            },
+            width:'auto',
+            modal: true
          });
 
          $("#uninstall_actions_open").on("click", function(event) {
