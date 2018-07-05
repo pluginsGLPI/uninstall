@@ -36,7 +36,7 @@ class PluginUninstallConfig extends Config {
    private const CFG_CTXT = 'plugin:uninstall';
 
    static function getTypeName($nb = 0) {
-      return __('Uninstall', 'uninstall');
+      return __("Item's Lifecycle", 'uninstall');
    }
 
    /**

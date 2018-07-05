@@ -108,7 +108,7 @@ function plugin_init_uninstall() {
 
 function plugin_version_uninstall() {
    return [
-      'name'           => __("Item's uninstallation", 'uninstall'),
+      'name'           => __("Item's Lifecycle (uninstall)", 'uninstall'),
       'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
       'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
       'homepage'       => 'https://github.com/pluginsGLPI/uninstall',

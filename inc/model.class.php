@@ -39,10 +39,7 @@ class PluginUninstallModel extends CommonDBTM {
    const TYPE_MODEL_REPLACEMENT = 2;
 
    static function getTypeName($nb = 0) {
-      return _n("Uninstallation template",
-                "Uninstallation templates",
-                $nb,
-                'uninstall');
+      return _n("Template", "Templates", $nb);
    }
 
    static function canDelete() {
@@ -66,9 +63,7 @@ class PluginUninstallModel extends CommonDBTM {
       $menu = [];
 
       // get Menu name :
-      $tab = plugin_version_uninstall();
-      $menu['title'] = $tab["name"];
-
+      $menu['title'] = __("Item's Lifecycle", 'uninstall');
       $menu['page']  = '/plugins/uninstall/front/model.php';
 
       if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {

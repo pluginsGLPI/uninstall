@@ -812,7 +812,7 @@ class PluginUninstallUninstall extends CommonDBTM {
       if (self::canView()
          && in_array($item->getType(), $UNINSTALL_TYPES)) {
          if (!$withtemplate) {
-            return __('Uninstall', 'uninstall');
+            return __('Lifecycle', 'uninstall');
          }
       }
       return '';
