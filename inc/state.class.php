@@ -53,7 +53,6 @@ class PluginUninstallState {
       $html_modal = ob_get_contents();
       ob_end_clean();
 
-
       // we json encore to pass it to js (auto-escaping)
       $html= json_encode("
          <div id='uninstall_actions'>
