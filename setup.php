@@ -28,7 +28,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_UNINSTALL_VERSION', '2.4.1');
+define ('PLUGIN_UNINSTALL_VERSION', '2.5.0');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_UNINSTALL_MIN_GLPI", "9.3");
@@ -56,15 +56,29 @@ function plugin_init_uninstall() {
                                              'Printer'];
 
       if (Session::getLoginUserID()) {
+         // config page
+         Plugin::registerClass('PluginUninstallConfig', [
+            'addtabon' => 'Config'
+         ]);
+         $PLUGIN_HOOKS['config_page']['uninstall'] = 'front/config.form.php';
+         $uninstallconfig = PluginUninstallConfig::getConfig();
+
+         $PLUGIN_HOOKS['add_css']['uninstall'] = [
+            'css/uninstall.css',
+         ];
+
+         if ($uninstallconfig['replace_status_dropdown']) {
+            $PLUGIN_HOOKS['post_item_form']['uninstall'] = [
+               'PluginUninstallStatus', 'replaceStatus'
+            ];
+         }
+
          if (Session::haveRight('uninstall:profile', READ)) {
             $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
 
             if (Session::haveRight('uninstall:profile', UPDATE)) {
                // Add link in GLPI plugins list :
                $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = ['admin' => 'PluginUninstallModel'];
-
-               // add to 'Admin' menu :
-               $PLUGIN_HOOKS['config_page']['uninstall'] = "front/model.php";
             }
 
             //Item actions

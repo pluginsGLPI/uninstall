@@ -626,9 +626,9 @@ class PluginUninstallUninstall extends CommonDBTM {
       echo "<form action='".$CFG_GLPI["root_doc"]."/plugins/uninstall/front/action.php?device_type=$type'
              method='post'>";
       echo "<table class='tab_cadre_fixe' cellpadding='5'>";
-      echo "<tr><th colspan='3'>" . self::getTypeName() . "</th></tr>";
+      echo "<tr><th colspan='3'>" . __("Apply model", 'uninstall') . "</th></tr>";
 
-      echo "<tr class='tab_bg_1'><td>" . PluginUninstallModel::getTypeName() . "</td><td>";
+      echo "<tr class='tab_bg_1'><td>" . __("Model") . "</td><td>";
       $item = new $type();
       $item->getFromDB($ID);
       $rand = self::dropdownUninstallModels("model_id", $_SESSION["glpiID"],
@@ -643,7 +643,7 @@ class PluginUninstallUninstall extends CommonDBTM {
                                     $CFG_GLPI["root_doc"] . "/plugins/uninstall/ajax/locations.php",
                                     $params);
 
-      echo "<tr class='tab_bg_1'><td>" . __("Item's location after uninstall", "uninstall") ."</td>";
+      echo "<tr class='tab_bg_1'><td>" . __("Item's location after applying model", "uninstall") ."</td>";
       echo "<td><span id='show_objects'>\n".Dropdown::EMPTY_VALUE."</span></td>\n";
       echo "</tr>";
 

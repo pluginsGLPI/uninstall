@@ -39,7 +39,10 @@ class PluginUninstallModel extends CommonDBTM {
    const TYPE_MODEL_REPLACEMENT = 2;
 
    static function getTypeName($nb = 0) {
-      return __("Uninstallation template", 'uninstall');
+      return _n("Uninstallation template",
+                "Uninstallation templates",
+                $nb,
+                'uninstall');
    }
 
    static function canDelete() {
@@ -70,7 +73,7 @@ class PluginUninstallModel extends CommonDBTM {
 
       if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
 
-         $menu['options']['model']['title'] = self::getTypeName(1);
+         $menu['options']['model']['title'] = self::getTypeName(Session::getPluralNumber());
          $menu['options']['model']['page'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
          $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
 
