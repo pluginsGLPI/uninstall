@@ -673,11 +673,11 @@ class PluginUninstallReplace extends CommonDBTM {
       echo "<tr class='tab_bg_1 center'>";
       echo "<th>" . __('Old item', 'uninstall') . "</th>";
 
-      if (self::searchFieldInSearchOptions($type, 'otherserial')) {
+      if (Search::getOptionNumber($type, 'otherserial')) {
          echo "<th>" . __('Inventory number') . "</th>";
       }
 
-      if (self::searchFieldInSearchOptions($type, 'serial')) {
+      if (Search::getOptionNumber($type, 'serial')) {
          echo "<th>" . __('Serial number') . "</th>";
       }
 
@@ -691,11 +691,11 @@ class PluginUninstallReplace extends CommonDBTM {
          echo "<tr class='tab_bg_1 center'>";
          echo "<td>" . $commonitem->getName() . "</td>";
 
-         if (self::searchFieldInSearchOptions($type, 'otherserial')) {
+         if (Search::getOptionNumber($type, 'otherserial')) {
             echo "<td>" . $commonitem->fields['otherserial'] . "</td>";
          }
 
-         if (self::searchFieldInSearchOptions($type, 'serial')) {
+         if (Search::getOptionNumber($type, 'serial')) {
             echo "<td>" . $commonitem->fields['serial'] . "</td>";
          }
 
@@ -720,26 +720,6 @@ class PluginUninstallReplace extends CommonDBTM {
       echo "</table>";
       Html::closeForm();
    }
-
-   /**
-    * @param $itemtype
-    * @param $field     (default '')
-   **/
-   static function searchFieldInSearchOptions($itemtype, $field = '') {
-      if ($item = getItemForItemtype($itemtype)) {
-
-         foreach ($item->rawSearchOptions() as $searchOption) {
-            if (is_array($searchOption)
-               && isset($searchOption['field'])
-                  && $searchOption['field']==$field) {
-               return true;
-            }
-         }
-      }
-
-      return false;
-   }
-
 
    /**
     * Get documents associated to an item
