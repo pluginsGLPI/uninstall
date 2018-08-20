@@ -187,7 +187,7 @@ class PluginUninstallUninstall extends CommonDBTM {
 
          if ($item->isField('groups_id')) {
             $nbgroup = countElementsInTableForEntity("glpi_groups", $entity,
-                                                     "`id`='".$item->fields['groups_id']."'");
+                                                     ['id' => $item->fields['groups_id']]);
             if (($model->fields["groups_id"] > -1)
                 && ($nbgroup == 1)) {
                // If a new group is defined and if the group is accessible in the object's entity

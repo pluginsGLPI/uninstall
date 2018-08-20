@@ -134,7 +134,7 @@ class PluginUninstallProfile extends Profile {
 
       //Add new rights in glpi_profilerights table
       foreach ([PluginUninstallProfile::$rightname] as $field) {
-         if (countElementsInTable("glpi_profilerights", "`name` = '".$field."'") == 0) {
+         if (!countElementsInTable("glpi_profilerights", ['name' => $field])) {
             ProfileRight::addProfileRights([$field]);
          }
       }
@@ -167,11 +167,11 @@ class PluginUninstallProfile extends Profile {
       $profileRight = new ProfileRight();
       foreach ($rights as $right => $value) {
          if (countElementsInTable('glpi_profilerights',
-               "`profiles_id`='$profiles_id' AND `name`='$right'") && $drop_existing) {
+               ['profiles_id' => $profiles_id, 'name' => $right]) && $drop_existing) {
                $profileRight->deleteByCriteria(['profiles_id' => $profiles_id, 'name' => $right]);
          }
          if (!countElementsInTable('glpi_profilerights',
-               "`profiles_id`='$profiles_id' AND `name`='$right'")) {
+               ['profiles_id' => $profiles_id, 'name' => $right])) {
                $myright['profiles_id'] = $profiles_id;
                $myright['name']        = $right;
                $myright['rights']      = $value;
