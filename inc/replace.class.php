@@ -895,7 +895,7 @@ class PluginUninstallReplace extends CommonDBTM {
          $item = new $itemtype();
          if ($item->canView()) {
             $datas = getAllDatasFromTable('glpi_computers_items',
-                                         "`computers_id` = '".$ID."' AND `itemtype` = '".$itemtype."'");
+                                          ['computers_id' => $ID, 'itemtype' => $itemtype]);
             foreach ($datas as $computer_item) {
                $data[$itemtype][] = $computer_item;
             }

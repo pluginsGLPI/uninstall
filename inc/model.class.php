@@ -1260,7 +1260,7 @@ class PluginUninstallModel extends CommonDBTM {
 
       $transfers_id = PluginUninstallUninstall::getUninstallTransferModelID();
 
-      if (!countElementsInTable('glpi_plugin_uninstall_models', "`name`='$name'")) {
+      if (!countElementsInTable('glpi_plugin_uninstall_models', ['name' => $name])) {
          $model = new self();
          $tmp['entities_id']                = 0;
          $tmp['is_recursive']               = 1;
