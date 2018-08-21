@@ -1223,7 +1223,7 @@ class PluginUninstallModel extends CommonDBTM {
                     `replace_contact` tinyint(1) NOT NULL DEFAULT '0',
                     `replace_contact_num` tinyint(1) NOT NULL DEFAULT '0',
                     PRIMARY KEY (`id`)
-                  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                  ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
          $DB->queryOrDie($query, $DB->error());
 

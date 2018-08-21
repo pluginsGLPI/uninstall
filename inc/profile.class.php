@@ -244,7 +244,7 @@ class PluginUninstallProfile extends Profile {
                     `use` varchar(1) DEFAULT '',
                     `replace` tinyint(1) NOT NULL default '0',
                     PRIMARY KEY (`id`)
-                  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->queryOrDie($query, $DB->error());
          self::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
       }
