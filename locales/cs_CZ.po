@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-06 10:33+0000\n"
+"POT-Creation-Date: 2018-06-28 09:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Cédric Anne, 2018\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>, 2018\n"
 "Language-Team: Czech (Czech Republic) (https://www.transifex.com/teclib/teams/28042/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
@@ -18,136 +18,124 @@ msgstr ""
 "Language: cs_CZ\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: front/action.php:55 inc/replace.class.php:476
+#: front/action.php:55 inc/replace.class.php:466
 msgid "Replacement successful"
 msgstr "Nahrazení úspěšné"
 
-#: front/action.php:96 inc/uninstall.class.php:324
+#: front/action.php:96 inc/uninstall.class.php:320
 msgid "Uninstallation successful"
 msgstr "Odinstalace úspěšná"
 
-#: ajax/locations.php:43 inc/preference.class.php:74 inc/replace.class.php:589
+#: ajax/locations.php:43 inc/preference.class.php:74 inc/replace.class.php:579
 msgid "Keep previous location"
 msgstr "Ponechat předchozí umístění"
 
-#: ajax/locations.php:44 inc/preference.class.php:75 inc/replace.class.php:593
+#: ajax/locations.php:44 inc/preference.class.php:75 inc/replace.class.php:583
 msgid "Empty location"
 msgstr "Prázdné umístění"
 
-#: hook.php:42 inc/uninstall.class.php:110
+#: hook.php:50 inc/uninstall.class.php:110 inc/uninstall.class.php:781
 msgid "Uninstall"
 msgstr "Odinstalovat"
 
-#: inc/config.class.php:39 inc/model.class.php:66 inc/uninstall.class.php:38
-msgid "Item's Lifecycle"
-msgstr "Životní cyklus položky"
+#: inc/model.class.php:42
+msgid "Uninstallation template"
+msgstr ""
 
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Zkratky"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Předvolby umístění"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Nahradit rozbalovací nabídku stavu akcemi zásuvného modulu"
-
-#: inc/model.class.php:106 inc/model.class.php:986 inc/model.class.php:1028
+#: inc/model.class.php:108 inc/model.class.php:988 inc/model.class.php:1030
 msgid "Uninstallation"
 msgstr "Odinstalace"
 
-#: inc/model.class.php:108 inc/model.class.php:988 inc/model.class.php:1030
+#: inc/model.class.php:110 inc/model.class.php:990 inc/model.class.php:1032
 #: inc/replace.class.php:61 inc/replace.class.php:108
 msgid "Replacement"
 msgstr "Nahrazení"
 
-#: inc/model.class.php:118
+#: inc/model.class.php:120
 msgid "PDF Archiving"
 msgstr "PDF archivace"
 
-#: inc/model.class.php:120
+#: inc/model.class.php:122
 msgid "CSV Archiving"
 msgstr "CSV archivace"
 
-#: inc/model.class.php:123
+#: inc/model.class.php:125
 msgid "Purge"
 msgstr "Trvale smazat"
 
-#: inc/model.class.php:124
+#: inc/model.class.php:126
 msgid "Delete + Comment"
 msgstr "Smazat + komentovat"
 
-#: inc/model.class.php:125
+#: inc/model.class.php:127
 msgid "Keep + Comment"
 msgstr "Ponechat + komentovat"
 
-#: inc/model.class.php:166
+#: inc/model.class.php:168
 msgid "Replacing data"
 msgstr "Nahrazují se data"
 
-#: inc/model.class.php:210 inc/model.class.php:829
+#: inc/model.class.php:212 inc/model.class.php:831
 msgid "Type of template"
 msgstr "Typ šablony"
 
-#: inc/model.class.php:219 inc/model.class.php:793
+#: inc/model.class.php:221 inc/model.class.php:795
 msgid "Transfer's model to use"
 msgstr "Model přenosu který použít"
 
-#: inc/model.class.php:239 inc/replace.class.php:603
+#: inc/model.class.php:241 inc/replace.class.php:593
 msgid "New status of the computer"
 msgstr "Nový stav počítače"
 
-#: inc/model.class.php:251 inc/model.class.php:839
+#: inc/model.class.php:253 inc/model.class.php:841
 msgid "Action on group"
 msgstr "Akce na skupině"
 
-#: inc/model.class.php:263
+#: inc/model.class.php:265
 msgid "New group"
 msgstr "Nová skupina"
 
-#: inc/model.class.php:284
+#: inc/model.class.php:286
 msgid "Add template"
 msgstr "Přidat šablonu"
 
-#: inc/model.class.php:287
+#: inc/model.class.php:289
 msgid "Manage templates"
 msgstr "Spravovat šablony"
 
-#: inc/model.class.php:298
+#: inc/model.class.php:300
 msgid "Erase datas"
 msgstr "Vymazat data"
 
-#: inc/model.class.php:301 inc/model.class.php:701
+#: inc/model.class.php:303 inc/model.class.php:703
 msgid "Delete software history (computers)"
 msgstr "Smazat historii software (počítače)"
 
-#: inc/model.class.php:306 inc/model.class.php:859
+#: inc/model.class.php:308 inc/model.class.php:861
 msgid "Delete the whole history"
 msgstr "Smazat celou historii"
 
-#: inc/model.class.php:388 inc/model.class.php:438
+#: inc/model.class.php:390 inc/model.class.php:440
 msgid "Informations replacement"
 msgstr "Nahrazení informací"
 
-#: inc/model.class.php:389 inc/replace.class.php:549
+#: inc/model.class.php:391 inc/replace.class.php:539
 msgid "General informations"
 msgstr "Obecné informace"
 
-#: inc/model.class.php:411 inc/replace.class.php:564
+#: inc/model.class.php:413 inc/replace.class.php:554
 msgid "Overwrite informations (from old item to the new)"
 msgstr "Přepsat informace (z původní položky do nové)"
 
-#: inc/model.class.php:418 inc/model.class.php:849 inc/replace.class.php:567
+#: inc/model.class.php:420 inc/model.class.php:851 inc/replace.class.php:557
 msgid "Archiving method of the old material"
 msgstr "Metoda archivace původního materiálu"
 
-#: inc/model.class.php:428
+#: inc/model.class.php:430
 msgid "Plugin PDF is installed and activated"
 msgstr "Zásuvný modul pro PDF je nainstalovaný a zapnutý"
 
-#: inc/model.class.php:431
+#: inc/model.class.php:433
 msgid ""
 "Plugin PDF is not installed, you won't be able to use PDF format for "
 "archiving"
@@ -155,15 +143,15 @@ msgstr ""
 "Zásuvný modul pro PDF není nainstalován, proto nebude možné pro archivaci "
 "použít PDF formát"
 
-#: inc/model.class.php:439 inc/replace.class.php:625
+#: inc/model.class.php:441 inc/replace.class.php:615
 msgid "Connections with other materials"
 msgstr "Propojení s ostatními materiály"
 
-#: inc/model.class.php:513 inc/replace.class.php:660
+#: inc/model.class.php:515 inc/replace.class.php:650
 msgid "Direct connections"
 msgstr "Přímá propojení"
 
-#: inc/model.class.php:586
+#: inc/model.class.php:588
 msgid "OCSNG link"
 msgid_plural "OCSNG links"
 msgstr[0] "OCSNG odkaz"
@@ -171,83 +159,65 @@ msgstr[1] "OCSNG odkazy"
 msgstr[2] "OCSNG odkazů"
 msgstr[3] "OCSNG odkazy"
 
-#: inc/model.class.php:588
+#: inc/model.class.php:590
 msgid "These options only apply to computers coming from OCSNG"
 msgstr "Tyto volby jsou uplatněny pouze na počítače pocházející z OCSNG"
 
-#: inc/model.class.php:592 inc/model.class.php:812
+#: inc/model.class.php:594 inc/model.class.php:814
 msgid "Delete computer in OCSNG"
 msgstr "Smazat počítač v OCSNG"
 
-#: inc/model.class.php:598 inc/model.class.php:820
+#: inc/model.class.php:600 inc/model.class.php:822
 msgid "Delete link with computer in OCSNG"
 msgstr "Smazat propojení s počítačem v OCSNG"
 
-#: inc/model.class.php:612
+#: inc/model.class.php:614
 msgid "Delete computer in FusionInventory"
 msgstr "Smazat počítač ve FusionInventory"
 
-#: inc/model.class.php:624
+#: inc/model.class.php:626
 msgid "Additionnal fields"
 msgstr "Další kolonky"
 
-#: inc/model.class.php:628
+#: inc/model.class.php:630
 msgid "Delete Fields plugin informations"
 msgstr "Smazat informace zásuvného modulu Kolonky"
 
-#: inc/model.class.php:993 inc/uninstall.class.php:762
+#: inc/model.class.php:995 inc/uninstall.class.php:728
 msgid "Keep in the current group"
 msgstr "Ponechat ve stávající skupině"
 
-#: inc/preference.class.php:54
+#: inc/preference.class.php:54 inc/uninstall.class.php:646
 msgid "Item's location after uninstall"
 msgstr "Umístění položky po odinstalaci"
+
+#: inc/uninstall.class.php:38 setup.php:89
+msgid "Item's uninstallation"
+msgstr ""
 
 #: inc/uninstall.class.php:114
 msgid "Please wait, uninstallation is running..."
 msgstr "Čekejte, probíhá odinstalace…"
 
-#: inc/uninstall.class.php:545
+#: inc/uninstall.class.php:522
 msgid "Item is now uninstalled"
 msgstr "Položka je nyní odinstalovaná"
 
-#: inc/uninstall.class.php:547
-#, php-format
-msgid "Item is now uninstalled with model %s"
-msgstr "Položka je nyní odinstalovaná pomocí šablony %s"
-
-#: inc/uninstall.class.php:553
+#: inc/uninstall.class.php:526
 msgid "Item replaced by a new one"
 msgstr "Položka je nahrazena novou"
 
-#: inc/uninstall.class.php:555
-#, php-format
-msgid "Item replaced by a new one with model %s"
-msgstr "Položka nahrazena novou pomocí šablony %s"
-
-#: inc/uninstall.class.php:561
+#: inc/uninstall.class.php:530
 msgid "Item replacing an old one"
 msgstr "Položka nahrazující tu původní"
 
-#: inc/uninstall.class.php:566
+#: inc/uninstall.class.php:535
 msgid "Removed from OCSNG with ID"
 msgstr "Odebráno z OCSNG s identifikátorem"
 
-#: inc/uninstall.class.php:663
-msgid "Apply model"
-msgstr "Použít šablonu"
-
-#: inc/uninstall.class.php:680
-msgid "Item's location after applying model"
-msgstr "Umístění položky po použití šablony"
-
-#: inc/uninstall.class.php:763
+#: inc/uninstall.class.php:729
 msgid "Affect to a new group"
 msgstr "Přiřadit do nové skupiny"
-
-#: inc/uninstall.class.php:815
-msgid "Lifecycle"
-msgstr "Životní cyklus"
 
 #: inc/replace.class.php:40
 msgid "Item's replacement"
@@ -269,38 +239,34 @@ msgstr "Archiv starého materiálu"
 msgid "See attached document"
 msgstr "Zobrazit přiložený dokument"
 
-#: inc/replace.class.php:498
+#: inc/replace.class.php:488
 msgid "This item is a replacement for item"
 msgstr "Tato položka je náhradou za položku"
 
-#: inc/replace.class.php:500
+#: inc/replace.class.php:490
 msgid "This item was replaced by"
 msgstr "Tato položka byla nahrazena"
 
-#: inc/replace.class.php:548 inc/replace.class.php:624
+#: inc/replace.class.php:538 inc/replace.class.php:614
 msgid "Reminder of the replacement model"
 msgstr "Připomínka modelu nahrazení"
 
-#: inc/replace.class.php:586
+#: inc/replace.class.php:576
 msgid "New location of item"
 msgstr "Nové umístění položky"
 
-#: inc/replace.class.php:671
+#: inc/replace.class.php:661
 msgid "Choices for item to replace"
 msgstr "Volby pro položky k nahrazení"
 
-#: inc/replace.class.php:674
+#: inc/replace.class.php:664
 msgid "Old item"
 msgstr "Původní položka"
 
-#: inc/replace.class.php:684
+#: inc/replace.class.php:674
 msgid "New item"
 msgstr "Nová položka"
 
-#: inc/replace.class.php:716
+#: inc/replace.class.php:706
 msgid "Replace"
 msgstr "Nahradit"
-
-#: setup.php:111
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Životní cyklus položky (odinstalace)"
