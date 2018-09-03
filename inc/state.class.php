@@ -36,7 +36,8 @@ class PluginUninstallState {
    static function replaceState($params = []) {
       global $UNINSTALL_TYPES;
 
-      if (!in_array(get_class($params['item']), $UNINSTALL_TYPES)
+      if (!array_key_exists('item', $params)
+          || !in_array(get_class($params['item']), $UNINSTALL_TYPES)
           || !isset($params['item']->fields['id'])) {
          return false;
       }
@@ -65,8 +66,6 @@ class PluginUninstallState {
 
       $JS = <<<JAVASCRIPT
       $(function() {
-         console.debug('launch uninstall replaceStatus')
-
          // replace status select
          var state_span = $("#page select[name=states_id]").parent();
          state_span.html({$html});

@@ -449,7 +449,7 @@ class PluginUninstallReplace extends CommonDBTM {
                // Delete OLD item from DB (not PURGE) only if delete is requested
                PluginUninstallUninstall::addUninstallLog([
                   'itemtype'  => $type,
-                  'items_id'  => $olditem_idn,
+                  'items_id'  => $olditem_id,
                   'action'    => 'replaced_by',
                   'models_id' => $model_id,
                ]);
