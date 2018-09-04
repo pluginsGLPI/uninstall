@@ -46,7 +46,9 @@ class PluginUninstallState {
       $users_id    = Session::getLoginUserID();
       $state       = new State;
       $state->getFromDB($item->fields['states_id']);
-      $states_name = $state->getName();
+      $states_name = $state->getName([
+         'complete' => true,
+      ]);
 
       // get form for uninstall actions
       ob_start();
