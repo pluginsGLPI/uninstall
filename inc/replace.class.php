@@ -447,7 +447,12 @@ class PluginUninstallReplace extends CommonDBTM {
                                 false);
 
                // Delete OLD item from DB (not PURGE) only if delete is requested
-               PluginUninstallUninstall::addUninstallLog($type, $olditem_id, 'replaced_by');
+               PluginUninstallUninstall::addUninstallLog([
+                  'itemtype'  => $type,
+                  'items_id'  => $olditem_id,
+                  'action'    => 'replaced_by',
+                  'models_id' => $model_id,
+               ]);
                if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
                   $olditem->delete(['id' => $olditem_id], 0, false);
                }
@@ -458,7 +463,12 @@ class PluginUninstallReplace extends CommonDBTM {
          Plugin::doHook("plugin_uninstall_replace_after", $olditem);
 
          //Add history
-         PluginUninstallUninstall::addUninstallLog($type, $newitem_id, 'replace');
+         PluginUninstallUninstall::addUninstallLog([
+            'itemtype'  => $type,
+            'items_id'  => $newitem_id,
+            'action'    => 'replace',
+            'models_id' => $model_id,
+         ]);
          Html::changeProgressBarPosition($count, $tot+1);
       }
 
@@ -663,11 +673,11 @@ class PluginUninstallReplace extends CommonDBTM {
       echo "<tr class='tab_bg_1 center'>";
       echo "<th>" . __('Old item', 'uninstall') . "</th>";
 
-      if (self::searchFieldInSearchOptions($type, 'otherserial')) {
+      if (Search::getOptionNumber($type, 'otherserial')) {
          echo "<th>" . __('Inventory number') . "</th>";
       }
 
-      if (self::searchFieldInSearchOptions($type, 'serial')) {
+      if (Search::getOptionNumber($type, 'serial')) {
          echo "<th>" . __('Serial number') . "</th>";
       }
 
@@ -681,11 +691,11 @@ class PluginUninstallReplace extends CommonDBTM {
          echo "<tr class='tab_bg_1 center'>";
          echo "<td>" . $commonitem->getName() . "</td>";
 
-         if (self::searchFieldInSearchOptions($type, 'otherserial')) {
+         if (Search::getOptionNumber($type, 'otherserial')) {
             echo "<td>" . $commonitem->fields['otherserial'] . "</td>";
          }
 
-         if (self::searchFieldInSearchOptions($type, 'serial')) {
+         if (Search::getOptionNumber($type, 'serial')) {
             echo "<td>" . $commonitem->fields['serial'] . "</td>";
          }
 
@@ -710,26 +720,6 @@ class PluginUninstallReplace extends CommonDBTM {
       echo "</table>";
       Html::closeForm();
    }
-
-   /**
-    * @param $itemtype
-    * @param $field     (default '')
-   **/
-   static function searchFieldInSearchOptions($itemtype, $field = '') {
-      if ($item = getItemForItemtype($itemtype)) {
-
-         foreach ($item->rawSearchOptions() as $searchOption) {
-            if (is_array($searchOption)
-               && isset($searchOption['field'])
-                  && $searchOption['field']==$field) {
-               return true;
-            }
-         }
-      }
-
-      return false;
-   }
-
 
    /**
     * Get documents associated to an item
@@ -895,7 +885,7 @@ class PluginUninstallReplace extends CommonDBTM {
          $item = new $itemtype();
          if ($item->canView()) {
             $datas = getAllDatasFromTable('glpi_computers_items',
-                                         "`computers_id` = '".$ID."' AND `itemtype` = '".$itemtype."'");
+                                          ['computers_id' => $ID, 'itemtype' => $itemtype]);
             foreach ($datas as $computer_item) {
                $data[$itemtype][] = $computer_item;
             }

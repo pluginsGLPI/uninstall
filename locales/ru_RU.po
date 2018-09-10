@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-28 09:42+0000\n"
+"POT-Creation-Date: 2018-09-10 10:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Nikolay <techobsl@yandex.ru>, 2018\n"
 "Language-Team: Russian (Russia) (https://www.transifex.com/teclib/teams/28042/ru_RU/)\n"
@@ -18,124 +18,136 @@ msgstr ""
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: front/action.php:55 inc/replace.class.php:466
+#: front/action.php:55 inc/replace.class.php:476
 msgid "Replacement successful"
 msgstr "Успешная замена"
 
-#: front/action.php:96 inc/uninstall.class.php:320
+#: front/action.php:96 inc/uninstall.class.php:324
 msgid "Uninstallation successful"
 msgstr "Успешное удаление"
 
-#: ajax/locations.php:43 inc/preference.class.php:74 inc/replace.class.php:579
+#: ajax/locations.php:43 inc/preference.class.php:74 inc/replace.class.php:589
 msgid "Keep previous location"
 msgstr "Сохранить предыдущее местоположение"
 
-#: ajax/locations.php:44 inc/preference.class.php:75 inc/replace.class.php:583
+#: ajax/locations.php:44 inc/preference.class.php:75 inc/replace.class.php:593
 msgid "Empty location"
 msgstr "Пустое местоположение"
 
-#: hook.php:50 inc/uninstall.class.php:110 inc/uninstall.class.php:781
+#: hook.php:42 inc/uninstall.class.php:110
 msgid "Uninstall"
 msgstr "Удалить"
 
-#: inc/model.class.php:42
-msgid "Uninstallation template"
-msgstr "Шаблон удаления"
+#: inc/config.class.php:39 inc/model.class.php:66 inc/uninstall.class.php:38
+msgid "Item's Lifecycle"
+msgstr ""
 
-#: inc/model.class.php:108 inc/model.class.php:988 inc/model.class.php:1030
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr ""
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr ""
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr ""
+
+#: inc/model.class.php:106 inc/model.class.php:986 inc/model.class.php:1028
 msgid "Uninstallation"
 msgstr "Удаление"
 
-#: inc/model.class.php:110 inc/model.class.php:990 inc/model.class.php:1032
+#: inc/model.class.php:108 inc/model.class.php:988 inc/model.class.php:1030
 #: inc/replace.class.php:61 inc/replace.class.php:108
 msgid "Replacement"
 msgstr "Замена"
 
-#: inc/model.class.php:120
+#: inc/model.class.php:118
 msgid "PDF Archiving"
 msgstr "PDF Архивирование"
 
-#: inc/model.class.php:122
+#: inc/model.class.php:120
 msgid "CSV Archiving"
 msgstr " CSV Архивирование"
 
-#: inc/model.class.php:125
+#: inc/model.class.php:123
 msgid "Purge"
 msgstr "Очистить"
 
-#: inc/model.class.php:126
+#: inc/model.class.php:124
 msgid "Delete + Comment"
 msgstr "Удалить + Комментарий"
 
-#: inc/model.class.php:127
+#: inc/model.class.php:125
 msgid "Keep + Comment"
 msgstr "Сохранить + Комментарий"
 
-#: inc/model.class.php:168
+#: inc/model.class.php:166
 msgid "Replacing data"
 msgstr "Замена данных"
 
-#: inc/model.class.php:212 inc/model.class.php:831
+#: inc/model.class.php:210 inc/model.class.php:829
 msgid "Type of template"
 msgstr "Тип шаблона"
 
-#: inc/model.class.php:221 inc/model.class.php:795
+#: inc/model.class.php:219 inc/model.class.php:793
 msgid "Transfer's model to use"
 msgstr "Модель переноса для использования"
 
-#: inc/model.class.php:241 inc/replace.class.php:593
+#: inc/model.class.php:239 inc/replace.class.php:603
 msgid "New status of the computer"
 msgstr "Новый статус компьютера"
 
-#: inc/model.class.php:253 inc/model.class.php:841
+#: inc/model.class.php:251 inc/model.class.php:839
 msgid "Action on group"
 msgstr "Действие по группе"
 
-#: inc/model.class.php:265
+#: inc/model.class.php:263
 msgid "New group"
 msgstr "Новая группа"
 
-#: inc/model.class.php:286
+#: inc/model.class.php:284
 msgid "Add template"
 msgstr "Добавить шаблон"
 
-#: inc/model.class.php:289
+#: inc/model.class.php:287
 msgid "Manage templates"
 msgstr "Управление шаблонами"
 
-#: inc/model.class.php:300
+#: inc/model.class.php:298
 msgid "Erase datas"
 msgstr "Сбросить даты"
 
-#: inc/model.class.php:303 inc/model.class.php:703
+#: inc/model.class.php:301 inc/model.class.php:701
 msgid "Delete software history (computers)"
 msgstr "Удалить историю ПО (компьютеры)"
 
-#: inc/model.class.php:308 inc/model.class.php:861
+#: inc/model.class.php:306 inc/model.class.php:859
 msgid "Delete the whole history"
 msgstr "Удалить всю историю"
 
-#: inc/model.class.php:390 inc/model.class.php:440
+#: inc/model.class.php:388 inc/model.class.php:438
 msgid "Informations replacement"
 msgstr "Замена информации"
 
-#: inc/model.class.php:391 inc/replace.class.php:539
+#: inc/model.class.php:389 inc/replace.class.php:549
 msgid "General informations"
 msgstr "Общая информация"
 
-#: inc/model.class.php:413 inc/replace.class.php:554
+#: inc/model.class.php:411 inc/replace.class.php:564
 msgid "Overwrite informations (from old item to the new)"
 msgstr ""
 
-#: inc/model.class.php:420 inc/model.class.php:851 inc/replace.class.php:557
+#: inc/model.class.php:418 inc/model.class.php:849 inc/replace.class.php:567
 msgid "Archiving method of the old material"
 msgstr ""
 
-#: inc/model.class.php:430
+#: inc/model.class.php:428
 msgid "Plugin PDF is installed and activated"
 msgstr ""
 
-#: inc/model.class.php:433
+#: inc/model.class.php:431
 msgid ""
 "Plugin PDF is not installed, you won't be able to use PDF format for "
 "archiving"
@@ -143,15 +155,15 @@ msgstr ""
 "Плагин PDF не установлен, вы не сможете использовать формат PDF для "
 "архивации"
 
-#: inc/model.class.php:441 inc/replace.class.php:615
+#: inc/model.class.php:439 inc/replace.class.php:625
 msgid "Connections with other materials"
 msgstr ""
 
-#: inc/model.class.php:515 inc/replace.class.php:650
+#: inc/model.class.php:513 inc/replace.class.php:660
 msgid "Direct connections"
 msgstr ""
 
-#: inc/model.class.php:588
+#: inc/model.class.php:586
 msgid "OCSNG link"
 msgid_plural "OCSNG links"
 msgstr[0] ""
@@ -159,64 +171,82 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: inc/model.class.php:590
+#: inc/model.class.php:588
 msgid "These options only apply to computers coming from OCSNG"
 msgstr ""
 
-#: inc/model.class.php:594 inc/model.class.php:814
+#: inc/model.class.php:592 inc/model.class.php:812
 msgid "Delete computer in OCSNG"
 msgstr ""
 
-#: inc/model.class.php:600 inc/model.class.php:822
+#: inc/model.class.php:598 inc/model.class.php:820
 msgid "Delete link with computer in OCSNG"
 msgstr ""
 
-#: inc/model.class.php:614
+#: inc/model.class.php:612
 msgid "Delete computer in FusionInventory"
 msgstr ""
 
-#: inc/model.class.php:626
+#: inc/model.class.php:624
 msgid "Additionnal fields"
 msgstr ""
 
-#: inc/model.class.php:630
+#: inc/model.class.php:628
 msgid "Delete Fields plugin informations"
 msgstr ""
 
-#: inc/model.class.php:995 inc/uninstall.class.php:728
+#: inc/model.class.php:993 inc/uninstall.class.php:762
 msgid "Keep in the current group"
 msgstr ""
 
-#: inc/preference.class.php:54 inc/uninstall.class.php:646
+#: inc/preference.class.php:54
 msgid "Item's location after uninstall"
 msgstr ""
-
-#: inc/uninstall.class.php:38 setup.php:89
-msgid "Item's uninstallation"
-msgstr "Удаление элемента"
 
 #: inc/uninstall.class.php:114
 msgid "Please wait, uninstallation is running..."
 msgstr "Пожалуйста, ожидайте, удаление запущено..."
 
-#: inc/uninstall.class.php:522
+#: inc/uninstall.class.php:545
 msgid "Item is now uninstalled"
 msgstr ""
 
-#: inc/uninstall.class.php:526
+#: inc/uninstall.class.php:547
+#, php-format
+msgid "Item is now uninstalled with model %s"
+msgstr ""
+
+#: inc/uninstall.class.php:553
 msgid "Item replaced by a new one"
 msgstr ""
 
-#: inc/uninstall.class.php:530
+#: inc/uninstall.class.php:555
+#, php-format
+msgid "Item replaced by a new one with model %s"
+msgstr ""
+
+#: inc/uninstall.class.php:561
 msgid "Item replacing an old one"
 msgstr ""
 
-#: inc/uninstall.class.php:535
+#: inc/uninstall.class.php:566
 msgid "Removed from OCSNG with ID"
 msgstr ""
 
-#: inc/uninstall.class.php:729
+#: inc/uninstall.class.php:663
+msgid "Apply model"
+msgstr ""
+
+#: inc/uninstall.class.php:680
+msgid "Item's location after applying model"
+msgstr ""
+
+#: inc/uninstall.class.php:763
 msgid "Affect to a new group"
+msgstr ""
+
+#: inc/uninstall.class.php:815
+msgid "Lifecycle"
 msgstr ""
 
 #: inc/replace.class.php:40
@@ -239,34 +269,38 @@ msgstr ""
 msgid "See attached document"
 msgstr ""
 
-#: inc/replace.class.php:488
+#: inc/replace.class.php:498
 msgid "This item is a replacement for item"
 msgstr ""
 
-#: inc/replace.class.php:490
+#: inc/replace.class.php:500
 msgid "This item was replaced by"
 msgstr ""
 
-#: inc/replace.class.php:538 inc/replace.class.php:614
+#: inc/replace.class.php:548 inc/replace.class.php:624
 msgid "Reminder of the replacement model"
 msgstr ""
 
-#: inc/replace.class.php:576
+#: inc/replace.class.php:586
 msgid "New location of item"
 msgstr ""
 
-#: inc/replace.class.php:661
+#: inc/replace.class.php:671
 msgid "Choices for item to replace"
 msgstr ""
 
-#: inc/replace.class.php:664
+#: inc/replace.class.php:674
 msgid "Old item"
 msgstr ""
 
-#: inc/replace.class.php:674
+#: inc/replace.class.php:684
 msgid "New item"
 msgstr ""
 
-#: inc/replace.class.php:706
+#: inc/replace.class.php:716
 msgid "Replace"
+msgstr ""
+
+#: setup.php:111
+msgid "Item's Lifecycle (uninstall)"
 msgstr ""

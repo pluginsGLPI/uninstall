@@ -257,7 +257,7 @@ class PluginUninstallPreference extends CommonDBTM {
                      `templates_id` int(11) DEFAULT '0',
                      `locations_id` int(11) DEFAULT '0',
                      PRIMARY KEY (`id`)
-                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
          $DB->queryOrDie($query, $DB->error());
       }
       return true;

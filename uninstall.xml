@@ -7,10 +7,12 @@
       <short>
          <fr><![CDATA[Désinstallez facilement les objets obsolètes de votre inventaire]]></fr>
          <en><![CDATA[Easy uninstall of obsolete assets in your inventory]]></en>
+	 <cs><![CDATA[Snadná odinstalace zastaralého majetku z inventáře]]></cs>
       </short>
       <long>
 	 <fr><![CDATA[Ce plugin vous permet de classer ou supprimer facilement et proprement les objets en fin de vie de votre parc]]></fr>
          <en><![CDATA[This plugin let you to archive easily assets which reached their end of life]]></en>
+	 <cs><![CDATA[Tento zásuvný modul umožňuje snadno zaarchivovat záznamy zařízení, kterým už skončila životnost]]></cs>
       </long>
    </description>
    <homepage>https://github.com/pluginsglpi/uninstall</homepage>
@@ -23,6 +25,10 @@
       <author>Remi Collet</author>
    </authors>
    <versions>
+      <version>
+         <num>2.5.0</num>
+         <compatibility>9.3</compatibility>
+      </version>
       <version>
          <num>2.4.1</num>
          <compatibility>9.3</compatibility>
@@ -71,6 +77,7 @@
        </version>
    </versions>
    <langs>
+      <lang>cs_CZ</lang>
       <lang>fr_FR</lang>
       <lang>en_GB</lang>
    </langs>
@@ -92,6 +99,14 @@
             <tag>clean</tag>
             <tag>archive</tag>
          </en>
+	 <cs>
+            <tag>inventura</tag>
+            <tag>objekty</tag>
+            <tag>odinstalace</tag>
+            <tag>odebrat</tag>
+            <tag>vyčistit</tag>
+            <tag>archivovat</tag>
+         </cs>
    </tags>
    <license>GPL v2+</license>
 </root>

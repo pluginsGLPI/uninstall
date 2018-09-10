@@ -62,8 +62,9 @@ if ($item->maybeTemplate()) {
    $where .= " AND `is_template` = '0' ";
 }
 
-if ((strlen($_REQUEST['searchText']) > 0)
-    && ($_REQUEST['searchText'] != $CFG_GLPI["ajax_wildcard"])) {
+if (isset($_REQUEST['searchText'])
+    && strlen($_REQUEST['searchText']) > 0
+    && $_REQUEST['searchText'] != $CFG_GLPI["ajax_wildcard"]) {
    $search = Search::makeTextSearch($_REQUEST['searchText']);
 
    $where .= " AND (`name` ".$search."
@@ -84,7 +85,8 @@ if (isset($_REQUEST['current_item']) && ($_REQUEST['current_item'] > 0)) {
 $NBMAX = $CFG_GLPI["dropdown_max"];
 $LIMIT = "LIMIT 0,$NBMAX";
 
-if ($_REQUEST['searchText'] == $CFG_GLPI["ajax_wildcard"]) {
+if (isset($_REQUEST['searchText'])
+    && $_REQUEST['searchText'] == $CFG_GLPI["ajax_wildcard"]) {
    $LIMIT = "";
 }
 

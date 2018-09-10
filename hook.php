@@ -28,14 +28,6 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-function plugin_uninstall_postinit() {
-   global $UNINSTALL_TYPES;
-
-   foreach ($UNINSTALL_TYPES as $type) {
-      CommonGLPI::registerStandardTab($type, 'PluginUninstallUninstall');
-   }
-}
-
 // ** Massive actions **
 
 function plugin_uninstall_MassiveActions($type) {
@@ -78,10 +70,12 @@ function plugin_uninstall_install() {
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/preference.class.php");
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/model.class.php");
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/replace.class.php");
+   require_once (GLPI_ROOT . "/plugins/uninstall/inc/config.class.php");
 
    PluginUninstallProfile::install($migration);
    PluginUninstallModel::install($migration);
    PluginUninstallPreference::install($migration);
+   PluginUninstallConfig::install($migration);
    return true;
 }
 
@@ -93,9 +87,11 @@ function plugin_uninstall_uninstall() {
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/preference.class.php");
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/model.class.php");
    require_once (GLPI_ROOT . "/plugins/uninstall/inc/replace.class.php");
+   require_once (GLPI_ROOT . "/plugins/uninstall/inc/config.class.php");
 
    PluginUninstallProfile::uninstall();
    PluginUninstallModel::uninstall();
    PluginUninstallPreference::uninstall();
+   PluginUninstallConfig::uninstall();
    return true;
 }

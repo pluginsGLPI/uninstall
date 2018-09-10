@@ -39,7 +39,7 @@ class PluginUninstallModel extends CommonDBTM {
    const TYPE_MODEL_REPLACEMENT = 2;
 
    static function getTypeName($nb = 0) {
-      return __("Uninstallation template", 'uninstall');
+      return _n("Template", "Templates", $nb);
    }
 
    static function canDelete() {
@@ -63,14 +63,12 @@ class PluginUninstallModel extends CommonDBTM {
       $menu = [];
 
       // get Menu name :
-      $tab = plugin_version_uninstall();
-      $menu['title'] = $tab["name"];
-
+      $menu['title'] = __("Item's Lifecycle", 'uninstall');
       $menu['page']  = '/plugins/uninstall/front/model.php';
 
       if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
 
-         $menu['options']['model']['title'] = self::getTypeName(1);
+         $menu['options']['model']['title'] = self::getTypeName(Session::getPluralNumber());
          $menu['options']['model']['page'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
          $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
 
@@ -1223,7 +1221,7 @@ class PluginUninstallModel extends CommonDBTM {
                     `replace_contact` tinyint(1) NOT NULL DEFAULT '0',
                     `replace_contact_num` tinyint(1) NOT NULL DEFAULT '0',
                     PRIMARY KEY (`id`)
-                  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                  ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
          $DB->queryOrDie($query, $DB->error());
 
@@ -1260,7 +1258,7 @@ class PluginUninstallModel extends CommonDBTM {
 
       $transfers_id = PluginUninstallUninstall::getUninstallTransferModelID();
 
-      if (!countElementsInTable('glpi_plugin_uninstall_models', "`name`='$name'")) {
+      if (!countElementsInTable('glpi_plugin_uninstall_models', ['name' => $name])) {
          $model = new self();
          $tmp['entities_id']                = 0;
          $tmp['is_recursive']               = 1;
