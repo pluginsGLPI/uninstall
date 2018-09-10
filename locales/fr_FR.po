@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 09:14+0200\n"
+"POT-Creation-Date: 2018-09-10 10:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: alexandre delaunay <delaunay.alexandre@gmail.com>, 2018\n"
 "Language-Team: French (France) (https://www.transifex.com/teclib/teams/28042/fr_FR/)\n"
@@ -17,10 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-
-#: setup.php:111
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Cycle de vie des matériels (uninstall)"
 
 #: front/action.php:55 inc/replace.class.php:476
 msgid "Replacement successful"
@@ -38,9 +34,25 @@ msgstr "Garder l'ancien lieu"
 msgid "Empty location"
 msgstr "Vider le lieu"
 
-#: inc/model.class.php:66 inc/uninstall.class.php:38 inc/config.class.php:39
+#: hook.php:42 inc/uninstall.class.php:110
+msgid "Uninstall"
+msgstr "Désinstaller"
+
+#: inc/config.class.php:39 inc/model.class.php:66 inc/uninstall.class.php:38
 msgid "Item's Lifecycle"
 msgstr "Cycle de vie des matériels"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Raccourcis"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Préférences de lieux"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Remplacer la liste déroulante des statuts par les actions du plugin"
 
 #: inc/model.class.php:106 inc/model.class.php:986 inc/model.class.php:1028
 msgid "Uninstallation"
@@ -185,9 +197,9 @@ msgstr "Supprimer les informations du plugin Fields"
 msgid "Keep in the current group"
 msgstr "Conserver la valeur actuelle"
 
-#: inc/uninstall.class.php:110 hook.php:42
-msgid "Uninstall"
-msgstr "Désinstaller"
+#: inc/preference.class.php:54
+msgid "Item's location after uninstall"
+msgstr "Lieu du matériel après désinstallation"
 
 #: inc/uninstall.class.php:114
 msgid "Please wait, uninstallation is running..."
@@ -234,22 +246,6 @@ msgstr "Affecter à une nouvelle valeur"
 #: inc/uninstall.class.php:815
 msgid "Lifecycle"
 msgstr "Cycle de vie"
-
-#: inc/preference.class.php:54
-msgid "Item's location after uninstall"
-msgstr "Lieu du matériel après désinstallation"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Raccourcis"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Préférences de lieux"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Remplacer la liste déroulante des statuts par les actions du plugin"
 
 #: inc/replace.class.php:40
 msgid "Item's replacement"
@@ -302,3 +298,7 @@ msgstr "Nouveau matériel"
 #: inc/replace.class.php:716
 msgid "Replace"
 msgstr "Remplacer"
+
+#: setup.php:111
+msgid "Item's Lifecycle (uninstall)"
+msgstr "Cycle de vie des matériels (uninstall)"

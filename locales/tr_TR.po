@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 09:14+0200\n"
+"POT-Creation-Date: 2018-09-10 10:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2017\n"
 "Language-Team: Turkish (Turkey) (https://www.transifex.com/teclib/teams/28042/tr_TR/)\n"
@@ -17,10 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-
-#: setup.php:111
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Ögenin Yaşam Döngüsü (kaldır)"
 
 #: front/action.php:55 inc/replace.class.php:476
 msgid "Replacement successful"
@@ -38,9 +34,25 @@ msgstr "Önceki konum korunsun"
 msgid "Empty location"
 msgstr "Boş konum"
 
-#: inc/model.class.php:66 inc/uninstall.class.php:38 inc/config.class.php:39
+#: hook.php:42 inc/uninstall.class.php:110
+msgid "Uninstall"
+msgstr "Kaldır"
+
+#: inc/config.class.php:39 inc/model.class.php:66 inc/uninstall.class.php:38
 msgid "Item's Lifecycle"
 msgstr "Ögenin Yaşam Döngüsü"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Kısayollar"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Konum ayarları"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Durum açılan kutusu uygulama eki işlemlerine göre değiştirilsin"
 
 #: inc/model.class.php:106 inc/model.class.php:986 inc/model.class.php:1028
 msgid "Uninstallation"
@@ -184,9 +196,9 @@ msgstr "Alanlar uygulama eki bilgilerini sil"
 msgid "Keep in the current group"
 msgstr "Geçerli grupta tut"
 
-#: inc/uninstall.class.php:110 hook.php:42
-msgid "Uninstall"
-msgstr "Kaldır"
+#: inc/preference.class.php:54
+msgid "Item's location after uninstall"
+msgstr "Kaldırma sonrası öge konumu"
 
 #: inc/uninstall.class.php:114
 msgid "Please wait, uninstallation is running..."
@@ -233,22 +245,6 @@ msgstr "Yeni bir gruba etki"
 #: inc/uninstall.class.php:815
 msgid "Lifecycle"
 msgstr "Yaşam Döngüsü"
-
-#: inc/preference.class.php:54
-msgid "Item's location after uninstall"
-msgstr "Kaldırma sonrası öge konumu"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Kısayollar"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Konum ayarları"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Durum açılan kutusu uygulama eki işlemlerine göre değiştirilsin"
 
 #: inc/replace.class.php:40
 msgid "Item's replacement"
@@ -301,3 +297,7 @@ msgstr "Yeni öge"
 #: inc/replace.class.php:716
 msgid "Replace"
 msgstr "Değiştir"
+
+#: setup.php:111
+msgid "Item's Lifecycle (uninstall)"
+msgstr "Ögenin Yaşam Döngüsü (kaldır)"

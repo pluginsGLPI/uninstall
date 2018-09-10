@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 09:14+0200\n"
+"POT-Creation-Date: 2018-09-10 10:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: 李赋 <fu792659@163.com>, 2018\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/teclib/teams/28042/zh_CN/)\n"
@@ -17,10 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-
-#: setup.php:111
-msgid "Item's Lifecycle (uninstall)"
-msgstr ""
 
 #: front/action.php:55 inc/replace.class.php:476
 msgid "Replacement successful"
@@ -38,8 +34,24 @@ msgstr "保留以前的位置"
 msgid "Empty location"
 msgstr "空位"
 
-#: inc/model.class.php:66 inc/uninstall.class.php:38 inc/config.class.php:39
+#: hook.php:42 inc/uninstall.class.php:110
+msgid "Uninstall"
+msgstr "卸载"
+
+#: inc/config.class.php:39 inc/model.class.php:66 inc/uninstall.class.php:38
 msgid "Item's Lifecycle"
+msgstr ""
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr ""
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr ""
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
 msgstr ""
 
 #: inc/model.class.php:106 inc/model.class.php:986 inc/model.class.php:1028
@@ -182,9 +194,9 @@ msgstr "删除字段插件信息"
 msgid "Keep in the current group"
 msgstr "保持在当前组中"
 
-#: inc/uninstall.class.php:110 hook.php:42
-msgid "Uninstall"
-msgstr "卸载"
+#: inc/preference.class.php:54
+msgid "Item's location after uninstall"
+msgstr "卸载后项目的位置"
 
 #: inc/uninstall.class.php:114
 msgid "Please wait, uninstallation is running..."
@@ -230,22 +242,6 @@ msgstr "对新组的影响"
 
 #: inc/uninstall.class.php:815
 msgid "Lifecycle"
-msgstr ""
-
-#: inc/preference.class.php:54
-msgid "Item's location after uninstall"
-msgstr "卸载后项目的位置"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr ""
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr ""
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
 msgstr ""
 
 #: inc/replace.class.php:40
@@ -299,3 +295,7 @@ msgstr "新项目"
 #: inc/replace.class.php:716
 msgid "Replace"
 msgstr "替代"
+
+#: setup.php:111
+msgid "Item's Lifecycle (uninstall)"
+msgstr ""

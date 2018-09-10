@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 09:14+0200\n"
+"POT-Creation-Date: 2018-09-10 10:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>, 2018\n"
 "Language-Team: Czech (Czech Republic) (https://www.transifex.com/teclib/teams/28042/cs_CZ/)\n"
@@ -17,10 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs_CZ\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
-
-#: setup.php:111
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Životní cyklus položky (odinstalace)"
 
 #: front/action.php:55 inc/replace.class.php:476
 msgid "Replacement successful"
@@ -38,9 +34,25 @@ msgstr "Ponechat předchozí umístění"
 msgid "Empty location"
 msgstr "Prázdné umístění"
 
-#: inc/model.class.php:66 inc/uninstall.class.php:38 inc/config.class.php:39
+#: hook.php:42 inc/uninstall.class.php:110
+msgid "Uninstall"
+msgstr "Odinstalovat"
+
+#: inc/config.class.php:39 inc/model.class.php:66 inc/uninstall.class.php:38
 msgid "Item's Lifecycle"
 msgstr "Životní cyklus položky"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Zkratky"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Preference umístění"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Nahradit rozbalovací nabídku stavu akcí zásuvného modulu"
 
 #: inc/model.class.php:106 inc/model.class.php:986 inc/model.class.php:1028
 msgid "Uninstallation"
@@ -187,9 +199,9 @@ msgstr "Smazat informace zásuvného modulu Kolonky"
 msgid "Keep in the current group"
 msgstr "Ponechat ve stávající skupině"
 
-#: inc/uninstall.class.php:110 hook.php:42
-msgid "Uninstall"
-msgstr "Odinstalovat"
+#: inc/preference.class.php:54
+msgid "Item's location after uninstall"
+msgstr "Umístění položky po odinstalaci"
 
 #: inc/uninstall.class.php:114
 msgid "Please wait, uninstallation is running..."
@@ -236,22 +248,6 @@ msgstr "Přiřadit do nové skupiny"
 #: inc/uninstall.class.php:815
 msgid "Lifecycle"
 msgstr "Životní cyklus"
-
-#: inc/preference.class.php:54
-msgid "Item's location after uninstall"
-msgstr "Umístění položky po odinstalaci"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Zkratky"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Preference umístění"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Nahradit rozbalovací nabídku stavu akcí zásuvného modulu"
 
 #: inc/replace.class.php:40
 msgid "Item's replacement"
@@ -304,3 +300,7 @@ msgstr "Nová položka"
 #: inc/replace.class.php:716
 msgid "Replace"
 msgstr "Nahradit"
+
+#: setup.php:111
+msgid "Item's Lifecycle (uninstall)"
+msgstr "Životní cyklus položky (odinstalace)"
