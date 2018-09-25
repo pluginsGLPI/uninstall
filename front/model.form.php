@@ -57,7 +57,7 @@ if (isset ($_POST["add"])) {
    $model->update($_POST);
    Html::back();
 
-} else if (isset ($_POST["delete"])) {
+} else if (isset($_POST['purge'])) {
    $model->check($_POST['id'], DELETE);
    $model->delete($_POST);
    $model->redirectToList();
