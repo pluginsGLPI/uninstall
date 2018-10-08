@@ -38,7 +38,8 @@ class PluginUninstallState {
 
       if (!array_key_exists('item', $params)
           || !in_array(get_class($params['item']), $UNINSTALL_TYPES)
-          || !isset($params['item']->fields['id'])) {
+          || !isset($params['item']->fields['id'])
+          || !$params['item']->can($params['item']->fields['id'], UPDATE)) {
          return false;
       }
       $item        = $params['item'];
