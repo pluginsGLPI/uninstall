@@ -28,12 +28,12 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_UNINSTALL_VERSION', '2.5.1');
+define ('PLUGIN_UNINSTALL_VERSION', '2.6.0');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_UNINSTALL_MIN_GLPI", "9.3");
 // Maximum GLPI version, exclusive
-define("PLUGIN_UNINSTALL_MAX_GLPI", "9.4");
+define("PLUGIN_UNINSTALL_MAX_GLPI", "9.5");
 
 /**
  * Function Init
