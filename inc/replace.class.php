@@ -122,7 +122,7 @@ class PluginUninstallReplace extends CommonDBTM {
             }
 
             // Write document
-            $out_file  = GLPI_UPLOAD_DIR."/".$name_out;
+            $out_file  = GLPI_TMP_DIR."/".$name_out;
             $open_file = fopen($out_file, 'a');
             fwrite ($open_file, $out);
             fclose($open_file);
