@@ -78,6 +78,14 @@ if (in_array($_REQUEST['itemtype'], $CFG_GLPI["helpdesk_visible_types"])) {
    $where .= " AND `is_helpdesk_visible` = '1' ";
 }
 
+if (isset($_REQUEST['used'])) {
+   $used = $_REQUEST['used'];
+
+   if (count($used)) {
+      $where .=" AND `$table`.`id` NOT IN ('".implode("','", $used)."' ) ";
+   }
+}
+
 if (isset($_REQUEST['current_item']) && ($_REQUEST['current_item'] > 0)) {
    $where .= " AND `id` != " . $_REQUEST['current_item'];
 }
