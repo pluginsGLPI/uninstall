@@ -700,9 +700,12 @@ class PluginUninstallReplace extends CommonDBTM {
          }
 
          echo "<td>";
-         $type::dropdown(['name'        => "newItems[$id]",
-                          'displaywith' => ['serial', 'otherserial'],
-                          'url'         => $CFG_GLPI['root_doc']."/plugins/uninstall/ajax/dropdownReplaceFindDevice.php"]);
+         $type::dropdown([
+            'name'        => "newItems[$id]",
+            'displaywith' => ['serial', 'otherserial'],
+            'url'         => $CFG_GLPI['root_doc']."/plugins/uninstall/ajax/dropdownReplaceFindDevice.php",
+            'used'        => array_keys($tab_ids[$type])
+         ]);
          echo "</td></tr>";
       }
 
