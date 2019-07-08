@@ -207,7 +207,7 @@ class PluginUninstallPreference extends CommonDBTM {
 
    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
-      if ($item->getType() == 'Preference' && Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
+      if ($item->getType() == 'Preference' && Session::haveRight('uninstall:profile', READ)) {
          return PluginUninstallUninstall::getTypeName();
       }
       return '';
@@ -217,7 +217,7 @@ class PluginUninstallPreference extends CommonDBTM {
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       global $CFG_GLPI;
 
-      if ($item->getType() == 'Preference' && Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
+      if ($item->getType() == 'Preference' && Session::haveRight('uninstall:profile', READ)) {
          $pref = new self();
          $pref->showFormUserPreferences();
       }
