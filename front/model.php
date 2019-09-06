@@ -33,7 +33,7 @@ include ('../../../inc/includes.php');
 Html::header(PluginUninstallModel::getTypeName(Session::getPluralNumber()), '', "admin",
    "PluginUninstallModel", "model");
 
-if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
+if (Session::haveRight(PluginUninstallModel::$rightname, READ)) {
    Search::show("PluginUninstallModel");
 } else {
    Html::displayRightError();
