@@ -104,7 +104,7 @@ $query = "SELECT *
           ORDER BY `name`
           $LIMIT";
 $result = $DB->query($query);
-while ($data = $DB->fetch_assoc($result)) {
+while ($data = $DB->fetchAssoc($result)) {
    $outputval = Toolbox::unclean_cross_side_scripting_deep($data["name"]);
 
    if ($displaywith) {
