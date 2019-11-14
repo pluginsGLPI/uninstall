@@ -703,7 +703,7 @@ class PluginUninstallReplace extends CommonDBTM {
          $type::dropdown([
             'name'        => "newItems[$id]",
             'displaywith' => ['serial', 'otherserial'],
-            'url'         => $CFG_GLPI['root_doc']."/plugins/uninstall/ajax/dropdownReplaceFindDevice.php",
+            'url'         => Plugin::getWebDir('uninstall')."/ajax/dropdownReplaceFindDevice.php",
             'used'        => array_keys($tab_ids[$type])
          ]);
          echo "</td></tr>";
@@ -887,7 +887,7 @@ class PluginUninstallReplace extends CommonDBTM {
       foreach ($UNINSTALL_DIRECT_CONNECTIONS_TYPE as $itemtype) {
          $item = new $itemtype();
          if ($item->canView()) {
-            $datas = getAllDatasFromTable('glpi_computers_items',
+            $datas = getAllDataFromTable('glpi_computers_items',
                                           ['computers_id' => $ID, 'itemtype' => $itemtype]);
             foreach ($datas as $computer_item) {
                $data[$itemtype][] = $computer_item;

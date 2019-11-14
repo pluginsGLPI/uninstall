@@ -85,7 +85,7 @@ class PluginUninstallUninstall extends CommonDBTM {
                   $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
                }
             }
-            Html::redirect($CFG_GLPI["root_doc"] . '/plugins/uninstall/front/action.php?device_type=' .
+            Html::redirect(Plugin::getWebDir('uninstall') . '/front/action.php?device_type=' .
                   $itemtype . "&model_id=" . $_POST["model_id"]);
             return;
             break;
@@ -217,10 +217,6 @@ class PluginUninstallUninstall extends CommonDBTM {
                }
             }
 
-            if ($item->isField('domains_id') && $model->fields["raz_domain"]) {
-               $fields["domains_id"] = 0;
-            }
-
             //RAZ network
             if ($item->isField('networks_id') && ($model->fields["raz_network"] == 1)) {
                $fields["networks_id"] = 0;
@@ -259,6 +255,11 @@ class PluginUninstallUninstall extends CommonDBTM {
                $infocom->dohistory = false;
                $infocom->update($tmp);
             }
+         }
+
+         if ($model->fields["raz_domain"]) {
+            $domain_item = new Domain_Item();
+            $domain_item->cleanDBonItemDelete($type, $id);
          }
 
          //Delete machine from glpi_ocs_link
@@ -657,7 +658,7 @@ class PluginUninstallUninstall extends CommonDBTM {
 
       $type = $item->getType();
       // TODO review this to pass arg in form, not in URL.
-      echo "<form action='".$CFG_GLPI["root_doc"]."/plugins/uninstall/front/action.php?device_type=$type'
+      echo "<form action='".Plugin::getWebDir('uninstall')."/front/action.php?device_type=$type'
              method='post'>";
       echo "<table class='tab_cadre_fixe' cellpadding='5'>";
       echo "<tr><th colspan='3'>" . __("Apply model", 'uninstall') . "</th></tr>";
@@ -674,7 +675,7 @@ class PluginUninstallUninstall extends CommonDBTM {
                  'users_id'     => $_SESSION["glpiID"]];
 
       Ajax::updateItemOnSelectEvent("dropdown_model_id$rand", "show_objects",
-                                    $CFG_GLPI["root_doc"] . "/plugins/uninstall/ajax/locations.php",
+                                    Plugin::getWebDir('uninstall') . "/ajax/locations.php",
                                     $params);
 
       echo "<tr class='tab_bg_1'><td>" . __("Item's location after applying model", "uninstall") ."</td>";
@@ -774,7 +775,7 @@ class PluginUninstallUninstall extends CommonDBTM {
                     'entity_sons' => $entity_sons];
 
       Ajax::updateItemOnSelectEvent("dropdown__" . $name . "_action".$rand, "show_".$ajax_page,
-                                    $CFG_GLPI["root_doc"]."/plugins/uninstall/ajax/$ajax_page.php",
+                                    Plugin::getWebDir('uninstall')."/ajax/$ajax_page.php",
                                     $params);
       return $action;
    }
@@ -795,7 +796,7 @@ class PluginUninstallUninstall extends CommonDBTM {
                 ORDER BY `name`";
       $result = $DB->query($query);
 
-      while ($datas = $DB->fetch_array($result)) {
+      while ($datas = $DB->fetchArray($result)) {
          $templates[$datas["id"]] = ($add_entity
                                        ? Dropdown::getDropdownName("glpi_entities",
                                                                    $datas["entities_id"]) . " > "

@@ -60,17 +60,18 @@ function plugin_uninstall_addDefaultWhere($itemtype) {
 // ** Install / Uninstall plugin **
 
 function plugin_uninstall_install() {
+   $dir = Plugin::getPhpDir('uninstall');
 
    $plugin_infos = plugin_version_uninstall();
    $migration    = new Migration($plugin_infos['version']);
 
    //Plugin classes are not loaded when plugin is not activated : force class loading
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/uninstall.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/profile.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/preference.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/model.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/replace.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/config.class.php");
+   require_once ($dir . "/inc/uninstall.class.php");
+   require_once ($dir . "/inc/profile.class.php");
+   require_once ($dir . "/inc/preference.class.php");
+   require_once ($dir . "/inc/model.class.php");
+   require_once ($dir . "/inc/replace.class.php");
+   require_once ($dir . "/inc/config.class.php");
 
    PluginUninstallProfile::install($migration);
    PluginUninstallModel::install($migration);
@@ -81,13 +82,14 @@ function plugin_uninstall_install() {
 
 
 function plugin_uninstall_uninstall() {
+   $dir = Plugin::getPhpDir('uninstall');
 
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/uninstall.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/profile.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/preference.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/model.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/replace.class.php");
-   require_once (GLPI_ROOT . "/plugins/uninstall/inc/config.class.php");
+   require_once ($dir . "/inc/uninstall.class.php");
+   require_once ($dir . "/inc/profile.class.php");
+   require_once ($dir . "/inc/preference.class.php");
+   require_once ($dir . "/inc/model.class.php");
+   require_once ($dir . "/inc/replace.class.php");
+   require_once ($dir . "/inc/config.class.php");
 
    PluginUninstallProfile::uninstall();
    PluginUninstallModel::uninstall();
