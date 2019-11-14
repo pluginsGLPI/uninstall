@@ -795,7 +795,7 @@ class PluginUninstallUninstall extends CommonDBTM {
                 ORDER BY `name`";
       $result = $DB->query($query);
 
-      while ($datas = $DB->fetch_array($result)) {
+      while ($datas = method_exists($DB, 'fetchArray') ? $DB->fetchArray($result) : $DB->fetch_array($result)) {
          $templates[$datas["id"]] = ($add_entity
                                        ? Dropdown::getDropdownName("glpi_entities",
                                                                    $datas["entities_id"]) . " > "
