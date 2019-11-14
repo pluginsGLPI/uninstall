@@ -887,7 +887,8 @@ class PluginUninstallReplace extends CommonDBTM {
       foreach ($UNINSTALL_DIRECT_CONNECTIONS_TYPE as $itemtype) {
          $item = new $itemtype();
          if ($item->canView()) {
-            $datas = getAllDatasFromTable('glpi_computers_items',
+            $getAllFct = function_exists('getAllDataFromTable') ? 'getAllDataFromTable' : 'getAllDatasFromTable';
+            $datas = $getAllFct('glpi_computers_items',
                                           ['computers_id' => $ID, 'itemtype' => $itemtype]);
             foreach ($datas as $computer_item) {
                $data[$itemtype][] = $computer_item;
