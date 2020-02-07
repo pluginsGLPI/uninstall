@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-08 13:22+0000\n"
+"POT-Creation-Date: 2020-02-07 10:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,11 +54,11 @@ msgstr ""
 msgid "Replace status dropdown by plugin actions"
 msgstr ""
 
-#: inc/model.class.php:106 inc/model.class.php:986 inc/model.class.php:1028
+#: inc/model.class.php:106 inc/model.class.php:987 inc/model.class.php:1029
 msgid "Uninstallation"
 msgstr ""
 
-#: inc/model.class.php:108 inc/model.class.php:988 inc/model.class.php:1030
+#: inc/model.class.php:108 inc/model.class.php:989 inc/model.class.php:1031
 #: inc/replace.class.php:61 inc/replace.class.php:108
 msgid "Replacement"
 msgstr ""
@@ -87,11 +87,11 @@ msgstr ""
 msgid "Replacing data"
 msgstr ""
 
-#: inc/model.class.php:210 inc/model.class.php:829
+#: inc/model.class.php:210 inc/model.class.php:830
 msgid "Type of template"
 msgstr ""
 
-#: inc/model.class.php:219 inc/model.class.php:793
+#: inc/model.class.php:219 inc/model.class.php:794
 msgid "Transfer's model to use"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr ""
 msgid "New status of the computer"
 msgstr ""
 
-#: inc/model.class.php:251 inc/model.class.php:839
+#: inc/model.class.php:251 inc/model.class.php:840
 msgid "Action on group"
 msgstr ""
 
@@ -119,11 +119,11 @@ msgstr ""
 msgid "Erase datas"
 msgstr ""
 
-#: inc/model.class.php:301 inc/model.class.php:701
+#: inc/model.class.php:301 inc/model.class.php:702
 msgid "Delete software history (computers)"
 msgstr ""
 
-#: inc/model.class.php:306 inc/model.class.php:859
+#: inc/model.class.php:306 inc/model.class.php:860
 msgid "Delete the whole history"
 msgstr ""
 
@@ -139,7 +139,7 @@ msgstr ""
 msgid "Overwrite informations (from old item to the new)"
 msgstr ""
 
-#: inc/model.class.php:418 inc/model.class.php:849 inc/replace.class.php:567
+#: inc/model.class.php:418 inc/model.class.php:850 inc/replace.class.php:567
 msgid "Archiving method of the old material"
 msgstr ""
 
@@ -171,11 +171,11 @@ msgstr[1] ""
 msgid "These options only apply to computers coming from OCSNG"
 msgstr ""
 
-#: inc/model.class.php:592 inc/model.class.php:812
+#: inc/model.class.php:592 inc/model.class.php:813
 msgid "Delete computer in OCSNG"
 msgstr ""
 
-#: inc/model.class.php:598 inc/model.class.php:820
+#: inc/model.class.php:598 inc/model.class.php:821
 msgid "Delete link with computer in OCSNG"
 msgstr ""
 
@@ -191,7 +191,7 @@ msgstr ""
 msgid "Delete Fields plugin informations"
 msgstr ""
 
-#: inc/model.class.php:993 inc/uninstall.class.php:762
+#: inc/model.class.php:994 inc/uninstall.class.php:762
 msgid "Keep in the current group"
 msgstr ""
 
