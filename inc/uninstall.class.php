@@ -218,6 +218,8 @@ class PluginUninstallUninstall extends CommonDBTM {
             }
 
             if ($item->isField('domains_id') && $model->fields["raz_domain"]) {
+               // 'domains_id' field has been replaced in GLPI 9.5 by an entry in glpi_domains_items
+               // this piece of code could be removed when plugin will not be anymore compatible with GLPI < 9.5
                $fields["domains_id"] = 0;
             }
 
@@ -259,6 +261,11 @@ class PluginUninstallUninstall extends CommonDBTM {
                $infocom->dohistory = false;
                $infocom->update($tmp);
             }
+         }
+
+         if ($model->fields["raz_domain"]) {
+            $domain_item = new Domain_Item();
+            $domain_item->cleanDBonItemDelete($type, $id);
          }
 
          //Delete machine from glpi_ocs_link
