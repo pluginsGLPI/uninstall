@@ -64,7 +64,8 @@ class PluginUninstallModel extends CommonDBTM {
 
       // get Menu name :
       $menu['title'] = __("Item's Lifecycle", 'uninstall');
-      $menu['page']  = '/plugins/uninstall/front/model.php';
+      $menu['page']  = '/' . Plugin::getWebDir('uninstall', false) . '/front/model.php';
+      $menu['icon']  = self::getIcon();
 
       if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
 
@@ -1370,4 +1371,7 @@ class PluginUninstallModel extends CommonDBTM {
       return;
    }
 
+   static function getIcon() {
+      return "fas fa-recycle";
+   }
 }

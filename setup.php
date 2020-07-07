@@ -28,12 +28,12 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-define ('PLUGIN_UNINSTALL_VERSION', '2.6.3');
+define ('PLUGIN_UNINSTALL_VERSION', '2.7.0');
 
 // Minimal GLPI version, inclusive
-define("PLUGIN_UNINSTALL_MIN_GLPI", "9.3");
+define("PLUGIN_UNINSTALL_MIN_GLPI", "9.5");
 // Maximum GLPI version, exclusive
-define("PLUGIN_UNINSTALL_MAX_GLPI", "9.5");
+define("PLUGIN_UNINSTALL_MAX_GLPI", "9.6");
 
 /**
  * Function Init
@@ -110,7 +110,7 @@ function plugin_version_uninstall() {
    return [
       'name'           => __("Item's Lifecycle (uninstall)", 'uninstall'),
       'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
-      'license'        => '<a href="../plugins/uninstall/LICENSE" target="_blank">GPLv2+</a>',
+      'license'        => "GPLv2+",
       'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
       'version'        => PLUGIN_UNINSTALL_VERSION,
       'license'        => 'GPLv2+',
@@ -122,31 +122,4 @@ function plugin_version_uninstall() {
          ]
       ]
    ];
-}
-
-function plugin_uninstall_check_prerequisites() {
-
-   //Version check is not done by core in GLPI < 9.2 but has to be delegated to core in GLPI >= 9.2.
-   if (!method_exists('Plugin', 'checkGlpiVersion')) {
-      $version = preg_replace('/^((\d+\.?)+).*$/', '$1', GLPI_VERSION);
-      $matchMinGlpiReq = version_compare($version, PLUGIN_UNINSTALL_MIN_GLPI, '>=');
-      $matchMaxGlpiReq = version_compare($version, PLUGIN_UNINSTALL_MAX_GLPI, '<');
-
-      if (!$matchMinGlpiReq || !$matchMaxGlpiReq) {
-         echo vsprintf(
-            'This plugin requires GLPI >= %1$s and < %2$s.',
-            [
-               PLUGIN_UNINSTALL_MIN_GLPI,
-               PLUGIN_UNINSTALL_MAX_GLPI,
-            ]
-         );
-         return false;
-      }
-   }
-
-   return true;
-}
-
-function plugin_uninstall_check_config($verbose = false) {
-   return true;
 }
