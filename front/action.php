@@ -32,6 +32,9 @@ include ('../../../inc/includes.php');
 
 Html::header(__('Transfer'), $_SERVER['PHP_SELF'], "admin", "transfer");
 
+Session::checkSeveralRightsOr(['uninstall:profile' => READ,
+                               'uninstall:profile' => PluginUninstallProfile::RIGHT_REPLACE]);
+
 if (!isset($_REQUEST["device_type"])
     || !isset($_REQUEST["model_id"])
     || ($_REQUEST["model_id"] == 0)) {

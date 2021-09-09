@@ -32,6 +32,15 @@ include ('../../../inc/includes.php');
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
+Session::checkSeveralRightsOr(['uninstall:profile' => READ,
+                               'uninstall:profile' => PluginUninstallProfile::RIGHT_REPLACE]);
+
+global $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
+
+if (!in_array($_REQUEST['itemtype'], array_merge($UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE))) {
+   Html::displayErrorAndDie(__("You don't have permission to perform this action."));
+}
+
 $itemtypeisplugin = isPluginItemType($_REQUEST['itemtype']);
 $item             = new $_REQUEST['itemtype']();
 $table            = getTableForItemType($_REQUEST['itemtype']);
@@ -68,7 +77,7 @@ if (isset($_REQUEST['searchText'])
    $search = Search::makeTextSearch($_REQUEST['searchText']);
 
    $where .= " AND (`name` ".$search."
-                    OR `id` = '".$_REQUEST['searchText']."'
+                    OR `id` = '".intval($_REQUEST['searchText'])."'
                     OR `serial` ".$search."
                     OR `otherserial` ".$search.")";
 }

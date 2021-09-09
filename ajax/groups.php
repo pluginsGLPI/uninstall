@@ -32,6 +32,9 @@ include ('../../../inc/includes.php');
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
+Session::checkSeveralRightsOr(['uninstall:profile' => READ,
+                               'uninstall:profile' => PluginUninstallProfile::RIGHT_REPLACE]);
+
 if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
    switch ($_POST["id"]) {
       case 'old' :
