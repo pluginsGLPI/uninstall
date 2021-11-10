@@ -59,13 +59,11 @@ class PluginUninstallState {
 
       // we json encore to pass it to js (auto-escaping)
       $html= json_encode("
-         <div id='uninstall_actions'>
-           <p>$html_modal</p>
-         </div>
          $states_name
          <a href='#' id='uninstall_actions_open' class='vsubmit'>".
             __("Update").
          "</a>");
+      $modal_body = json_encode($html_modal);
 
       $JS = <<<JAVASCRIPT
       $(function() {
@@ -73,21 +71,12 @@ class PluginUninstallState {
          var state_span = $("#page select[name=states_id]").parent();
          state_span.html({$html});
 
-         // actions
-         $("#uninstall_actions").dialog({
-            autoOpen: false,
-            position: {
-               my: "center center",
-               at: "center center",
-               of: $("#uninstall_actions_open")
-            },
-            width:'auto',
-            modal: true
-         });
-
          $("#uninstall_actions_open").on("click", function(event) {
             event.preventDefault();
-            $("#uninstall_actions").dialog("open");
+
+            glpi_html_dialog({
+               body: {$modal_body}
+            })
          });
       });
 JAVASCRIPT;

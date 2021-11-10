@@ -255,6 +255,10 @@ class PluginUninstallPreference extends CommonDBTM {
    static function install(Migration $migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       // From 0.2 to 1.0.0
       $table = 'glpi_plugin_uninstallcomputer_preference';
       if ($DB->tableExists($table)) {
@@ -269,10 +273,10 @@ class PluginUninstallPreference extends CommonDBTM {
          // from 1.0.0 to 1.3.0
          if ($DB->fieldExists($table, 'ID')) {
             $migration->changeField($table, 'ID', 'id', 'autoincrement');
-            $migration->changeField($table, 'FK_users', 'users_id', 'integer');
-            $migration->changeField($table, 'FK_entities', 'entities_id', 'integer');
-            $migration->changeField($table, 'FK_template', 'templates_id', 'integer');
-            $migration->changeField($table, 'location', 'locations_id', "integer");
+            $migration->changeField($table, 'FK_users', 'users_id', "int {$default_key_sign} NOT NULL");
+            $migration->changeField($table, 'FK_entities', 'entities_id', "int {$default_key_sign} DEFAULT 0");
+            $migration->changeField($table, 'FK_template', 'templates_id', "int {$default_key_sign} DEFAULT 0");
+            $migration->changeField($table, 'location', 'locations_id', "int {$default_key_sign} DEFAULT 0");
          }
 
          // 2.7.2
@@ -296,14 +300,14 @@ class PluginUninstallPreference extends CommonDBTM {
       } else {
          // plugin nevers installed
          $query = "CREATE TABLE `".$table."` (
-                     `id` int(11) NOT NULL AUTO_INCREMENT,
-                     `users_id` int(11) NOT NULL,
-                     `entities_id` int(11) DEFAULT '0',
-                     `templates_id` int(11) DEFAULT '0',
+                     `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                     `users_id` int {$default_key_sign} NOT NULL,
+                     `entities_id` int {$default_key_sign} DEFAULT '0',
+                     `templates_id` int {$default_key_sign} DEFAULT '0',
                      `locations_action` varchar(10) NOT NULL DEFAULT 'set',
-                     `locations_id` int(11) DEFAULT '0',
+                     `locations_id` int {$default_key_sign} DEFAULT '0',
                      PRIMARY KEY (`id`)
-                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                     ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
          $DB->queryOrDie($query, $DB->error());
       }
       return true;

@@ -367,7 +367,7 @@ class PluginUninstallUninstall extends CommonDBTM {
       $iterator = $DB->request('glpi_plugin_ocsinventoryng_ocslinks', $crit);
 
       if ($iterator->numrows() == 1) {
-         $data = $iterator->next();
+         $data = $iterator->current();
          self::deleteComputerInOCS($data["ocsid"], $data["plugin_ocsinventoryng_ocsservers_id"]);
          self::addUninstallLog([
             'itemtype'  => 'Computer',
@@ -621,7 +621,7 @@ class PluginUninstallUninstall extends CommonDBTM {
             $id = 0;
          }
       } else {
-         $data = $iterator->next();
+         $data = $iterator->current();
          $id   = $data['id'];
       }
       return $id;
