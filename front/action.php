@@ -79,7 +79,7 @@ if (isset($_REQUEST["uninstall"])) {
                                           $location);
       Html::back();
    } else {
-      PluginUninstallReplace::showForm($_REQUEST["device_type"], $_REQUEST["model_id"],
+      PluginUninstallReplace::showReplacementForm($_REQUEST["device_type"], $_REQUEST["model_id"],
                                        [$_REQUEST["device_type"]
                                              => [$_REQUEST["id"] => $_REQUEST["id"]]],
                                        $location);
@@ -105,7 +105,7 @@ if (isset($_REQUEST["uninstall"])) {
 
    } else {
       if (isset($_SESSION['glpi_uninstalllist'])) {
-         PluginUninstallReplace::showForm($_REQUEST["device_type"], $_REQUEST["model_id"],
+         PluginUninstallReplace::showReplacementForm($_REQUEST["device_type"], $_REQUEST["model_id"],
                                           $_SESSION['glpi_uninstalllist'], $location);
       }
       Html::footer();

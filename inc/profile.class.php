@@ -199,6 +199,10 @@ class PluginUninstallProfile extends Profile {
    static function install($migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       // From 0.2 to 1.0.0
       $table = 'glpi_plugin_uninstallcomputer_profiles';
       if ($DB->tableExists($table)) {
@@ -239,12 +243,12 @@ class PluginUninstallProfile extends Profile {
       } else {
          // plugin never installed
          $query = "CREATE TABLE `".$table."` (
-                    `id` int(11) NOT NULL DEFAULT '0',
-                    `profile` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+                    `id` int {$default_key_sign} NOT NULL DEFAULT '0',
+                    `profile` varchar(255) NOT NULL DEFAULT '0',
                     `use` varchar(1) DEFAULT '',
-                    `replace` tinyint(1) NOT NULL default '0',
+                    `replace` tinyint NOT NULL default '0',
                     PRIMARY KEY (`id`)
-                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                  ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
          $DB->queryOrDie($query, $DB->error());
          self::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
       }

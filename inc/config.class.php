@@ -103,7 +103,8 @@ class PluginUninstallConfig extends Config {
          echo Html::hidden('config_class', ['value' => __CLASS__]);
          echo Html::hidden('config_context', ['value' => self::CFG_CTXT]);
          echo Html::submit(_sx('button', 'Save'), [
-            'name' => 'update'
+            'name' => 'update',
+            'class' => 'vsubmit'
          ]);
       }
 

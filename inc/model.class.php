@@ -197,7 +197,12 @@ class PluginUninstallModel extends CommonDBTM {
 
       echo "<tr class='tab_bg_1'><td>" . __('Name') . "</td>";
       echo "<td>";
-      Html::autocompletionTextField($this, 'name');
+      echo Html::input(
+         'name',
+         [
+            'value' => $this->fields['name'],
+         ]
+      );
       echo "</td>";
       echo "<td>" . __('Type of template', 'uninstall')."</td>";
       echo "<td>";
@@ -1053,12 +1058,16 @@ class PluginUninstallModel extends CommonDBTM {
    static function install($migration) {
       global $DB;
 
+      $default_charset = DBConnection::getDefaultCharset();
+      $default_collation = DBConnection::getDefaultCollation();
+      $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
       // From 0.2 to 1.0.0
       if ($DB->tableExists('glpi_plugin_uninstallcomputer_config')) {
          $table = 'glpi_plugin_uninstall_models';
          $migration->renameTable('glpi_plugin_uninstallcomputer_config', $table);
          $migration->addField($table, 'FK_entities', 'integer');
-         $migration->addField($table, 'recursive', 'int(1) NOT NULL DEFAULT 1');
+         $migration->addField($table, 'recursive', 'int NOT NULL DEFAULT 1');
          $migration->addField($table, 'name', 'string');
          $migration->addField($table, `comments`, 'text', ['value' => 'NOT NULL']);
 
@@ -1078,12 +1087,12 @@ class PluginUninstallModel extends CommonDBTM {
          // From 1.0.0 to 1.1.0
          if (!$DB->fieldExists($table, 'group')) {
             $migration->addField($table, 'group', 'integer');
-            $migration->addField($table, 'remove_from_ocs', 'int(1) NOT NULL DEFAULT 0');
+            $migration->addField($table, 'remove_from_ocs', 'int NOT NULL DEFAULT 0');
          }
 
          // From 1.1.0 to 1.2.1
          if (!$DB->fieldExists($table, 'delete_ocs_link')) {
-            $migration->addField($table, 'delete_ocs_link', 'int(1) NOT NULL DEFAULT 0');
+            $migration->addField($table, 'delete_ocs_link', 'int NOT NULL DEFAULT 0');
          }
 
          // from 1.2.1 to 1.3.0
@@ -1092,7 +1101,7 @@ class PluginUninstallModel extends CommonDBTM {
             $migration->changeField($table, 'FK_entities', 'entities_id', 'integer');
             $migration->changeField($table, 'recursive', 'is_recursive', "bool",
                                     ['value' => 1]);
-            $migration->changeField($table, 'transfer_id', 'transfers_id', "integer");
+            $migration->changeField($table, 'transfer_id', 'transfers_id', "int {$default_key_sign} NOT NULL DEFAULT 0");
             $migration->changeField($table, 'state', 'states_id', "integer");
             $migration->changeField($table, 'group', 'groups_id', "integer");
          }
@@ -1100,7 +1109,7 @@ class PluginUninstallModel extends CommonDBTM {
          // from 1.3.0 to 2.0.0
          if (!$DB->fieldExists($table, 'types_id')) {
 
-            $migration->addField($table, 'types_id', 'integer');
+            $migration->addField($table, 'types_id', "int {$default_key_sign} NOT NULL DEFAULT 0");
             $migration->migrationOneTable($table);
             $query = "UPDATE `".$table."`
                       SET `types_id` = '1'
@@ -1190,51 +1199,51 @@ class PluginUninstallModel extends CommonDBTM {
       } else {
          // plugin never installed
          $query = "CREATE TABLE IF NOT EXISTS `".getTableForItemType(__CLASS__)."` (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `entities_id` int(11) DEFAULT '0',
-                    `is_recursive` tinyint(1) NOT NULL DEFAULT '1',
-                    `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-                    `transfers_id` int(11) NOT NULL,
-                    `states_id` int(11) NOT NULL,
-                    `raz_name` int(1) NOT NULL DEFAULT '1',
-                    `raz_contact` int(1) NOT NULL DEFAULT '1',
-                    `raz_contact_num` int(1) NOT NULL DEFAULT '1',
-                    `raz_ip` int(1) NOT NULL DEFAULT '1',
-                    `raz_os` int(1) NOT NULL DEFAULT '1',
-                    `raz_domain` int(1) NOT NULL DEFAULT '1',
-                    `raz_network` int(1) NOT NULL DEFAULT '1',
-                    `raz_history` int(1) NOT NULL DEFAULT '1',
-                    `raz_soft_history` int(1) NOT NULL DEFAULT '1',
-                    `raz_budget` int(1) NOT NULL DEFAULT '1',
-                    `raz_antivirus` int(1) NOT NULL DEFAULT '1',
-                    `raz_user` int(1) NOT NULL DEFAULT '1',
-                    `raz_ocs_registrykeys` int(1) NOT NULL DEFAULT '1',
-                    `comment` text COLLATE utf8_unicode_ci NOT NULL,
+                    `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                    `entities_id` int {$default_key_sign} DEFAULT '0',
+                    `is_recursive` tinyint NOT NULL DEFAULT '1',
+                    `name` varchar(255) NOT NULL DEFAULT '',
+                    `transfers_id` int {$default_key_sign} NOT NULL,
+                    `states_id` int {$default_key_sign} NOT NULL,
+                    `raz_name` int NOT NULL DEFAULT '1',
+                    `raz_contact` int NOT NULL DEFAULT '1',
+                    `raz_contact_num` int NOT NULL DEFAULT '1',
+                    `raz_ip` int NOT NULL DEFAULT '1',
+                    `raz_os` int NOT NULL DEFAULT '1',
+                    `raz_domain` int NOT NULL DEFAULT '1',
+                    `raz_network` int NOT NULL DEFAULT '1',
+                    `raz_history` int NOT NULL DEFAULT '1',
+                    `raz_soft_history` int NOT NULL DEFAULT '1',
+                    `raz_budget` int NOT NULL DEFAULT '1',
+                    `raz_antivirus` int NOT NULL DEFAULT '1',
+                    `raz_user` int NOT NULL DEFAULT '1',
+                    `raz_ocs_registrykeys` int NOT NULL DEFAULT '1',
+                    `comment` text NOT NULL,
                     `groups_action` varchar(10) NOT NULL DEFAULT 'set',
-                    `groups_id` int(11) NOT NULL DEFAULT '0',
-                    `remove_from_ocs` int(1) NOT NULL DEFAULT '0',
-                    `delete_ocs_link` int(1) NOT NULL DEFAULT '0',
-                    `types_id` int(11) NOT NULL default '0',
-                    `replace_name` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_serial` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_otherserial` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_documents` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_contracts` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_infocoms` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_reservations` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_users` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_groups` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_tickets` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_netports` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_direct_connections` tinyint(1) NOT NULL DEFAULT '0',
-                    `overwrite` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_method` int(11) NOT NULL DEFAULT '2',
-                    `raz_fusioninventory` int(1) NOT NULL DEFAULT '1',
-                    `raz_plugin_fields` tinyint(1) NOT NULL DEFAULT '1',
-                    `replace_contact` tinyint(1) NOT NULL DEFAULT '0',
-                    `replace_contact_num` tinyint(1) NOT NULL DEFAULT '0',
+                    `groups_id` int {$default_key_sign} NOT NULL DEFAULT '0',
+                    `remove_from_ocs` int NOT NULL DEFAULT '0',
+                    `delete_ocs_link` int NOT NULL DEFAULT '0',
+                    `types_id` int {$default_key_sign} NOT NULL default '0',
+                    `replace_name` tinyint NOT NULL DEFAULT '0',
+                    `replace_serial` tinyint NOT NULL DEFAULT '0',
+                    `replace_otherserial` tinyint NOT NULL DEFAULT '0',
+                    `replace_documents` tinyint NOT NULL DEFAULT '0',
+                    `replace_contracts` tinyint NOT NULL DEFAULT '0',
+                    `replace_infocoms` tinyint NOT NULL DEFAULT '0',
+                    `replace_reservations` tinyint NOT NULL DEFAULT '0',
+                    `replace_users` tinyint NOT NULL DEFAULT '0',
+                    `replace_groups` tinyint NOT NULL DEFAULT '0',
+                    `replace_tickets` tinyint NOT NULL DEFAULT '0',
+                    `replace_netports` tinyint NOT NULL DEFAULT '0',
+                    `replace_direct_connections` tinyint NOT NULL DEFAULT '0',
+                    `overwrite` tinyint NOT NULL DEFAULT '0',
+                    `replace_method` int NOT NULL DEFAULT '2',
+                    `raz_fusioninventory` int NOT NULL DEFAULT '1',
+                    `raz_plugin_fields` tinyint NOT NULL DEFAULT '1',
+                    `replace_contact` tinyint NOT NULL DEFAULT '0',
+                    `replace_contact_num` tinyint NOT NULL DEFAULT '0',
                     PRIMARY KEY (`id`)
-                  ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                  ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
          $DB->queryOrDie($query, $DB->error());
 

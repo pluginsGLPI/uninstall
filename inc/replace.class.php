@@ -327,15 +327,10 @@ class PluginUninstallReplace extends CommonDBTM {
 
          }
 
-         //Array netport_types renamed in networkport_types in GLPI 0.80
-         if (isset($CFG_GLPI["netport_types"])) {
-            $netport_types = $CFG_GLPI["netport_types"];
-         } else {
-            $netport_types = $CFG_GLPI["networkport_types"];
-         }
+         $networkport_types = $CFG_GLPI["networkport_types"];
          // NetPorts
          if ($model->fields["replace_netports"]
-             && in_array($type, $netport_types)) {
+             && in_array($type, $networkport_types)) {
 
             $netport_item = new NetworkPort();
             foreach (self::getAssociatedNetports($type, $olditem_id) as $netport) {
@@ -532,7 +527,7 @@ class PluginUninstallReplace extends CommonDBTM {
    }
 
 
-   static function showForm($type, $model_id, $tab_ids, $location) {
+   static function showReplacementForm($type, $model_id, $tab_ids, $location) {
       global $DB, $CFG_GLPI;
 
       // Retrieve model informations and show details

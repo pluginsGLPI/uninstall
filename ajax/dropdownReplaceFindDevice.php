@@ -29,6 +29,9 @@
  */
 
 include ('../../../inc/includes.php');
+
+use Glpi\Toolbox\Sanitizer;
+
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
@@ -114,7 +117,7 @@ $query = "SELECT *
           $LIMIT";
 $result = $DB->query($query);
 while ($data = $DB->fetchAssoc($result)) {
-   $outputval = Toolbox::unclean_cross_side_scripting_deep($data["name"]);
+   $outputval = Sanitizer::unsanitize($data["name"]);
 
    if ($displaywith) {
       foreach ($_REQUEST['displaywith'] as $key) {
