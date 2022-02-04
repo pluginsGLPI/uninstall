@@ -32,6 +32,26 @@ class PluginUninstallPreference extends CommonDBTM {
 
    static $rightname = "uninstall:replace";
 
+   function prepareInputForAdd($input) {
+      return $this->handleLocationPref($input);
+   }
+
+   function prepareInputForUpdate($input) {
+      return $this->handleLocationPref($input);
+   }
+
+   public function handleLocationPref(array $input): array {
+      if (array_key_exists('locations_id', $input)) {
+         if ($input['locations_id'] == -1) {
+            $input['locations_action'] = 'old';
+            $input['locations_id']     = 0;
+         } else {
+            $input['locations_action'] = 'set';
+         }
+      }
+      return $input;
+   }
+
    function showFormUserPreferences() {
       global $DB;
 
@@ -190,16 +210,24 @@ class PluginUninstallPreference extends CommonDBTM {
    static function getLocationByUserByEntity($user_id, $template, $entity) {
       global $DB;
 
-      $query = "SELECT `locations_id`
-                FROM `".getTableForItemType(__CLASS__)."`
-                WHERE `users_id` = '" . $user_id . "'
-                      AND `entities_id` = '" . $entity. "'
-                      AND `templates_id` = '".$template."'";
-      $result = $DB->query($query);
+      $result = $DB->request(
+         [
+            'SELECT' => ['locations_action', 'locations_id'],
+            'FROM'   => self::getTable(),
+            'WHERE'  => [
+               'users_id'     => $user_id,
+               'entities_id'  => $entity,
+               'templates_id' => $template,
+            ]
+         ]
+      );
 
-      if ($DB->numrows($result) > 0) {
-         return $DB->result($result, 0, "locations_id");
+      if ($userpref = $result->next()) {
+         return $userpref['locations_action'] === 'old'
+            ? -1
+            : $userpref['locations_id'];
       }
+
       return '';
    }
 
@@ -247,6 +275,24 @@ class PluginUninstallPreference extends CommonDBTM {
             $migration->changeField($table, 'location', 'locations_id', "integer");
          }
 
+         // 2.7.2
+         if (!$DB->fieldExists($table, 'locations_action')) {
+            $migration->addField($table, 'locations_action', "varchar(10) NOT NULL DEFAULT 'set'");
+            $migration->addPostQuery(
+                $DB->buildUpdate(
+                    $table,
+                    ['locations_action' => 'set'],
+                    ['NOT' => ['locations_id' => '-1']]
+                )
+            );
+            $migration->addPostQuery(
+                $DB->buildUpdate(
+                    $table,
+                    ['locations_action' => 'old', 'locations_id' => '0'],
+                    ['locations_id' => '-1']
+                )
+            );
+         }
       } else {
          // plugin nevers installed
          $query = "CREATE TABLE `".$table."` (
@@ -254,6 +300,7 @@ class PluginUninstallPreference extends CommonDBTM {
                      `users_id` int(11) NOT NULL,
                      `entities_id` int(11) DEFAULT '0',
                      `templates_id` int(11) DEFAULT '0',
+                     `locations_action` varchar(10) NOT NULL DEFAULT 'set',
                      `locations_id` int(11) DEFAULT '0',
                      PRIMARY KEY (`id`)
                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
