@@ -77,6 +77,9 @@ function plugin_uninstall_install() {
    PluginUninstallModel::install($migration);
    PluginUninstallPreference::install($migration);
    PluginUninstallConfig::install($migration);
+
+   $migration->executeMigration();
+
    return true;
 }
 

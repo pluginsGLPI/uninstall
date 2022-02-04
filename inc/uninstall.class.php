@@ -188,7 +188,7 @@ class PluginUninstallUninstall extends CommonDBTM {
          if ($item->isField('groups_id')) {
             $nbgroup = countElementsInTableForEntity("glpi_groups", $entity,
                                                      ['id' => $item->fields['groups_id']]);
-            if (($model->fields["groups_id"] > -1)
+            if (($model->fields["groups_action"] === 'set')
                 && ($nbgroup == 1)) {
                // If a new group is defined and if the group is accessible in the object's entity
                $fields["groups_id"] = $model->fields["groups_id"];
@@ -742,42 +742,6 @@ class PluginUninstallUninstall extends CommonDBTM {
                                                   'value'  => 0,
                                                   'entity' => $entity,
                                                   'used'   => $used]);
-   }
-
-
-   /**
-    * @param $name
-    * @param $entity                (default 0)
-    * @param $entity_sons  array
-    * @param $value                 (default -1)
-    */
-   static function dropdownFieldAction($name, $entity = 0, $entity_sons = [], $value = -1) {
-      global $CFG_GLPI;
-
-      if ($value == -1) {
-         $action = 'old';
-      } else {
-         $action = 'set';
-      }
-
-      $tabactions = ['old' => __('Keep in the current group', 'uninstall'), // Keep the current value
-                     'set' => __('Affect to a new group', 'uninstall')
-                    ]; // Affect a new value
-
-      preg_match('/(.*)_id/', $name, $results);
-      $ajax_page = $results[1];
-      $rand      = Dropdown::showFromArray("_" . $name . "_action", $tabactions,
-                                           ['value' => $action]);
-
-      $params    = ['id'          => '__VALUE__',
-                    $name         => $value,
-                    'entities_id' => $entity,
-                    'entity_sons' => $entity_sons];
-
-      Ajax::updateItemOnSelectEvent("dropdown__" . $name . "_action".$rand, "show_".$ajax_page,
-                                    Plugin::getWebDir('uninstall')."/ajax/$ajax_page.php",
-                                    $params);
-      return $action;
    }
 
 
