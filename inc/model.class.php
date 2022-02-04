@@ -82,15 +82,6 @@ class PluginUninstallModel extends CommonDBTM {
       return $menu;
    }
 
-   function prepareInputForAdd($input) {
-
-      if (isset($input['_groups_id_action'])
-            && ($input['_groups_id_action'] == 'old')) {
-          $input['groups_id'] = -1;
-      }
-      return $input;
-   }
-
 
    function prepareInputForUpdate($input) {
       return $this->prepareInputForAdd($input);
@@ -244,15 +235,19 @@ class PluginUninstallModel extends CommonDBTM {
       echo "</td></tr>";
 
       echo "<tr class='tab_bg_1'>";
-      if ($ID == -1) {
-         $this->fields['groups_id'] = -1;
-      }
-
       if ($this->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
          echo "<td>" . __('Action on group', 'uninstall') . "</td><td>";
-         $uninst = new PluginUninstallUninstall();
-         $action = $uninst->dropdownFieldAction("groups_id", $this->fields['entities_id'],
-                                                $entity_sons, $this->fields["groups_id"]);
+         Dropdown::showFromArray(
+             "groups_action",
+             [
+                 'old' => __('Keep in the current group', 'uninstall'),
+                 'set' => __('Affect to a new group', 'uninstall')
+             ],
+             [
+                 'on_change' => '$("#show_groups").toggle($(this).val() === "set");',
+                 'value'     => $this->fields["groups_action"],
+             ]
+         );
          echo "</td>";
       } else {
          echo "<td colspan='2'></td>";
@@ -262,15 +257,11 @@ class PluginUninstallModel extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       if ($this->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
          echo "<td>" . __('New group', 'uninstall') . "</td><td>";
-         echo "<span id='show_groups' name='show_groups'>";
-         if ($this->fields['groups_id'] != -1) {
-            Group::dropdown(['value'       => $this->fields["groups_id"],
-                             'entity'      => $this->fields["entities_id"],
-                             'entity_sons' => $entities,
-                             'emptylabel'  => __('None')]);
-         } else {
-            echo Dropdown::EMPTY_VALUE;
-         }
+         echo "<span id='show_groups' " . ($this->fields["groups_action"] === 'old' ? 'style="display:none;"' : '') . ">";
+         Group::dropdown(['value'       => $this->fields["groups_id"],
+                          'entity'      => $this->fields["entities_id"],
+                          'entity_sons' => $entities,
+                          'emptylabel'  => __('None')]);
          echo "</span></td>";
       } else {
          echo "<td colspan='2'></td>";
@@ -841,6 +832,7 @@ class PluginUninstallModel extends CommonDBTM {
          'name'               => __('Action on group', 'uninstall'),
          'linkfield'          => '',
          'datatype'           => 'specific',
+         'additionalfields'   => ['groups_action'],
          'searchtype'         => 'equals',
       ];
 
@@ -991,9 +983,9 @@ class PluginUninstallModel extends CommonDBTM {
             break;
 
          case 'groups_id' :
-            if ($values['groups_id'] < 0) {
+            if ($values['groups_action'] === 'old') {
                return __('Keep in the current group', 'uninstall');
-            } else if (!$values['groups_id']) {
+            } else if ($values['groups_id'] === 0) {
                return __('None');
             }
             return Dropdown::getDropdownName('glpi_groups', $values['groups_id']);
@@ -1175,6 +1167,25 @@ class PluginUninstallModel extends CommonDBTM {
             $migration->addField($table, 'raz_antivirus', "bool");
          }
 
+         // 2.7.2
+         if (!$DB->fieldExists($table, 'groups_action')) {
+            $migration->addField($table, 'groups_action', "varchar(10) NOT NULL DEFAULT 'set'");
+            $migration->addPostQuery(
+                $DB->buildUpdate(
+                    $table,
+                    ['groups_action' => 'set'],
+                    ['NOT' => ['groups_id' => '-1']]
+                )
+            );
+            $migration->addPostQuery(
+                $DB->buildUpdate(
+                    $table,
+                    ['groups_action' => 'old', 'groups_id' => '0'],
+                    ['groups_id' => '-1']
+                )
+            );
+         }
+
          $migration->migrationOneTable($table);
 
       } else {
@@ -1200,6 +1211,7 @@ class PluginUninstallModel extends CommonDBTM {
                     `raz_user` int(1) NOT NULL DEFAULT '1',
                     `raz_ocs_registrykeys` int(1) NOT NULL DEFAULT '1',
                     `comment` text COLLATE utf8_unicode_ci NOT NULL,
+                    `groups_action` varchar(10) NOT NULL DEFAULT 'set',
                     `groups_id` int(11) NOT NULL DEFAULT '0',
                     `remove_from_ocs` int(1) NOT NULL DEFAULT '0',
                     `delete_ocs_link` int(1) NOT NULL DEFAULT '0',
@@ -1281,6 +1293,7 @@ class PluginUninstallModel extends CommonDBTM {
          $tmp['raz_fusioninventory']        = 1;
          $tmp['raz_plugin_fields']          = 1;
          $tmp['comment']                    = '';
+         $tmp['groups_action']              = 'set';
          $tmp['groups_id']                  = 0;
          $tmp['remove_from_ocs']            = 0;
          $tmp['delete_ocs_link']            = 0;
