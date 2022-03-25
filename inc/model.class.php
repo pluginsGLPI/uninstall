@@ -414,8 +414,7 @@ class PluginUninstallModel extends CommonDBTM {
       echo "</td>";
       echo "<td>";
       $plug = new Plugin();
-      if ($plug->isActivated('PDF')
-          && $plug->fields['version'] >= '0.7.1') {
+      if ($plug->isActivated('PDF')) {
          echo "<span class='green b tracking_small'>".
                 __('Plugin PDF is installed and activated', 'uninstall')."</span>";
       } else {
