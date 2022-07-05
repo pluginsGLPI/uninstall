@@ -55,6 +55,8 @@ function plugin_init_uninstall() {
       $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = ['Monitor', 'Peripheral', 'Phone',
                                              'Printer'];
 
+      Conf::$defaults['plugin_uninstall_stale_agents_uninstall'] = 0;
+
       if (Session::getLoginUserID()) {
          // config page
          Plugin::registerClass('PluginUninstallConfig', [
@@ -80,6 +82,36 @@ function plugin_init_uninstall() {
                ]);
             }
          }
+
+         $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
+             [
+                 'label' => 'Apply uninstall profile',
+                 'item_action' => true,
+                 'render_callback' => static function($config) {
+                     if (!\PluginUninstallModel::canView()) {
+                         return false;
+                     }
+                     return \PluginUninstallModel::dropdown([
+                         'name'   => 'stale_agents_uninstall',
+                         'value'  => $config['stale_agents_uninstall'] ?? 0,
+                         'entity' => $_SESSION['glpiactive_entity'],
+                         'condition' => [
+                             'types_id' => \PluginUninstallModel::TYPE_MODEL_UNINSTALL
+                         ],
+                         'display' => false,
+                     ]);
+                 },
+                 'action_callback' => static function(?Agent $agent, array $config, ?CommonDBTM $item): bool {
+                     if ($item === null) {
+                         return false;
+                     }
+                     \PluginUninstallUninstall::uninstall(get_class($item), $config['stale_agents_status'], [
+                         get_class($item) => [$item->fields['id'] => true]
+                     ], '');
+                     return true;
+                 }
+             ]
+         ];
 
          if (Session::haveRight('uninstall:profile', READ)) {
             $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
