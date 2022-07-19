@@ -28,6 +28,9 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Inventory\Conf;
+use Glpi\Plugin\Hooks;
+
 define ('PLUGIN_UNINSTALL_VERSION', '2.8.0');
 
 // Minimal GLPI version, inclusive
@@ -55,8 +58,6 @@ function plugin_init_uninstall() {
       $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = ['Monitor', 'Peripheral', 'Phone',
                                              'Printer'];
 
-      Conf::$defaults['plugin_uninstall_stale_agents_uninstall'] = 0;
-
       if (Session::getLoginUserID()) {
          // config page
          Plugin::registerClass('PluginUninstallConfig', [
@@ -83,17 +84,25 @@ function plugin_init_uninstall() {
             }
          }
 
+         $PLUGIN_HOOKS['pre_item_update']['uninstall'] = [
+             'Config' => ['PluginUninstallConfig', 'preConfigSet']
+         ];
+          $PLUGIN_HOOKS['pre_item_add']['uninstall'] = [
+              'Config' => ['PluginUninstallConfig', 'preConfigSet']
+          ];
+
          $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
              [
                  'label' => 'Apply uninstall profile',
                  'item_action' => true,
-                 'render_callback' => static function($config) {
+                 'render_callback' => static function ($config) {
+                     $stale_agents_uninstall = Config::getConfigurationValue('plugin:uninstall', 'stale_agents_uninstall');
                      if (!\PluginUninstallModel::canView()) {
                          return false;
                      }
                      return \PluginUninstallModel::dropdown([
-                         'name'   => 'stale_agents_uninstall',
-                         'value'  => $config['stale_agents_uninstall'] ?? 0,
+                         'name' => '_stale_agents_uninstall',
+                         'value' => $stale_agents_uninstall ?? 0,
                          'entity' => $_SESSION['glpiactive_entity'],
                          'condition' => [
                              'types_id' => \PluginUninstallModel::TYPE_MODEL_UNINSTALL
@@ -101,11 +110,12 @@ function plugin_init_uninstall() {
                          'display' => false,
                      ]);
                  },
-                 'action_callback' => static function(?Agent $agent, array $config, ?CommonDBTM $item): bool {
+                 'action_callback' => static function (?Agent $agent, array $config, ?CommonDBTM $item): bool {
                      if ($item === null) {
                          return false;
                      }
-                     \PluginUninstallUninstall::uninstall(get_class($item), $config['stale_agents_status'], [
+                     $stale_agents_uninstall = Config::getConfigurationValue('plugin:uninstall', 'stale_agents_uninstall');
+                     \PluginUninstallUninstall::uninstall(get_class($item), $stale_agents_uninstall, [
                          get_class($item) => [$item->fields['id'] => true]
                      ], '');
                      return true;
