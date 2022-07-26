@@ -101,12 +101,7 @@ function plugin_init_uninstall() {
                      if ($item === null) {
                          return false;
                      }
-                     $stale_agents_uninstall = Config::getConfigurationValue('plugin:uninstall', 'stale_agents_uninstall');
-                     $model = new PluginUninstallModel();
-                     $model->getConfig($stale_agents_uninstall);
-                     $transfer = new Transfer();
-                     $transfer->getFromDB($model->fields["transfers_id"]);
-                     \PluginUninstallUninstall::doOneUninstall($model, $transfer, $item);
+                     \PluginUninstallUninstall::doStaleAgentUninstall($item);
                      return true;
                  }
              ]

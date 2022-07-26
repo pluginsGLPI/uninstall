@@ -97,7 +97,7 @@ class PluginUninstallUninstall extends CommonDBTM {
      * Do uninstall process on a single item
      * @return void
      */
-   public static function doOneUninstall(PluginUninstallModel $model, Transfer $transfer, CommonDBTM $item, array $options = []): void
+   private static function doOneUninstall(PluginUninstallModel $model, Transfer $transfer, CommonDBTM $item, array $options = []): void
    {
        global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
@@ -345,6 +345,20 @@ class PluginUninstallUninstall extends CommonDBTM {
       echo "</table></div>";
    }
 
+    /**
+     * Do the configured uninstall action for the item related to the stale agent being cleaned.
+     * @param CommonDBTM $item
+     * @return void
+     */
+   public static function doStaleAgentUninstall(CommonDBTM $item): void
+   {
+       $stale_agents_uninstall = Config::getConfigurationValue('plugin:uninstall', 'stale_agents_uninstall');
+       $model = new PluginUninstallModel();
+       $model->getConfig($stale_agents_uninstall);
+       $transfer = new Transfer();
+       $transfer->getFromDB($model->fields["transfers_id"]);
+       self::doOneUninstall($model, $transfer, $item);
+   }
 
    /**
     * Function to uninstall an object
