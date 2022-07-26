@@ -94,7 +94,6 @@ function plugin_init_uninstall() {
          $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
              [
                  'label' => 'Apply uninstall profile',
-                 'item_action' => true,
                  'render_callback' => static function ($config) {
                      return PluginUninstallConfig::renderStaleAgentConfigField();
                  },
