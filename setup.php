@@ -96,19 +96,7 @@ function plugin_init_uninstall() {
                  'label' => 'Apply uninstall profile',
                  'item_action' => true,
                  'render_callback' => static function ($config) {
-                     $stale_agents_uninstall = Config::getConfigurationValue('plugin:uninstall', 'stale_agents_uninstall');
-                     if (!\PluginUninstallModel::canView()) {
-                         return false;
-                     }
-                     return \PluginUninstallModel::dropdown([
-                         'name' => '_stale_agents_uninstall',
-                         'value' => $stale_agents_uninstall ?? 0,
-                         'entity' => $_SESSION['glpiactive_entity'],
-                         'condition' => [
-                             'types_id' => \PluginUninstallModel::TYPE_MODEL_UNINSTALL
-                         ],
-                         'display' => false,
-                     ]);
+                     return PluginUninstallConfig::renderStaleAgentConfigField();
                  },
                  'action_callback' => static function (?Agent $agent, array $config, ?CommonDBTM $item): bool {
                      if ($item === null) {

@@ -153,4 +153,26 @@ class PluginUninstallConfig extends Config {
            }
        }
    }
+
+    /**
+     * Show the configuration option for stale agents uninstallation
+     *
+     * @return string|false The HTML code to display the option or false if the option is not available
+     */
+   public static function renderStaleAgentConfigField()
+   {
+       $stale_agents_uninstall = Config::getConfigurationValue('plugin:uninstall', 'stale_agents_uninstall');
+       if (!\PluginUninstallModel::canView()) {
+           return false;
+       }
+       return \PluginUninstallModel::dropdown([
+           'name' => '_stale_agents_uninstall',
+           'value' => $stale_agents_uninstall ?? 0,
+           'entity' => $_SESSION['glpiactive_entity'],
+           'condition' => [
+               'types_id' => \PluginUninstallModel::TYPE_MODEL_UNINSTALL
+           ],
+           'display' => false,
+       ]);
+   }
 }
