@@ -295,6 +295,9 @@ class PluginUninstallUninstall extends CommonDBTM {
                self::deletePluginFieldsLink($type, $id);
            }
        }
+
+       //Plugin hook after uninstall
+       Plugin::doHook("plugin_uninstall_after", $item);
    }
 
    static function uninstall($type, $model_id, $tab_ids, $location) {
@@ -325,9 +328,6 @@ class PluginUninstallUninstall extends CommonDBTM {
              'type' => $type,
              'location' => $location
          ]);
-
-         //Plugin hook after uninstall
-         Plugin::doHook("plugin_uninstall_after", $item);
 
          Html::changeProgressBarPosition($count, $tot+1);
       }
