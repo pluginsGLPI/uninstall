@@ -146,7 +146,7 @@ class PluginUninstallConfig extends Config {
 
    public static function preConfigSet(Config $config)
    {
-       if ($config->input['context'] === 'inventory') {
+       if (isset($config['context']) && $config->input['context'] === 'inventory') {
            if ($config->input['name'] === '_stale_agents_uninstall') {
                $config->input['name'] = 'stale_agents_uninstall';
                $config->input['context'] = 'plugin:uninstall';
