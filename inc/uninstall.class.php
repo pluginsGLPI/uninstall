@@ -93,9 +93,217 @@ class PluginUninstallUninstall extends CommonDBTM {
       return;
    }
 
-   static function uninstall($type, $model_id, $tab_ids, $location) {
-      global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
+    /**
+     * Do uninstall process on a single item
+     * @return bool
+     */
+   public static function doOneUninstall(PluginUninstallModel $model, Transfer $transfer, CommonDBTM $item, array $options): bool
+   {
+       global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
+       if (!isset($options['type'])) {
+           return false;
+       }
+
+       $id = $item->fields['id'];
+       $type = $options['type'];
+       $location = $options['location'] ?? '';
+       $plug = new Plugin();
+
+       //First clean object and change location and status if needed
+       $entity               = $item->fields["entities_id"];
+       $input                = [];
+       $input["id"]          = $id;
+       $input["entities_id"] = $entity;
+       $fields               = [];
+
+       //Hook to perform actions before item is being uninstalled
+       $item->fields['_uninstall_event'] = $model->getID();
+       $item->fields['_action']          = 'uninstall';
+       Plugin::doHook("plugin_uninstall_before", $item);
+
+       //--------------------//
+       //Direct connections //
+       //------------------//
+       if (in_array($type, $UNINSTALL_DIRECT_CONNECTIONS_TYPE)) {
+           $conn = new Computer_Item();
+           $conn->deleteByCriteria(['itemtype' => $type,
+               'items_id' => $id], true);
+       }
+
+       //--------------------//
+       //-- Common fields --//
+       //------------------//
+
+       //RAZ contact
+       if ($item->isField('contact') && ($model->fields["raz_contact"] == 1)) {
+           $fields["contact"] = '';
+       }
+
+       //RAZ contact number
+       if ($item->isField('contact') && ($model->fields["raz_contact_num"] == 1)) {
+           if ($item->isField('contact_num')) {
+               $fields["contact_num"] = '';
+           }
+       }
+
+       //RAZ user
+       if (($model->fields["raz_user"] == 1) && $item->isField('users_id')) {
+           $fields["users_id"] = 0;
+       }
+
+       //RAZ status
+       if (($model->fields["states_id"] > 0) && $item->isField('states_id')) {
+           $fields["states_id"] = $model->fields["states_id"];
+       }
+
+       //RAZ machine's name
+       if ($item->isField('name') && ($model->fields["raz_name"] == 1)) {
+           $fields["name"] = '';
+       }
+
+       if ($item->isField('locations_id')) {
+           if ($location == '') {
+               $location = 0;
+           }
+           switch ($location) {
+               case -1 :
+                   break;
+
+               default :
+                   $fields["locations_id"] = $location;
+                   break;
+           }
+       }
+
+       if ($item->isField('groups_id')) {
+           $nbgroup = countElementsInTableForEntity("glpi_groups", $entity,
+               ['id' => $item->fields['groups_id']]);
+           if (($model->fields["groups_action"] === 'set')
+               && ($nbgroup == 1)) {
+               // If a new group is defined and if the group is accessible in the object's entity
+               $fields["groups_id"] = $model->fields["groups_id"];
+           }
+       }
+
+       //------------------------------//
+       //-- Computer specific fields --//
+       //------------------------------//
+
+       if ($type == 'Computer') {
+           //RAZ all OS related informations
+           if ($model->fields["raz_os"] == 1
+               && Item_OperatingSystem::countForItem($item)) {
+               $os = new Item_OperatingSystem();
+               $os->deleteByCriteria(['itemtype' => 'Computer',
+                   'items_id' => $item->fields['id']
+               ], true);
+               $fields["autoupdatesystems_id"] = 0;
+           }
+
+           if ($plug->isActivated('ocsinventoryng')) {
+               if ($item->fields["is_dynamic"]
+                   && ($model->fields["remove_from_ocs"] || $model->fields["delete_ocs_link"])) {
+                   $input["is_dynamic"] = 0;
+               }
+           }
+
+           //RAZ network
+           if ($item->isField('networks_id') && ($model->fields["raz_network"] == 1)) {
+               $fields["networks_id"] = 0;
+           }
+       }
+
+       //RAZ IPs from all the network cards
+       if ($model->fields["raz_ip"] == 1) {
+           self::razPortInfos($type, $id);
+
+           // For NetworkEquiment
+           if ($item->isField('ip')) {
+               $fields['ip'] = '';
+           }
+           if ($item->isField('mac')) {
+               $fields['mac'] = '';
+           }
+       }
+
+       foreach ($fields as $name => $value) {
+           if (!($item->getField($name) != NOT_AVAILABLE)
+               || ($item->getField($name) != $value)) {
+               $input[$name] = $value;
+           }
+       }
+
+       $item->dohistory = true;
+       $item->update($input);
+
+       if ($model->fields["raz_budget"] == 1) {
+           $infocom_id = self::getInfocomPresentForDevice($type, $id);
+           if ($infocom_id > 0) {
+               $infocom            = new InfoCom();
+               $tmp["id"]          = $infocom_id;
+               $tmp["budgets_id"]  = 0;
+               $infocom->dohistory = false;
+               $infocom->update($tmp);
+           }
+       }
+
+       if ($model->fields["raz_domain"]) {
+           $domain_item = new Domain_Item();
+           $domain_item->cleanDBonItemDelete($type, $id);
+       }
+
+       //Delete machine from glpi_ocs_link
+       if ($type == 'Computer') {
+           //Delete computer's volumes
+           self::purgeComputerVolumes($id);
+
+           //Delete computer antivirus
+           if ($model->fields["raz_antivirus"] == 1) {
+               self::purgeComputerAntivirus($id);
+           }
+
+           if ($model->fields["raz_history"] == 1) {
+               //Delete history related to software
+               self::deleteHistory($id, false);
+           } else if ($model->fields["raz_soft_history"] == 1) {
+               //Delete history related to software
+               self::deleteHistory($id, true);
+           }
+
+           if ($plug->isActivated('ocsinventoryng')) {
+               //Delete computer from OCS
+               if ($model->fields["remove_from_ocs"] == 1) {
+                   self::deleteComputerInOCSByGlpiID($id);
+               }
+               //Delete link in glpi_ocs_link
+               if ($model->fields["delete_ocs_link"] || $model->fields["remove_from_ocs"]) {
+                   self::deleteOcsLink($id);
+               }
+           }
+           //Should never happend that transfer_id = 0, but just in case
+           if ($model->fields["transfers_id"] > 0) {
+               $transfer->moveItems([$type => [$id => $id]],
+                   $entity, $transfer->fields);
+           }
+       }
+
+       if ($plug->isActivated('fusioninventory')) {
+           if ($model->fields['raz_fusioninventory'] == 1) {
+               self::deleteFusionInventoryLink($type, $id);
+           }
+       }
+
+       if ($plug->isActivated('fields')) {
+           if ($model->fields['raz_plugin_fields'] == 1) {
+               self::deletePluginFieldsLink($type, $id);
+           }
+       }
+
+       return true;
+   }
+
+   static function uninstall($type, $model_id, $tab_ids, $location) {
       $plug = new Plugin();
 
       //Get the model
@@ -119,195 +327,10 @@ class PluginUninstallUninstall extends CommonDBTM {
          $item = new $type();
          $item->getFromDB($id);
 
-         //First clean object and change location and status if needed
-         $entity               = $item->fields["entities_id"];
-         $input                = [];
-         $input["id"]          = $id;
-         $input["entities_id"] = $entity;
-         $fields               = [];
-
-         //Hook to perform actions before item is being uninstalled
-         $item->fields['_uninstall_event'] = $model->getID();
-         $item->fields['_action']          = 'uninstall';
-         Plugin::doHook("plugin_uninstall_before", $item);
-
-         //--------------------//
-         //Direct connections //
-         //------------------//
-         if (in_array($type, $UNINSTALL_DIRECT_CONNECTIONS_TYPE)) {
-            $conn = new Computer_Item();
-            $conn->deleteByCriteria(['itemtype' => $type,
-                                     'items_id' => $id], true);
-         }
-
-         //--------------------//
-         //-- Common fields --//
-         //------------------//
-
-         //RAZ contact
-         if ($item->isField('contact') && ($model->fields["raz_contact"] == 1)) {
-            $fields["contact"] = '';
-         }
-
-         //RAZ contact number
-         if ($item->isField('contact') && ($model->fields["raz_contact_num"] == 1)) {
-            if ($item->isField('contact_num')) {
-               $fields["contact_num"] = '';
-            }
-         }
-
-         //RAZ user
-         if (($model->fields["raz_user"] == 1) && $item->isField('users_id')) {
-            $fields["users_id"] = 0;
-         }
-
-         //RAZ status
-         if (($model->fields["states_id"] > 0) && $item->isField('states_id')) {
-            $fields["states_id"] = $model->fields["states_id"];
-         }
-
-         //RAZ machine's name
-         if ($item->isField('name') && ($model->fields["raz_name"] == 1)) {
-               $fields["name"] = '';
-         }
-
-         if ($item->isField('locations_id')) {
-            if ($location == '') {
-               $location = 0;
-            }
-            switch ($location) {
-               case -1 :
-                  break;
-
-               default :
-                  $fields["locations_id"] = $location;
-                  break;
-            }
-         }
-
-         if ($item->isField('groups_id')) {
-            $nbgroup = countElementsInTableForEntity("glpi_groups", $entity,
-                                                     ['id' => $item->fields['groups_id']]);
-            if (($model->fields["groups_action"] === 'set')
-                && ($nbgroup == 1)) {
-               // If a new group is defined and if the group is accessible in the object's entity
-               $fields["groups_id"] = $model->fields["groups_id"];
-            }
-         }
-
-         //------------------------------//
-         //-- Computer specific fields --//
-         //------------------------------//
-
-         if ($type == 'Computer') {
-            //RAZ all OS related informations
-            if ($model->fields["raz_os"] == 1
-               && Item_OperatingSystem::countForItem($item)) {
-               $os = new Item_OperatingSystem();
-               $os->deleteByCriteria(['itemtype' => 'Computer',
-                                      'items_id' => $item->fields['id']
-                                     ], true);
-               $fields["autoupdatesystems_id"] = 0;
-            }
-
-            if ($plug->isActivated('ocsinventoryng')) {
-               if ($item->fields["is_dynamic"]
-                   && ($model->fields["remove_from_ocs"] || $model->fields["delete_ocs_link"])) {
-                  $input["is_dynamic"] = 0;
-               }
-            }
-
-            //RAZ network
-            if ($item->isField('networks_id') && ($model->fields["raz_network"] == 1)) {
-               $fields["networks_id"] = 0;
-            }
-         }
-
-         //RAZ IPs from all the network cards
-         if ($model->fields["raz_ip"] == 1) {
-            self::razPortInfos($type, $id);
-
-            // For NetworkEquiment
-            if ($item->isField('ip')) {
-               $fields['ip'] = '';
-            }
-            if ($item->isField('mac')) {
-               $fields['mac'] = '';
-            }
-         }
-
-         foreach ($fields as $name => $value) {
-            if (!($item->getField($name) != NOT_AVAILABLE)
-                || ($item->getField($name) != $value)) {
-               $input[$name] = $value;
-            }
-         }
-
-         $item->dohistory = true;
-         $item->update($input);
-
-         if ($model->fields["raz_budget"] == 1) {
-            $infocom_id = self::getInfocomPresentForDevice($type, $id);
-            if ($infocom_id > 0) {
-               $infocom            = new InfoCom();
-               $tmp["id"]          = $infocom_id;
-               $tmp["budgets_id"]  = 0;
-               $infocom->dohistory = false;
-               $infocom->update($tmp);
-            }
-         }
-
-         if ($model->fields["raz_domain"]) {
-            $domain_item = new Domain_Item();
-            $domain_item->cleanDBonItemDelete($type, $id);
-         }
-
-         //Delete machine from glpi_ocs_link
-         if ($type == 'Computer') {
-            //Delete computer's volumes
-            self::purgeComputerVolumes($id);
-
-            //Delete computer antivirus
-            if ($model->fields["raz_antivirus"] == 1) {
-               self::purgeComputerAntivirus($id);
-            }
-
-            if ($model->fields["raz_history"] == 1) {
-               //Delete history related to software
-               self::deleteHistory($id, false);
-            } else if ($model->fields["raz_soft_history"] == 1) {
-               //Delete history related to software
-               self::deleteHistory($id, true);
-            }
-
-            if ($plug->isActivated('ocsinventoryng')) {
-               //Delete computer from OCS
-               if ($model->fields["remove_from_ocs"] == 1) {
-                  self::deleteComputerInOCSByGlpiID($id);
-               }
-               //Delete link in glpi_ocs_link
-               if ($model->fields["delete_ocs_link"] || $model->fields["remove_from_ocs"]) {
-                  self::deleteOcsLink($id);
-               }
-            }
-            //Should never happend that transfer_id = 0, but just in case
-            if ($model->fields["transfers_id"] > 0) {
-               $transfer->moveItems([$type => [$id => $id]],
-                                    $entity, $transfer->fields);
-            }
-         }
-
-         if ($plug->isActivated('fusioninventory')) {
-            if ($model->fields['raz_fusioninventory'] == 1) {
-               self::deleteFusionInventoryLink($type, $id);
-            }
-         }
-
-         if ($plug->isActivated('fields')) {
-            if ($model->fields['raz_plugin_fields'] == 1) {
-               self::deletePluginFieldsLink($type, $id);
-            }
-         }
+         self::doOneUninstall($model, $transfer, $item, [
+             'type' => $type,
+             'location' => $location
+         ]);
 
          //Plugin hook after uninstall
          Plugin::doHook("plugin_uninstall_after", $item);
