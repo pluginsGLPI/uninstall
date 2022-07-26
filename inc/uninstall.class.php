@@ -95,18 +95,14 @@ class PluginUninstallUninstall extends CommonDBTM {
 
     /**
      * Do uninstall process on a single item
-     * @return bool
+     * @return void
      */
-   public static function doOneUninstall(PluginUninstallModel $model, Transfer $transfer, CommonDBTM $item, array $options): bool
+   public static function doOneUninstall(PluginUninstallModel $model, Transfer $transfer, CommonDBTM $item, array $options = []): void
    {
        global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
-       if (!isset($options['type'])) {
-           return false;
-       }
-
        $id = $item->fields['id'];
-       $type = $options['type'];
+       $type = $options['type'] ?? $item::getType();
        $location = $options['location'] ?? '';
        $plug = new Plugin();
 
@@ -299,8 +295,6 @@ class PluginUninstallUninstall extends CommonDBTM {
                self::deletePluginFieldsLink($type, $id);
            }
        }
-
-       return true;
    }
 
    static function uninstall($type, $model_id, $tab_ids, $location) {
