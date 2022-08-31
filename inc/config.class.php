@@ -150,6 +150,10 @@ class PluginUninstallConfig extends Config {
            if ($config->input['name'] === '_stale_agents_uninstall') {
                $config->input['name'] = 'stale_agents_uninstall';
                $config->input['context'] = 'plugin:uninstall';
+               // Try deleting the existing record if it exists since the core doesn't know to do an upodate when the context is changed.
+               // Don't use the same $config object because it erases the input
+               $c = new Config();
+               $c->deleteByCriteria(['context' => 'plugin:uninstall', 'name' => 'stale_agents_uninstall']);
            }
        }
    }
