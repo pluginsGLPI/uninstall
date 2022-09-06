@@ -143,4 +143,48 @@ class PluginUninstallConfig extends Config {
 
       return true;
    }
+
+   /**
+    * Callback for Config `pre_item_add` hook.
+    *
+    * @param Config $config
+    * @return void
+    */
+   public static function preConfigSet(Config $config): void
+   {
+       if (
+           ($config->input['context'] ?? null) === 'inventory'
+           && ($config->input['name'] ?? null) === '_stale_agents_uninstall'
+       ) {
+           $value = $config->input['value'] ?? 0;
+           // Stop config `add` operation on `inventory` context.
+           // Even if config already exists, it is submitted on `inventory` context and will therefore be
+           // considered as new. We have to call `Config::setConfigurationValues()` using the good context to be able to
+           // trigger `add` or `update` whether config already exists or not.
+           $config->input = false;
+           Config::setConfigurationValues('plugin:uninstall', ['stale_agents_uninstall' => $value]);
+       }
+   }
+
+    /**
+     * Show the configuration option for stale agents uninstallation
+     *
+     * @return string|false The HTML code to display the option or false if the option is not available
+     */
+   public static function renderStaleAgentConfigField()
+   {
+       $stale_agents_uninstall = Config::getConfigurationValue('plugin:uninstall', 'stale_agents_uninstall');
+       if (!\PluginUninstallModel::canView()) {
+           return false;
+       }
+       return \PluginUninstallModel::dropdown([
+           'name' => '_stale_agents_uninstall',
+           'value' => $stale_agents_uninstall ?? 0,
+           'entity' => $_SESSION['glpiactive_entity'],
+           'condition' => [
+               'types_id' => \PluginUninstallModel::TYPE_MODEL_UNINSTALL
+           ],
+           'display' => false,
+       ]);
+   }
 }
