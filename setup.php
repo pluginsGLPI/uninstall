@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Plugin\Hooks;
+
 define ('PLUGIN_UNINSTALL_VERSION', '2.8.1');
 
 // Minimal GLPI version, inclusive
@@ -80,6 +82,28 @@ function plugin_init_uninstall() {
                ]);
             }
          }
+
+         // As config update is submitted using the `context` inventory, it will always be considered as "new" and will
+         // be processed by an `add` operation.
+         $PLUGIN_HOOKS['pre_item_add']['uninstall'] = [
+             'Config' => ['PluginUninstallConfig', 'preConfigSet']
+         ];
+
+         $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
+             [
+                 'label' => 'Apply uninstall profile',
+                 'render_callback' => static function ($config) {
+                     return PluginUninstallConfig::renderStaleAgentConfigField();
+                 },
+                 'action_callback' => static function (Agent $agent, array $config, ?CommonDBTM $item): bool {
+                     if ($item === null) {
+                         return false;
+                     }
+                     \PluginUninstallUninstall::doStaleAgentUninstall($item);
+                     return true;
+                 }
+             ]
+         ];
 
          if (Session::haveRight('uninstall:profile', READ)) {
             $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
