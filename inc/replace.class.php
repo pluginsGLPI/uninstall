@@ -83,8 +83,9 @@ class PluginUninstallReplace extends CommonDBTM {
 
          //States
          if ($model->fields['states_id'] != 0) {
-            $olditem->update(['id'        => $olditem_id,
-                              'states_id' => $model->fields['states_id']],
+            $olditem->update(['id'           => $olditem_id,
+                              'is_dynamic'   => $olditem->fields['is_dynamic'], #to prevent locked field
+                              'states_id'    => $model->fields['states_id']],
                              false);
          }
 
@@ -344,7 +345,9 @@ class PluginUninstallReplace extends CommonDBTM {
 
          // Directs connections
          if ($model->fields["replace_direct_connections"]
-             && (in_array($type, ['Computer']))) {
+             && (in_array($type, ['Computer']))
+             && $newitem_id) #do not update computer_item if no computer
+            {
 
             $comp_item = new Computer_Item();
             foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
@@ -367,6 +370,7 @@ class PluginUninstallReplace extends CommonDBTM {
 
                default:
                   $olditem->update(['id'           => $olditem_id,
+                                    'is_dynamic'   => $olditem->fields['is_dynamic'], #to prevent locked field
                                     'locations_id' => $location],
                                   false);
                   break;
@@ -437,8 +441,9 @@ class PluginUninstallReplace extends CommonDBTM {
                                 false);
 
                // Update comment for olditem
-               $olditem->update(['id'      => $olditem_id,
-                                 'comment' => Toolbox::addslashes_deep($commentold)],
+               $olditem->update(['id'           => $olditem_id,
+                                 'is_dynamic'   => $olditem->fields['is_dynamic'], #to prevent locked field
+                                 'comment'      => Toolbox::addslashes_deep($commentold)],
                                 false);
 
                // Delete OLD item from DB (not PURGE) only if delete is requested

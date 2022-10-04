@@ -244,6 +244,7 @@ class PluginUninstallUninstall extends CommonDBTM {
          }
 
          $item->dohistory = true;
+         $input['is_dynamic'] = $item->fields['is_dynamic']; #to prevent locked field
          $item->update($input);
 
          if ($model->fields["raz_budget"] == 1) {
