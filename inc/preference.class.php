@@ -86,6 +86,11 @@ class PluginUninstallPreference extends CommonDBTM {
             echo "<td>";
             $value = (isset($this->fields["locations_id"]) ? $this->fields["locations_id"] : 0);
 
+            // Handle "old" special value, dropdown expect "-1" in this case
+            if ($this->fields['locations_action'] == "old" && $value == 0) {
+               $value = -1;
+            }
+
             Location::dropdown(['name'      => "id[$pref_ID][locations_id]",
                                 'value'     => ($value == '' ? 0 : $value),
                                 'comments'  => 1,
