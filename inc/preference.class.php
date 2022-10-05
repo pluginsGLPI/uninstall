@@ -221,8 +221,7 @@ class PluginUninstallPreference extends CommonDBTM {
             ]
          ]
       );
-
-      if ($userpref = $result->next()) {
+      if ($userpref = $result->current()) {
          return $userpref['locations_action'] === 'old'
             ? -1
             : $userpref['locations_id'];
