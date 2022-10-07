@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Arthur Ramos Schaefer <arthur.r.schaefer@gmail.com>, 2017
+# Arthur Schaefer <arthur.r.schaefer@gmail.com>, 2017
 # Eduardo Spinola <eduardo.spinola@gmail.com>, 2017
 # 
 #, fuzzy
@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 14:39+0000\n"
+"POT-Creation-Date: 2022-10-07 10:56+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Eduardo Spinola <eduardo.spinola@gmail.com>, 2017\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/teclib/teams/28042/pt_BR/)\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pt_BR\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: inc/model.class.php:244 inc/model.class.php:836
 msgid "Action on group"
@@ -38,15 +38,15 @@ msgstr "Campos adicional"
 msgid "Affect to a new group"
 msgstr "Impacto a um novo grupo"
 
-#: inc/uninstall.class.php:664
+#: inc/uninstall.class.php:665
 msgid "Apply model"
 msgstr ""
 
-#: inc/replace.class.php:135
+#: inc/replace.class.php:136
 msgid "Archive of old material"
 msgstr "Arquivamento de material antigo"
 
-#: inc/model.class.php:415 inc/model.class.php:847 inc/replace.class.php:562
+#: inc/model.class.php:415 inc/model.class.php:847 inc/replace.class.php:567
 msgid "Archiving method of the old material"
 msgstr "Método de arquivamento do material antigo"
 
@@ -54,11 +54,11 @@ msgstr "Método de arquivamento do material antigo"
 msgid "CSV Archiving"
 msgstr "Arquivando CSV"
 
-#: inc/replace.class.php:666
+#: inc/replace.class.php:671
 msgid "Choices for item to replace"
 msgstr "Escolhas de item para substituir"
 
-#: inc/model.class.php:435 inc/replace.class.php:620
+#: inc/model.class.php:435 inc/replace.class.php:625
 msgid "Connections with other materials"
 msgstr "Conexões com outros materiais"
 
@@ -90,11 +90,11 @@ msgstr "Excluir hisórico de software (computadores)"
 msgid "Delete the whole history"
 msgstr "Excluir todo histórico"
 
-#: inc/model.class.php:509 inc/replace.class.php:655
+#: inc/model.class.php:509 inc/replace.class.php:660
 msgid "Direct connections"
 msgstr "Conexões diretas"
 
-#: inc/preference.class.php:94 inc/replace.class.php:588 ajax/locations.php:47
+#: inc/preference.class.php:99 inc/replace.class.php:593 ajax/locations.php:47
 msgid "Empty location"
 msgstr "Esvaziar localização"
 
@@ -102,7 +102,7 @@ msgstr "Esvaziar localização"
 msgid "Erase datas"
 msgstr "Excluir dados"
 
-#: inc/model.class.php:386 inc/replace.class.php:544
+#: inc/model.class.php:386 inc/replace.class.php:549
 msgid "General informations"
 msgstr "Informações gerais"
 
@@ -110,25 +110,25 @@ msgstr "Informações gerais"
 msgid "Informations replacement"
 msgstr "Substituição de informações"
 
-#: inc/uninstall.class.php:546
+#: inc/uninstall.class.php:547
 msgid "Item is now uninstalled"
 msgstr "O item está desinstalado"
 
-#: inc/uninstall.class.php:548
+#: inc/uninstall.class.php:549
 #, php-format
 msgid "Item is now uninstalled with model %s"
 msgstr ""
 
-#: inc/uninstall.class.php:554
+#: inc/uninstall.class.php:555
 msgid "Item replaced by a new one"
 msgstr "Item substituído por outro"
 
-#: inc/uninstall.class.php:556
+#: inc/uninstall.class.php:557
 #, php-format
 msgid "Item replaced by a new one with model %s"
 msgstr ""
 
-#: inc/uninstall.class.php:562
+#: inc/uninstall.class.php:563
 msgid "Item replacing an old one"
 msgstr "Item substituindo um mais antigo"
 
@@ -140,7 +140,7 @@ msgstr ""
 msgid "Item's Lifecycle (uninstall)"
 msgstr ""
 
-#: inc/uninstall.class.php:681
+#: inc/uninstall.class.php:682
 msgid "Item's location after applying model"
 msgstr ""
 
@@ -160,11 +160,11 @@ msgstr "Manter + Comentar"
 msgid "Keep in the current group"
 msgstr "Manter no grupo atua"
 
-#: inc/preference.class.php:93 inc/replace.class.php:584 ajax/locations.php:46
+#: inc/preference.class.php:98 inc/replace.class.php:589 ajax/locations.php:46
 msgid "Keep previous location"
 msgstr "Manter localização anterior"
 
-#: inc/uninstall.class.php:780
+#: inc/uninstall.class.php:781
 msgid "Lifecycle"
 msgstr ""
 
@@ -180,15 +180,15 @@ msgstr "Gerenciar modelos"
 msgid "New group"
 msgstr "Novo grupo"
 
-#: inc/replace.class.php:679
+#: inc/replace.class.php:684
 msgid "New item"
 msgstr "Novo item"
 
-#: inc/replace.class.php:581
+#: inc/replace.class.php:586
 msgid "New location of item"
 msgstr "Nova localização do item"
 
-#: inc/model.class.php:236 inc/replace.class.php:598
+#: inc/model.class.php:236 inc/replace.class.php:603
 msgid "New status of the computer"
 msgstr "Novo status do computador"
 
@@ -197,12 +197,13 @@ msgid "OCSNG link"
 msgid_plural "OCSNG links"
 msgstr[0] "Conexão OCSNG"
 msgstr[1] "Conexões OCSNG"
+msgstr[2] "Conexões OCSNG"
 
-#: inc/replace.class.php:669
+#: inc/replace.class.php:674
 msgid "Old item"
 msgstr "Item antigo"
 
-#: inc/model.class.php:408 inc/replace.class.php:559
+#: inc/model.class.php:408 inc/replace.class.php:564
 msgid "Overwrite informations (from old item to the new)"
 msgstr "Sobrescrever informações (da mais antiga a mais recente)"
 
@@ -234,15 +235,15 @@ msgstr ""
 msgid "Purge"
 msgstr "Limpar"
 
-#: inc/replace.class.php:543 inc/replace.class.php:619
+#: inc/replace.class.php:548 inc/replace.class.php:624
 msgid "Reminder of the replacement model"
 msgstr "Lembrete de modelo de substituição"
 
-#: inc/uninstall.class.php:567
+#: inc/uninstall.class.php:568
 msgid "Removed from OCSNG with ID"
 msgstr "Removido do OCSNG com ID"
 
-#: inc/replace.class.php:714
+#: inc/replace.class.php:719
 msgid "Replace"
 msgstr "Substituir"
 
@@ -251,11 +252,11 @@ msgid "Replace status dropdown by plugin actions"
 msgstr ""
 
 #: inc/model.class.php:100 inc/model.class.php:986 inc/model.class.php:1028
-#: inc/replace.class.php:61 inc/replace.class.php:108
+#: inc/replace.class.php:61 inc/replace.class.php:109
 msgid "Replacement"
 msgstr "Recolocação"
 
-#: front/action.php:58 inc/replace.class.php:471
+#: front/action.php:58 inc/replace.class.php:476
 msgid "Replacement successful"
 msgstr "Substituição executada com sucesso"
 
@@ -263,7 +264,7 @@ msgstr "Substituição executada com sucesso"
 msgid "Replacing data"
 msgstr "Substituindo dados"
 
-#: inc/replace.class.php:404
+#: inc/replace.class.php:408
 msgid "See attached document"
 msgstr "Visualizar documento anexado"
 
@@ -275,15 +276,15 @@ msgstr ""
 msgid "These options only apply to computers coming from OCSNG"
 msgstr "Estas opções apenas se aplicam a computadores vindos do OCSNG"
 
-#: inc/replace.class.php:130
+#: inc/replace.class.php:131
 msgid "This document is the archive of this replaced item"
 msgstr "O documento é o arquivo desse item substituído"
 
-#: inc/replace.class.php:493
+#: inc/replace.class.php:498
 msgid "This item is a replacement for item"
 msgstr "Este item é a substituição para item"
 
-#: inc/replace.class.php:495
+#: inc/replace.class.php:500
 msgid "This item was replaced by"
 msgstr "Este item foi substituído por"
 
@@ -303,6 +304,6 @@ msgstr "Desinstalar"
 msgid "Uninstallation"
 msgstr "Desinstalação"
 
-#: front/action.php:99 inc/uninstall.class.php:325
+#: front/action.php:99 inc/uninstall.class.php:326
 msgid "Uninstallation successful"
 msgstr "Desinstalação executada com sucesso"

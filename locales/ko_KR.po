@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 14:39+0000\n"
+"POT-Creation-Date: 2022-10-07 10:56+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: SeongHyeon Cho <jaymz9634@gmail.com>, 2020\n"
 "Language-Team: Korean (Korea) (https://www.transifex.com/teclib/teams/28042/ko_KR/)\n"
@@ -37,15 +37,15 @@ msgstr "추가 항목"
 msgid "Affect to a new group"
 msgstr "새 그룹에 영향"
 
-#: inc/uninstall.class.php:664
+#: inc/uninstall.class.php:665
 msgid "Apply model"
 msgstr "모델 적용"
 
-#: inc/replace.class.php:135
+#: inc/replace.class.php:136
 msgid "Archive of old material"
 msgstr "이전 자료의 보관"
 
-#: inc/model.class.php:415 inc/model.class.php:847 inc/replace.class.php:562
+#: inc/model.class.php:415 inc/model.class.php:847 inc/replace.class.php:567
 msgid "Archiving method of the old material"
 msgstr "이전 자료의 보관 방법"
 
@@ -53,11 +53,11 @@ msgstr "이전 자료의 보관 방법"
 msgid "CSV Archiving"
 msgstr "CSV 보관"
 
-#: inc/replace.class.php:666
+#: inc/replace.class.php:671
 msgid "Choices for item to replace"
 msgstr "대체할 품목 선택"
 
-#: inc/model.class.php:435 inc/replace.class.php:620
+#: inc/model.class.php:435 inc/replace.class.php:625
 msgid "Connections with other materials"
 msgstr "다른 자료와 연결"
 
@@ -89,11 +89,11 @@ msgstr "소프트웨어 이력 삭제 (컴퓨터)"
 msgid "Delete the whole history"
 msgstr "전체 이력 삭제"
 
-#: inc/model.class.php:509 inc/replace.class.php:655
+#: inc/model.class.php:509 inc/replace.class.php:660
 msgid "Direct connections"
 msgstr "직접 연결"
 
-#: inc/preference.class.php:94 inc/replace.class.php:588 ajax/locations.php:47
+#: inc/preference.class.php:99 inc/replace.class.php:593 ajax/locations.php:47
 msgid "Empty location"
 msgstr "빈 위치"
 
@@ -101,7 +101,7 @@ msgstr "빈 위치"
 msgid "Erase datas"
 msgstr "데이터 소거"
 
-#: inc/model.class.php:386 inc/replace.class.php:544
+#: inc/model.class.php:386 inc/replace.class.php:549
 msgid "General informations"
 msgstr "일반 정보"
 
@@ -109,25 +109,25 @@ msgstr "일반 정보"
 msgid "Informations replacement"
 msgstr "교체 정보"
 
-#: inc/uninstall.class.php:546
+#: inc/uninstall.class.php:547
 msgid "Item is now uninstalled"
 msgstr "이제 품목이 제거 되었습니다"
 
-#: inc/uninstall.class.php:548
+#: inc/uninstall.class.php:549
 #, php-format
 msgid "Item is now uninstalled with model %s"
 msgstr "이제 모델 %s의 품목이 제거 되었습니다"
 
-#: inc/uninstall.class.php:554
+#: inc/uninstall.class.php:555
 msgid "Item replaced by a new one"
 msgstr "품목이 새것으로 교체됨"
 
-#: inc/uninstall.class.php:556
+#: inc/uninstall.class.php:557
 #, php-format
 msgid "Item replaced by a new one with model %s"
 msgstr "품목이 모델 %s의 새것으로 교체됨"
 
-#: inc/uninstall.class.php:562
+#: inc/uninstall.class.php:563
 msgid "Item replacing an old one"
 msgstr "예전 것을 대체하는 품목"
 
@@ -139,7 +139,7 @@ msgstr "품목 주기"
 msgid "Item's Lifecycle (uninstall)"
 msgstr "품목 주기 (제거)"
 
-#: inc/uninstall.class.php:681
+#: inc/uninstall.class.php:682
 msgid "Item's location after applying model"
 msgstr "모델 적용 후 품목 위치"
 
@@ -159,11 +159,11 @@ msgstr "유지 + 댓글"
 msgid "Keep in the current group"
 msgstr "현재 그룹 유지"
 
-#: inc/preference.class.php:93 inc/replace.class.php:584 ajax/locations.php:46
+#: inc/preference.class.php:98 inc/replace.class.php:589 ajax/locations.php:46
 msgid "Keep previous location"
 msgstr "이전 위치 유지"
 
-#: inc/uninstall.class.php:780
+#: inc/uninstall.class.php:781
 msgid "Lifecycle"
 msgstr "주기"
 
@@ -179,15 +179,15 @@ msgstr "견본 관리"
 msgid "New group"
 msgstr "새 그룹"
 
-#: inc/replace.class.php:679
+#: inc/replace.class.php:684
 msgid "New item"
 msgstr "새 품목"
 
-#: inc/replace.class.php:581
+#: inc/replace.class.php:586
 msgid "New location of item"
 msgstr "품목의 새 위치"
 
-#: inc/model.class.php:236 inc/replace.class.php:598
+#: inc/model.class.php:236 inc/replace.class.php:603
 msgid "New status of the computer"
 msgstr "컴퓨터의 새 상태"
 
@@ -196,11 +196,11 @@ msgid "OCSNG link"
 msgid_plural "OCSNG links"
 msgstr[0] "OCSNG 링크"
 
-#: inc/replace.class.php:669
+#: inc/replace.class.php:674
 msgid "Old item"
 msgstr "예전 품목"
 
-#: inc/model.class.php:408 inc/replace.class.php:559
+#: inc/model.class.php:408 inc/replace.class.php:564
 msgid "Overwrite informations (from old item to the new)"
 msgstr "정보 덮어쓰기 (이전 품목에서 새 품목으로)"
 
@@ -230,15 +230,15 @@ msgstr "플러그인 PDF가 설치되지 않았기에, 보관용 PDF 형식을 �
 msgid "Purge"
 msgstr "제거"
 
-#: inc/replace.class.php:543 inc/replace.class.php:619
+#: inc/replace.class.php:548 inc/replace.class.php:624
 msgid "Reminder of the replacement model"
 msgstr "대체 모델의 알림"
 
-#: inc/uninstall.class.php:567
+#: inc/uninstall.class.php:568
 msgid "Removed from OCSNG with ID"
 msgstr "ID가 있는 OCSNG 에서 제거됨"
 
-#: inc/replace.class.php:714
+#: inc/replace.class.php:719
 msgid "Replace"
 msgstr "대체"
 
@@ -247,11 +247,11 @@ msgid "Replace status dropdown by plugin actions"
 msgstr "플러그인 동작으로 상태 드롭다운 교체"
 
 #: inc/model.class.php:100 inc/model.class.php:986 inc/model.class.php:1028
-#: inc/replace.class.php:61 inc/replace.class.php:108
+#: inc/replace.class.php:61 inc/replace.class.php:109
 msgid "Replacement"
 msgstr "교체"
 
-#: front/action.php:58 inc/replace.class.php:471
+#: front/action.php:58 inc/replace.class.php:476
 msgid "Replacement successful"
 msgstr "대체함"
 
@@ -259,7 +259,7 @@ msgstr "대체함"
 msgid "Replacing data"
 msgstr "데이터 교체"
 
-#: inc/replace.class.php:404
+#: inc/replace.class.php:408
 msgid "See attached document"
 msgstr "첨부된 문서 보기"
 
@@ -271,15 +271,15 @@ msgstr "바로가기"
 msgid "These options only apply to computers coming from OCSNG"
 msgstr "이 옵션들은 OCSNG에서 가져온 컴퓨터들에만 적용됩니다"
 
-#: inc/replace.class.php:130
+#: inc/replace.class.php:131
 msgid "This document is the archive of this replaced item"
 msgstr "이 문서는 이 교체된 품목의 보관입니다"
 
-#: inc/replace.class.php:493
+#: inc/replace.class.php:498
 msgid "This item is a replacement for item"
 msgstr "이 품목은 품목 교체용 입니다"
 
-#: inc/replace.class.php:495
+#: inc/replace.class.php:500
 msgid "This item was replaced by"
 msgstr "이 품목은 다음에 의해 교체됨"
 
@@ -299,6 +299,6 @@ msgstr "제거"
 msgid "Uninstallation"
 msgstr "제거"
 
-#: front/action.php:99 inc/uninstall.class.php:325
+#: front/action.php:99 inc/uninstall.class.php:326
 msgid "Uninstallation successful"
 msgstr "제거함"
