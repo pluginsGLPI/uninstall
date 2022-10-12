@@ -119,6 +119,9 @@ class PluginUninstallUninstall extends CommonDBTM {
        $item->fields['_action']          = 'uninstall';
        Plugin::doHook("plugin_uninstall_before", $item);
 
+       if ($model->fields['raz_glpiinventory'] == 1) {
+         self::deleteGlpiInventoryLink($item);
+       }
        //--------------------//
        //Direct connections //
        //------------------//
@@ -496,6 +499,88 @@ class PluginUninstallUninstall extends CommonDBTM {
             // remove licences
             $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
             $pfComputerLicenseInfo->deleteByCriteria(['computers_id' => $items_id]);
+         }
+      }
+   }
+
+   /**
+    * Function to remove GLPI Inventory information for an asset
+    *
+    * @param CommonDBTM $item
+    *
+    * @return nothing
+   **/
+   static function deleteGlpiInventoryLink($item) {
+
+      $plug = new Plugin();
+      if ($plug->isActivated('glpiinventory') && function_exists('plugin_pre_item_purge_glpiinventory')) {
+
+         // let glpi-inventory to clean item if needed (agent / collect etc ..)
+         plugin_pre_item_purge_glpiinventory($item);
+      } else {
+         $agent = new Agent();
+         $agent->deleteByCriteria([
+            'itemtype' => $item->getType(),
+            'items_id' => $item->getID(),
+         ]);
+      }
+
+      // purge lock manually because related computer is not purged
+      $lockedfield = new Lockedfield();
+      if ($lockedfield->isHandled($item)) {
+         $lockedfield->itemDeleted();
+      }
+
+      // unlock item relations
+      global $DB;
+      $RELATION = getDbRelations();
+      if (isset($RELATION[$item->getTable()])) {
+         foreach ($RELATION[$item->getTable()] as $tablename => $field) {
+            if ($tablename[0] == '_') {
+               $tablename = ltrim($tablename, '_');
+            }
+            $itemtype = getItemTypeForTable($tablename);
+            if (($subtype = new $itemtype()) && $subtype->maybeDynamic()) {
+               if ($itemtype == Computer_Item::getType()) {
+                  // Purge computer_item
+                  $subtype->deleteByCriteria([
+                     'computers_id' => $item->getID(),
+                     'is_dynamic'   => 1
+                  ], true);
+               } elseif (
+                  is_array($field)
+                  && count($itemtype_match = preg_grep('/itemtype/', $field)) === 1
+                  && count($items_id_match = preg_grep('/items_id/', $field)) === 1
+               ) {
+                  $DB->update(
+                     $tablename,
+                     [
+                        'is_deleted' => 0
+                     ],
+                     [
+                        $items_id_match[0] => $item->getID(),
+                        $itemtype_match[1] => $item->getType(),
+                        'is_dynamic' => 1
+                     ]
+                  );
+               } else {
+                  if (!is_array($field)) {
+                     $field = [$field];
+                  }
+                  foreach ($field as $f) {
+                     $DB->update(
+                        $tablename,
+                        [
+                           'is_deleted' => 0
+                        ],
+                        [
+                           $f => $item->getID(),
+                           'is_dynamic' => 1
+                        ]
+                     );
+                  }
+               }
+            }
          }
       }
    }
