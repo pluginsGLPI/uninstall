@@ -83,10 +83,35 @@ class PluginUninstallReplace extends CommonDBTM {
 
          //States
          if ($model->fields['states_id'] != 0) {
-            $olditem->update(['id'           => $olditem_id,
-                              'is_dynamic'   => $olditem->fields['is_dynamic'], #to prevent locked field
-                              'states_id'    => $model->fields['states_id']],
-                             false);
+            $lock_new_status = false;
+            $locked_field = new Lockedfield();
+
+            if ($locked_field->getFromDBByCrit([
+               'itemtype' => $olditem->getType(),
+               'items_id' => $olditem->getID(),
+               'field'    => 'states_id',
+            ])) {
+               // Delete lock to be able to update the status
+               $lock_new_status = true;
+               $old_value = $locked_field->fields['value'];
+               $locked_field->delete(['id' => $locked_field->fields['id']]);
+            }
+
+            $olditem->update([
+               'id'           => $olditem_id,
+               'is_dynamic'   => $olditem->fields['is_dynamic'], #to prevent locked field
+               'states_id'    => $model->fields['states_id']],
+            false);
+
+            if ($lock_new_status) {
+               // Relock the field
+               $locked_field->add([
+                  'itemtype' => $olditem->getType(),
+                  'items_id' => $olditem->getID(),
+                  'field'    => 'states_id',
+                  'value'    => $old_value,
+               ]);
+            }
          }
 
          // METHOD REPLACEMENT 1 : Archive
