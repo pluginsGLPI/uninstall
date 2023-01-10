@@ -377,7 +377,7 @@ class PluginUninstallModel extends CommonDBTM {
                           (isset($this->fields["raz_antivirus"])
                            ? $this->fields["raz_antivirus"] : 1));
       echo "</td>";
-      echo "<td>" . __('Delete inventory data (Lock, Agent, Collect ...)', 'uninstall') . "</td>";
+      echo "<td>" . __('Delete inventory data (Dynamic flag, Lock, Agent, Collect ...)', 'uninstall') . "</td>";
       echo "<td>";
       Dropdown::showYesNo("raz_glpiinventory",
                            (isset($this->fields["raz_glpiinventory"])
