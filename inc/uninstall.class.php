@@ -533,9 +533,20 @@ class PluginUninstallUninstall extends CommonDBTM {
 
       // unlock item relations
       global $DB;
+      $db_networkport = [];
       $RELATION = getDbRelations();
       if (isset($RELATION[$item->getTable()])) {
          foreach ($RELATION[$item->getTable()] as $tablename => $field) {
+
+            //do not process networkname items_id and itemtype
+            //do not refer to current item (it actually refers to a NetworkPort)
+            //just keep data from DB, to be cleaned after
+            if ($tablename == '_glpi_networknames') {
+               $networkport = new NetworkPort();
+               $db_networkport = $networkport->find(["itemtype" => $item->getType(), "items_id" => $item->getID()]);
+               continue;
+            }
+
             if ($tablename[0] == '_') {
                $tablename = ltrim($tablename, '_');
             }
@@ -555,7 +566,8 @@ class PluginUninstallUninstall extends CommonDBTM {
                   $DB->update(
                      $tablename,
                      [
-                        'is_deleted' => 0
+                        'is_deleted' => 0,
+                        'is_dynamic' => 0
                      ],
                      [
                         $items_id_match[0] => $item->getID(),
@@ -571,7 +583,8 @@ class PluginUninstallUninstall extends CommonDBTM {
                      $DB->update(
                         $tablename,
                         [
-                           'is_deleted' => 0
+                           'is_deleted' => 0,
+                           'is_dynamic' => 0
                         ],
                         [
                            $f => $item->getID(),
@@ -582,6 +595,34 @@ class PluginUninstallUninstall extends CommonDBTM {
                }
             }
          }
+
+         //manage networkname
+         foreach (array_keys($db_networkport) as $networkport_id) {
+            Toolbox::logError("update glpi_networknames on NetworkPort " . $networkport_id);
+            $DB->update(
+               "glpi_networknames",
+               [
+                  'is_deleted' => 0,
+                  'is_dynamic' => 0
+               ],
+               [
+                  "itemtype" => "NetworkPort",
+                  "items_id" => $networkport_id,
+                  'is_dynamic' => 1
+               ]
+            );
+         }
+      }
+
+      //remove is_dynamic from asset
+      if($item->maybeDynamic()) {
+         $DB->update(
+            Computer::getTable(),
+            ['is_dynamic' => false],
+            ['id' => $item->getID()]
+         );
+         //reload
+         $item->getFromDB($item->getID());
       }
    }
 
