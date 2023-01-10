@@ -598,7 +598,6 @@ class PluginUninstallUninstall extends CommonDBTM {
 
          //manage networkname
          foreach (array_keys($db_networkport) as $networkport_id) {
-            Toolbox::logError("update glpi_networknames on NetworkPort " . $networkport_id);
             $DB->update(
                "glpi_networknames",
                [
