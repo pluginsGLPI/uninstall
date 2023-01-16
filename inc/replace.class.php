@@ -682,6 +682,11 @@ class PluginUninstallReplace extends CommonDBTM {
       }
 
       echo "<th>" . __('New item', 'uninstall') . "</th>";
+
+      if (count($tab_ids[$type]) > 1){
+         echo "<th>" . __('Remove', 'uninstall') . "</th>";
+      }
+
       echo "</tr>";
 
       $commonitem = new $type();
@@ -706,7 +711,16 @@ class PluginUninstallReplace extends CommonDBTM {
             'url'         => Plugin::getWebDir('uninstall')."/ajax/dropdownReplaceFindDevice.php",
             'used'        => array_keys($tab_ids[$type])
          ]);
-         echo "</td></tr>";
+         echo "</td>";
+
+         if (count($tab_ids[$type]) > 1){
+            echo "<td>";
+            $button = "<button type='button' onclick=\"$(this).parent().parent().remove();\" ><i class='ti ti-trash'></i></button>";
+            echo $button;
+            echo "<td>";
+         }
+
+         echo"</tr>";
       }
 
       echo "<tr class='tab_bg_1 center'>";
