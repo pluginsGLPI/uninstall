@@ -668,7 +668,8 @@ class PluginUninstallReplace extends CommonDBTM {
       echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<th colspan='4'>" . __('Choices for item to replace', 'uninstall') . "</th></tr>";
+      count($tab_ids[$type]) > 1 ? $colspan = 5 : $colspan = 4;
+      echo "<th colspan='"  .$colspan. "'>" . __('Choices for item to replace', 'uninstall') . "</th></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
       echo "<th>" . __('Old item', 'uninstall') . "</th>";
