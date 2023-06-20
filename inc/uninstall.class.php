@@ -511,6 +511,7 @@ class PluginUninstallUninstall extends CommonDBTM {
     * @return nothing
    **/
    static function deleteGlpiInventoryLink($item) {
+      global $DB;
 
       $plug = new Plugin();
       if ($plug->isActivated('glpiinventory') && function_exists('plugin_pre_item_purge_glpiinventory')) {
@@ -519,11 +520,24 @@ class PluginUninstallUninstall extends CommonDBTM {
          plugin_pre_item_purge_glpiinventory($item);
       } else {
          $agent = new Agent();
-         $agent->deleteByCriteria([
-            'itemtype' => $item->getType(),
-            'items_id' => $item->getID(),
-         ]);
+         $agent->deleteByCriteria(
+            [
+               'itemtype' => $item->getType(),
+               'items_id' => $item->getID(),
+            ],
+            true
+         );
       }
+
+      // Purge dynamic computer items
+      $computer_item = new Computer_Item();
+      $computer_item->deleteByCriteria(
+         [
+            'computers_id' => $item->getID(),
+            'is_dynamic'   => 1
+         ],
+         true
+      );
 
       // purge lock manually because related computer is not purged
       $lockedfield = new Lockedfield();
@@ -531,38 +545,57 @@ class PluginUninstallUninstall extends CommonDBTM {
          $lockedfield->itemDeleted();
       }
 
+      // manage networkname
+      $networkport = new NetworkPort();
+      $db_networkport = $networkport->find(["itemtype" => $item->getType(), "items_id" => $item->getID()]);
+      foreach (array_keys($db_networkport) as $networkport_id) {
+         $DB->update(
+            "glpi_networknames",
+            [
+               'is_deleted' => 0,
+               'is_dynamic' => 0
+            ],
+            [
+               "itemtype" => "NetworkPort",
+               "items_id" => $networkport_id,
+               'is_dynamic' => 1
+            ]
+         );
+      }
+
       // unlock item relations
-      global $DB;
-      $db_networkport = [];
       $RELATION = getDbRelations();
       if (isset($RELATION[$item->getTable()])) {
-         foreach ($RELATION[$item->getTable()] as $tablename => $field) {
-
-            //do not process networkname items_id and itemtype
-            //do not refer to current item (it actually refers to a NetworkPort)
-            //just keep data from DB, to be cleaned after
-            if ($tablename == '_glpi_networknames') {
-               $networkport = new NetworkPort();
-               $db_networkport = $networkport->find(["itemtype" => $item->getType(), "items_id" => $item->getID()]);
-               continue;
-            }
-
+         foreach ($RELATION[$item->getTable()] as $tablename => $fields) {
             if ($tablename[0] == '_') {
                $tablename = ltrim($tablename, '_');
             }
-            $itemtype = getItemTypeForTable($tablename);
-            if (($subtype = new $itemtype()) && $subtype->maybeDynamic()) {
-               if ($itemtype == Computer_Item::getType()) {
-                  // Purge computer_item
-                  $subtype->deleteByCriteria([
-                     'computers_id' => $item->getID(),
-                     'is_dynamic'   => 1
-                  ], true);
-               } elseif (
-                  is_array($field)
-                  && count($itemtype_match = preg_grep('/itemtype/', $field)) === 1
-                  && count($items_id_match = preg_grep('/items_id/', $field)) === 1
-               ) {
+
+            $sub_itemtype = getItemTypeForTable($tablename);
+            $sub_item = getItemForItemtype($sub_itemtype);
+
+            if ($sub_item === false || !$sub_item->maybeDynamic()) {
+               continue;
+            }
+
+            if (in_array(get_class($sub_item), [Agent::class, Computer_Item::class, Lockedfield::class, NetworkName::class])) {
+               // Specific handling
+               continue;
+            }
+
+            foreach ($fields as $field) {
+               if (is_array($field)) {
+                  // Relation based on 'itemtype'/'items_id' (polymorphic relationship)
+                  if ($item instanceof IPAddress && in_array('mainitemtype', $field) && in_array('mainitems_id', $field)) {
+                     // glpi_ipaddresses relationship that does not respect naming conventions
+                     $itemtype_field = 'mainitemtype';
+                     $items_id_field = 'mainitems_id';
+                  } else {
+                     $itemtype_matches = preg_grep('/^itemtype/', $field);
+                     $items_id_matches = preg_grep('/^items_id/', $field);
+                     $itemtype_field = reset($itemtype_matches);
+                     $items_id_field = reset($items_id_matches);
+                  }
                   $DB->update(
                      $tablename,
                      [
@@ -570,51 +603,31 @@ class PluginUninstallUninstall extends CommonDBTM {
                         'is_dynamic' => 0
                      ],
                      [
-                        $items_id_match[0] => $item->getID(),
-                        $itemtype_match[1] => $item->getType(),
+                        $items_id_field => $item->getID(),
+                        $itemtype_field => $item->getType(),
                         'is_dynamic' => 1
                      ]
                   );
                } else {
-                  if (!is_array($field)) {
-                     $field = [$field];
-                  }
-                  foreach ($field as $f) {
-                     $DB->update(
-                        $tablename,
-                        [
-                           'is_deleted' => 0,
-                           'is_dynamic' => 0
-                        ],
-                        [
-                           $f => $item->getID(),
-                           'is_dynamic' => 1
-                        ]
-                     );
-                  }
+                  // Relation based on single foreign key
+                  $DB->update(
+                     $tablename,
+                     [
+                        'is_deleted' => 0,
+                        'is_dynamic' => 0
+                     ],
+                     [
+                        $field => $item->getID(),
+                        'is_dynamic' => 1
+                     ]
+                  );
                }
             }
-         }
-
-         //manage networkname
-         foreach (array_keys($db_networkport) as $networkport_id) {
-            $DB->update(
-               "glpi_networknames",
-               [
-                  'is_deleted' => 0,
-                  'is_dynamic' => 0
-               ],
-               [
-                  "itemtype" => "NetworkPort",
-                  "items_id" => $networkport_id,
-                  'is_dynamic' => 1
-               ]
-            );
          }
       }
 
       //remove is_dynamic from asset
-      if($item->maybeDynamic()) {
+      if ($item->maybeDynamic()) {
          $DB->update(
             Computer::getTable(),
             ['is_dynamic' => false],
