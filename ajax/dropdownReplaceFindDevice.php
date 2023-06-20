@@ -35,8 +35,7 @@ use Glpi\Toolbox\Sanitizer;
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
-Session::checkSeveralRightsOr(['uninstall:profile' => READ,
-                               'uninstall:profile' => PluginUninstallProfile::RIGHT_REPLACE]);
+Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
 global $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
