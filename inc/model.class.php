@@ -1073,12 +1073,21 @@ class PluginUninstallModel extends CommonDBTM {
 
          $migration->migrationOneTable($table);
          $ID = PluginUninstallUninstall::getUninstallTransferModelID();
-         $query = "INSERT INTO `glpi_plugin_uninstall_models`
-                          (`FK_entities`,`recursive`,`name`,`transfer_id`, `state`, `raz_name`,
-                           `raz_contact`, `raz_ip`, `raz_os`, `raz_domain`, `raz_network`,
-                           `raz_soft_history`, `raz_budget`)
-                   VALUES (0, 1, 'Uninstall',".$ID.", 0, 1, 1, 1, 1, 1, 1, 0, 0)";
-         $DB->queryOrDie($query, "add uninstall model in ".$table);
+         $DB->insertOrDie('glpi_plugin_uninstall_models', [
+            'FK_entities' => 0,
+            'recursive'   => 1,
+            'name'        => 'Uninstall',
+            'transfer_id' => $ID,
+            'state'       => 0,
+            'raz_name'    => 1,
+            'raz_contact' => 1,
+            'raz_ip'      => 1,
+            'raz_os'      => 1,
+            'raz_domain'  => 1,
+            'raz_network' => 1,
+            'raz_soft_history' => 0,
+            'raz_budget'  => 0
+         ], "add uninstall model in $table");
       }
 
       // Plugin already installed
@@ -1111,10 +1120,11 @@ class PluginUninstallModel extends CommonDBTM {
 
             $migration->addField($table, 'types_id', "int {$default_key_sign} NOT NULL DEFAULT 0");
             $migration->migrationOneTable($table);
-            $query = "UPDATE `".$table."`
-                      SET `types_id` = '1'
-                      WHERE `types_id` = '0'";
-            $DB->queryOrDie($query, "update types_id of ".$table);
+            $DB->updateOrDie($table, [
+                'types_id' => 1
+            ], [
+                'types_id' => 0
+            ], "update types_id of $table");
 
             $migration->addField($table, 'replace_name', "bool");
             $migration->addField($table, 'replace_serial', "bool");
@@ -1149,23 +1159,23 @@ class PluginUninstallModel extends CommonDBTM {
          }
          if ($migration->addField($table, 'raz_contact_num', "bool")) {
             $migration->migrationOneTable($table);
-            $query = "UPDATE `glpi_plugin_uninstall_models`
-                      SET `raz_contact_num`=`raz_contact`";
-            $DB->queryOrDie($query, "Fill raz_contact_num");
+            $DB->updateOrDie('glpi_plugin_uninstall_models', [
+                'raz_contact_num' => new QueryExpression($DB::quoteName('raz_contact'))
+            ], [new QueryExpression('1')], "Fill raz_contact_num");
          }
 
          if ($migration->addField($table, 'replace_contact', "bool")) {
             $migration->migrationOneTable($table);
-            $query = "UPDATE `glpi_plugin_uninstall_models`
-                      SET `replace_contact`=`replace_users`";
-            $DB->queryOrDie($query, "Fill replace_contact");
+            $DB->updateOrDie('glpi_plugin_uninstall_models', [
+                'replace_contact' => new QueryExpression($DB::quoteName('replace_users'))
+            ], [new QueryExpression('1')], "Fill replace_contact");
          }
 
          if ($migration->addField($table, 'replace_contact_num', "bool")) {
             $migration->migrationOneTable($table);
-            $query = "UPDATE `glpi_plugin_uninstall_models`
-                      SET `replace_contact_num`=`replace_contact`";
-            $DB->queryOrDie($query, "Fill replace_contact_num");
+            $DB->updateOrDie('glpi_plugin_uninstall_models', [
+                'replace_contact_num' => new QueryExpression($DB::quoteName('replace_contact'))
+            ], [new QueryExpression('1')], "Fill replace_contact_num");
          }
          if (!$DB->fieldExists($table, 'raz_plugin_fields')) {
             $migration->addField($table, 'raz_plugin_fields', "bool");

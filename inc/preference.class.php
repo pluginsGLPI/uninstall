@@ -150,13 +150,13 @@ class PluginUninstallPreference extends CommonDBTM {
    static function deleteUserPreferenceForModel($models_id, $except_entity = -1) {
       global $DB;
 
-      $query = "DELETE FROM `".getTableForItemType(__CLASS__)."`
-              WHERE `templates_id` = '".$models_id."'";
-
+      $criteria = ['templates_id' => $models_id];
       if ($except_entity != -1) {
-         $query .= " AND `entities_id` NOT IN (".$except_entity.")";
+         $criteria[] = [
+            'NOT' => ['entities_id' => $except_entity]
+         ];
       }
-      $DB->query($query);
+      $DB->delete(getTableForItemType(__CLASS__), $criteria);
    }
 
 
@@ -177,17 +177,16 @@ class PluginUninstallPreference extends CommonDBTM {
    static function checkIfPreferenceExistsByEntity($user_id, $template, $entity) {
       global $DB;
 
-      $query = "SELECT `id`
-                FROM `".getTableForItemType(__CLASS__)."`
-                WHERE `users_id` = '" . $user_id . "'
-                      AND `entities_id` = '" . $entity . "'
-                      AND `templates_id` = '$template'";
-      $result = $DB->query($query);
-
-      if ($DB->numrows($result) > 0) {
-         return $DB->result($result, 0, "id");
-      }
-      return 0;
+      $it = $DB->request([
+          'SELECT' => ['id'],
+          'FROM' => getTableForItemType(__CLASS__),
+          'WHERE' => [
+             'users_id' => $user_id,
+             'entities_id' => $entity,
+             'templates_id' => $template
+          ]
+      ]);
+      return count($it) ? $it->current()['id'] : 0;
    }
 
 
@@ -319,7 +318,8 @@ class PluginUninstallPreference extends CommonDBTM {
 
 
    static function uninstall() {
-      $GLOBALS['DB']->query("DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`");
+      global $DB;
+      $DB->query("DROP TABLE IF EXISTS `".getTableForItemType(__CLASS__)."`");
    }
 
 }
