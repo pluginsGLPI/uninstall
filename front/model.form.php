@@ -30,8 +30,7 @@
 
 include ('../../../inc/includes.php');
 
-Session::checkSeveralRightsOr(['uninstall:profile' => READ,
-                               'uninstall:profile' => PluginUninstallProfile::RIGHT_REPLACE]);
+Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
 if (!isset ($_GET["withtemplate"])) {
    $_GET["withtemplate"] = "";
