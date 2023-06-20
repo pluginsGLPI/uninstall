@@ -668,7 +668,8 @@ class PluginUninstallReplace extends CommonDBTM {
       echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
       echo "<tr class='tab_bg_1 center'>";
-      echo "<th colspan='4'>" . __('Choices for item to replace', 'uninstall') . "</th></tr>";
+      count($tab_ids[$type]) > 1 ? $colspan = 5 : $colspan = 4;
+      echo "<th colspan='"  .$colspan. "'>" . __('Choices for item to replace', 'uninstall') . "</th></tr>";
 
       echo "<tr class='tab_bg_1 center'>";
       echo "<th>" . __('Old item', 'uninstall') . "</th>";
@@ -682,6 +683,11 @@ class PluginUninstallReplace extends CommonDBTM {
       }
 
       echo "<th>" . __('New item', 'uninstall') . "</th>";
+
+      if (count($tab_ids[$type]) > 1){
+         echo "<th>" . __('Remove', 'uninstall') . "</th>";
+      }
+
       echo "</tr>";
 
       $commonitem = new $type();
@@ -706,7 +712,16 @@ class PluginUninstallReplace extends CommonDBTM {
             'url'         => Plugin::getWebDir('uninstall')."/ajax/dropdownReplaceFindDevice.php",
             'used'        => array_keys($tab_ids[$type])
          ]);
-         echo "</td></tr>";
+         echo "</td>";
+
+         if (count($tab_ids[$type]) > 1){
+            echo "<td>";
+            $button = "<button type='button' onclick=\"$(this).closest('tr').remove();\" ><i class='ti ti-trash'></i></button>";
+            echo $button;
+            echo "<td>";
+         }
+
+         echo"</tr>";
       }
 
       echo "<tr class='tab_bg_1 center'>";
