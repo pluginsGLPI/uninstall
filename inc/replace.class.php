@@ -716,7 +716,7 @@ class PluginUninstallReplace extends CommonDBTM {
 
          if (count($tab_ids[$type]) > 1){
             echo "<td>";
-            $button = "<button type='button' onclick=\"$(this).parent().parent().remove();\" ><i class='ti ti-trash'></i></button>";
+            $button = "<button type='button' onclick=\"$(this).closest('tr').remove();\" ><i class='ti ti-trash'></i></button>";
             echo $button;
             echo "<td>";
          }
