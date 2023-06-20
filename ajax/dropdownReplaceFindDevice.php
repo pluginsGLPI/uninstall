@@ -37,7 +37,7 @@ Html::header_nocache();
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
-global $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
+global $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE, $CFG_GLPI, $DB;
 
 if (!in_array($_REQUEST['itemtype'], array_merge($UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE))) {
    Html::displayErrorAndDie(__("You don't have permission to perform this action."));
@@ -57,65 +57,68 @@ if (isset($_REQUEST['displaywith'])) {
    }
 }
 
+$criteria = [
+   'FROM' => $table,
+   'WHERE' => []
+];
+
 if ($item->isEntityAssign()) {
    // allow opening ticket on recursive object (printer, software, ...)
-   $where = getEntitiesRestrictRequest("WHERE", $table, '',
-                                         $_SESSION['glpiactiveentities'], $item->maybeRecursive());
-
-} else {
-   $where = "WHERE 1";
+   $criteria['WHERE'] = getEntitiesRestrictCriteria($table, '', $_SESSION['glpiactiveentities'], $item->maybeRecursive());
 }
 
 if ($item->maybeDeleted()) {
-   $where .= " AND `is_deleted` = '0' ";
+   $criteria['WHERE']['is_deleted'] = 0;
 }
 if ($item->maybeTemplate()) {
-   $where .= " AND `is_template` = '0' ";
+   $criteria['WHERE']['is_template'] = 0;
 }
 
 if (isset($_REQUEST['searchText'])
     && strlen($_REQUEST['searchText']) > 0
     && $_REQUEST['searchText'] != $CFG_GLPI["ajax_wildcard"]) {
-   $search = Search::makeTextSearch($_REQUEST['searchText']);
-
-   $where .= " AND (`name` ".$search."
-                    OR `id` = '".intval($_REQUEST['searchText'])."'
-                    OR `serial` ".$search."
-                    OR `otherserial` ".$search.")";
+    // isset already makes sure the search value isn't null
+   $search_val = Search::makeTextSearchValue($_REQUEST['searchText']);
+   $critera['WHERE'][] = [
+      'OR' => [
+         'name' => ['LIKE', $search_val],
+         'id' => ['LIKE', $search_val],
+         'serial' => ['LIKE', $search_val],
+         'otherserial' => ['LIKE', $search_val]
+      ]
+   ];
 }
 
 //If software or plugins : filter to display only the objects that are allowed to be visible in Helpdesk
 if (in_array($_REQUEST['itemtype'], $CFG_GLPI["helpdesk_visible_types"])) {
-   $where .= " AND `is_helpdesk_visible` = '1' ";
+   $criteria['WHERE']['is_helpdesk_visible'] = 1;
 }
 
 if (isset($_REQUEST['used'])) {
    $used = $_REQUEST['used'];
 
    if (count($used)) {
-      $where .=" AND `$table`.`id` NOT IN ('".implode("','", $used)."' ) ";
+      $criteria['WHERE'][] = [
+         'NOT' => ["$table.id" => $used]
+      ];
    }
 }
 
 if (isset($_REQUEST['current_item']) && ($_REQUEST['current_item'] > 0)) {
-   $where .= " AND `id` != " . $_REQUEST['current_item'];
+   $criteria['WHERE']['id'] = ['!=', $_REQUEST['current_item']];
 }
 
-$NBMAX = $CFG_GLPI["dropdown_max"];
-$LIMIT = "LIMIT 0,$NBMAX";
+$criteria['START'] = 0;
+$criteria['LIMIT'] = $CFG_GLPI["dropdown_max"];
+$criteria['ORDER'] = ['name'];
 
 if (isset($_REQUEST['searchText'])
     && $_REQUEST['searchText'] == $CFG_GLPI["ajax_wildcard"]) {
-   $LIMIT = "";
+   unset($criteria['LIMIT']);
 }
 
-$query = "SELECT *
-          FROM $table
-          $where
-          ORDER BY `name`
-          $LIMIT";
-$result = $DB->query($query);
-while ($data = $DB->fetchAssoc($result)) {
+$it = $DB->request($criteria);
+foreach ($it as $data) {
    $outputval = Sanitizer::unsanitize($data["name"]);
 
    if ($displaywith) {

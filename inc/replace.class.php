@@ -771,24 +771,38 @@ class PluginUninstallReplace extends CommonDBTM {
          }
       }
 
-      $query = "SELECT `glpi_documents_items`.`id` as assocID,
-                       `glpi_documents`.*
-                FROM `glpi_documents_items`
-                LEFT JOIN `glpi_documents`
-                          ON (`glpi_documents_items`.`documents_id`=`glpi_documents`.`id`)
-                LEFT JOIN `glpi_entities` ON (`glpi_documents`.`entities_id`=`glpi_entities`.`id`)
-                WHERE `glpi_documents_items`.`items_id` = '".$item->getField('id')."'
-                      AND `glpi_documents_items`.`itemtype` = '".$item->getType()."' ";
+      $criteria = [
+         'SELECT' => ['glpi_documents_items.id AS assocID', 'glpi_documents.*'],
+         'FROM' => 'glpi_documents_items',
+         'LEFT JOIN' => [
+            'glpi_documents' => [
+               'ON' => [
+                  'glpi_documents_items' => 'documents_id',
+                  'glpi_documents' => 'id'
+               ]
+            ],
+            'glpi_entities' => [
+               'ON' => [
+                  'glpi_documents' => 'entities_id',
+                  'glpi_entities' => 'id'
+               ]
+            ]
+         ],
+         'WHERE' => [
+            'glpi_documents_items.items_id' => $item->getField('id'),
+            'glpi_documents_items.itemtype' => $item->getType()
+         ]
+      ];
 
       if (Session::getLoginUserID()) {
-         $query .= getEntitiesRestrictRequest(" AND", "glpi_documents", '', '', true);
+         $criteria['WHERE'][] = getEntitiesRestrictCriteria('glpi_documents', '', '', true);
       } else {
-         // Anonymous access from FAQ
-         $query .= " AND `glpi_documents`.`entities_id`= '0' ";
+         $criteria['WHERE']['glpi_documents.entities_id'] = 0;
       }
 
       $docs = [];
-      foreach ($DB->request($query) as $data) {
+      $it = $DB->request($criteria);
+      foreach ($it as $data) {
          $docs[] = $data;
       }
       return $docs;
@@ -811,16 +825,31 @@ class PluginUninstallReplace extends CommonDBTM {
          return [];
       }
 
-      $query = "SELECT `glpi_contracts_items`.*
-                FROM `glpi_contracts_items`,
-                     `glpi_contracts`
-                LEFT JOIN `glpi_entities` ON (`glpi_contracts`.`entities_id`=`glpi_entities`.`id`)
-                WHERE `glpi_contracts`.`id`=`glpi_contracts_items`.`contracts_id`
-                      AND `glpi_contracts_items`.`items_id` = '".$item->fields['id']."'
-                      AND `glpi_contracts_items`.`itemtype` = '".$item->getType()."'".
-                      getEntitiesRestrictRequest(" AND", "glpi_contracts", '', '', true)."
-               ORDER BY `glpi_contracts`.`name`";
-      foreach ($DB->request($query) as $data) {
+      $criteria = [
+         'SELECT' => ['glpi_contracts_items.*'],
+         'FROM' => 'glpi_contracts_items',
+         'LEFT JOIN' => [
+            'glpi_contracts' => [
+               'ON' => [
+                  'glpi_contracts_items' => 'contracts_id',
+                  'glpi_contracts' => 'id'
+               ]
+            ],
+            'glpi_entities' => [
+               'ON' => [
+                  'glpi_contracts' => 'entities_id',
+                  'glpi_entities' => 'id'
+               ]
+            ]
+         ],
+         'WHERE' => [
+            'glpi_contracts_items.items_id' => $item->getField('id'),
+            'glpi_contracts_items.itemtype' => $item->getType(),
+            getEntitiesRestrictCriteria('glpi_contracts', '', '', true)
+         ]
+      ];
+      $it = $DB->request($criteria);
+      foreach ($it as $data) {
          $contracts[] = $data;
       }
 
@@ -849,14 +878,18 @@ class PluginUninstallReplace extends CommonDBTM {
       }
 
       $tickets = [];
-      $query   = "(`items_id` = '".$items_id."'
-                   AND `itemtype` = '".$itemtype."') ".
-                   getEntitiesRestrictRequest("AND", "glpi_tickets");
-      foreach ($DB->request('glpi_items_tickets', $query) as $data) {
+      $it = $DB->request([
+         'FROM' => 'glpi_items_tickets',
+         'WHERE' => [
+            'itemtype' => $itemtype,
+            'items_id' => $items_id,
+            getEntitiesRestrictCriteria('glpi_tickets')
+         ]
+      ]);
+      foreach ($it as $data) {
          $tickets[] = $data;
       }
       return $tickets;
-
    }
 
 
@@ -878,8 +911,14 @@ class PluginUninstallReplace extends CommonDBTM {
       }
 
       $netports = [];
-      foreach ($DB->request('glpi_networkports',
-                            "`items_id` = '".$ID."' AND `itemtype` = '".$itemtype."'") as $data) {
+      $it = $DB->request([
+         'FROM' => 'glpi_networkports',
+         'WHERE' => [
+            'itemtype' => $itemtype,
+            'items_id' => $ID,
+         ]
+      ]);
+      foreach ($it as $data) {
          $netports[] = $data;
       }
       return $netports;
@@ -921,10 +960,14 @@ class PluginUninstallReplace extends CommonDBTM {
    static function getPdfUserPreference($item) {
       global $DB;
 
-      $iterator = $DB->request('glpi_plugin_pdf_preferences',
-                               ['users_ID' => $_SESSION['glpiID'],
-                                'itemtype' => $item->getType()]);
-      if (!$iterator->numrows()) {
+      $iterator = $DB->request([
+         'FROM' => 'glpi_plugin_pdf_preferences',
+         'WHERE' => [
+            'users_ID' => $_SESSION['glpiID'],
+            'itemtype' => $item->getType()
+         ]
+      ]);
+      if (!count($iterator)) {
          //Get all item's tabs
          $tab = array_keys($item->defineTabs());
 

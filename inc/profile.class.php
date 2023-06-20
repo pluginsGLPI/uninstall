@@ -140,14 +140,22 @@ class PluginUninstallProfile extends Profile {
       }
 
       //Migration old rights in new ones
-      foreach ($DB->request("SELECT `id` FROM `glpi_profiles`") as $prof) {
+      $profiles_it = $DB->request([
+         'SELECT' => ['id'],
+         'FROM'   => 'glpi_profiles'
+      ]);
+      foreach ($profiles_it as $prof) {
          self::migrateOneProfile($prof['id']);
       }
-      foreach ($DB->request("SELECT *
-                           FROM `glpi_profilerights`
-                           WHERE `profiles_id`='".$_SESSION['glpiactiveprofile']['id']."'
-                              AND `name` LIKE '%plugin_uninstall%'") as $prof) {
-                                 $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
+      $rights_it = $DB->request([
+         'FROM' => 'glpi_profilerights',
+         'WHERE' => [
+            'profiles_id' => $_SESSION['glpiactiveprofile']['id'],
+            'name' => ['LIKE', '%plugin_uninstall%']
+         ]
+      ]);
+      foreach ($rights_it as $prof) {
+         $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
       }
    }
 
@@ -209,10 +217,9 @@ class PluginUninstallProfile extends Profile {
          $migration->changeField($table, 'use', 'use', "char", ['value' => '0']);
          $migration->migrationOneTable($table);
 
-         $query = "UPDATE `".$table."`
-                   SET `use` = 'r'
-                   WHERE `use` = '1'";
-         $DB->queryOrDie($query, "change value use (1 to r) for ".$table);
+         $DB->updateOrDie($table, [
+            'use' => 'r'
+         ], ['use' => '1'], "change value use (1 to r) for $table");
 
          $migration->renameTable($table, 'glpi_plugin_uninstall_profiles');
       }
@@ -231,9 +238,9 @@ class PluginUninstallProfile extends Profile {
             $migration->addField($table, 'replace', "bool");
             $migration->migrationOneTable($table);
             // UPDATE replace access for current user
-            $query = "UPDATE `glpi_plugin_uninstall_profiles` SET `replace` = 1
-             WHERE `id` = ".$_SESSION['glpiactiveprofile']['id'];
-            $DB->query($query);
+            $DB->update('glpi_plugin_uninstall_profiles', [
+               'replace' => 1
+            ], ['id' => $_SESSION['glpiactiveprofile']['id']]);
          }
 
          self::migrateAllProfiles();

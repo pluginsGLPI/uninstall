@@ -395,10 +395,12 @@ class PluginUninstallUninstall extends CommonDBTM {
    static function deleteComputerInOCSByGlpiID($computer_id) {
       global $DB;
 
-      $crit     = "`computers_id` = '" . $computer_id . "'";
-      $iterator = $DB->request('glpi_plugin_ocsinventoryng_ocslinks', $crit);
+      $iterator = $DB->request([
+         'FROM' => 'glpi_plugin_ocsinventoryng_ocslinks',
+         'WHERE' => ['computers_id' => $computer_id]
+      ]);
 
-      if ($iterator->numrows() == 1) {
+      if (count($iterator) === 1) {
          $data = $iterator->current();
          self::deleteComputerInOCS($data["ocsid"], $data["plugin_ocsinventoryng_ocsservers_id"]);
          self::addUninstallLog([
@@ -531,20 +533,19 @@ class PluginUninstallUninstall extends CommonDBTM {
    static function deleteHistory($computer_id, $only_history = true) {
       global $DB;
 
-      $where = "`itemtype` = 'Computer'
-                AND `items_id` = '" . $computer_id . "'";
+      $criteria = [
+         'itemtype' => 'Computer',
+         'items_id' => $computer_id
+      ];
 
       if ($only_history) {
-         $where .= " AND `linked_action` IN ('".Log::HISTORY_INSTALL_SOFTWARE."',
-                                             '".Log::HISTORY_UNINSTALL_SOFTWARE."')";
-
+         $criteria['linked_action'] = [
+            Log::HISTORY_INSTALL_SOFTWARE,
+            Log::HISTORY_UNINSTALL_SOFTWARE
+         ];
       }
-      $log            = new Log();
-      $log->dohistory = false;
 
-      foreach ($DB->request("glpi_logs", $where) as $row) {
-         $log->delete($row);
-      }
+      $DB->delete('glpi_logs', $criteria);
    }
 
    /**
@@ -633,10 +634,12 @@ class PluginUninstallUninstall extends CommonDBTM {
    static function getUninstallTransferModelID($create = true) {
       global $DB;
 
-      $iterator = $DB->request('glpi_transfers',
-                               "`name`='" . self::PLUGIN_UNINSTALL_TRANSFER_NAME . "'");
+      $iterator = $DB->request([
+         'FROM' => 'glpi_transfers',
+         'WHERE' => ['name' => self::PLUGIN_UNINSTALL_TRANSFER_NAME]
+      ]);
 
-      if (!$iterator->numrows()) {
+      if (!count($iterator)) {
          if ($create) {
             $transfer                   = new Transfer();
             $input["name"]              = self::PLUGIN_UNINSTALL_TRANSFER_NAME;
@@ -667,14 +670,17 @@ class PluginUninstallUninstall extends CommonDBTM {
    static function getInfocomPresentForDevice($type, $ID) {
       global $DB;
 
-      $query = "SELECT `id`
-              FROM `glpi_infocoms`
-              WHERE `itemtype` = '".$type."'
-                    AND `items_id` = '" . $ID . "'";
-      $result = $DB->query($query);
+      $it = $DB->request([
+         'SELECT' => ['id'],
+         'FROM' => 'glpi_infocoms',
+         'WHERE' => [
+            'itemtype' => $type,
+            'items_id' => $ID
+         ]
+      ]);
 
-      if ($DB->numrows($result) > 0) {
-         return $DB->result($result, 0, "id");
+      if (count($it)) {
+         return $it->current()['id'];
       }
       return 0;
    }
@@ -734,11 +740,16 @@ class PluginUninstallUninstall extends CommonDBTM {
       $nn   = new NetworkName();
       $conn = new NetworkPort_NetworkPort();
       $vlan = new NetworkPort_Vlan();
-      $crit = ['items_id' => $items_id,
-               'itemtype' => $type
-              ];
+      $crit = [
+         'FROM' => 'glpi_networkports',
+         'WHERE' => [
+            'items_id' => $items_id,
+            'itemtype' => $type
+         ]
+      ];
 
-      foreach ($DB->request('glpi_networkports', $crit) as $data) {
+      $it = $DB->request($crit);
+      foreach ($it as $data) {
 
          $nn->unaffectAddressesOfItem($data['id'], 'NetworkPort');
 
@@ -785,19 +796,20 @@ class PluginUninstallUninstall extends CommonDBTM {
       global $DB, $CFG_GLPI;
 
       $templates = [];
-      $query = "SELECT `entities_id`, `id`, `name`
-                FROM `glpi_plugin_uninstall_models`".
-                getEntitiesRestrictRequest(" WHERE", "glpi_plugin_uninstall_models", "entities_id",
-                                           $entity, true)."
-                ORDER BY `name`";
-      $result = $DB->query($query);
+      $criteria = [
+         'SELECT' => ['entities_id', 'id', 'name'],
+         'FROM' => 'glpi_plugin_uninstall_models',
+         'WHERE' => getEntitiesRestrictCriteria('glpi_plugin_uninstall_models', 'entities_id', $entity, true),
+         'ORDER' => ['name']
+      ];
+      $it = $DB->request($criteria);
 
-      while ($datas = $DB->fetchArray($result)) {
-         $templates[$datas["id"]] = ($add_entity
+      foreach ($it as $data) {
+         $templates[$data["id"]] = ($add_entity
                                        ? Dropdown::getDropdownName("glpi_entities",
-                                                                   $datas["entities_id"]) . " > "
+                                                                   $data["entities_id"]) . " > "
                                        : "")
-                                    .$datas["name"];
+                                    .$data["name"];
       }
       return $templates;
    }
