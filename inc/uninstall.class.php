@@ -511,7 +511,7 @@ class PluginUninstallUninstall extends CommonDBTM {
     *
     * @return nothing
    **/
-   static function deleteGlpiInventoryLink(&$item) {
+   static function deleteGlpiInventoryLink($item) {
       global $DB;
 
       $plug = new Plugin();
