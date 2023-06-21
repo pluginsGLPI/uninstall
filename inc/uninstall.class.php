@@ -111,7 +111,6 @@ class PluginUninstallUninstall extends CommonDBTM {
        $input                = [];
        $input["id"]          = $id;
        $input["entities_id"] = $entity;
-       $input['is_dynamic']  = $item->fields['is_dynamic']; #to prevent locked field
        $fields               = [];
 
        //Hook to perform actions before item is being uninstalled
@@ -122,6 +121,8 @@ class PluginUninstallUninstall extends CommonDBTM {
        if ($model->fields['raz_glpiinventory'] == 1) {
          self::deleteGlpiInventoryLink($item);
        }
+       $input['is_dynamic']  = $item->fields['is_dynamic']; #to prevent locked field
+
        //--------------------//
        //Direct connections //
        //------------------//
@@ -510,7 +511,7 @@ class PluginUninstallUninstall extends CommonDBTM {
     *
     * @return nothing
    **/
-   static function deleteGlpiInventoryLink($item) {
+   static function deleteGlpiInventoryLink(&$item) {
       global $DB;
 
       $plug = new Plugin();
