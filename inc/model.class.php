@@ -376,6 +376,12 @@ class PluginUninstallModel extends CommonDBTM {
       Dropdown::showYesNo("raz_antivirus",
                           (isset($this->fields["raz_antivirus"])
                            ? $this->fields["raz_antivirus"] : 1));
+      echo "</td>";
+      echo "<td>" . __('Delete inventory data (Dynamic flag, Lock, Agent, Collect ...)', 'uninstall') . "</td>";
+      echo "<td>";
+      Dropdown::showYesNo("raz_glpiinventory",
+                           (isset($this->fields["raz_glpiinventory"])
+                           ? $this->fields["raz_glpiinventory"] : 0), -1);
       echo "</td></tr>";
    }
 
@@ -533,7 +539,6 @@ class PluginUninstallModel extends CommonDBTM {
                            ? $this->fields["replace_contact_num"] : 1),
                            -1, ['width' => '100%']);
       echo "</td>";
-      echo "<td colspan='2'></td>";
       echo "</tr>";
 
    }
@@ -1204,6 +1209,10 @@ class PluginUninstallModel extends CommonDBTM {
             );
          }
 
+         if (!$DB->fieldExists($table, 'raz_glpiinventory')) {
+            $migration->addField($table, 'raz_glpiinventory', "integer");
+         }
+
          $migration->migrationOneTable($table);
 
       } else {
@@ -1248,6 +1257,7 @@ class PluginUninstallModel extends CommonDBTM {
                     `replace_direct_connections` tinyint NOT NULL DEFAULT '0',
                     `overwrite` tinyint NOT NULL DEFAULT '0',
                     `replace_method` int NOT NULL DEFAULT '2',
+                    `raz_glpiinventory` int NOT NULL DEFAULT '1',
                     `raz_fusioninventory` int NOT NULL DEFAULT '1',
                     `raz_plugin_fields` tinyint NOT NULL DEFAULT '1',
                     `replace_contact` tinyint NOT NULL DEFAULT '0',
@@ -1308,6 +1318,7 @@ class PluginUninstallModel extends CommonDBTM {
          $tmp['raz_budget']                 = 1;
          $tmp['raz_user']                   = 1;
          $tmp['raz_ocs_registrykeys']       = 1;
+         $tmp['raz_glpiinventory']          = 1;
          $tmp['raz_fusioninventory']        = 1;
          $tmp['raz_plugin_fields']          = 1;
          $tmp['comment']                    = '';
