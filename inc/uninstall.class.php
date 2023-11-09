@@ -46,6 +46,7 @@ class PluginUninstallUninstall extends CommonDBTM
     **/
     public static function showMassiveActionsSubForm(MassiveAction $ma)
     {
+        /** @var array $UNINSTALL_TYPES */
         global $UNINSTALL_TYPES;
 
         foreach ($ma->getItems() as $itemtype => $data) {
@@ -77,8 +78,6 @@ class PluginUninstallUninstall extends CommonDBTM
     **/
     public static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids)
     {
-        global $CFG_GLPI;
-
         switch ($ma->getAction()) {
             case "uninstall":
                 $itemtype = $ma->getItemtype(false);
@@ -104,6 +103,7 @@ class PluginUninstallUninstall extends CommonDBTM
      */
     private static function doOneUninstall(PluginUninstallModel $model, Transfer $transfer, CommonDBTM $item, array $options = []): void
     {
+        /** @var array $UNINSTALL_DIRECT_CONNECTIONS_TYPE */
         global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
         $id = $item->fields['id'];
@@ -258,7 +258,7 @@ class PluginUninstallUninstall extends CommonDBTM
         if ($model->fields["raz_budget"] == 1) {
             $infocom_id = self::getInfocomPresentForDevice($type, $id);
             if ($infocom_id > 0) {
-                $infocom            = new InfoCom();
+                $infocom            = new Infocom();
                 $tmp["id"]          = $infocom_id;
                 $tmp["budgets_id"]  = 0;
                 $infocom->dohistory = false;
@@ -388,17 +388,18 @@ class PluginUninstallUninstall extends CommonDBTM
    /**
     * Function to uninstall an object
     *
-    * @param $computers_id the computer's ID in GLPI
+    * @param int $computers_id the computer's ID in GLPI
     *
-    * @return nothing
+    * @return void
    **/
     public static function deleteOcsLink($computers_id)
     {
-
+        //@phpstan-ignore-next-line
         $link = new PluginOcsinventoryngOcslink();
         $link->dohistory = false;
         $link->deleteByCriteria(['computers_id' => $computers_id]);
 
+        //@phpstan-ignore-next-line
         $reg = new PluginOcsinventoryngRegistryKey();
         $reg->deleteByCriteria(['computers_id' => $computers_id]);
     }
@@ -406,7 +407,8 @@ class PluginUninstallUninstall extends CommonDBTM
 
     public static function deleteRegistryKeys($computers_id)
     {
-        $key = new RegistryKey();
+        //@phpstan-ignore-next-line
+        $key = new PluginOcsinventoryngRegistryKey();
         $key->deleteByCriteria(['computers_id' => $computers_id]);
     }
 
@@ -415,10 +417,11 @@ class PluginUninstallUninstall extends CommonDBTM
     *
     * @param computer_id the computer's ID in GLPI
     *
-    * @return nothing
+    * @return void
    **/
     public static function deleteComputerInOCSByGlpiID($computer_id)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $iterator = $DB->request([
@@ -441,10 +444,12 @@ class PluginUninstallUninstall extends CommonDBTM
 
     public static function deleteComputerInOCS($ocs_id, $ocs_server_id)
     {
-
+        /** @var DBmysql $DB */
+        global $DB;
+        //@phpstan-ignore-next-line
         $DBocs = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id)->getDB();
 
-       //First try to remove all the network ports
+        //First try to remove all the network ports
         $query = "DELETE
                 FROM `netmap`
                 WHERE `MAC` IN (SELECT `MACADDR`
@@ -476,8 +481,10 @@ class PluginUninstallUninstall extends CommonDBTM
 
     public static function ocsTableExists($ocs_server_id, $tablename)
     {
+        //@phpstan-ignore-next-line
         $dbClient = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id);
 
+        //@phpstan-ignore-next-line
         if (!($dbClient instanceof PluginOcsinventoryngOcsDbClient)) {
             return false;
         }
@@ -497,6 +504,7 @@ class PluginUninstallUninstall extends CommonDBTM
     {
         $item = new $itemtype();
         $item->getFromDB($items_id);
+        //@phpstan-ignore-next-line
         PluginFieldsContainer::preItemPurge($item);
     }
 
@@ -506,13 +514,14 @@ class PluginUninstallUninstall extends CommonDBTM
     * @param $itemtype the asset type
     * @param $items_id the asset's ID in GLPI
     *
-    * @return nothing
+    * @return void
    **/
     public static function deleteFusionInventoryLink($itemtype, $items_id)
     {
         if (function_exists('plugin_pre_item_purge_fusioninventory')) {
             $item = new $itemtype();
             $item->getFromDB($items_id);
+            //@phpstan-ignore-next-line
             $agent = new PluginFusioninventoryAgent();
             $agents = $agent->getAgentsFromComputers([$items_id]);
 
@@ -526,6 +535,7 @@ class PluginUninstallUninstall extends CommonDBTM
                 }
 
                 // remove licences
+                //@phpstan-ignore-next-line
                 $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
                 $pfComputerLicenseInfo->deleteByCriteria(['computers_id' => $items_id]);
             }
@@ -541,6 +551,7 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function deleteGlpiInventoryLink($item)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $plug = new Plugin();
@@ -692,13 +703,14 @@ class PluginUninstallUninstall extends CommonDBTM
    /**
     * Remove all the computer software's history
     *
-    * @param computer_id      the computer's ID in GLPI
-    * @param $only_history    (true by default)
+    * @param int  $computer_id  the computer's ID in GLPI
+    * @param bool $only_history (true by default)
     *
-    * @return nothing
+    * @return void
    **/
     public static function deleteHistory($computer_id, $only_history = true)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $criteria = [
@@ -811,6 +823,7 @@ class PluginUninstallUninstall extends CommonDBTM
     */
     public static function getUninstallTransferModelID($create = true)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $iterator = $DB->request([
@@ -848,6 +861,7 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function getInfocomPresentForDevice($type, $ID)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $it = $DB->request([
@@ -873,8 +887,6 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function showFormUninstallation($ID, $item, $user_id)
     {
-        global $CFG_GLPI;
-
         $type = $item->getType();
        // TODO review this to pass arg in form, not in URL.
         echo "<form action='" . Plugin::getWebDir('uninstall') . "/front/action.php?device_type=$type'
@@ -924,6 +936,7 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function razPortInfos($type, $items_id)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $nn   = new NetworkName();
@@ -960,6 +973,7 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function dropdownUninstallModels($name, $user, $entity)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $used = [];
@@ -984,7 +998,8 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function getAllTemplatesByEntity($entity, $add_entity = false)
     {
-        global $DB, $CFG_GLPI;
+        /** @var DBmysql $DB */
+        global $DB;
 
         $templates = [];
         $criteria = [
@@ -1010,6 +1025,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
+        /** @var array $UNINSTALL_TYPES */
         global $UNINSTALL_TYPES;
 
         if (
@@ -1026,6 +1042,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
+        /** @var array $UNINSTALL_TYPES */
         global $UNINSTALL_TYPES;
 
         if (in_array($item->getType(), $UNINSTALL_TYPES)) {

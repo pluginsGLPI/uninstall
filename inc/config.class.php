@@ -72,8 +72,6 @@ class PluginUninstallConfig extends Config
 
     public static function showForConfig(Config $config, $withtemplate = 0)
     {
-        global $CFG_GLPI;
-
         if (!self::canView()) {
             return false;
         }
@@ -130,15 +128,13 @@ class PluginUninstallConfig extends Config
         $current_config = self::getConfig();
 
        // fill config table with default values if missing
-        foreach (
-            [
-                'replace_status_dropdown' => 0,
-            ] as $key => $value
-        ) {
+        foreach (['replace_status_dropdown' => 0] as $key => $value) {
             if (!isset($current_config[$key])) {
                 Config::setConfigurationValues(self::CFG_CTXT, [$key => $value]);
             }
         }
+
+        return true;
     }
 
    /**

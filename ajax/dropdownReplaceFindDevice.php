@@ -37,6 +37,12 @@ Html::header_nocache();
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
+/**
+ * @var array $UNINSTALL_TYPES
+ * @var array $UNINSTALL_DIRECT_CONNECTIONS_TYPE
+ * @var array $CFG_GLPI
+ * @var DBmysql $DB
+ */
 global $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE, $CFG_GLPI, $DB;
 
 if (!in_array($_REQUEST['itemtype'], array_merge($UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE))) {

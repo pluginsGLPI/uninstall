@@ -57,8 +57,6 @@ class PluginUninstallPreference extends CommonDBTM
 
     public function showFormUserPreferences()
     {
-        global $DB;
-
         $entity     = $_SESSION['glpiactive_entity'];
         $userID     = Session::getLoginUserID();
         $templates  = PluginUninstallUninstall::getAllTemplatesByEntity(
@@ -158,6 +156,7 @@ class PluginUninstallPreference extends CommonDBTM
    **/
     public static function deleteUserPreferenceForModel($models_id, $except_entity = -1)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $criteria = ['templates_id' => $models_id];
@@ -187,6 +186,7 @@ class PluginUninstallPreference extends CommonDBTM
    **/
     public static function checkIfPreferenceExistsByEntity($user_id, $template, $entity)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $it = $DB->request([
@@ -226,6 +226,7 @@ class PluginUninstallPreference extends CommonDBTM
    **/
     public static function getLocationByUserByEntity($user_id, $template, $entity)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $result = $DB->request(
@@ -261,8 +262,6 @@ class PluginUninstallPreference extends CommonDBTM
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        global $CFG_GLPI;
-
         if ($item->getType() == 'Preference' && Session::haveRight('uninstall:profile', READ)) {
             $pref = new self();
             $pref->showFormUserPreferences();
@@ -273,6 +272,7 @@ class PluginUninstallPreference extends CommonDBTM
 
     public static function install(Migration $migration)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $default_charset = DBConnection::getDefaultCharset();
@@ -336,6 +336,7 @@ class PluginUninstallPreference extends CommonDBTM
 
     public static function uninstall()
     {
+        /** @var DBmysql $DB */
         global $DB;
         $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
     }

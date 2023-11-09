@@ -36,6 +36,7 @@ class PluginUninstallState
 {
     public static function replaceState($params = [])
     {
+        /** @var array $UNINSTALL_TYPES */
         global $UNINSTALL_TYPES;
 
         if (

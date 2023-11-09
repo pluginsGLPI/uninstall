@@ -32,6 +32,7 @@
 
 function plugin_uninstall_MassiveActions($type)
 {
+    /** @var array $UNINSTALL_TYPES */
     global $UNINSTALL_TYPES;
 
    // Like GLPI 0.84, this plugin don't support massive actions in Global item page.

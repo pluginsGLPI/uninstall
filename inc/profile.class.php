@@ -56,8 +56,6 @@ class PluginUninstallProfile extends Profile
 
     public function showForm($ID, $options = [])
     {
-        global $DB;
-
         $profile = new Profile();
 
         if ($ID) {
@@ -82,6 +80,8 @@ class PluginUninstallProfile extends Profile
             $options['candel'] = false;
             $this->showFormButtons($options);
         }
+
+        return true;
     }
 
     public static function createFirstAccess($ID)
@@ -124,6 +124,7 @@ class PluginUninstallProfile extends Profile
     */
     public static function migrateOneProfile($profiles_id)
     {
+        /** @var DBmysql $DB */
         global $DB;
        //Cannot launch migration if there's nothing to migrate...
         if (!$DB->tableExists('glpi_plugin_uninstall_profiles')) {
@@ -147,6 +148,7 @@ class PluginUninstallProfile extends Profile
     */
     public static function migrateAllProfiles()
     {
+        /** @var DBmysql $DB */
         global $DB;
 
        //Add new rights in glpi_profilerights table
@@ -189,8 +191,6 @@ class PluginUninstallProfile extends Profile
 
     public static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false)
     {
-        global $DB;
-
         $profileRight = new ProfileRight();
         foreach ($rights as $right => $value) {
             if (
@@ -236,6 +236,7 @@ class PluginUninstallProfile extends Profile
 
     public static function install($migration)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $default_charset = DBConnection::getDefaultCharset();
@@ -294,6 +295,7 @@ class PluginUninstallProfile extends Profile
 
     public static function uninstall()
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");

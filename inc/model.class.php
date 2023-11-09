@@ -65,7 +65,6 @@ class PluginUninstallModel extends CommonDBTM
 
     public static function getMenuContent()
     {
-        global $CFG_GLPI;
         $menu = [];
 
        // get Menu name :
@@ -204,7 +203,8 @@ class PluginUninstallModel extends CommonDBTM
 
     public function showForm($ID, $options = [])
     {
-        global $DB, $CFG_GLPI;
+        /** @var array $CFG_GLPI */
+        global $CFG_GLPI;
 
         $this->initForm($ID, $options);
         $this->showFormHeader($options);
@@ -650,8 +650,6 @@ class PluginUninstallModel extends CommonDBTM
    **/
     public function showFormAction($item)
     {
-        global $DB;
-
         $spotted = false;
         $id      = $item->getID();
 
@@ -1181,6 +1179,7 @@ class PluginUninstallModel extends CommonDBTM
 
     public static function install($migration)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $default_charset = DBConnection::getDefaultCharset();
@@ -1399,6 +1398,7 @@ class PluginUninstallModel extends CommonDBTM
 
     public static function uninstall()
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
@@ -1483,8 +1483,6 @@ class PluginUninstallModel extends CommonDBTM
     **/
     public static function showMassiveActionsSubForm(MassiveAction $ma)
     {
-        global $UNINSTALL_TYPES;
-
         switch ($ma->getAction()) {
             case 'transfert':
                 Entity::dropdown();
@@ -1520,8 +1518,6 @@ class PluginUninstallModel extends CommonDBTM
     **/
     public static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids)
     {
-        global $CFG_GLPI;
-
         switch ($ma->getAction()) {
             case "transfert":
                 $input = $ma->getInput();

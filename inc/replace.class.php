@@ -50,7 +50,11 @@ class PluginUninstallReplace extends CommonDBTM
    **/
     public static function replace($type, $model_id, $tab_ids, $location)
     {
-        global $DB, $CFG_GLPI, $PLUGIN_HOOKS;
+        /**
+         * @var array $CFG_GLPI
+         * @var array $PLUGIN_HOOKS
+         */
+        global $CFG_GLPI, $PLUGIN_HOOKS;
 
         $plug = new Plugin();
 
@@ -80,7 +84,7 @@ class PluginUninstallReplace extends CommonDBTM
             $olditem->fields['_action'] = 'replace';
             Plugin::doHook("plugin_uninstall_replace_before", $olditem);
 
-           // Retrieve informations
+           // Retrieve information
 
            //States
             if ($model->fields['states_id'] != 0) {
@@ -111,6 +115,7 @@ class PluginUninstallReplace extends CommonDBTM
                     $out = __('Replacement', 'uninstall') . "\r\n";
 
                     $datas = $olditem->fields;
+                    //@phpstan-ignore-next-line
                     unset($datas['comment']);
                     foreach ($datas as $k => $v) {
                         $out .= $k . ";";
@@ -596,9 +601,7 @@ class PluginUninstallReplace extends CommonDBTM
 
     public static function showReplacementForm($type, $model_id, $tab_ids, $location)
     {
-        global $DB, $CFG_GLPI;
-
-       // Retrieve model informations and show details
+       // Retrieve model information and show details
        // It's just for helping user!
         $model = new PluginUninstallModel();
         $model->getConfig($model_id);
@@ -823,6 +826,10 @@ class PluginUninstallReplace extends CommonDBTM
    **/
     public static function getAssociatedDocuments(CommonDBTM $item, $withtemplate = '')
     {
+        /**
+         * @var DBmysql $DB
+         * @var array   $CFG_GLPI
+         */
         global $DB, $CFG_GLPI;
 
         if (
@@ -896,6 +903,7 @@ class PluginUninstallReplace extends CommonDBTM
    **/
     public static function getAssociatedContracts(CommonDBTM $item)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $contracts = [];
@@ -942,10 +950,11 @@ class PluginUninstallReplace extends CommonDBTM
     * @param $itemtype
     * @param $items_id
     *
-    * @return nothing (display a table)
+    * @return array
    **/
     public static function getAssociatedTickets($itemtype, $items_id)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         if (
@@ -983,6 +992,7 @@ class PluginUninstallReplace extends CommonDBTM
    **/
     public static function getAssociatedNetports($itemtype, $ID)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         if (!($item = getItemForItemtype($itemtype))) {
@@ -1017,7 +1027,8 @@ class PluginUninstallReplace extends CommonDBTM
    **/
     public static function getAssociatedItems(Computer $comp)
     {
-        global $DB, $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
+        /** @var array $UNINSTALL_DIRECT_CONNECTIONS_TYPE */
+        global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
         $ID = $comp->fields['id'];
 
@@ -1045,6 +1056,7 @@ class PluginUninstallReplace extends CommonDBTM
    */
     public static function getPdfUserPreference($item)
     {
+        /** @var DBmysql $DB */
         global $DB;
 
         $iterator = $DB->request([

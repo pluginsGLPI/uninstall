@@ -42,8 +42,12 @@ define("PLUGIN_UNINSTALL_MAX_GLPI", "10.0.99");
  */
 function plugin_init_uninstall()
 {
-    global $PLUGIN_HOOKS, $CFG_GLPI, $UNINSTALL_TYPES,
-          $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
+    /**
+     * @var array $PLUGIN_HOOKS
+     * @var array $UNINSTALL_TYPES
+     * @var array $UNINSTALL_DIRECT_CONNECTIONS_TYPE
+     */
+    global $PLUGIN_HOOKS, $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
     $PLUGIN_HOOKS['csrf_compliant']['uninstall'] = true;
 
@@ -139,7 +143,6 @@ function plugin_version_uninstall()
     return [
         'name'           => __("Item's Lifecycle (uninstall)", 'uninstall'),
         'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
-        'license'        => "GPLv2+",
         'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
         'version'        => PLUGIN_UNINSTALL_VERSION,
         'license'        => 'GPLv2+',
