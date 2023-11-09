@@ -466,7 +466,7 @@ class PluginUninstallReplace extends CommonDBTM
                    // If old item is attached in PDF/CSV
                    // Delete AND Purge it in DB
                     if (isset($document_added) && $document_added) {
-                       $olditem->delete(['id' => $olditem_id], true);
+                        $olditem->delete(['id' => $olditem_id], true);
                     }
                     break;
 
