@@ -28,55 +28,61 @@
  * -------------------------------------------------------------------------
  */
 
-include ('../../../inc/includes.php');
+include('../../../inc/includes.php');
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
-if (!isset ($_GET["withtemplate"])) {
-   $_GET["withtemplate"] = "";
+if (!isset($_GET["withtemplate"])) {
+    $_GET["withtemplate"] = "";
 }
 
-if (isset ($_GET["id"])) {
-   $id = $_GET["id"];
-} else if (isset ($_POST["id"])) {
-   $id = $_POST["id"];
+if (isset($_GET["id"])) {
+    $id = $_GET["id"];
+} else if (isset($_POST["id"])) {
+    $id = $_POST["id"];
 } else {
-   $id = -1;
+    $id = -1;
 }
 
 $model = new PluginUninstallModel();
 
-if (isset ($_POST["add"])) {
-   $model->check(-1, UPDATE, $_POST);
-   $model->add($_POST);
-   Html::back();
-
-} else if (isset ($_POST["update"])) {
-   $model->check($_POST['id'], UPDATE);
-   $model->update($_POST);
-   Html::back();
-
+if (isset($_POST["add"])) {
+    $model->check(-1, UPDATE, $_POST);
+    $model->add($_POST);
+    Html::back();
+} else if (isset($_POST["update"])) {
+    $model->check($_POST['id'], UPDATE);
+    $model->update($_POST);
+    Html::back();
 } else if (isset($_POST['purge'])) {
-   $model->check($_POST['id'], DELETE);
-   $model->delete($_POST);
-   $model->redirectToList();
-
+    $model->check($_POST['id'], DELETE);
+    $model->delete($_POST);
+    $model->redirectToList();
 } else {
+    Html::header(
+        PluginUninstallModel::getTypeName(),
+        $_SERVER['PHP_SELF'],
+        "admin",
+        "PluginUninstallModel",
+        "model"
+    );
 
-   Html::header(PluginUninstallModel::getTypeName(), $_SERVER['PHP_SELF'], "admin",
-                "PluginUninstallModel", "model");
+    if ($model->getFromDB($id)) {
+        if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT) {
+            if (
+                !Session::haveRight(
+                    'uninstall:profile',
+                    PluginUninstallProfile::RIGHT_REPLACE
+                )
+            ) {
+                Html::displayRightError();
+            }
+        }
+    }
 
-   if ($model->getFromDB($id)) {
-      if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT) {
-         if (!Session::haveRight('uninstall:profile',
-                                 PluginUninstallProfile::RIGHT_REPLACE)) {
-            Html::displayRightError();
-         }
-      }
-   }
+    $model->display(['id'           => $id,
+        'withtemplate' => $_GET["withtemplate"]
+    ]);
 
-   $model->display(['id'           => $id,
-                    'withtemplate' => $_GET["withtemplate"]]);
-
-   Html::footer();
+    Html::footer();
 }

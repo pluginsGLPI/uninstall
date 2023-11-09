@@ -30,73 +30,77 @@
 
 // ** Massive actions **
 
-function plugin_uninstall_MassiveActions($type) {
-   global $UNINSTALL_TYPES;
+function plugin_uninstall_MassiveActions($type)
+{
+    global $UNINSTALL_TYPES;
 
    // Like GLPI 0.84, this plugin don't support massive actions in Global item page.
-   if (isset($_REQUEST['container']) && $_REQUEST['container'] == 'massformAllAssets') {
-      return [];
-   }
+    if (isset($_REQUEST['container']) && $_REQUEST['container'] == 'massformAllAssets') {
+        return [];
+    }
 
-   if (in_array($type, $UNINSTALL_TYPES)) {
-      return ["PluginUninstallUninstall:uninstall" => __("Uninstall", 'uninstall')];
-   }
-   return [];
+    if (in_array($type, $UNINSTALL_TYPES)) {
+        return ["PluginUninstallUninstall:uninstall" => __("Uninstall", 'uninstall')];
+    }
+    return [];
 }
 
 // ** Search **
 
-function plugin_uninstall_addDefaultWhere($itemtype) {
+function plugin_uninstall_addDefaultWhere($itemtype)
+{
 
-   switch ($itemtype) {
-      case 'PluginUninstallModel' :
-         if (!PluginUninstallModel::canReplace()) {
-            return "`glpi_plugin_uninstall_models`.`types_id` = '1'";
-         }
-         break;
-   }
+    switch ($itemtype) {
+        case 'PluginUninstallModel':
+            if (!PluginUninstallModel::canReplace()) {
+                return "`glpi_plugin_uninstall_models`.`types_id` = '1'";
+            }
+            break;
+    }
 }
 
 // ** Install / Uninstall plugin **
 
-function plugin_uninstall_install() {
-   $dir = Plugin::getPhpDir('uninstall');
+function plugin_uninstall_install()
+{
+    $dir = Plugin::getPhpDir('uninstall');
 
-   $plugin_infos = plugin_version_uninstall();
-   $migration    = new Migration($plugin_infos['version']);
+    $plugin_infos = plugin_version_uninstall();
+    $migration    = new Migration($plugin_infos['version']);
 
    //Plugin classes are not loaded when plugin is not activated : force class loading
-   require_once ($dir . "/inc/uninstall.class.php");
-   require_once ($dir . "/inc/profile.class.php");
-   require_once ($dir . "/inc/preference.class.php");
-   require_once ($dir . "/inc/model.class.php");
-   require_once ($dir . "/inc/replace.class.php");
-   require_once ($dir . "/inc/config.class.php");
+    require_once($dir . "/inc/uninstall.class.php");
+    require_once($dir . "/inc/profile.class.php");
+    require_once($dir . "/inc/preference.class.php");
+    require_once($dir . "/inc/model.class.php");
+    require_once($dir . "/inc/replace.class.php");
+    require_once($dir . "/inc/config.class.php");
 
-   PluginUninstallProfile::install($migration);
-   PluginUninstallModel::install($migration);
-   PluginUninstallPreference::install($migration);
-   PluginUninstallConfig::install($migration);
+    PluginUninstallProfile::install($migration);
+    PluginUninstallModel::install($migration);
+    PluginUninstallPreference::install($migration);
+    PluginUninstallConfig::install($migration);
 
-   $migration->executeMigration();
+    $migration->executeMigration();
 
-   return true;
+    return true;
 }
 
 
-function plugin_uninstall_uninstall() {
-   $dir = Plugin::getPhpDir('uninstall');
+function plugin_uninstall_uninstall()
+{
+    $dir = Plugin::getPhpDir('uninstall');
 
-   require_once ($dir . "/inc/uninstall.class.php");
-   require_once ($dir . "/inc/profile.class.php");
-   require_once ($dir . "/inc/preference.class.php");
-   require_once ($dir . "/inc/model.class.php");
-   require_once ($dir . "/inc/replace.class.php");
-   require_once ($dir . "/inc/config.class.php");
+    require_once($dir . "/inc/uninstall.class.php");
+    require_once($dir . "/inc/profile.class.php");
+    require_once($dir . "/inc/preference.class.php");
+    require_once($dir . "/inc/model.class.php");
+    require_once($dir . "/inc/replace.class.php");
+    require_once($dir . "/inc/config.class.php");
 
-   PluginUninstallProfile::uninstall();
-   PluginUninstallModel::uninstall();
-   PluginUninstallPreference::uninstall();
-   PluginUninstallConfig::uninstall();
-   return true;
+    PluginUninstallProfile::uninstall();
+    PluginUninstallModel::uninstall();
+    PluginUninstallPreference::uninstall();
+    PluginUninstallConfig::uninstall();
+    return true;
 }

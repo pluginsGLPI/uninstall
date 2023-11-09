@@ -29,43 +29,47 @@
  */
 
 if (!defined('GLPI_ROOT')) {
-   die("Sorry. You can't access directly to this file");
+    die("Sorry. You can't access directly to this file");
 }
 
-class PluginUninstallState {
-   static function replaceState($params = []) {
-      global $UNINSTALL_TYPES;
+class PluginUninstallState
+{
+    static function replaceState($params = [])
+    {
+        global $UNINSTALL_TYPES;
 
-      if (!array_key_exists('item', $params)
-          || !in_array(get_class($params['item']), $UNINSTALL_TYPES)
-          || !isset($params['item']->fields['id'])
-          || !$params['item']->can($params['item']->fields['id'], UPDATE)) {
-         return false;
-      }
-      $item        = $params['item'];
-      $items_id    = $item->fields['id'];
-      $users_id    = Session::getLoginUserID();
-      $state       = new State;
-      $state->getFromDB($item->fields['states_id']);
-      $states_name = $state->getName([
-         'complete' => true,
-      ]);
+        if (
+            !array_key_exists('item', $params)
+            || !in_array(get_class($params['item']), $UNINSTALL_TYPES)
+            || !isset($params['item']->fields['id'])
+            || !$params['item']->can($params['item']->fields['id'], UPDATE)
+        ) {
+            return false;
+        }
+        $item        = $params['item'];
+        $items_id    = $item->fields['id'];
+        $users_id    = Session::getLoginUserID();
+        $state       = new State();
+        $state->getFromDB($item->fields['states_id']);
+        $states_name = $state->getName([
+            'complete' => true,
+        ]);
 
-      // get form for uninstall actions
-      ob_start();
-      PluginUninstallUninstall::showFormUninstallation($items_id, $item, $users_id);
-      $html_modal = ob_get_contents();
-      ob_end_clean();
+       // get form for uninstall actions
+        ob_start();
+        PluginUninstallUninstall::showFormUninstallation($items_id, $item, $users_id);
+        $html_modal = ob_get_contents();
+        ob_end_clean();
 
-      // we json encore to pass it to js (auto-escaping)
-      $html= json_encode("
+       // we json encore to pass it to js (auto-escaping)
+        $html = json_encode("
          $states_name
-         <a href='#' id='uninstall_actions_open' class='vsubmit'>".
-            __("Update").
+         <a href='#' id='uninstall_actions_open' class='vsubmit'>" .
+            __("Update") .
          "</a>");
-      $modal_body = json_encode($html_modal);
+        $modal_body = json_encode($html_modal);
 
-      $JS = <<<JAVASCRIPT
+        $JS = <<<JAVASCRIPT
       $(function() {
          // replace status select
          var state_span = $("#page select[name=states_id]").parent();
@@ -80,6 +84,6 @@ class PluginUninstallState {
          });
       });
 JAVASCRIPT;
-      echo Html::scriptBlock($JS);
-   }
+        echo Html::scriptBlock($JS);
+    }
 }

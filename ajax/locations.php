@@ -28,20 +28,26 @@
  * -------------------------------------------------------------------------
  */
 
-include ('../../../inc/includes.php');
+include('../../../inc/includes.php');
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
-if (Session::haveRight(PluginUninstallUninstall::$rightname, READ)
-    && $_POST['templates_id']) {
-   $location = PluginUninstallPreference::getLocationByUserByEntity($_POST["users_id"],
-                                                                    $_POST["templates_id"],
-                                                                    $_POST["entity"]);
-   Location::dropdown(['value'     => ($location == '' ? 0 : $location),
-                       'comments'  => 1,
-                       'entity'    => $_POST["entity"],
-                       'toadd'     => [-1 => __('Keep previous location', 'uninstall'),
-                                       0  => __('Empty location', 'uninstall')]]);
+if (
+    Session::haveRight(PluginUninstallUninstall::$rightname, READ)
+    && $_POST['templates_id']
+) {
+    $location = PluginUninstallPreference::getLocationByUserByEntity(
+        $_POST["users_id"],
+        $_POST["templates_id"],
+        $_POST["entity"]
+    );
+    Location::dropdown(['value'     => ($location == '' ? 0 : $location),
+        'comments'  => 1,
+        'entity'    => $_POST["entity"],
+        'toadd'     => [-1 => __('Keep previous location', 'uninstall'),
+            0  => __('Empty location', 'uninstall')
+        ]
+    ]);
 }

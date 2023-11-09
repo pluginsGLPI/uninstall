@@ -28,6 +28,6 @@
  * -------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+include("../../../inc/includes.php");
 
-Html::redirect($CFG_GLPI["root_doc"]."/front/config.form.php?forcetab=PluginUninstallConfig\$1");
+Html::redirect($CFG_GLPI["root_doc"] . "/front/config.form.php?forcetab=PluginUninstallConfig\$1");
