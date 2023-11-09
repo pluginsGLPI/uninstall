@@ -210,7 +210,6 @@ class PluginUninstallModel extends CommonDBTM
         $this->showFormHeader($options);
 
         $entities = (isset($_SESSION['glpiparententities']) ? $_SESSION['glpiparententities'] : 0);
-        $entity_sons = empty($entity_sons) ? 0 : 1;
 
         echo "<tr class='tab_bg_1'><td>" . __('Name') . "</td>";
         echo "<td>";

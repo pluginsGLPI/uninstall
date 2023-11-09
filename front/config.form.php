@@ -30,4 +30,5 @@
 
 include("../../../inc/includes.php");
 
+/** @var array $CFG_GLPI */
 Html::redirect($CFG_GLPI["root_doc"] . "/front/config.form.php?forcetab=PluginUninstallConfig\$1");

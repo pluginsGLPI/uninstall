@@ -355,14 +355,14 @@ class PluginUninstallUninstall extends CommonDBTM
             ]);
 
             Html::changeProgressBarPosition($count, $tot + 1);
-        }
 
-       //Add line in machine's history to say that machine was uninstalled
-        self::addUninstallLog([
-            'itemtype'  => $type,
-            'items_id'  => $id,
-            'models_id' => $model_id,
-        ]);
+            //Add line in machine's history to say that machine was uninstalled
+            self::addUninstallLog([
+                'itemtype'  => $type,
+                'items_id'  => $id,
+                'models_id' => $model_id,
+            ]);
+        }
 
         Html::changeProgressBarPosition($count, $tot, __('Uninstallation successful', 'uninstall'));
 
@@ -750,8 +750,8 @@ class PluginUninstallUninstall extends CommonDBTM
         $changes[0] = 0;
         $changes[1] = "";
 
+        $model = new PluginUninstallModel();
         if (isset($params['models_id'])) {
-            $model = new PluginUninstallModel();
             $model->getConfig($params['models_id']);
         }
 
