@@ -34,7 +34,7 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginUninstallState
 {
-    static function replaceState($params = [])
+    public static function replaceState($params = [])
     {
         global $UNINSTALL_TYPES;
 

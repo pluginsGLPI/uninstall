@@ -34,9 +34,9 @@ class PluginUninstallReplace extends CommonDBTM
     const METHOD_DELETE_AND_COMMENT = 2;
     const METHOD_KEEP_AND_COMMENT   = 3;
 
-    static $rightname = "uninstall:profile";
+    public static $rightname = "uninstall:profile";
 
-    static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0)
     {
         return __("Item's replacement", 'uninstall');
     }
@@ -48,7 +48,7 @@ class PluginUninstallReplace extends CommonDBTM
     * @param $tab_ids
     * @param $location
    **/
-    static function replace($type, $model_id, $tab_ids, $location)
+    public static function replace($type, $model_id, $tab_ids, $location)
     {
         global $DB, $CFG_GLPI, $PLUGIN_HOOKS;
 
@@ -546,7 +546,7 @@ class PluginUninstallReplace extends CommonDBTM
     *
     * @return the comments generated
    **/
-    static function getCommentsForReplacement(CommonDBTM $item, $new = true, $display_message = true)
+    public static function getCommentsForReplacement(CommonDBTM $item, $new = true, $display_message = true)
     {
 
         $string = "";
@@ -585,7 +585,7 @@ class PluginUninstallReplace extends CommonDBTM
    /**
     * @param $field
    **/
-    static function coloredYN($field)
+    public static function coloredYN($field)
     {
 
         return ($field == 1)
@@ -594,7 +594,7 @@ class PluginUninstallReplace extends CommonDBTM
     }
 
 
-    static function showReplacementForm($type, $model_id, $tab_ids, $location)
+    public static function showReplacementForm($type, $model_id, $tab_ids, $location)
     {
         global $DB, $CFG_GLPI;
 
@@ -821,7 +821,7 @@ class PluginUninstallReplace extends CommonDBTM
     * @param $item            CommonDBTM object for which associated documents must be displayed
     * @param $withtemplate    (default '')
    **/
-    static function getAssociatedDocuments(CommonDBTM $item, $withtemplate = '')
+    public static function getAssociatedDocuments(CommonDBTM $item, $withtemplate = '')
     {
         global $DB, $CFG_GLPI;
 
@@ -894,7 +894,7 @@ class PluginUninstallReplace extends CommonDBTM
     *
     * @return Nothing (display)
    **/
-    static function getAssociatedContracts(CommonDBTM $item)
+    public static function getAssociatedContracts(CommonDBTM $item)
     {
         global $DB;
 
@@ -944,7 +944,7 @@ class PluginUninstallReplace extends CommonDBTM
     *
     * @return nothing (display a table)
    **/
-    static function getAssociatedTickets($itemtype, $items_id)
+    public static function getAssociatedTickets($itemtype, $items_id)
     {
         global $DB;
 
@@ -981,7 +981,7 @@ class PluginUninstallReplace extends CommonDBTM
     * @param $itemtype     integer  item type
     * @param $ID           integer  item ID
    **/
-    static function getAssociatedNetports($itemtype, $ID)
+    public static function getAssociatedNetports($itemtype, $ID)
     {
         global $DB;
 
@@ -1015,7 +1015,7 @@ class PluginUninstallReplace extends CommonDBTM
     *
     * @return Nothing (call to classes members)
    **/
-    static function getAssociatedItems(Computer $comp)
+    public static function getAssociatedItems(Computer $comp)
     {
         global $DB, $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
@@ -1043,7 +1043,7 @@ class PluginUninstallReplace extends CommonDBTM
    * @param $itemtype itemtype to export in PDF
    * @return an array of tabs to export
    */
-    static function getPdfUserPreference($item)
+    public static function getPdfUserPreference($item)
     {
         global $DB;
 

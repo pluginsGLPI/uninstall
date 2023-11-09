@@ -38,7 +38,7 @@ class PluginUninstallProfile extends Profile
     *
     * @return array:array:string rights matrix
     */
-    function getGeneralRights()
+    public function getGeneralRights()
     {
         $rights = [
             [
@@ -54,7 +54,7 @@ class PluginUninstallProfile extends Profile
         return $rights;
     }
 
-    function showForm($ID, $options = [])
+    public function showForm($ID, $options = [])
     {
         global $DB;
 
@@ -84,7 +84,7 @@ class PluginUninstallProfile extends Profile
         }
     }
 
-    static function createFirstAccess($ID)
+    public static function createFirstAccess($ID)
     {
         self::addDefaultProfileInfos(
             $ID,
@@ -99,7 +99,7 @@ class PluginUninstallProfile extends Profile
     * Init profiles
     *
     **/
-    static function translateARight($old_right)
+    public static function translateARight($old_right)
     {
         switch ($old_right) {
             case '':
@@ -122,7 +122,7 @@ class PluginUninstallProfile extends Profile
     * Migration rights from old system to the new one for one profile
     * @param $profiles_id the profile ID
     */
-    static function migrateOneProfile($profiles_id)
+    public static function migrateOneProfile($profiles_id)
     {
         global $DB;
        //Cannot launch migration if there's nothing to migrate...
@@ -145,7 +145,7 @@ class PluginUninstallProfile extends Profile
    /**
     * Initialize profiles, and migrate it necessary
     */
-    static function migrateAllProfiles()
+    public static function migrateAllProfiles()
     {
         global $DB;
 
@@ -176,7 +176,7 @@ class PluginUninstallProfile extends Profile
         }
     }
 
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
         if ($item->getType() == 'Profile') {
@@ -187,7 +187,7 @@ class PluginUninstallProfile extends Profile
         return '';
     }
 
-    static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false)
+    public static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false)
     {
         global $DB;
 
@@ -218,7 +218,7 @@ class PluginUninstallProfile extends Profile
         }
     }
 
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
 
         if ($item->getType() == 'Profile') {
@@ -234,7 +234,7 @@ class PluginUninstallProfile extends Profile
         return true;
     }
 
-    static function install($migration)
+    public static function install($migration)
     {
         global $DB;
 
@@ -292,7 +292,7 @@ class PluginUninstallProfile extends Profile
         return true;
     }
 
-    static function uninstall()
+    public static function uninstall()
     {
         global $DB;
 

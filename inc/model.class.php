@@ -30,7 +30,7 @@
 
 class PluginUninstallModel extends CommonDBTM
 {
-    static $rightname         = "uninstall:profile";
+    public static $rightname         = "uninstall:profile";
     public $dohistory         = true;
     public $first_level_menu  = "plugins";
     public $second_level_menu = "uninstall";
@@ -38,32 +38,32 @@ class PluginUninstallModel extends CommonDBTM
     const TYPE_MODEL_UNINSTALL   = 1;
     const TYPE_MODEL_REPLACEMENT = 2;
 
-    static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0)
     {
         return _n("Template", "Templates", $nb);
     }
 
-    static function canDelete()
+    public static function canDelete()
     {
         return self::canUpdate();
     }
 
-    static function canPurge()
+    public static function canPurge()
     {
         return self::canUpdate();
     }
 
-    static function canCreate()
+    public static function canCreate()
     {
         return self::canUpdate();
     }
 
-    static function canReplace()
+    public static function canReplace()
     {
         return Session::haveRight(self::$rightname, PluginUninstallProfile::RIGHT_REPLACE) ? true : false;
     }
 
-    static function getMenuContent()
+    public static function getMenuContent()
     {
         global $CFG_GLPI;
         $menu = [];
@@ -87,7 +87,7 @@ class PluginUninstallModel extends CommonDBTM
     }
 
 
-    function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input)
     {
         return $this->prepareInputForAdd($input);
     }
@@ -98,7 +98,7 @@ class PluginUninstallModel extends CommonDBTM
     * @param $name   select name (default 'types_id')
     * @param $value  default value (default '')
    **/
-    static function dropdownType($name = 'types_id', $value = '')
+    public static function dropdownType($name = 'types_id', $value = '')
     {
 
         $values[1] = __('Uninstallation', 'uninstall');
@@ -109,7 +109,7 @@ class PluginUninstallModel extends CommonDBTM
     }
 
 
-    static function getReplacementMethods()
+    public static function getReplacementMethods()
     {
 
         $plug = new Plugin();
@@ -132,7 +132,7 @@ class PluginUninstallModel extends CommonDBTM
     * @param $name   select name
     * @param $value  default value (default '')
    **/
-    static function dropdownMethodReplacement($name, $value = '')
+    public static function dropdownMethodReplacement($name, $value = '')
     {
 
         Dropdown::showFromArray(
@@ -146,7 +146,7 @@ class PluginUninstallModel extends CommonDBTM
    /**
     * @param $value  (default 0)
    **/
-    static function getMethodReplacement($value = 0)
+    public static function getMethodReplacement($value = 0)
     {
 
         $values = self::getReplacementMethods();
@@ -159,7 +159,7 @@ class PluginUninstallModel extends CommonDBTM
    /**
     * Définition du nom de l'onglet
     **/
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
         switch ($item->getType()) {
@@ -178,7 +178,7 @@ class PluginUninstallModel extends CommonDBTM
    /**
     * Définition du contenu de l'onglet
     **/
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
         switch ($item->getType()) {
             case __CLASS__:
@@ -194,7 +194,7 @@ class PluginUninstallModel extends CommonDBTM
         return true;
     }
 
-    function defineTabs($options = [])
+    public function defineTabs($options = [])
     {
         $ong = [];
         $this->addStandardTab(__CLASS__, $ong, $options);
@@ -202,7 +202,7 @@ class PluginUninstallModel extends CommonDBTM
         return $ong;
     }
 
-    function showForm($ID, $options = [])
+    public function showForm($ID, $options = [])
     {
         global $DB, $CFG_GLPI;
 
@@ -312,7 +312,7 @@ class PluginUninstallModel extends CommonDBTM
         return true;
     }
 
-    function showPartFormUninstall()
+    public function showPartFormUninstall()
     {
         echo "<tr class='tab_bg_1 center'>";
         echo "<th colspan='4'>" . __('Erase datas', 'uninstall') . "</th></tr>";
@@ -438,7 +438,7 @@ class PluginUninstallModel extends CommonDBTM
         echo "</td></tr>";
     }
 
-    function showPartFormRemplacement()
+    public function showPartFormRemplacement()
     {
         echo "<tr class='tab_bg_1 center'>";
         echo "<th colspan='4'>" . sprintf(
@@ -648,7 +648,7 @@ class PluginUninstallModel extends CommonDBTM
    /**
     * @param $item
    **/
-    function showFormAction($item)
+    public function showFormAction($item)
     {
         global $DB;
 
@@ -775,7 +775,7 @@ class PluginUninstallModel extends CommonDBTM
    /**
     * @param $model_id
    **/
-    function getConfig($model_id)
+    public function getConfig($model_id)
     {
         if (! $this->getFromDB($model_id)) {
             $this->fields = [];
@@ -783,13 +783,13 @@ class PluginUninstallModel extends CommonDBTM
     }
 
 
-    function cleanDBonPurge()
+    public function cleanDBonPurge()
     {
         PluginUninstallPreference::deleteUserPreferenceForModel($this->fields['id']);
     }
 
 
-    function rawSearchOptions()
+    public function rawSearchOptions()
     {
 
         $tab = [];
@@ -1091,7 +1091,7 @@ class PluginUninstallModel extends CommonDBTM
     * @param $values
     * @param $options   array
    **/
-    static function getSpecificValueToDisplay($field, $values, array $options = [])
+    public static function getSpecificValueToDisplay($field, $values, array $options = [])
     {
 
         if (!is_array($values)) {
@@ -1134,7 +1134,7 @@ class PluginUninstallModel extends CommonDBTM
     * @param $values             (defaut '')
     * @param $options   array
    **/
-    static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
+    public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
     {
 
         if (!is_array($values)) {
@@ -1179,7 +1179,7 @@ class PluginUninstallModel extends CommonDBTM
     }
 
 
-    static function install($migration)
+    public static function install($migration)
     {
         global $DB;
 
@@ -1397,7 +1397,7 @@ class PluginUninstallModel extends CommonDBTM
     }
 
 
-    static function uninstall()
+    public static function uninstall()
     {
         global $DB;
 
@@ -1420,7 +1420,7 @@ class PluginUninstallModel extends CommonDBTM
    /**
     * @param $name   (default 'Uninstall')
    **/
-    static function createTransferModel($name = 'Uninstall')
+    public static function createTransferModel($name = 'Uninstall')
     {
 
         $transfers_id = PluginUninstallUninstall::getUninstallTransferModelID();
@@ -1481,7 +1481,7 @@ class PluginUninstallModel extends CommonDBTM
     *
     * @see CommonDBTM::showMassiveActionsSubForm()
     **/
-    static function showMassiveActionsSubForm(MassiveAction $ma)
+    public static function showMassiveActionsSubForm(MassiveAction $ma)
     {
         global $UNINSTALL_TYPES;
 
@@ -1495,7 +1495,7 @@ class PluginUninstallModel extends CommonDBTM
         return "";
     }
 
-    function getSpecificMassiveActions($checkitem = null)
+    public function getSpecificMassiveActions($checkitem = null)
     {
 
         $isadmin = static::canUpdate();
@@ -1518,7 +1518,7 @@ class PluginUninstallModel extends CommonDBTM
     *
     * @see CommonDBTM::processMassiveActionsForOneItemtype()
     **/
-    static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids)
+    public static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, array $ids)
     {
         global $CFG_GLPI;
 
@@ -1543,7 +1543,7 @@ class PluginUninstallModel extends CommonDBTM
         return;
     }
 
-    static function getIcon()
+    public static function getIcon()
     {
         return "fas fa-recycle";
     }

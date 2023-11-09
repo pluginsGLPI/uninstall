@@ -36,7 +36,7 @@ class PluginUninstallConfig extends Config
 {
     const CFG_CTXT = 'plugin:uninstall';
 
-    static function getTypeName($nb = 0)
+    public static function getTypeName($nb = 0)
     {
         return __("Item's Lifecycle", 'uninstall');
     }
@@ -46,12 +46,12 @@ class PluginUninstallConfig extends Config
     *
     * @return array config with keys => values
     */
-    static function getConfig()
+    public static function getConfig()
     {
         return Config::getConfigurationValues(self::CFG_CTXT);
     }
 
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
         switch ($item->getType()) {
             case "Config":
@@ -60,7 +60,7 @@ class PluginUninstallConfig extends Config
         return '';
     }
 
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
         switch ($item->getType()) {
             case "Config":
@@ -70,7 +70,7 @@ class PluginUninstallConfig extends Config
         return true;
     }
 
-    static function showForConfig(Config $config, $withtemplate = 0)
+    public static function showForConfig(Config $config, $withtemplate = 0)
     {
         global $CFG_GLPI;
 
@@ -125,7 +125,7 @@ class PluginUninstallConfig extends Config
     * @param Migration $migration
     * @return boolean True on success
     */
-    static function install(Migration $migration)
+    public static function install(Migration $migration)
     {
         $current_config = self::getConfig();
 
@@ -146,7 +146,7 @@ class PluginUninstallConfig extends Config
     *
     * @return boolean True on success
     */
-    static function uninstall()
+    public static function uninstall()
     {
         $config = new Config();
         $config->deleteByCriteria(['context' => self::CFG_CTXT]);

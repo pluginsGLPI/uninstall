@@ -30,14 +30,14 @@
 
 class PluginUninstallPreference extends CommonDBTM
 {
-    static $rightname = "uninstall:replace";
+    public static $rightname = "uninstall:replace";
 
-    function prepareInputForAdd($input)
+    public function prepareInputForAdd($input)
     {
         return $this->handleLocationPref($input);
     }
 
-    function prepareInputForUpdate($input)
+    public function prepareInputForUpdate($input)
     {
         return $this->handleLocationPref($input);
     }
@@ -55,7 +55,7 @@ class PluginUninstallPreference extends CommonDBTM
         return $input;
     }
 
-    function showFormUserPreferences()
+    public function showFormUserPreferences()
     {
         global $DB;
 
@@ -125,7 +125,7 @@ class PluginUninstallPreference extends CommonDBTM
    /**
     * @param $item
    **/
-    static function afterUpdateModel($item)
+    public static function afterUpdateModel($item)
     {
 
         if ($item->fields["is_recursive"] == 0) {
@@ -137,7 +137,7 @@ class PluginUninstallPreference extends CommonDBTM
    /**
     * @param $item
    **/
-    static function beforeItemPurge($item)
+    public static function beforeItemPurge($item)
     {
 
         switch ($item->getType()) {
@@ -156,7 +156,7 @@ class PluginUninstallPreference extends CommonDBTM
     * @param $models_id
     * @param $except_entity   (default -1)
    **/
-    static function deleteUserPreferenceForModel($models_id, $except_entity = -1)
+    public static function deleteUserPreferenceForModel($models_id, $except_entity = -1)
     {
         global $DB;
 
@@ -173,7 +173,7 @@ class PluginUninstallPreference extends CommonDBTM
    /**
     * @param $users_id
    **/
-    static function deleteUserPreferences($users_id)
+    public static function deleteUserPreferences($users_id)
     {
         $preference = new self();
         $preference->deleteByCriteria(['users_id' => $users_id]);
@@ -185,7 +185,7 @@ class PluginUninstallPreference extends CommonDBTM
     * @param $template
     * @param $entity
    **/
-    static function checkIfPreferenceExistsByEntity($user_id, $template, $entity)
+    public static function checkIfPreferenceExistsByEntity($user_id, $template, $entity)
     {
         global $DB;
 
@@ -207,7 +207,7 @@ class PluginUninstallPreference extends CommonDBTM
     * @param $template
     * @param $entity
    **/
-    static function addDefaultPreference($user_id, $template, $entity)
+    public static function addDefaultPreference($user_id, $template, $entity)
     {
 
         $pref                  = new self();
@@ -224,7 +224,7 @@ class PluginUninstallPreference extends CommonDBTM
     * @param $template
     * @param $entity
    **/
-    static function getLocationByUserByEntity($user_id, $template, $entity)
+    public static function getLocationByUserByEntity($user_id, $template, $entity)
     {
         global $DB;
 
@@ -249,7 +249,7 @@ class PluginUninstallPreference extends CommonDBTM
     }
 
 
-    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
         if ($item->getType() == 'Preference' && Session::haveRight('uninstall:profile', READ)) {
@@ -259,7 +259,7 @@ class PluginUninstallPreference extends CommonDBTM
     }
 
 
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
         global $CFG_GLPI;
 
@@ -271,7 +271,7 @@ class PluginUninstallPreference extends CommonDBTM
     }
 
 
-    static function install(Migration $migration)
+    public static function install(Migration $migration)
     {
         global $DB;
 
@@ -334,7 +334,7 @@ class PluginUninstallPreference extends CommonDBTM
     }
 
 
-    static function uninstall()
+    public static function uninstall()
     {
         global $DB;
         $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
