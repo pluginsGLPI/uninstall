@@ -28,14 +28,19 @@
  * -------------------------------------------------------------------------
  */
 
-include ('../../../inc/includes.php');
+include('../../../inc/includes.php');
 
-Html::header(PluginUninstallModel::getTypeName(Session::getPluralNumber()), '', "admin",
-   "PluginUninstallModel", "model");
+Html::header(
+    PluginUninstallModel::getTypeName(Session::getPluralNumber()),
+    '',
+    "admin",
+    "PluginUninstallModel",
+    "model"
+);
 
 if (Session::haveRight(PluginUninstallModel::$rightname, READ)) {
-   Search::show("PluginUninstallModel");
+    Search::show("PluginUninstallModel");
 } else {
-   Html::displayRightError();
+    Html::displayRightError();
 }
 Html::footer();

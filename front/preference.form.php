@@ -28,13 +28,13 @@
  * -------------------------------------------------------------------------
  */
 
-include ('../../../inc/includes.php');
+include('../../../inc/includes.php');
 
 // Save user preferences
-if (isset ($_POST['update_user_preferences_uninstall'])) {
-   $pref = new PluginUninstallPreference();
-   foreach ($_POST["id"] as $prefid => $values) {
-      $pref->update($values);
-   }
-   Html::back();
+if (isset($_POST['update_user_preferences_uninstall'])) {
+    $pref = new PluginUninstallPreference();
+    foreach ($_POST["id"] as $prefid => $values) {
+        $pref->update($values);
+    }
+    Html::back();
 }
