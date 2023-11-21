@@ -187,7 +187,7 @@ class PluginUninstallUninstall extends CommonDBTM
             $nbgroup = countElementsInTableForEntity(
                 "glpi_groups",
                 $entity,
-                ['id' => $item->fields['groups_id']]
+                ['id' => $model->fields['groups_id']]
             );
             if (
                 ($model->fields["groups_action"] === 'set')
