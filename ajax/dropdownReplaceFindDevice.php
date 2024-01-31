@@ -87,7 +87,7 @@ if (
 ) {
     // isset already makes sure the search value isn't null
     $search_val = Search::makeTextSearchValue($_REQUEST['searchText']);
-    $critera['WHERE'][] = [
+    $criteria['WHERE'][] = [
         'OR' => [
             'name' => ['LIKE', $search_val],
             'id' => ['LIKE', $search_val],
