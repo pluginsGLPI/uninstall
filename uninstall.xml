@@ -2,7 +2,7 @@
    <name>Uninstall</name>
    <key>uninstall</key>
    <state>stable</state>
-   <logo>https://raw.githubusercontent.com/pluginsglpi/uninstall/master/uninstall.png</logo>
+   <logo>https://raw.githubusercontent.com/pluginsglpi/uninstall/main/uninstall.png</logo>
    <description>
       <short>
          <fr><![CDATA[Désinstallez facilement les objets obsolètes de votre inventaire]]></fr>
@@ -169,9 +169,9 @@
          </cs>
    </tags>
    <screenshots>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/master/screenshots/uninstall.png</screenshot>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/master/screenshots/uninstall2.png</screenshot>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/master/uninstall.gif</screenshot>
+      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/main/screenshots/uninstall.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/main/screenshots/uninstall2.png</screenshot>
+      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/main/uninstall.gif</screenshot>
    </screenshots>
    <license>GPL v2+</license>
 </root>
