@@ -132,7 +132,7 @@ function plugin_uninstall_hook_add_field($item) {
     }
     $fieldId = $item->getID();
     $uninstallContainer = new PluginUninstallModelcontainer();
-    $uninstallContainers = $uninstallContainer->find();
+    $uninstallContainers = $uninstallContainer->find(['plugin_fields_containers_id' => $item->fields['plugin_fields_containers_id']]);
     $uninstallField = new PluginUninstallModelcontainerfield();
     foreach ($uninstallContainers as $container) {
         $uninstallField->add([
