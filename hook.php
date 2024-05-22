@@ -81,6 +81,8 @@ function plugin_uninstall_install()
     PluginUninstallModel::install($migration);
     PluginUninstallPreference::install($migration);
     PluginUninstallConfig::install($migration);
+    PluginUninstallModelcontainer::install($migration);
+    PluginUninstallModelcontainerfield::install($migration);
 
     $migration->executeMigration();
 
@@ -103,5 +105,64 @@ function plugin_uninstall_uninstall()
     PluginUninstallModel::uninstall();
     PluginUninstallPreference::uninstall();
     PluginUninstallConfig::uninstall();
+    PluginUninstallModelcontainer::uninstall();
+    PluginUninstallModelcontainerfield::uninstall();
     return true;
+}
+
+function plugin_uninstall_hook_add_container($item) {
+    if (!($item instanceof PluginFieldsContainer)) {
+        return;
+    }
+    $containerId = $item->getID();
+    $uninstallContainer = new PluginUninstallModelcontainer();
+    $model = new PluginUninstallModel();
+    $models = $model->find();
+    foreach ($models as $mod) {
+        $uninstallContainer->add([
+            'plugin_uninstall_models_id' => $mod['id'],
+            'plugin_fields_containers_id' => $containerId
+        ]);
+    }
+}
+
+function plugin_uninstall_hook_add_field($item) {
+    if (!($item instanceof PluginFieldsField)) {
+        return;
+    }
+    $fieldId = $item->getID();
+    $uninstallContainer = new PluginUninstallModelcontainer();
+    $uninstallContainers = $uninstallContainer->find();
+    $uninstallField = new PluginUninstallModelcontainerfield();
+    foreach ($uninstallContainers as $container) {
+        $uninstallField->add([
+            'plugin_uninstall_modelcontainers_id' => $container['id'],
+            'plugin_fields_fields_id' => $fieldId,
+            'action' => $uninstallField::ACTION_RAZ
+        ]);
+    }
+}
+
+function plugin_uninstall_hook_purge_container($item) {
+    if (!($item instanceof PluginFieldsContainer)) {
+        return;
+    }
+    global $DB;
+    $containerId = $item->getID();
+    $DB->delete(
+        PluginUninstallModelcontainer::getTable(),
+        ['plugin_fields_containers_id' => $containerId]
+    );
+}
+
+function plugin_uninstall_hook_purge_field($item) {
+    if (!($item instanceof PluginFieldsField)) {
+        return;
+    }
+    global $DB;
+    $fieldId = $item->getID();
+    $DB->delete(
+        PluginUninstallModelcontainerfield::getTable(),
+        ['plugin_fields_fields_id' => $fieldId]
+    );
 }

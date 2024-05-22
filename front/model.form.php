@@ -48,11 +48,19 @@ $model = new PluginUninstallModel();
 
 if (isset($_POST["add"])) {
     $model->check(-1, UPDATE, $_POST);
-    $model->add($_POST);
+    if ($id = $model->add($_POST)) {
+        if ($_POST['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+            $model->createPluginFieldsRelations($id);
+        }
+    }
     Html::back();
 } else if (isset($_POST["update"])) {
     $model->check($_POST['id'], UPDATE);
-    $model->update($_POST);
+    if ($model->update($_POST)) {
+        if ($_POST['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+            $model->createPluginFieldsRelations($_POST['id']);
+        }
+    }
     Html::back();
 } else if (isset($_POST['purge'])) {
     $model->check($_POST['id'], DELETE);
