@@ -1391,7 +1391,6 @@ class PluginUninstallModel extends CommonDBTM
                     `name` varchar(255) NOT NULL DEFAULT '',
                     `transfers_id` int {$default_key_sign} NOT NULL,
                     `states_id` int {$default_key_sign} NOT NULL,
-                    `states_id` int {$default_key_sign} NOT NULL,
                     `raz_name` int NOT NULL DEFAULT '1',
                     `raz_contact` int NOT NULL DEFAULT '1',
                     `raz_contact_num` int NOT NULL DEFAULT '1',
