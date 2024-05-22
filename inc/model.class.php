@@ -794,7 +794,11 @@ class PluginUninstallModel extends CommonDBTM
         $plugin = new Plugin();
         if ($plugin->isActivated('fields')) {
             if ($item->fields['action_plugin_fields'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
-
+                echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
+                echo "<tr class='tab_bg_1 center'>";
+                echo "<th colspan='4'>" . __('Plugin fields blocks', 'uninstall') .
+                    "</th></tr></table>";
+                Search::show('PluginUninstallModelcontainer');
             } else {
                 echo "<span class='center b'>" . __("Select 'Advanced options' for the field 'Fields plugin informations' to access this tab.") . "</span>";
                 return false;

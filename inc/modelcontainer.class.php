@@ -32,6 +32,106 @@ class PluginUninstallModelcontainer extends CommonDBTM
 {
     public $dohistory = true;
 
+    public static function getTypeName($nb = 0)
+    {
+        return __("Plugin fields block", "uninstall");
+    }
+
+    public function rawSearchOptions()
+    {
+        $tab = [];
+
+        $tab[] = [
+            'id' => 'common',
+            'name' => self::getTypeName(),
+        ];
+
+        $tab[] = [
+            'id' => '1',
+            'table' => self::getTable(),
+            'field' => 'id',
+            'name' => __('ID'),
+            'massiveaction' => false,
+            'datatype' => 'itemlink'
+        ];
+
+        $tab[] = [
+            'id' => '2',
+            'table' => PluginFieldsContainer::getTable(),
+            'field' => 'label',
+            'name' => __('Block', 'fields'),
+            'datatype' => 'dropdown',
+            'linkfield' => 'plugin_fields_containers_id',
+            'massiveaction' => false
+        ];
+
+        $tab[] = [
+            'id'            => 3,
+            'table'         => PluginFieldsContainer::getTable(),
+            'field'         => 'itemtypes',
+            'name'          => __("Associated item type"),
+            'datatype'      => 'specific',
+            'massiveaction' => false
+        ];
+
+        return $tab;
+    }
+
+    /**
+     * Copy from PluginFieldsContainer
+     * @param $field
+     * @param $values
+     * @param array $options
+     * @return string
+     */
+    public static function getSpecificValueToDisplay($field, $values, array $options = [])
+    {
+        if (!is_array($values)) {
+            $values = [$field => $values];
+        }
+        switch ($field) {
+            case 'itemtypes':
+                $types = json_decode($values[$field]);
+                $obj   = '';
+                $count = count($types);
+                $i     = 1;
+                foreach ($types as $type) {
+                    // prevent usage of plugin class if not loaded
+                    if (!class_exists($type)) {
+                        continue;
+                    }
+                    $name_type = getItemForItemtype($type);
+                    $obj .= $name_type->getTypeName(2);
+                    if ($count > $i) {
+                        $obj .= ", ";
+                    }
+                    $i++;
+                }
+                return $obj;
+        }
+
+        return '';
+    }
+
+    /**
+     * Copy from PluginFieldsContainer
+     * @param $field_id_or_search_options
+     * @param $name
+     * @param $values
+     * @param $options
+     * @return mixed
+     */
+    public function getValueToSelect($field_id_or_search_options, $name = '', $values = '', $options = [])
+    {
+        switch ($field_id_or_search_options['table'] . '.' . $field_id_or_search_options['field']) {
+            case $this->getTable() . '.itemtypes':
+                $options['display'] = false;
+                return Dropdown::showFromArray($name, self::getItemtypes(false), $options);
+        }
+
+        return parent::getValueToSelect($field_id_or_search_options, $name, $values, $options);
+    }
+
     public static function install($migration)
     {
         /** @var DBmysql $DB */

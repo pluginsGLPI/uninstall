@@ -39,6 +39,80 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
     // set value to new_value
     const ACTION_NEW_VALUE = 2;
 
+    public static function getTypeName($nb = 0)
+    {
+        return __("Plugin fields block", "uninstall");
+    }
+
+    public function rawSearchOptions()
+    {
+        $tab = [];
+
+        $tab[] = [
+            'id' => '1',
+            'table' => self::getTable(),
+            'field' => 'id',
+            'name' => __('ID'),
+            'massiveaction' => false,
+            'datatype' => 'itemlink'
+        ];
+
+        $tab[] = [
+            'id' => '2',
+            'table' => PluginFieldsField::getTable(),
+            'field' => 'label',
+            'name' => __('Label'),
+            'datatype' => 'dropdown',
+            'linkfield' => 'plugin_fields_fields_id',
+        ];
+
+        $tab[] = [
+            'id'            => 3,
+            'table'         => PluginFieldsField::getTable(),
+            'field'         => 'type',
+            'name'          => __("Type"),
+            'datatype'      => 'specific',
+            'massiveaction' => false,
+            'nosearch'      => true,
+        ];
+
+        $tab[] = [
+            'id'            => 4,
+            'table'         => self::getTable(),
+            'field'         => 'action',
+            'name'          => __("Action"),
+            'datatype'      => 'specific',
+            'massiveaction' => true,
+            'nosearch'      => true,
+        ];
+
+        return $tab;
+    }
+
+    public static function getSpecificValueToDisplay($field, $values, array $options = [])
+    {
+        if (!is_array($values)) {
+            $values = [$field => $values];
+        }
+        switch ($field) {
+            case 'type':
+                // TODO why does type never go there ?
+                $types = PluginFieldsField::getType(false);
+                return $types[$values[$field]];
+            case 'action':
+                switch ($values[$field]) {
+                    case self::ACTION_NONE:
+                        return __("Don't alter", 'uninstall');
+                    case self::ACTION_RAZ:
+                        return __('Blank');
+                    case self::ACTION_NEW_VALUE:
+                        return __('Set value', 'uninstall');
+                }
+        }
+
+        return '';
+    }
+
     public static function install($migration)
     {
         /** @var DBmysql $DB */

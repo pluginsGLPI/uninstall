@@ -57,6 +57,16 @@ function plugin_uninstall_addDefaultWhere($itemtype)
                 return "`glpi_plugin_uninstall_models`.`types_id` = '1'";
             }
             break;
+        case 'PluginUninstallModelcontainer':
+            if (isset($_GET['id'])) {
+                return "`glpi_plugin_uninstall_modelcontainers`.`plugin_uninstall_models_id` = '" . $_GET['id'] . "'";
+            }
+            break;
+        case 'PluginUninstallModelcontainerfield':
+            if (isset($_GET['id'])) {
+                return "`glpi_plugin_uninstall_modelcontainerfields`.`plugin_uninstall_modelcontainers_id` = '" . $_GET['id'] . "'";
+            }
+            break;
     }
 }
 
@@ -110,7 +120,8 @@ function plugin_uninstall_uninstall()
     return true;
 }
 
-function plugin_uninstall_hook_add_container($item) {
+function plugin_uninstall_hook_add_container($item)
+{
     if (!($item instanceof PluginFieldsContainer)) {
         return;
     }
@@ -126,13 +137,16 @@ function plugin_uninstall_hook_add_container($item) {
     }
 }
 
-function plugin_uninstall_hook_add_field($item) {
+function plugin_uninstall_hook_add_field($item)
+{
     if (!($item instanceof PluginFieldsField)) {
         return;
     }
     $fieldId = $item->getID();
     $uninstallContainer = new PluginUninstallModelcontainer();
-    $uninstallContainers = $uninstallContainer->find(['plugin_fields_containers_id' => $item->fields['plugin_fields_containers_id']]);
+    $uninstallContainers = $uninstallContainer->find(
+        ['plugin_fields_containers_id' => $item->fields['plugin_fields_containers_id']]
+    );
     $uninstallField = new PluginUninstallModelcontainerfield();
     foreach ($uninstallContainers as $container) {
         $uninstallField->add([
@@ -143,7 +157,8 @@ function plugin_uninstall_hook_add_field($item) {
     }
 }
 
-function plugin_uninstall_hook_purge_container($item) {
+function plugin_uninstall_hook_purge_container($item)
+{
     if (!($item instanceof PluginFieldsContainer)) {
         return;
     }
@@ -155,7 +170,8 @@ function plugin_uninstall_hook_purge_container($item) {
     );
 }
 
-function plugin_uninstall_hook_purge_field($item) {
+function plugin_uninstall_hook_purge_field($item)
+{
     if (!($item instanceof PluginFieldsField)) {
         return;
     }
