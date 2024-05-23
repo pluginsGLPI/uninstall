@@ -32,16 +32,10 @@ include('../../../inc/includes.php');
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
-$id = 1;
-if (isset($_GET["id"])) {
-    $id = $_GET["id"];
-} else if (isset($_POST["id"])) {
-    $id = $_POST["id"];
-}
-
 $field = new PluginUninstallModelcontainerfield();
 
 if (isset($_POST["update"])) {
+    // TODO handling of mandatory when action = SET_VALUE
     $field->check($_POST['id'], UPDATE);
     $field->update($_POST);
     Html::back();
@@ -54,7 +48,12 @@ if (isset($_POST["update"])) {
         "model"
     );
 
-    $field->display(['id' => $id]);
+    if (isset($_GET["id"])) {
+        PluginUninstallModelcontainerfield::displayFullPageForItem($_GET['id']);
+    } else {
+
+    }
+
 
     Html::footer();
 }

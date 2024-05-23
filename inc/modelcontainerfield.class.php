@@ -32,6 +32,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
 {
     public $dohistory = true;
 
+    public static $rightname = "uninstall:profile";
     // don't modify the field
     const ACTION_NONE = 0;
     // delete value
@@ -41,7 +42,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
 
     public static function getTypeName($nb = 0)
     {
-        return __("Plugin fields block", "uninstall");
+        return __("Plugin fields field", "uninstall");
     }
 
     public function rawSearchOptions()
@@ -87,6 +88,97 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
         ];
 
         return $tab;
+    }
+
+    public function showForm($ID, $options = [])
+    {
+        /** @var array $CFG_GLPI */
+        global $CFG_GLPI;
+
+        $this->initForm($ID, $options);
+        $this->showFormHeader($options);
+
+        $pluginFieldsField = new PluginFieldsField();
+        if ($pluginFieldsField->getFromDB($this->fields['plugin_fields_fields_id'])) {
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<th colspan='4'>" . __('Field informations', 'uninstall') .
+                "</th></tr>";
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<td>" . __("Label") . " : </td>";
+            echo "<td>";
+            echo $pluginFieldsField->fields['label'];
+            echo "</td>";
+            echo "<td>" . __("Type") . " : </td>";
+            echo "<td>";
+            echo PluginFieldsField::getTypes(true)[$pluginFieldsField->fields['type']];
+            echo "</td>";
+            echo "</tr>";
+            // DEFAULT VALUE
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<td>" . __('Active') . " :</td>";
+            echo "<td>";
+            echo $pluginFieldsField->fields["is_active"]  ? __('Yes') : __('No');
+            echo "</td>";
+            echo "<td>" . __("Mandatory field") . " : </td>";
+            echo "<td>";
+            echo $pluginFieldsField->fields["mandatory"]  ? __('Yes') : __('No');
+            echo "</td>";
+            echo "</tr>";
+
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<th colspan='4'>" . __('Uninstall action', 'uninstall') .
+                "</th></tr>";
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<td>" . __('Action', 'uninstall') . " :</td>";
+            echo "<td>";
+            $rand = mt_rand();
+            Dropdown::showFromArray(
+                "action",
+                [
+                    self::ACTION_NONE => __("Don't alter", 'uninstall'),
+                    self::ACTION_RAZ => __('Blank'),
+                    self::ACTION_NEW_VALUE => __('Set value', 'uninstall'),
+                ],
+                [
+                    'value' => (isset($this->fields["action"])
+                        ? $this->fields["action"] : self::ACTION_RAZ),
+                    'width' => '100%',
+                    'rand' => $rand
+                ]
+            );
+            echo "</td>";
+            echo "<td><span id='label-set-value' style='display: none'>".__('New value', 'uninstall')." : </span></td>";
+            echo "<td id='container-set-value'></td>";
+            echo "</tr>";
+            $url = Plugin::getWebDir('uninstall') . "/ajax/fieldValueInput.php";
+            echo "
+            <script>
+                $(document).ready(function() {
+                    const select = $('#dropdown_action$rand');
+                    const label = $('#label-set-value');
+                    const inputContainer = $('#container-set-value');
+                    select.change(e => {
+                        if (e.target.selectedIndex === ".self::ACTION_NEW_VALUE.") {
+                            label[0].style.display = '';
+                        } else {
+                            label[0].style.display = 'none'
+                        }
+                        inputContainer.load('$url', {
+                            'id' : $ID,
+                            'action' : e.target.selectedIndex
+                        });
+                    })
+                    select.trigger('change');
+                });
+            </script>
+        ";
+
+            $this->showFormButtons($options);
+        } else {
+            // TODO warning message + button to delete
+        }
+
+        return true;
     }
 
     public static function getSpecificValueToDisplay($field, $values, array $options = [])
