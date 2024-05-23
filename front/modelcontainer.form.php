@@ -33,21 +33,29 @@ include('../../../inc/includes.php');
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
-$model = new PluginUninstallModelcontainer();
+$container = new PluginUninstallModelcontainer();
+if (isset($_POST["update"])) {
+    $container->check($_POST['id'], UPDATE);
+    $container->update($_POST);
+    Html::back();
+} else {
+    Html::header(
+        PluginUninstallModel::getTypeName(),
+        $_SERVER['PHP_SELF'],
+        "admin",
+        "PluginUninstallModel",
+        "model"
+    );
+    $container->getFromDB($_GET['id']);
+    $container->showForm($_GET['id']);
+    if ($container->fields['action'] == $container::ACTION_CUSTOM) {
+        echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
+        echo "<tr class='tab_bg_1 center'>";
+        echo "<th colspan='4'>" . __('Fields', 'fields') .
+            "</th></tr></table>";
+        Search::show('PluginUninstallModelcontainerfield');
+    }
 
-Html::header(
-    PluginUninstallModel::getTypeName(),
-    $_SERVER['PHP_SELF'],
-    "admin",
-    "PluginUninstallModel",
-    "model"
-);
+    Html::footer();
+}
 
-
-echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
-echo "<tr class='tab_bg_1 center'>";
-echo "<th colspan='4'>" . __('Fields', 'fields') .
-    "</th></tr></table>";
-Search::show('PluginUninstallModelcontainerfield');
-
-Html::footer();

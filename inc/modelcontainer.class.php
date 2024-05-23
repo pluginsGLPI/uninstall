@@ -32,6 +32,14 @@ class PluginUninstallModelcontainer extends CommonDBTM
 {
     public $dohistory = true;
 
+    public static $rightname = "uninstall:profile";
+
+    const ACTION_NONE = 0;
+    // delete value
+    const ACTION_RAZ = 1;
+    // set value to new_value
+    const ACTION_CUSTOM = 2;
+
     public static function getTypeName($nb = 0)
     {
         return __("Plugin fields block", "uninstall");
@@ -132,6 +140,76 @@ class PluginUninstallModelcontainer extends CommonDBTM
         return parent::getValueToSelect($field_id_or_search_options, $name, $values, $options);
     }
 
+    public function showForm($ID, $options = [])
+    {
+        /** @var array $CFG_GLPI */
+        global $CFG_GLPI;
+
+        $this->initForm($ID, $options);
+        $this->showFormHeader($options);
+
+        $pluginFieldsContainer = new PluginFieldsContainer();
+        if ($pluginFieldsContainer->getFromDB($this->fields['plugin_fields_containers_id'])) {
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<th colspan='4'>" . __('Block informations', 'uninstall') .
+                "</th></tr>";
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<td>" . __("Label") . " : </td>";
+            echo "<td>";
+            echo $pluginFieldsContainer->fields['label'];
+            echo "</td>";
+            echo "<td>" . __("Associated item type") . " : </td>";
+            echo "<td>";
+            $types = json_decode($pluginFieldsContainer->fields['itemtypes']);
+            $obj = '';
+            $count = count($types);
+            $i = 1;
+            foreach ($types as $type) {
+                // prevent usage of plugin class if not loaded
+                if (!class_exists($type)) {
+                    continue;
+                }
+
+                $name_type = getItemForItemtype($type);
+                $obj .= $name_type->getTypeName(2);
+                if ($count > $i) {
+                    $obj .= ", ";
+                }
+                $i++;
+            }
+            echo $obj;
+            echo "</td>";
+            echo "</tr>";
+
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<th colspan='4'>" . __('Uninstall action', 'uninstall') .
+                "</th></tr>";
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<td>" . __('Action', 'uninstall') . " :</td>";
+            echo "<td colspan='3'>";
+            $rand = mt_rand();
+            Dropdown::showFromArray(
+                "action",
+                [
+                    self::ACTION_NONE => __("Don't alter", 'uninstall'),
+                    self::ACTION_RAZ => __('Blank'),
+                    self::ACTION_CUSTOM => __('Per field action', 'uninstall'),
+                ],
+                [
+                    'value' => (isset($this->fields["action"])
+                        ? $this->fields["action"] : self::ACTION_RAZ),
+                    'width' => '100%',
+                    'rand' => $rand
+                ]
+            );
+            echo "</td>";
+            echo "</tr>";
+            $this->showFormButtons($options);
+        }
+
+        return true;
+    }
+
     public static function install($migration)
     {
         /** @var DBmysql $DB */
@@ -147,6 +225,7 @@ class PluginUninstallModelcontainer extends CommonDBTM
                     `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
                     `plugin_uninstall_models_id` int {$default_key_sign} DEFAULT '0',
                     `plugin_fields_containers_id` tinyint NOT NULL DEFAULT '0',
+                    `action` int NOT NULL DEFAULT ". self::ACTION_RAZ ." ,
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
