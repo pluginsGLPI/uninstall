@@ -81,7 +81,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             'id'            => 4,
             'table'         => self::getTable(),
             'field'         => 'action',
-            'name'          => __("Action"),
+            'name'          => __('Action', 'uninstall'),
             'datatype'      => 'specific',
             'massiveaction' => true,
             'nosearch'      => true,

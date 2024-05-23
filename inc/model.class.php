@@ -799,7 +799,15 @@ class PluginUninstallModel extends CommonDBTM
                 echo "<tr class='tab_bg_1 center'>";
                 echo "<th colspan='4'>" . __('Plugin fields blocks', 'uninstall') .
                     "</th></tr></table>";
-                Search::show('PluginUninstallModelcontainer');
+                $parameters = [
+                    'start'      => 0,
+                    'is_deleted' => 0,
+                    'sort'       => 1,
+                    'order'      => 'DESC',
+                    'reset'      => 'reset',
+                    'criteria'   => [],
+                ];
+                Search::showList(PluginUninstallModelcontainer::class, $parameters);
             } else {
                 echo "<span class='center b'>" . __("Select 'Advanced options' for the field 'Fields plugin informations' to access this tab.") . "</span>";
                 return false;

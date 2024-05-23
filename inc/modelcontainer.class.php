@@ -45,6 +45,52 @@ class PluginUninstallModelcontainer extends CommonDBTM
         return __("Plugin fields block", "uninstall");
     }
 
+    public static function getActions() {
+        return [
+            self::ACTION_NONE => __("Don't alter", 'uninstall'),
+            self::ACTION_RAZ => __('Blank'),
+            self::ACTION_CUSTOM => __('Per field action', 'uninstall'),
+        ];
+    }
+
+    public function defineTabs($options = [])
+    {
+        $ong = [];
+        $this->addStandardTab(__CLASS__, $ong, $options);
+        $this->addStandardTab('Log', $ong, $options);
+        return $ong;
+    }
+
+    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
+    {
+        switch ($item->getType()) {
+            case __CLASS__:
+                switch ($tabnum) {
+                    case 1:
+                        $item->showForm($item->getID());
+                        break;
+                    case 2:
+                        $item->showFields($item);
+                        break;
+                }
+        }
+        return true;
+    }
+
+    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
+    {
+        switch ($item->getType()) {
+            case __CLASS__:
+                $tab = [];
+                $tab[1] = self::getTypeName(1);
+                if ($item->fields['action'] == self::ACTION_CUSTOM) {
+                    $tab[2] = __('Fields');
+                }
+                return $tab;
+        }
+        return '';
+    }
+
     public function rawSearchOptions()
     {
         $tab = [];
@@ -82,11 +128,19 @@ class PluginUninstallModelcontainer extends CommonDBTM
             'massiveaction' => false
         ];
 
+        $tab[] = [
+            'id'            => 4,
+            'table'         => self::getTable(),
+            'field'         => 'action',
+            'name'          => __('Action', 'uninstall'),
+            'datatype'      => 'specific',
+            'massiveaction' => false
+        ];
+
         return $tab;
     }
 
     /**
-     * Copy from PluginFieldsContainer
      * @param $field
      * @param $values
      * @param array $options
@@ -104,7 +158,6 @@ class PluginUninstallModelcontainer extends CommonDBTM
                 $count = count($types);
                 $i     = 1;
                 foreach ($types as $type) {
-                    // prevent usage of plugin class if not loaded
                     if (!class_exists($type)) {
                         continue;
                     }
@@ -116,6 +169,8 @@ class PluginUninstallModelcontainer extends CommonDBTM
                     $i++;
                 }
                 return $obj;
+            case 'action':
+                return self::getActions()[$values[$field]];
         }
 
         return '';
@@ -190,11 +245,7 @@ class PluginUninstallModelcontainer extends CommonDBTM
             $rand = mt_rand();
             Dropdown::showFromArray(
                 "action",
-                [
-                    self::ACTION_NONE => __("Don't alter", 'uninstall'),
-                    self::ACTION_RAZ => __('Blank'),
-                    self::ACTION_CUSTOM => __('Per field action', 'uninstall'),
-                ],
+                self::getActions(),
                 [
                     'value' => (isset($this->fields["action"])
                         ? $this->fields["action"] : self::ACTION_RAZ),
@@ -208,6 +259,24 @@ class PluginUninstallModelcontainer extends CommonDBTM
         }
 
         return true;
+    }
+
+    public function showFields($item) {
+        if ($item->fields['action'] == self::ACTION_CUSTOM) {
+            echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<th colspan='4'>" . __('Fields', 'fields') .
+                "</th></tr></table>";
+            $parameters = [
+                'start'      => 0,
+                'is_deleted' => 0,
+                'sort'       => 1,
+                'order'      => 'DESC',
+                'reset'      => 'reset',
+                'criteria'   => [],
+            ];
+            Search::showList(PluginUninstallModelcontainerfield::class, $parameters);
+        }
     }
 
     public static function install($migration)

@@ -46,15 +46,7 @@ if (isset($_POST["update"])) {
         "PluginUninstallModel",
         "model"
     );
-    $container->getFromDB($_GET['id']);
-    $container->showForm($_GET['id']);
-    if ($container->fields['action'] == $container::ACTION_CUSTOM) {
-        echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<th colspan='4'>" . __('Fields', 'fields') .
-            "</th></tr></table>";
-        Search::show('PluginUninstallModelcontainerfield');
-    }
+    $container->display(['id' => $_GET['id']]);
 
     Html::footer();
 }
