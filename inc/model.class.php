@@ -175,7 +175,7 @@ class PluginUninstallModel extends CommonDBTM
                 $tab[1] = self::getTypeName(1);
                 $tab[2] = __('Replacing data', 'uninstall');
                 $plugin = new Plugin();
-                if ($plugin->isActivated('fields')) {
+                if ($plugin->isActivated('fields') && $item->fields['types_id'] == self::TYPE_MODEL_UNINSTALL) {
                     $tab[3] = __('Plugin fields options', 'uninstall');
                 }
                 return $tab;
@@ -744,7 +744,8 @@ class PluginUninstallModel extends CommonDBTM
             echo "</tr>";
         }
 
-        if ($plug->isActivated('fields')) {
+        // noticed that the field was never used in replace.class.php
+        if ($plug->isActivated('fields') && $this->fields['types_id'] == self::TYPE_MODEL_UNINSTALL) {
             echo "<tr class='tab_bg_1 center'>";
             echo "<th colspan='4'>" . __("Additionnal fields", "fields") .
               "</th></tr>";
