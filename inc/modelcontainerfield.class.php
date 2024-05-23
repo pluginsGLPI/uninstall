@@ -132,13 +132,16 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             echo "<td>" . __('Action', 'uninstall') . " :</td>";
             echo "<td>";
             $rand = mt_rand();
+            $options = [
+                self::ACTION_NONE => __("Don't alter", 'uninstall'),
+                self::ACTION_RAZ => __('Blank')
+            ];
+            if ($pluginFieldsField->fields['type'] !== 'glpi_item') {
+                $options[self::ACTION_NEW_VALUE] = __('Set value', 'uninstall');
+            }
             Dropdown::showFromArray(
                 "action",
-                [
-                    self::ACTION_NONE => __("Don't alter", 'uninstall'),
-                    self::ACTION_RAZ => __('Blank'),
-                    self::ACTION_NEW_VALUE => __('Set value', 'uninstall'),
-                ],
+                $options,
                 [
                     'value' => (isset($this->fields["action"])
                         ? $this->fields["action"] : self::ACTION_RAZ),
@@ -148,7 +151,11 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             );
             echo "</td>";
             echo "<td><span id='label-set-value' style='display: none'>".__('New value', 'uninstall')." : </span></td>";
-            echo "<td id='container-set-value'></td>";
+            echo "<td id='container-set-value'>";
+            if ($pluginFieldsField->fields['type'] === 'glpi_item') {
+                echo __('Action set value is not available for this field type', 'uninstall');
+            }
+            echo "</td>";
             echo "</tr>";
             $url = Plugin::getWebDir('uninstall') . "/ajax/fieldValueInput.php";
             echo "
