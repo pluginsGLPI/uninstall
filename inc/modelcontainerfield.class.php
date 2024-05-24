@@ -63,14 +63,15 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             'table' => PluginFieldsField::getTable(),
             'field' => 'label',
             'name' => __('Label'),
-            'datatype' => 'dropdown',
+            'datatype' => 'text',
             'linkfield' => 'plugin_fields_fields_id',
         ];
 
+        // temp solution to the fact that the plugin Fields does not provide the specific value display for type
         $tab[] = [
             'id'            => 3,
-            'table'         => PluginFieldsField::getTable(),
-            'field'         => 'type',
+            'table'         => self::getTable(),
+            'field'         => 'plugin_fields_fields_id',
             'name'          => __("Type"),
             'datatype'      => 'specific',
             'massiveaction' => false,
@@ -194,10 +195,11 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             $values = [$field => $values];
         }
         switch ($field) {
-            case 'type':
-                // TODO why does type never go there ?
-                $types = PluginFieldsField::getType(false);
-                return $types[$values[$field]];
+            case 'plugin_fields_fields_id':
+                $pluginField = new PluginFieldsField();
+                $pluginField->getFromDB($values[$field]);
+                $types = PluginFieldsField::getTypes(true);
+                return $types[$pluginField->fields['type']];
             case 'action':
                 switch ($values[$field]) {
                     case self::ACTION_NONE:
