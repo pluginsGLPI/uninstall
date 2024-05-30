@@ -444,6 +444,31 @@ class PluginUninstallReplace extends CommonDBTM
                 }
             }
 
+            if ($plug->isActivated('fields')) {
+                $pluginFieldsContainer = new PluginFieldsContainer();
+                if ($model->fields['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_COPY) {
+                    $containers = $pluginFieldsContainer->find(['itemtypes' => ['LIKE', "%\"$type\"%"]]);
+                    foreach ($containers as $container) {
+                        self::handlePluginFieldsContainerValues($container, $olditem, $newitem, $type);
+                    }
+                }
+                if ($model->fields['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                    $pluginUninstallContainer = new PluginUninstallModelcontainer();
+                    $containers = $pluginFieldsContainer->find(['itemtypes' => ['LIKE', "%\"$type\"%"]]);
+                    foreach ($containers as $container) {
+                        $pluginUninstallContainer->getFromDBByCrit([
+                            'plugin_fields_containers_id' => $container['id'],
+                            'plugin_uninstall_models_id' => $model->getID()
+                        ]);
+                        if ($pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_COPY) {
+                            self::handlePluginFieldsContainerValues($container, $olditem, $newitem, $type);
+                        } else if ($pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_CUSTOM) {
+                            self::handlePluginFieldsContainerValues($container, $olditem, $newitem, $type, $pluginUninstallContainer);
+                        }
+                    }
+                }
+            }
+
            // METHOD REPLACEMENT 1 : Purge
             switch ($model->fields['replace_method']) {
                 case self::METHOD_PURGE:
@@ -1080,6 +1105,59 @@ class PluginUninstallReplace extends CommonDBTM
                 $tabs[] = $data['tabref'];
             }
             return $tabs;
+        }
+    }
+
+    /**
+     * Create the query
+     * @param $container array data of PluginFieldsContainer
+     * @param $olditem CommonDBTM
+     * @param $newitem CommonDBTM
+     * @param $type string
+     * @param $pluginUninstallContainer PluginUninstallModelcontainer
+     * @return void
+     */
+    public static function handlePluginFieldsContainerValues($container, $olditem, $newitem, $type, $pluginUninstallContainer = null) {
+        global $DB;
+        $pluginFieldsField = new PluginFieldsField();
+        $pluginUninstallField = new PluginUninstallModelcontainerfield();
+        $table = 'glpi_plugin_fields_'.strtolower($type).$container['name'].'s';
+        $values = $DB->request([
+            'FROM' => $table,
+            'WHERE' => [
+                'items_id' => $olditem->getID(),
+                'itemtype' => $type,
+                'plugin_fields_containers_id' => $container['id']
+            ]
+        ]);
+        if ($values->count()) {
+            $fields = $pluginFieldsField->find(['plugin_fields_containers_id' => $container['id']]);
+            $parameters = [];
+            foreach($fields as $field) {
+                if ($pluginUninstallContainer && $pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_CUSTOM) {
+                    if ($pluginUninstallField->getFromDBByCrit([
+                        'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID(),
+                        'plugin_fields_fields_id' => $field['id']
+                    ])) {
+                        if ($pluginUninstallField->fields['action'] == $pluginUninstallField::ACTION_COPY) {
+                            $parameters[$field['name']] = $values->current()[$field['name']];
+                        }
+                    }
+                } else {
+                    $parameters[$field['name']] = $values->current()[$field['name']]; 
+                }
+            }
+            if (count($parameters)) {
+                $DB->updateOrInsert(
+                    $table,
+                    $parameters,
+                    [
+                        'items_id' => $newitem->getID(),
+                        'itemtype' => $type,
+                        'plugin_fields_containers_id' => $container['id']
+                    ]
+                );
+            }
         }
     }
 }
