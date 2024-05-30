@@ -152,7 +152,7 @@ function plugin_uninstall_hook_add_field($item)
         $uninstallField->add([
             'plugin_uninstall_modelcontainers_id' => $container['id'],
             'plugin_fields_fields_id' => $fieldId,
-            'action' => $uninstallField::ACTION_RAZ
+            'action' => $uninstallField::ACTION_NONE
         ]);
     }
 }

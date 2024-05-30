@@ -34,22 +34,46 @@ class PluginUninstallModelcontainer extends CommonDBTM
 
     public static $rightname = "uninstall:profile";
 
+    // do nothing
     const ACTION_NONE = 0;
-    // delete value
+    // delete values, uninstall only
     const ACTION_RAZ = 1;
-    // set value to new_value
-    const ACTION_CUSTOM = 2;
+    // copy values, replace only
+    const ACTION_COPY = 2;
+    // choose action for each field individually
+    const ACTION_CUSTOM = 3;
+
 
     public static function getTypeName($nb = 0)
     {
         return __("Plugin fields block", "uninstall");
     }
 
-    public static function getActions() {
+    /**
+     * Get the list of actions available for an instance, or all available actions
+     * @param $self PluginUninstallModelcontainer|null
+     * @return array value => label
+     */
+    public static function getActions($self = null) {
+        if ($self) {
+            $model = new PluginUninstallModel();
+            $model->getFromDB($self->fields['plugin_uninstall_models_id']);
+            $values = [
+                self::ACTION_NONE => __("Do nothing", 'uninstall'),
+            ];
+            if ($model->fields['types_id'] == $model::TYPE_MODEL_UNINSTALL) {
+                $values[self::ACTION_RAZ] = __('Blank');
+            } else {
+                $values[self::ACTION_COPY] = __('Copy values', 'uninstall');
+            }
+            $values[self::ACTION_CUSTOM] = __('Per field action', 'uninstall');
+            return $values;
+        }
         return [
-            self::ACTION_NONE => __("Don't alter", 'uninstall'),
+            self::ACTION_NONE => __("Do nothing", 'uninstall'),
             self::ACTION_RAZ => __('Blank'),
-            self::ACTION_CUSTOM => __('Per field action', 'uninstall'),
+            self::ACTION_COPY => __('Copy values', 'uninstall'),
+            self::ACTION_CUSTOM => __('Per field action', 'uninstall')
         ];
     }
 
@@ -243,12 +267,15 @@ class PluginUninstallModelcontainer extends CommonDBTM
             echo "<td>" . __('Action', 'uninstall') . " :</td>";
             echo "<td colspan='3'>";
             $rand = mt_rand();
+            $model = new PluginUninstallModel();
+            $model->getFromDB($this->fields['plugin_uninstall_models_id']);
+            $defaultValue = $model->fields['types_id'] == $model::TYPE_MODEL_UNINSTALL ? $this::ACTION_RAZ : $this::ACTION_NONE;
             Dropdown::showFromArray(
                 "action",
-                self::getActions(),
+                self::getActions($this),
                 [
                     'value' => (isset($this->fields["action"])
-                        ? $this->fields["action"] : self::ACTION_RAZ),
+                        ? $this->fields["action"] : $defaultValue),
                     'width' => '100%',
                     'rand' => $rand
                 ]
@@ -294,7 +321,7 @@ class PluginUninstallModelcontainer extends CommonDBTM
                     `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
                     `plugin_uninstall_models_id` int {$default_key_sign} DEFAULT '0',
                     `plugin_fields_containers_id` tinyint NOT NULL DEFAULT '0',
-                    `action` int NOT NULL DEFAULT ". self::ACTION_RAZ ." ,
+                    `action` int NOT NULL DEFAULT ". self::ACTION_NONE ." ,
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 

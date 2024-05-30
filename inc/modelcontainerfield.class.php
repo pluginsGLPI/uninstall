@@ -33,12 +33,14 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
     public $dohistory = true;
 
     public static $rightname = "uninstall:profile";
-    // don't modify the field
+    // do nothing
     const ACTION_NONE = 0;
-    // delete value
+    // delete value, uninstall only
     const ACTION_RAZ = 1;
-    // set value to new_value
+    // set value to new_value, uninstall only
     const ACTION_NEW_VALUE = 2;
+    // copy value, replace only
+    const ACTION_COPY = 3;
 
     public static function getTypeName($nb = 0)
     {
@@ -100,6 +102,10 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
         $this->showFormHeader($options);
 
         $pluginFieldsField = new PluginFieldsField();
+        $pluginUninstallContainer = new PluginUninstallModelcontainer();
+        $pluginUninstallContainer->getFromDB($this->fields['plugin_uninstall_modelcontainers_id']);
+        $pluginUninstallModel = new PluginUninstallModel();
+        $pluginUninstallModel->getFromDB($pluginUninstallContainer->fields['plugin_uninstall_models_id']);
         if ($pluginFieldsField->getFromDB($this->fields['plugin_fields_fields_id'])) {
             echo "<tr class='tab_bg_1 center'>";
             echo "<th colspan='4'>" . __('Field informations', 'uninstall') .
@@ -134,18 +140,23 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             echo "<td>";
             $rand = mt_rand();
             $options = [
-                self::ACTION_NONE => __("Don't alter", 'uninstall'),
-                self::ACTION_RAZ => __('Blank')
+                self::ACTION_NONE => __("Do nothing", 'uninstall'),
             ];
-            if ($pluginFieldsField->fields['type'] !== 'glpi_item') {
-                $options[self::ACTION_NEW_VALUE] = __('Set value', 'uninstall');
+            if ($pluginUninstallModel->fields['types_id'] == $pluginUninstallModel::TYPE_MODEL_UNINSTALL) {
+                $options[self::ACTION_RAZ] = __('Blank');
+                if ($pluginFieldsField->fields['type'] !== 'glpi_item') {
+                    $options[self::ACTION_NEW_VALUE] = __('Set value', 'uninstall');
+                }
+            } else {
+                $options[self::ACTION_COPY] = __('Copy value');
             }
+
             Dropdown::showFromArray(
                 "action",
                 $options,
                 [
                     'value' => (isset($this->fields["action"])
-                        ? $this->fields["action"] : self::ACTION_RAZ),
+                        ? $this->fields["action"] : self::ACTION_NONE),
                     'width' => '100%',
                     'rand' => $rand
                 ]
@@ -182,8 +193,6 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
         ";
 
             $this->showFormButtons($options);
-        } else {
-            // TODO warning message + button to delete
         }
 
         return true;
@@ -203,7 +212,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             case 'action':
                 switch ($values[$field]) {
                     case self::ACTION_NONE:
-                        return __("Don't alter", 'uninstall');
+                        return __("Do nothing", 'uninstall');
                     case self::ACTION_RAZ:
                         return __('Blank');
                     case self::ACTION_NEW_VALUE:
@@ -229,7 +238,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
                     `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
                     `plugin_uninstall_modelcontainers_id` int {$default_key_sign} DEFAULT '0',
                     `plugin_fields_fields_id` tinyint NOT NULL DEFAULT '0',
-                    `action` int NOT NULL DEFAULT ". self::ACTION_RAZ ." ,
+                    `action` int NOT NULL DEFAULT ". self::ACTION_NONE ." ,
                     `new_value` varchar(255),
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
