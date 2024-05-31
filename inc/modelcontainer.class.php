@@ -344,6 +344,15 @@ class PluginUninstallModelcontainer extends CommonDBTM
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
             $DB->queryOrDie($query, $DB->error());
+
+            $queryPreferences = "INSERT INTO `glpi_displaypreferences` (`itemtype`, `num`, `rank`, `users_id`)
+                VALUES 
+                    ('".self::class."', '2', '1', '0'),
+                    ('".self::class."', '3', '2', '0'),
+                    ('".self::class."', '4', '3', '0')
+                    ;";
+
+            $DB->queryOrDie($queryPreferences, $DB->error());
         }
         return true;
     }
@@ -354,6 +363,8 @@ class PluginUninstallModelcontainer extends CommonDBTM
         global $DB;
 
         $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
+
+        $DB->query("DELETE FROM `glpi_displaypreferences` WHERE `itemtype` = '" . self::class . "';");
 
         //Delete history
         $log = new Log();

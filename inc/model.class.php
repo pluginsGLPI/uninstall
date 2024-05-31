@@ -1477,7 +1477,7 @@ class PluginUninstallModel extends CommonDBTM
                     `replace_method` int NOT NULL DEFAULT '2',
                     `raz_glpiinventory` int NOT NULL DEFAULT '1',
                     `raz_fusioninventory` int NOT NULL DEFAULT '1',
-                    `action_plugin_fields` int NOT NULL DEFAULT '1',
+                    `action_plugin_fields` int NOT NULL DEFAULT '0',
                     `replace_contact` tinyint NOT NULL DEFAULT '0',
                     `replace_contact_num` tinyint NOT NULL DEFAULT '0',
                     PRIMARY KEY (`id`)
