@@ -759,12 +759,12 @@ class PluginUninstallModel extends CommonDBTM
             echo "<td>" . __('Fields plugin informations', 'uninstall') . "</td>";
             echo "<td>";
             $choices = [
-                self::PLUGIN_FIELDS_ACTION_NONE => __("Do nothing", 'uninstall')
+                self::PLUGIN_FIELDS_ACTION_NONE => __('Do nothing')
             ];
             if ($this->fields['types_id'] == self::TYPE_MODEL_UNINSTALL) {
                 $choices[self::PLUGIN_FIELDS_ACTION_RAZ] = __('Blank');
             } else {
-                $choices[self::PLUGIN_FIELDS_ACTION_COPY] = __('Copy values', 'uninstall');
+                $choices[self::PLUGIN_FIELDS_ACTION_COPY] = __('Copy');
             }
             $choices[self::PLUGIN_FIELDS_ACTION_ADVANCED] = __('Advanced options', 'uninstall');
             $defaultValue = $this->fields['types_id'] == self::TYPE_MODEL_UNINSTALL ?

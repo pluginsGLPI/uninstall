@@ -84,7 +84,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             'id'            => 4,
             'table'         => self::getTable(),
             'field'         => 'action',
-            'name'          => __('Action', 'uninstall'),
+            'name'          => __('Action'),
             'datatype'      => 'specific',
             'massiveaction' => true,
             'nosearch'      => true,
@@ -136,11 +136,11 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             echo "<th colspan='4'>" . __('Uninstall action', 'uninstall') .
                 "</th></tr>";
             echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" . __('Action', 'uninstall') . " :</td>";
+            echo "<td>" . __('Action') . " :</td>";
             echo "<td>";
             $rand = mt_rand();
             $options = [
-                self::ACTION_NONE => __("Do nothing", 'uninstall'),
+                self::ACTION_NONE => __('Do nothing'),
             ];
             if ($pluginUninstallModel->fields['types_id'] == $pluginUninstallModel::TYPE_MODEL_UNINSTALL) {
                 $options[self::ACTION_RAZ] = __('Blank');
@@ -148,7 +148,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
                     $options[self::ACTION_NEW_VALUE] = __('Set value', 'uninstall');
                 }
             } else {
-                $options[self::ACTION_COPY] = __('Copy value');
+                $options[self::ACTION_COPY] = __('Copy');
             }
 
             Dropdown::showFromArray(
@@ -212,9 +212,11 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             case 'action':
                 switch ($values[$field]) {
                     case self::ACTION_NONE:
-                        return __("Do nothing", 'uninstall');
+                        return __('Do nothing');
                     case self::ACTION_RAZ:
                         return __('Blank');
+                    case self::ACTION_COPY:
+                        return __('Copy');
                     case self::ACTION_NEW_VALUE:
                         return __('Set value', 'uninstall');
                 }

@@ -59,20 +59,20 @@ class PluginUninstallModelcontainer extends CommonDBTM
             $model = new PluginUninstallModel();
             $model->getFromDB($self->fields['plugin_uninstall_models_id']);
             $values = [
-                self::ACTION_NONE => __("Do nothing", 'uninstall'),
+                self::ACTION_NONE => __('Do nothing'),
             ];
             if ($model->fields['types_id'] == $model::TYPE_MODEL_UNINSTALL) {
                 $values[self::ACTION_RAZ] = __('Blank');
             } else {
-                $values[self::ACTION_COPY] = __('Copy values', 'uninstall');
+                $values[self::ACTION_COPY] = __('Copy');
             }
             $values[self::ACTION_CUSTOM] = __('Per field action', 'uninstall');
             return $values;
         }
         return [
-            self::ACTION_NONE => __("Do nothing", 'uninstall'),
+            self::ACTION_NONE => __('Do nothing'),
             self::ACTION_RAZ => __('Blank'),
-            self::ACTION_COPY => __('Copy values', 'uninstall'),
+            self::ACTION_COPY => __('Copy'),
             self::ACTION_CUSTOM => __('Per field action', 'uninstall')
         ];
     }
@@ -156,7 +156,7 @@ class PluginUninstallModelcontainer extends CommonDBTM
             'id'            => 4,
             'table'         => self::getTable(),
             'field'         => 'action',
-            'name'          => __('Action', 'uninstall'),
+            'name'          => __('Action'),
             'datatype'      => 'specific',
             'massiveaction' => false
         ];
@@ -264,7 +264,7 @@ class PluginUninstallModelcontainer extends CommonDBTM
             echo "<th colspan='4'>" . __('Uninstall action', 'uninstall') .
                 "</th></tr>";
             echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" . __('Action', 'uninstall') . " :</td>";
+            echo "<td>" . __('Action') . " :</td>";
             echo "<td colspan='3'>";
             $rand = mt_rand();
             $model = new PluginUninstallModel();
@@ -292,7 +292,7 @@ class PluginUninstallModelcontainer extends CommonDBTM
         if ($item->fields['action'] == self::ACTION_CUSTOM) {
             echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
             echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . __('Fields', 'fields') .
+            echo "<th colspan='4'>" . __('Fields') .
                 "</th></tr></table>";
             $parameters = [
                 'start'      => 0,
