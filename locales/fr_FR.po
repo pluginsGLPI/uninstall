@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 09:34+0200\n"
-"PO-Revision-Date: 2024-05-31 09:35+0200\n"
+"POT-Creation-Date: 2024-05-31 10:16+0200\n"
+"PO-Revision-Date: 2024-05-31 10:17+0200\n"
 "Last-Translator: Cédric Anne, 2023\n"
 "Language-Team: French (France) (https://app.transifex.com/teclib/teams/28042/"
 "fr_FR/)\n"
@@ -105,8 +105,8 @@ msgid "Replacing data"
 msgstr "Remplacement des données"
 
 #: inc/model.class.php:184
-msgid "Plugin fields options"
-msgstr "Options du plugin champs supplémentaires"
+msgid "Additional fields options"
+msgstr "Options des champs supplémentaires"
 
 #: inc/model.class.php:240 inc/model.class.php:1013
 msgid "Type of template"
@@ -196,7 +196,7 @@ msgstr "Connexion avec les autres matériels"
 
 #: inc/model.class.php:625 inc/replace.class.php:764
 msgid "Direct connections"
-msgstr "connexions directes"
+msgstr "Connexions directes"
 
 #: inc/model.class.php:704
 msgid "OCSNG link"
@@ -234,46 +234,46 @@ msgid "Advanced options"
 msgstr "Options avancées"
 
 #: inc/model.class.php:812
-msgid "Plugin fields blocks"
+msgid "Plugin additionnal fields blocks"
 msgstr "Blocs du plugin champs supplémentaires"
 
-#: inc/modelcontainer.class.php:49
-msgid "Plugin fields block"
-msgstr "Bloc du plugin champs supplémentaires"
-
-#: inc/modelcontainer.class.php:69 inc/modelcontainer.class.php:76
-msgid "Per field action"
-msgstr "Choisir par champ"
-
-#: inc/modelcontainer.class.php:140
+#: inc/modelcontainer.class.php:51 inc/modelcontainer.class.php:148
 msgid "Block"
 msgstr "Bloc"
 
-#: inc/modelcontainer.class.php:233
+#: inc/modelcontainer.class.php:71 inc/modelcontainer.class.php:78
+msgid "Per field action"
+msgstr "Choisir par champ"
+
+#: inc/modelcontainer.class.php:242
+msgid "Blocs list"
+msgstr "Liste des blocs"
+
+#: inc/modelcontainer.class.php:251
 msgid "Block informations"
 msgstr "Informations du bloc"
 
-#: inc/modelcontainer.class.php:264 inc/modelcontainerfield.class.php:136
+#: inc/modelcontainer.class.php:282 inc/modelcontainerfield.class.php:154
 msgid "Uninstall action"
 msgstr "Action du plugin"
 
-#: inc/modelcontainerfield.class.php:47
-msgid "Plugin fields field"
-msgstr "Champs du plugin champs supplémentaires"
+#: inc/modelcontainerfield.class.php:120
+msgid "Fields list"
+msgstr "Liste des champs"
 
-#: inc/modelcontainerfield.class.php:111
+#: inc/modelcontainerfield.class.php:129
 msgid "Field informations"
 msgstr "Informations du champ"
 
-#: inc/modelcontainerfield.class.php:148 inc/modelcontainerfield.class.php:221
+#: inc/modelcontainerfield.class.php:166 inc/modelcontainerfield.class.php:239
 msgid "Set value"
 msgstr "Choisir la valeur"
 
-#: inc/modelcontainerfield.class.php:165
+#: inc/modelcontainerfield.class.php:183
 msgid "New value"
 msgstr "Nouvelle valeur"
 
-#: inc/modelcontainerfield.class.php:168
+#: inc/modelcontainerfield.class.php:186
 msgid "Action set value is not available for this field type"
 msgstr "L'action choisir la valeur n'est pas disponible pour ce type de champ"
 
@@ -378,3 +378,12 @@ msgstr "Lieu de l'élément après application du modèle"
 #: inc/uninstall.class.php:1113
 msgid "Lifecycle"
 msgstr "Cycle de vie"
+
+#~ msgid "Plugin fields options"
+#~ msgstr "Options du plugin champs supplémentaires"
+
+#~ msgid "Plugin fields block"
+#~ msgstr "Bloc du plugin champs supplémentaires"
+
+#~ msgid "Plugin fields field"
+#~ msgstr "Champs du plugin champs supplémentaires"

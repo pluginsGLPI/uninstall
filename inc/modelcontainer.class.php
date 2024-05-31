@@ -43,10 +43,12 @@ class PluginUninstallModelcontainer extends CommonDBTM
     // choose action for each field individually
     const ACTION_CUSTOM = 3;
 
+    protected $displaylist = false;
+
 
     public static function getTypeName($nb = 0)
     {
-        return __("Plugin fields block", "uninstall");
+        return __("Block", "fields");
     }
 
     /**
@@ -113,6 +115,12 @@ class PluginUninstallModelcontainer extends CommonDBTM
                 return $tab;
         }
         return '';
+    }
+
+    public function getName($options = []) {
+        $container = new PluginFieldsContainer();
+        $container->getFromDB($this->fields['plugin_fields_containers_id']);
+        return $container->getFriendlyName();
     }
 
     public function rawSearchOptions()
@@ -229,6 +237,16 @@ class PluginUninstallModelcontainer extends CommonDBTM
 
         $pluginFieldsContainer = new PluginFieldsContainer();
         if ($pluginFieldsContainer->getFromDB($this->fields['plugin_fields_containers_id'])) {
+            echo "<tr class='tab_bg_1 center'><td>";
+            $backUrl = '../front/model.form.php?forecetab=3&id='.$this->fields['plugin_uninstall_models_id'];
+            $backTitle = __('Blocs list', 'uninstall');
+            echo "<a href='$backUrl' title=\"$backTitle\"
+                  class='btn btn-sm btn-icon btn-ghost-secondary'
+                  data-bs-toggle='tooltip' data-bs-placement='bottom'>
+                  <i class='far fa-lg fa-list-alt'></i>
+                  <span class='ml-2'>$backTitle</span>
+               </a>";
+            echo "</td></tr>";
             echo "<tr class='tab_bg_1 center'>";
             echo "<th colspan='4'>" . __('Block informations', 'uninstall') .
                 "</th></tr>";

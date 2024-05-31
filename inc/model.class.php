@@ -181,7 +181,7 @@ class PluginUninstallModel extends CommonDBTM
                 $tab[2] = __('Replacing data', 'uninstall');
                 $plugin = new Plugin();
                 if ($plugin->isActivated('fields') && $item->fields['action_plugin_fields'] == self::PLUGIN_FIELDS_ACTION_ADVANCED) {
-                    $tab[3] = __('Plugin fields options', 'uninstall');
+                    $tab[3] = __('Additional fields options', 'uninstall');
                 }
                 return $tab;
         }
@@ -809,7 +809,7 @@ class PluginUninstallModel extends CommonDBTM
             if ($item->fields['action_plugin_fields'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
                 echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
                 echo "<tr class='tab_bg_1 center'>";
-                echo "<th colspan='4'>" . __('Plugin fields blocks', 'uninstall') .
+                echo "<th colspan='4'>" . __('Plugin additionnal fields blocks', 'uninstall') .
                     "</th></tr></table>";
                 $parameters = [
                     'start'      => 0,
