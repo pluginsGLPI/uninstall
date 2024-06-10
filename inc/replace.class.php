@@ -251,15 +251,19 @@ class PluginUninstallReplace extends CommonDBTM
                     }
                 }
 
-               // Update current Infocoms of old item
-                if ($infocom->getFromDBforDevice($type, $olditem_id)) {
-                    $infocom->update(
-                        ['id'       => $infocom->getID(),
-                            'itemtype' => $type,
-                            'items_id' => $newitem_id
-                        ],
-                        false
-                    );
+                // Checks that the itemtype/items_id key doesn't already exist to avoid duplication
+                if (!$infocom->getFromDBforDevice($type, $newitem_id)) {
+                    // Update current Infocoms of old item
+                    if ($infocom->getFromDBforDevice($type, $olditem_id)) {
+                        $infocom->update(
+                            [
+                                'id'       => $infocom->getID(),
+                                'itemtype' => $type,
+                                'items_id' => $newitem_id
+                            ],
+                            false
+                        );
+                    }
                 }
             }
 
@@ -932,8 +936,7 @@ class PluginUninstallReplace extends CommonDBTM
             'WHERE' => [
                 'glpi_contracts_items.items_id' => $item->getField('id'),
                 'glpi_contracts_items.itemtype' => $item->getType(),
-                getEntitiesRestrictCriteria('glpi_contracts', '', '', true)
-            ]
+            ] + getEntitiesRestrictCriteria('glpi_contracts', '', '', true)
         ];
         $it = $DB->request($criteria);
         foreach ($it as $data) {
@@ -974,8 +977,7 @@ class PluginUninstallReplace extends CommonDBTM
             'WHERE' => [
                 'itemtype' => $itemtype,
                 'items_id' => $items_id,
-                getEntitiesRestrictCriteria('glpi_tickets')
-            ]
+            ] + getEntitiesRestrictCriteria('glpi_tickets')
         ]);
         foreach ($it as $data) {
             $tickets[] = $data;
