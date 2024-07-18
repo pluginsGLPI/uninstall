@@ -30,7 +30,7 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_UNINSTALL_VERSION', '2.10.0');
+define('PLUGIN_UNINSTALL_VERSION', '2.9.2-infotel');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_UNINSTALL_MIN_GLPI", "10.0.7");
