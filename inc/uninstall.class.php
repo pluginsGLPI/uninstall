@@ -191,7 +191,7 @@ class PluginUninstallUninstall extends CommonDBTM
             );
             if (
                 ($model->fields["groups_action"] === 'set')
-                && ($nbgroup == 1)
+                && ($nbgroup == 1 || $model->fields["groups_id"] == 0)
             ) {
                 // If a new group is defined and if the group is accessible in the object's entity
                 $fields["groups_id"] = $model->fields["groups_id"];
