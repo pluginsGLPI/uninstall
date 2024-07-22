@@ -574,9 +574,7 @@ class PluginUninstallReplace extends CommonDBTM
                 PluginUninstallUninstall::uninstall(
                     $type,
                     $model->getID(),
-                    [
-                        $type => [$olditem_id => $olditem_id]
-                    ],
+                    [$type => [$olditem_id => $olditem_id]],
                     $location
                 );
             }

@@ -96,7 +96,8 @@ class PluginUninstallModel extends CommonDBTM
         return $menu;
     }
 
-    public function prepareInputForAdd($input) {
+    public function prepareInputForAdd($input)
+    {
         $input = parent::prepareInputForadd($input);
         if ($input['types_id'] == self::TYPE_MODEL_REPLACEMENT_UNINSTALL && $input['replace_method'] == PluginUninstallReplace::METHOD_PURGE) {
             Session::addMessageAfterRedirect(
@@ -1192,7 +1193,7 @@ class PluginUninstallModel extends CommonDBTM
             break;
 
             case 'types_id':
-                switch($values['types_id']){
+                switch ($values['types_id']) {
                     case self::TYPE_MODEL_UNINSTALL:
                         return __('Uninstallation', 'uninstall');
                     case self::TYPE_MODEL_REPLACEMENT:
