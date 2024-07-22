@@ -191,7 +191,7 @@ class PluginUninstallUninstall extends CommonDBTM
             );
             if (
                 ($model->fields["groups_action"] === 'set')
-                && ($nbgroup == 1)
+                && ($nbgroup == 1 || $model->fields["groups_id"] == 0)
             ) {
                 // If a new group is defined and if the group is accessible in the object's entity
                 $fields["groups_id"] = $model->fields["groups_id"];
@@ -965,9 +965,9 @@ class PluginUninstallUninstall extends CommonDBTM
     public static function showFormUninstallation($ID, $item, $user_id)
     {
         $type = $item->getType();
-       // TODO review this to pass arg in form, not in URL.
-        echo "<form action='" . Plugin::getWebDir('uninstall') . "/front/action.php?device_type=$type'
+        echo "<form action='" . Plugin::getWebDir('uninstall') . "/front/action.php'
              method='post'>";
+        echo Html::hidden('device_type', ['value' => $type]);
         echo "<table class='tab_cadre_fixe' cellpadding='5'>";
         echo "<tr><th colspan='3'>" . __("Apply model", 'uninstall') . "</th></tr>";
 
