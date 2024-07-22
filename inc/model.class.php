@@ -1132,13 +1132,10 @@ class PluginUninstallModel extends CommonDBTM
                 switch ($values['types_id']) {
                     case self::TYPE_MODEL_UNINSTALL:
                         return __('Uninstallation', 'uninstall');
-					break;	
                     case self::TYPE_MODEL_REPLACEMENT:
                         return __('Replacement', 'uninstall');
-					break;		
                     case self::TYPE_MODEL_REPLACEMENT_UNINSTALL:
                         return __('Replacement then uninstallation', 'uninstall');
-					break;	
                 }
             break;
 
