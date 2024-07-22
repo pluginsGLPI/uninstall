@@ -543,6 +543,19 @@ class PluginUninstallReplace extends CommonDBTM
 
         echo "</td></tr>";
         echo "</table></div>";
+
+        if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT_UNINSTALL) {
+            foreach ($tab_ids as $olditem_id => $newitem_id) {
+                PluginUninstallUninstall::uninstall(
+                    $type,
+                    $model->getID(),
+                    [
+                        $type => [$olditem_id => $olditem_id]
+                    ],
+                    $location
+                );
+            }
+        }
     }
 
 
