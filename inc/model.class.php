@@ -1201,7 +1201,7 @@ class PluginUninstallModel extends CommonDBTM
                     case self::TYPE_MODEL_REPLACEMENT_UNINSTALL:
                         return __('Replacement then uninstallation', 'uninstall');
                 }
-            break;
+                break;
 
             case 'groups_id':
                 if ($values['groups_action'] === 'old') {
