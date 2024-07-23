@@ -32,40 +32,11 @@ include('../../../inc/includes.php');
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
-if (!isset($_GET["withtemplate"])) {
-    $_GET["withtemplate"] = "";
-}
-
-if (isset($_GET["id"])) {
-    $id = $_GET["id"];
-} else if (isset($_POST["id"])) {
-    $id = $_POST["id"];
-} else {
-    $id = -1;
-}
-
-$model = new PluginUninstallModel();
-
-if (isset($_POST["add"])) {
-    $model->check(-1, UPDATE, $_POST);
-    if ($id = $model->add($_POST)) {
-        if ($_POST['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
-            $model->createPluginFieldsRelations($id);
-        }
-    }
+$container = new PluginUninstallModelcontainer();
+if (isset($_POST["update"])) {
+    $container->check($_POST['id'], UPDATE);
+    $container->update($_POST);
     Html::back();
-} else if (isset($_POST["update"])) {
-    $model->check($_POST['id'], UPDATE);
-    if ($model->update($_POST)) {
-        if ($_POST['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
-            $model->createPluginFieldsRelations($_POST['id']);
-        }
-    }
-    Html::back();
-} else if (isset($_POST['purge'])) {
-    $model->check($_POST['id'], DELETE);
-    $model->delete($_POST);
-    $model->redirectToList();
 } else {
     Html::header(
         PluginUninstallModel::getTypeName(),
@@ -74,23 +45,7 @@ if (isset($_POST["add"])) {
         "PluginUninstallModel",
         "model"
     );
-
-    if ($model->getFromDB($id)) {
-        if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT) {
-            if (
-                !Session::haveRight(
-                    'uninstall:profile',
-                    PluginUninstallProfile::RIGHT_REPLACE
-                )
-            ) {
-                Html::displayRightError();
-            }
-        }
-    }
-
-    $model->display(['id'           => $id,
-        'withtemplate' => $_GET["withtemplate"]
-    ]);
+    $container->display(['id' => $_GET['id']]);
 
     Html::footer();
 }
