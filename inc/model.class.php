@@ -1401,7 +1401,7 @@ class PluginUninstallModel extends CommonDBTM
 
             // from 2.9.1 to 2.10.0
             if (!$DB->fieldExists($table, 'action_plugin_fields')) {
-                $migration->addField($table, 'action_plugin_fields', "int NOT NULL DEFAULT '".self::PLUGIN_FIELDS_ACTION_NONE."'");
+                $migration->addField($table, 'action_plugin_fields', "int NOT NULL DEFAULT '" . self::PLUGIN_FIELDS_ACTION_NONE . "'");
                 $migration->addPostQuery(
                     // uninstall with no raz
                     $DB->buildUpdate(
@@ -1644,7 +1644,8 @@ class PluginUninstallModel extends CommonDBTM
      * Create all non-existing relations between plugin fields containers and a model
      * @param $modelId int
      */
-    public function createPluginFieldsRelations($modelId) {
+    public function createPluginFieldsRelations($modelId)
+    {
         global $DB;
         if ($DB->tableExists('glpi_plugin_fields_containers')) {
             $uninstallContainer = new PluginUninstallModelcontainer();
@@ -1654,20 +1655,21 @@ class PluginUninstallModel extends CommonDBTM
             $fieldsContainer = new PluginFieldsContainer();
             $condition = count($existingContainersIds) ? ['NOT' => [
                 'id' => $existingContainersIds
-            ]] : [];
+            ]
+            ] : [];
             $fieldsContainers = $fieldsContainer->find($condition);
 
             $fieldsField = new PluginFieldsField();
             $uninstallField = new PluginUninstallModelcontainerfield();
 
-            foreach($fieldsContainers as $container) {
+            foreach ($fieldsContainers as $container) {
                 $newId = $uninstallContainer->add([
                     'plugin_uninstall_models_id' => $modelId,
                     'plugin_fields_containers_id' => $container['id']
                 ]);
 
                 $fieldsFields = $fieldsField->find(['plugin_fields_containers_id' => $container['id']]);
-                foreach($fieldsFields as $field) {
+                foreach ($fieldsFields as $field) {
                     $uninstallField->add([
                         'plugin_fields_fields_id' => $field['id'],
                         'plugin_uninstall_modelcontainers_id' => $newId,

@@ -69,19 +69,18 @@ switch ($_POST['action']) {
                         $allowed_itemtypes
                     )
                 );
-
             } else {
                 $dropdown_matches = [];
                 $is_dropdown = $type == 'dropdown' || preg_match(
-                        '/^dropdown-(?<class>.+)$/',
-                        $type,
-                        $dropdown_matches
-                    ) === 1;
+                    '/^dropdown-(?<class>.+)$/',
+                    $type,
+                    $dropdown_matches
+                ) === 1;
 
                 if (in_array($type, ['date', 'datetime'])) {
                     echo '<i class="pointer fa fa-info" title="' . __s(
-                            "You can use 'now' for date and datetime field"
-                        ) . '"></i>';
+                        "You can use 'now' for date and datetime field"
+                    ) . '"></i>';
                 }
 
                 if ($is_dropdown) {
@@ -119,5 +118,3 @@ switch ($_POST['action']) {
         }
         break;
 }
-
-

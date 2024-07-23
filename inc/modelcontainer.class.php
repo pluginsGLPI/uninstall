@@ -56,7 +56,8 @@ class PluginUninstallModelcontainer extends CommonDBTM
      * @param $self PluginUninstallModelcontainer|null
      * @return array value => label
      */
-    public static function getActions($self = null) {
+    public static function getActions($self = null)
+    {
         if ($self) {
             $model = new PluginUninstallModel();
             $model->getFromDB($self->fields['plugin_uninstall_models_id']);
@@ -117,7 +118,8 @@ class PluginUninstallModelcontainer extends CommonDBTM
         return '';
     }
 
-    public function getName($options = []) {
+    public function getName($options = [])
+    {
         $container = new PluginFieldsContainer();
         $container->getFromDB($this->fields['plugin_fields_containers_id']);
         return $container->getFriendlyName();
@@ -238,7 +240,7 @@ class PluginUninstallModelcontainer extends CommonDBTM
         $pluginFieldsContainer = new PluginFieldsContainer();
         if ($pluginFieldsContainer->getFromDB($this->fields['plugin_fields_containers_id'])) {
             echo "<tr class='tab_bg_1 center'><td>";
-            $backUrl = '../front/model.form.php?forecetab=3&id='.$this->fields['plugin_uninstall_models_id'];
+            $backUrl = '../front/model.form.php?forecetab=3&id=' . $this->fields['plugin_uninstall_models_id'];
             $backTitle = __('Blocs list', 'uninstall');
             echo "<a href='$backUrl' title=\"$backTitle\"
                   class='btn btn-sm btn-icon btn-ghost-secondary'
@@ -306,7 +308,8 @@ class PluginUninstallModelcontainer extends CommonDBTM
         return true;
     }
 
-    public function showFields($item) {
+    public function showFields($item)
+    {
         if ($item->fields['action'] == self::ACTION_CUSTOM) {
             echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
             echo "<tr class='tab_bg_1 center'>";
@@ -339,7 +342,7 @@ class PluginUninstallModelcontainer extends CommonDBTM
                     `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
                     `plugin_uninstall_models_id` int {$default_key_sign} DEFAULT '0',
                     `plugin_fields_containers_id` tinyint NOT NULL DEFAULT '0',
-                    `action` int NOT NULL DEFAULT ". self::ACTION_NONE ." ,
+                    `action` int NOT NULL DEFAULT " . self::ACTION_NONE . " ,
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
@@ -347,9 +350,9 @@ class PluginUninstallModelcontainer extends CommonDBTM
 
             $queryPreferences = "INSERT INTO `glpi_displaypreferences` (`itemtype`, `num`, `rank`, `users_id`)
                 VALUES 
-                    ('".self::class."', '2', '1', '0'),
-                    ('".self::class."', '3', '2', '0'),
-                    ('".self::class."', '4', '3', '0')
+                    ('" . self::class . "', '2', '1', '0'),
+                    ('" . self::class . "', '3', '2', '0'),
+                    ('" . self::class . "', '4', '3', '0')
                     ;";
 
             $DB->queryOrDie($queryPreferences, $DB->error());

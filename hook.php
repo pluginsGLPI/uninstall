@@ -170,7 +170,7 @@ function plugin_uninstall_hook_purge_container($item)
         'WHERE' => ['plugin_fields_containers_id' => $containerId]
     ]);
     $ids = [];
-    foreach($pluginUninstallContainers as $cont) {
+    foreach ($pluginUninstallContainers as $cont) {
         $ids[] = $cont['id'];
     }
     if (count($ids)) {

@@ -49,7 +49,8 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
         return __("Field");
     }
 
-    public function getName($options = []) {
+    public function getName($options = [])
+    {
         $field = new PluginFieldsField();
         $field->getFromDB($this->fields['plugin_fields_fields_id']);
         return $field->fields['label'];
@@ -116,7 +117,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
         $pluginUninstallModel->getFromDB($pluginUninstallContainer->fields['plugin_uninstall_models_id']);
         if ($pluginFieldsField->getFromDB($this->fields['plugin_fields_fields_id'])) {
             echo "<tr class='tab_bg_1 center'><td>";
-            $backUrl = '../front/modelcontainer.form.php?forecetab=2&id='.$pluginUninstallContainer->getID();
+            $backUrl = '../front/modelcontainer.form.php?forecetab=2&id=' . $pluginUninstallContainer->getID();
             $backTitle = __('Fields list', 'uninstall');
             echo "<a href='$backUrl' title=\"$backTitle\"
                   class='btn btn-sm btn-icon btn-ghost-secondary'
@@ -180,7 +181,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
                 ]
             );
             echo "</td>";
-            echo "<td><span id='label-set-value' style='display: none'>".__('New value', 'uninstall')." : </span></td>";
+            echo "<td><span id='label-set-value' style='display: none'>" . __('New value', 'uninstall') . " : </span></td>";
             echo "<td id='container-set-value'>";
             if ($pluginFieldsField->fields['type'] === 'glpi_item') {
                 echo __('Action set value is not available for this field type', 'uninstall');
@@ -195,7 +196,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
                     const label = $('#label-set-value');
                     const inputContainer = $('#container-set-value');
                     select.change(e => {
-                        if (e.target.selectedIndex === ".self::ACTION_NEW_VALUE.") {
+                        if (e.target.selectedIndex === " . self::ACTION_NEW_VALUE . ") {
                             label[0].style.display = '';
                         } else {
                             label[0].style.display = 'none'
@@ -258,7 +259,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
                     `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
                     `plugin_uninstall_modelcontainers_id` int {$default_key_sign} DEFAULT '0',
                     `plugin_fields_fields_id` tinyint NOT NULL DEFAULT '0',
-                    `action` int NOT NULL DEFAULT ". self::ACTION_NONE ." ,
+                    `action` int NOT NULL DEFAULT " . self::ACTION_NONE . " ,
                     `new_value` varchar(255),
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
@@ -267,9 +268,9 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
 
             $queryPreferences = "INSERT INTO `glpi_displaypreferences` (`itemtype`, `num`, `rank`, `users_id`)
                 VALUES 
-                    ('".self::class."', '2', '1', '0'),
-                    ('".self::class."', '3', '2', '0'),
-                    ('".self::class."', '4', '3', '0')
+                    ('" . self::class . "', '2', '1', '0'),
+                    ('" . self::class . "', '3', '2', '0'),
+                    ('" . self::class . "', '4', '3', '0')
                     ;";
 
             $DB->queryOrDie($queryPreferences, $DB->error());

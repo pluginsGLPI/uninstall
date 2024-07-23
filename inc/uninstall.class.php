@@ -533,13 +533,15 @@ class PluginUninstallUninstall extends CommonDBTM
 
         // first level foreach & condition of first level if are copied from PluginFieldsContainer::preItemPurge
         $existingFieldsContainers = $pluginFieldsContainer->find();
-        foreach($existingFieldsContainers as $fieldsContainer) {
+        foreach ($existingFieldsContainers as $fieldsContainer) {
             $itemtypes = json_decode($fieldsContainer['itemtypes']);
             if (in_array($itemtype, $itemtypes)) {
-                if ($pluginUninstallContainer->getFromDBByCrit([
-                    'plugin_uninstall_models_id' => $model->getID(),
-                    'plugin_fields_containers_id' => $fieldsContainer['id']
-                ])) {
+                if (
+                    $pluginUninstallContainer->getFromDBByCrit([
+                        'plugin_uninstall_models_id' => $model->getID(),
+                        'plugin_fields_containers_id' => $fieldsContainer['id']
+                    ])
+                ) {
                     if ($pluginUninstallContainer->fields['action'] != PluginUninstallModelcontainer::ACTION_NONE) {
                         $classname = 'PluginFields' . $itemtype . getSingular($fieldsContainer['name']);
                         $obj = new $classname();
@@ -557,7 +559,7 @@ class PluginUninstallUninstall extends CommonDBTM
                                 $field = array_filter($fieldsFields, fn($e) => $e['id'] == $setting['plugin_fields_fields_id']);
                                 $field = reset($field);
                                 switch ($setting['action']) {
-                                    case PluginUninstallModelcontainerfield::ACTION_RAZ :
+                                    case PluginUninstallModelcontainerfield::ACTION_RAZ:
                                         $razValue = null;
                                         // field types which doesn't accept NULL values
                                         if (str_starts_with($field['type'], 'dropdown') || $field['type'] == 'glpi_item') {
@@ -569,7 +571,7 @@ class PluginUninstallUninstall extends CommonDBTM
                                             ['items_id' => $items_id]
                                         );
                                         break;
-                                    case PluginUninstallModelcontainerfield::ACTION_NEW_VALUE :
+                                    case PluginUninstallModelcontainerfield::ACTION_NEW_VALUE:
                                         $DB->update(
                                             $obj->getTable(),
                                             [$field['name'] => $setting['new_value']],
