@@ -1120,11 +1120,12 @@ class PluginUninstallReplace extends CommonDBTM
      * @param $pluginUninstallContainer PluginUninstallModelcontainer
      * @return void
      */
-    public static function handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type, $pluginUninstallContainer = null) {
+    public static function handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type, $pluginUninstallContainer = null)
+    {
         global $DB;
         $pluginFieldsField = new PluginFieldsField();
         $pluginUninstallField = new PluginUninstallModelcontainerfield();
-        $table = 'glpi_plugin_fields_'.strtolower($type).$container['name'].'s';
+        $table = 'glpi_plugin_fields_' . strtolower($type) . $container['name'] . 's';
         $oldItemValues = $DB->request([
             'FROM' => $table,
             'WHERE' => [
@@ -1144,13 +1145,14 @@ class PluginUninstallReplace extends CommonDBTM
         if ($oldItemValues->count()) {
             $fields = $pluginFieldsField->find(['plugin_fields_containers_id' => $container['id']]);
             $parameters = [];
-            foreach($fields as $field) {
-
+            foreach ($fields as $field) {
                 if ($pluginUninstallContainer && $pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_CUSTOM) {
-                    if ($pluginUninstallField->getFromDBByCrit([
-                        'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID(),
-                        'plugin_fields_fields_id' => $field['id']
-                    ])) {
+                    if (
+                        $pluginUninstallField->getFromDBByCrit([
+                            'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID(),
+                            'plugin_fields_fields_id' => $field['id']
+                        ])
+                    ) {
                         if ($pluginUninstallField->fields['action'] == $pluginUninstallField::ACTION_COPY) {
                             if ($overwrite || !$newItemValues->current()) {
                                 // overwrite or no record
