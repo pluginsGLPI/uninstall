@@ -316,10 +316,10 @@ class PluginUninstallUninstall extends CommonDBTM
         }
 
         if ($plug->isActivated('fields')) {
-            if ($model->fields['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_RAZ) {
+            if ($model->fields['action_plugin_fields_uninstall'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_RAZ) {
                 self::deletePluginFieldsLink($type, $id);
             }
-            if ($model->fields['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+            if ($model->fields['action_plugin_fields_uninstall'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
                 self::handlePluginFieldsValues($type, $id, $model);
             }
         }
@@ -538,7 +538,8 @@ class PluginUninstallUninstall extends CommonDBTM
             if (in_array($itemtype, $itemtypes)) {
                 if ($pluginUninstallContainer->getFromDBByCrit([
                     'plugin_uninstall_models_id' => $model->getID(),
-                    'plugin_fields_containers_id' => $fieldsContainer['id']
+                    'plugin_fields_containers_id' => $fieldsContainer['id'],
+                    'model_type' => PluginUninstallModel::TYPE_MODEL_UNINSTALL
                 ])) {
                     if ($pluginUninstallContainer->fields['action'] != PluginUninstallModelcontainer::ACTION_NONE) {
                         $classname = 'PluginFields' . $itemtype . getSingular($fieldsContainer['name']);

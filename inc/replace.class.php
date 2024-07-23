@@ -450,19 +450,20 @@ class PluginUninstallReplace extends CommonDBTM
 
             if ($plug->isActivated('fields')) {
                 $pluginFieldsContainer = new PluginFieldsContainer();
-                if ($model->fields['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_COPY) {
+                if ($model->fields['action_plugin_fields_replace'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_COPY) {
                     $containers = $pluginFieldsContainer->find(['itemtypes' => ['LIKE', "%\"$type\"%"]]);
                     foreach ($containers as $container) {
                         self::handlePluginFieldsContainerValues($container, $olditem, $newitem, $type);
                     }
                 }
-                if ($model->fields['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                if ($model->fields['action_plugin_fields_replace'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
                     $pluginUninstallContainer = new PluginUninstallModelcontainer();
                     $containers = $pluginFieldsContainer->find(['itemtypes' => ['LIKE', "%\"$type\"%"]]);
                     foreach ($containers as $container) {
                         $pluginUninstallContainer->getFromDBByCrit([
                             'plugin_fields_containers_id' => $container['id'],
-                            'plugin_uninstall_models_id' => $model->getID()
+                            'plugin_uninstall_models_id' => $model->getID(),
+                            'model_type' => PluginUninstallModel::TYPE_MODEL_REPLACEMENT
                         ]);
                         if ($pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_COPY) {
                             self::handlePluginFieldsContainerValues($container, $olditem, $newitem, $type);

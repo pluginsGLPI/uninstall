@@ -169,6 +169,17 @@ class PluginUninstallModelcontainer extends CommonDBTM
             'massiveaction' => false
         ];
 
+        $tab[] = [
+            'id'            => 5,
+            'table'         => self::getTable(),
+            'field'              => 'types_id',
+            'name'               => __('Type of template', 'uninstall'),
+            'linkfield'          => '',
+            'datatype'           => 'specific',
+            'searchtype'         => 'equals',
+            'massiveaction' => false
+        ];
+
         return $tab;
     }
 
@@ -203,9 +214,34 @@ class PluginUninstallModelcontainer extends CommonDBTM
                 return $obj;
             case 'action':
                 return self::getActions()[$values[$field]];
+            case 'model_type':
+                switch ($values['types_id']) {
+                    case PluginUninstallModel::TYPE_MODEL_UNINSTALL:
+                        return __('Uninstallation', 'uninstall');
+                    case PluginUninstallModel::TYPE_MODEL_REPLACEMENT:
+                        return __('Replacement', 'uninstall');
+                }
+                break;
         }
 
         return '';
+    }
+
+    public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
+    {
+        if (!is_array($values)) {
+            $values = [$field => $values];
+        }
+        switch ($field) {
+            case 'model_type':
+                $choices[1] = __('Uninstallation', 'uninstall');
+                $choices[2] = __('Replacement', 'uninstall');
+                return Dropdown::showFromArray($name, $choices, [
+                    'value' => $values[$field],
+                    'display' => false
+                ]);
+        }
+        return parent::getSpecificValueToSelect($field, $name, $values, $options);
     }
 
     /**
@@ -286,8 +322,7 @@ class PluginUninstallModelcontainer extends CommonDBTM
             echo "<td colspan='3'>";
             $rand = mt_rand();
             $model = new PluginUninstallModel();
-            $model->getFromDB($this->fields['plugin_uninstall_models_id']);
-            $defaultValue = $model->fields['types_id'] == $model::TYPE_MODEL_UNINSTALL ? $this::ACTION_RAZ : $this::ACTION_NONE;
+            $defaultValue = $this->fields['model_type'] == $model::TYPE_MODEL_UNINSTALL ? $this::ACTION_RAZ : $this::ACTION_NONE;
             Dropdown::showFromArray(
                 "action",
                 self::getActions($this),
