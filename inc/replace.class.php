@@ -453,7 +453,7 @@ class PluginUninstallReplace extends CommonDBTM
                 if ($model->fields['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_COPY) {
                     $containers = $pluginFieldsContainer->find(['itemtypes' => ['LIKE', "%\"$type\"%"]]);
                     foreach ($containers as $container) {
-                        self::handlePluginFieldsContainerValues($container, $olditem, $newitem, $type);
+                        self::handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type);
                     }
                 }
                 if ($model->fields['action_plugin_fields'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
@@ -465,9 +465,9 @@ class PluginUninstallReplace extends CommonDBTM
                             'plugin_uninstall_models_id' => $model->getID()
                         ]);
                         if ($pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_COPY) {
-                            self::handlePluginFieldsContainerValues($container, $olditem, $newitem, $type);
+                            self::handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type);
                         } else if ($pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_CUSTOM) {
-                            self::handlePluginFieldsContainerValues($container, $olditem, $newitem, $type, $pluginUninstallContainer);
+                            self::handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type, $pluginUninstallContainer);
                         }
                     }
                 }
@@ -1111,7 +1111,8 @@ class PluginUninstallReplace extends CommonDBTM
     }
 
     /**
-     * Create the query
+     * Handle copy of values from the plugin fields
+     * @param $overwrite bool if true copy will replace values from newitem by those of olditem
      * @param $container array data of PluginFieldsContainer
      * @param $olditem CommonDBTM
      * @param $newitem CommonDBTM
@@ -1119,12 +1120,12 @@ class PluginUninstallReplace extends CommonDBTM
      * @param $pluginUninstallContainer PluginUninstallModelcontainer
      * @return void
      */
-    public static function handlePluginFieldsContainerValues($container, $olditem, $newitem, $type, $pluginUninstallContainer = null) {
+    public static function handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type, $pluginUninstallContainer = null) {
         global $DB;
         $pluginFieldsField = new PluginFieldsField();
         $pluginUninstallField = new PluginUninstallModelcontainerfield();
         $table = 'glpi_plugin_fields_'.strtolower($type).$container['name'].'s';
-        $values = $DB->request([
+        $oldItemValues = $DB->request([
             'FROM' => $table,
             'WHERE' => [
                 'items_id' => $olditem->getID(),
@@ -1132,21 +1133,40 @@ class PluginUninstallReplace extends CommonDBTM
                 'plugin_fields_containers_id' => $container['id']
             ]
         ]);
-        if ($values->count()) {
+        $newItemValues = $DB->request([
+            'FROM' => $table,
+            'WHERE' => [
+                'items_id' => $newitem->getID(),
+                'itemtype' => $type,
+                'plugin_fields_containers_id' => $container['id']
+            ]
+        ]);
+        if ($oldItemValues->count()) {
             $fields = $pluginFieldsField->find(['plugin_fields_containers_id' => $container['id']]);
             $parameters = [];
             foreach($fields as $field) {
+
                 if ($pluginUninstallContainer && $pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_CUSTOM) {
                     if ($pluginUninstallField->getFromDBByCrit([
                         'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID(),
                         'plugin_fields_fields_id' => $field['id']
                     ])) {
                         if ($pluginUninstallField->fields['action'] == $pluginUninstallField::ACTION_COPY) {
-                            $parameters[$field['name']] = $values->current()[$field['name']];
+                            if ($overwrite || !$newItemValues->current()) {
+                                // overwrite or no record
+                                $parameters[$field['name']] = $newItemValues->current()[$field['name']];
+                            } else if (!$newItemValues->current()[$field['name']] && !$newItemValues->current()[$field['name']] !== 0 && !$newItemValues->current()[$field['name']] !== '0') {
+                                // null or empty string
+                                $parameters[$field['name']] = $newItemValues->current()[$field['name']];
+                            }
                         }
                     }
                 } else {
-                    $parameters[$field['name']] = $values->current()[$field['name']]; 
+                    if ($overwrite || !$newItemValues->current()) {
+                        $parameters[$field['name']] = $newItemValues->current()[$field['name']];
+                    } else if (!$newItemValues->current()[$field['name']] && !$newItemValues->current()[$field['name']] !== 0 && !$newItemValues->current()[$field['name']] !== '0') {
+                        $parameters[$field['name']] = $newItemValues->current()[$field['name']];
+                    }
                 }
             }
             if (count($parameters)) {
