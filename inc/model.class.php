@@ -852,22 +852,16 @@ class PluginUninstallModel extends CommonDBTM
     {
         $plugin = new Plugin();
         if ($plugin->isActivated('fields')) {
-            if (($item->fields['action_plugin_fields_uninstall'] === self::PLUGIN_FIELDS_ACTION_ADVANCED)
-            || ($item->fields['action_plugin_fields_replace'] === self::PLUGIN_FIELDS_ACTION_ADVANCED)) {
-                echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
-                echo "<tr class='tab_bg_1 center'>";
-                echo "<th colspan='4'>" . __('Plugin additionnal fields blocks', 'uninstall') .
-                    "</th></tr></table>";
-                $parameters = [
-                    'start'      => 0,
-                    'is_deleted' => 0,
-                    'sort'       => 1,
-                    'order'      => 'DESC',
-                    'reset'      => 'reset',
-                    'criteria'   => [],
-                ];
-                Search::showList(PluginUninstallModelcontainer::class, $parameters);
-            } else {
+            $advancedOptions = false;
+            if ($item->fields['action_plugin_fields_replace'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                $advancedOptions = true;
+                PluginUninstallModelcontainer::showListsForType($item->getID(),self::TYPE_MODEL_REPLACEMENT);
+            }
+            if ($item->fields['action_plugin_fields_uninstall'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                $advancedOptions = true;
+                PluginUninstallModelcontainer::showListsForType($item->getID(),self::TYPE_MODEL_UNINSTALL);
+            }
+            if (!$advancedOptions) {
                 echo "<span class='center b'>" . __("Select 'Advanced options' for the field 'Fields plugin informations' to access this tab.") . "</span>";
                 return false;
             }
@@ -875,7 +869,6 @@ class PluginUninstallModel extends CommonDBTM
             echo "<span class='center b'>" . __("Activate the plugin 'fields' to access this tab.") . "</span>";
             return false;
         }
-
         return true;
     }
 
@@ -1697,6 +1690,7 @@ class PluginUninstallModel extends CommonDBTM
             $uninstallContainer = new PluginUninstallModelcontainer();
             $uninstallContainers = $uninstallContainer->find(['plugin_uninstall_models_id' => $modelId]);
             $existingContainersIds = array_map(fn($e) => $e['plugin_fields_containers_id'], $uninstallContainers);
+            $existingContainersIds = array_unique($existingContainersIds);
 
             $fieldsContainer = new PluginFieldsContainer();
             $condition = count($existingContainersIds) ? ['NOT' => [
@@ -1708,16 +1702,27 @@ class PluginUninstallModel extends CommonDBTM
             $uninstallField = new PluginUninstallModelcontainerfield();
 
             foreach($fieldsContainers as $container) {
-                $newId = $uninstallContainer->add([
+                $newIdReplace = $uninstallContainer->add([
                     'plugin_uninstall_models_id' => $modelId,
-                    'plugin_fields_containers_id' => $container['id']
+                    'plugin_fields_containers_id' => $container['id'],
+                    'model_type' => self::TYPE_MODEL_REPLACEMENT
+                ]);
+                $newIdUninstall = $uninstallContainer->add([
+                    'plugin_uninstall_models_id' => $modelId,
+                    'plugin_fields_containers_id' => $container['id'],
+                    'model_type' => self::TYPE_MODEL_UNINSTALL
                 ]);
 
                 $fieldsFields = $fieldsField->find(['plugin_fields_containers_id' => $container['id']]);
                 foreach($fieldsFields as $field) {
                     $uninstallField->add([
                         'plugin_fields_fields_id' => $field['id'],
-                        'plugin_uninstall_modelcontainers_id' => $newId,
+                        'plugin_uninstall_modelcontainers_id' => $newIdReplace,
+                        'action' => $uninstallField::ACTION_RAZ
+                    ]);
+                    $uninstallField->add([
+                        'plugin_fields_fields_id' => $field['id'],
+                        'plugin_uninstall_modelcontainers_id' => $newIdUninstall,
                         'action' => $uninstallField::ACTION_RAZ
                     ]);
                 }

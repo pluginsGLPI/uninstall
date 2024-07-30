@@ -341,6 +341,32 @@ class PluginUninstallModelcontainer extends CommonDBTM
         return true;
     }
 
+    /**
+     * @param $modelId int PluginUninstallModel id
+     * @param $type int const TYPE_MODEL from PluginUninstallModel
+     * @return void
+     */
+    public static function showListsForType($modelId, $type) {
+        echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
+        echo "<tr class='tab_bg_1 center'>";
+        $typeTitle = $type === PluginUninstallModel::TYPE_MODEL_UNINSTALL ? __('Uninstallation', 'uninstall') : __('Replacement', 'uninstall');
+        echo "<th colspan='4'>" . $typeTitle . ' - ' . __('Plugin additionnal fields blocks', 'uninstall') .
+            "</th></tr></table>";
+        $self = new self();
+        Search::showList(
+            __CLASS__,
+            [
+                'display_type' => Search::HTML_OUTPUT,
+                'criteria' => [
+                    $self->rawSearchOptions()
+                ]
+            ],
+            [
+                array_map(fn($e) => $e['field'], $self->rawSearchOptions())
+            ]
+        );
+    }
+
     public function showFields($item) {
         if ($item->fields['action'] == self::ACTION_CUSTOM) {
             echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
