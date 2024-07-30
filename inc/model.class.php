@@ -89,7 +89,7 @@ class PluginUninstallModel extends CommonDBTM
     public function prepareInputForAdd($input)
     {
         $input = parent::prepareInputForadd($input);
-        if (array_key_exists('types_id', $input)) {
+        if (array_key_exists('types_id', $input) && array_key_exists('replace_method', $input)) {
             if ($input['types_id'] == self::TYPE_MODEL_REPLACEMENT_UNINSTALL && $input['replace_method'] == PluginUninstallReplace::METHOD_PURGE) {
                 Session::addMessageAfterRedirect(
                     __("The purge archiving method is not available for this type of model", 'uninstall'),
