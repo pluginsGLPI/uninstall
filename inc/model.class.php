@@ -99,13 +99,15 @@ class PluginUninstallModel extends CommonDBTM
     public function prepareInputForAdd($input)
     {
         $input = parent::prepareInputForadd($input);
-        if ($input['types_id'] == self::TYPE_MODEL_REPLACEMENT_UNINSTALL && $input['replace_method'] == PluginUninstallReplace::METHOD_PURGE) {
-            Session::addMessageAfterRedirect(
-                __('The purge archiving method is not available for this type of model', 'uninstall'),
-                true,
-                ERROR
-            );
-            $input = [];
+        if (array_key_exists('types_id', $input)) {
+            if ($input['types_id'] == self::TYPE_MODEL_REPLACEMENT_UNINSTALL && $input['replace_method'] == PluginUninstallReplace::METHOD_PURGE) {
+                Session::addMessageAfterRedirect(
+                    __("The purge archiving method is not available for this type of model", 'uninstall'),
+                    true,
+                    ERROR
+                );
+                $input = [];
+            }
         }
         return $input;
     }
@@ -1582,6 +1584,7 @@ class PluginUninstallModel extends CommonDBTM
             $tmp['raz_glpiinventory']          = 1;
             $tmp['raz_fusioninventory']        = 1;
             $tmp['action_plugin_fields_uninstall']          = 0;
+            $tmp['action_plugin_fields_replace']          = 0;
             $tmp['comment']                    = '';
             $tmp['groups_action']              = 'set';
             $tmp['groups_id']                  = 0;
