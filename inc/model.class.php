@@ -99,7 +99,7 @@ class PluginUninstallModel extends CommonDBTM
     public function prepareInputForAdd($input)
     {
         $input = parent::prepareInputForadd($input);
-        if (array_key_exists('types_id', $input)) {
+        if (array_key_exists('types_id', $input) && array_key_exists('replace_method', $input)) {
             if ($input['types_id'] == self::TYPE_MODEL_REPLACEMENT_UNINSTALL && $input['replace_method'] == PluginUninstallReplace::METHOD_PURGE) {
                 Session::addMessageAfterRedirect(
                     __("The purge archiving method is not available for this type of model", 'uninstall'),
@@ -207,7 +207,8 @@ class PluginUninstallModel extends CommonDBTM
                 $tab[1] = self::getTypeName(1);
                 $tab[2] = __('Replacing data', 'uninstall');
                 $plugin = new Plugin();
-                if ($plugin->isActivated('fields') && $item->fields['action_plugin_fields'] == self::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                if ($plugin->isActivated('fields') &&
+                    ($item->fields['action_plugin_fields_uninstall'] == self::PLUGIN_FIELDS_ACTION_ADVANCED || $item->fields['action_plugin_fields_replace'] == self::PLUGIN_FIELDS_ACTION_ADVANCED)) {
                     $tab[3] = __('Additional fields options', 'uninstall');
                 }
                 return $tab;
@@ -494,7 +495,7 @@ class PluginUninstallModel extends CommonDBTM
                 self::PLUGIN_FIELDS_ACTION_ADVANCED => __('Advanced options', 'uninstall')
             ];
             Dropdown::showFromArray(
-                "action_plugin_fields",
+                "action_plugin_fields_uninstall",
                 $choices,
                 [
                     'value' => isset($this->fields["action_plugin_fields_uninstall"]) ?
@@ -728,7 +729,7 @@ class PluginUninstallModel extends CommonDBTM
                 self::PLUGIN_FIELDS_ACTION_ADVANCED => __('Advanced options', 'uninstall')
             ];
             Dropdown::showFromArray(
-                "action_plugin_fields",
+                "action_plugin_fields_replace",
                 $choices,
                 [
                     'value' => isset($this->fields["action_plugin_fields_replace"]) ?
@@ -860,6 +861,9 @@ class PluginUninstallModel extends CommonDBTM
                 PluginUninstallModelcontainer::showListsForType($item->getID(),self::TYPE_MODEL_REPLACEMENT);
             }
             if ($item->fields['action_plugin_fields_uninstall'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                if ($advancedOptions) {
+                    echo "<div class='m-4'></div>";
+                }
                 $advancedOptions = true;
                 PluginUninstallModelcontainer::showListsForType($item->getID(),self::TYPE_MODEL_UNINSTALL);
             }
@@ -1440,7 +1444,7 @@ class PluginUninstallModel extends CommonDBTM
             }
 
             // from 2.9.2 to 2.10.0
-            if (!$DB->fieldExists($table, 'action_plugin_fields')) {
+            if (!$DB->fieldExists($table, 'action_plugin_fields_replace')) {
                 $migration->addField($table, 'action_plugin_fields_replace', "int NOT NULL DEFAULT '".self::PLUGIN_FIELDS_ACTION_NONE."'");
                 $migration->addField($table, 'action_plugin_fields_uninstall', "int NOT NULL DEFAULT '".self::PLUGIN_FIELDS_ACTION_NONE."'");
                 $migration->addPostQuery(
@@ -1695,11 +1699,7 @@ class PluginUninstallModel extends CommonDBTM
             $existingContainersIds = array_map(fn($e) => $e['plugin_fields_containers_id'], $uninstallContainers);
             $existingContainersIds = array_unique($existingContainersIds);
 
-            $fieldsContainer = new PluginFieldsContainer();
-            $condition = count($existingContainersIds) ? ['NOT' => [
-                'id' => $existingContainersIds
-            ]] : [];
-            $fieldsContainers = $fieldsContainer->find($condition);
+            $fieldsContainers = PluginUninstallModelcontainer::getContainerForItemtypes($existingContainersIds);
 
             $fieldsField = new PluginFieldsField();
             $uninstallField = new PluginUninstallModelcontainerfield();

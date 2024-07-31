@@ -28,7 +28,7 @@
  * -------------------------------------------------------------------------
  */
 
-class PluginUninstallModelcontainer extends CommonDBTM
+class PluginUninstallModelcontainer extends CommonDBChild
 {
     public $dohistory = true;
 
@@ -43,7 +43,9 @@ class PluginUninstallModelcontainer extends CommonDBTM
     // choose action for each field individually
     const ACTION_CUSTOM = 3;
 
-    protected $displaylist = false;
+    public static $itemtype = 'PluginUninstallModel';
+    public static $items_id = 'plugin_uninstall_models_id';
+    protected $displaylist = true;
 
 
     public static function getTypeName($nb = 0)
@@ -56,14 +58,13 @@ class PluginUninstallModelcontainer extends CommonDBTM
      * @param $self PluginUninstallModelcontainer|null
      * @return array value => label
      */
-    public static function getActions($self = null) {
+    public static function getActions($self = null)
+    {
         if ($self) {
-            $model = new PluginUninstallModel();
-            $model->getFromDB($self->fields['plugin_uninstall_models_id']);
             $values = [
                 self::ACTION_NONE => __('Do nothing'),
             ];
-            if ($model->fields['types_id'] == $model::TYPE_MODEL_UNINSTALL) {
+            if ($self->fields['model_type'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL) {
                 $values[self::ACTION_RAZ] = __('Blank');
             } else {
                 $values[self::ACTION_COPY] = __('Copy');
@@ -117,131 +118,11 @@ class PluginUninstallModelcontainer extends CommonDBTM
         return '';
     }
 
-    public function getName($options = []) {
+    public function getName($options = [])
+    {
         $container = new PluginFieldsContainer();
         $container->getFromDB($this->fields['plugin_fields_containers_id']);
         return $container->getFriendlyName();
-    }
-
-    public function rawSearchOptions()
-    {
-        $tab = [];
-
-        $tab[] = [
-            'id' => 'common',
-            'name' => self::getTypeName(),
-        ];
-
-        $tab[] = [
-            'id' => '1',
-            'table' => self::getTable(),
-            'field' => 'id',
-            'name' => __('ID'),
-            'massiveaction' => false,
-            'datatype' => 'itemlink'
-        ];
-
-        $tab[] = [
-            'id' => '2',
-            'table' => PluginFieldsContainer::getTable(),
-            'field' => 'label',
-            'name' => __('Block', 'fields'),
-            'datatype' => 'dropdown',
-            'linkfield' => 'plugin_fields_containers_id',
-            'massiveaction' => false
-        ];
-
-        $tab[] = [
-            'id'            => 3,
-            'table'         => PluginFieldsContainer::getTable(),
-            'field'         => 'itemtypes',
-            'name'          => __("Associated item type"),
-            'datatype'      => 'specific',
-            'massiveaction' => false
-        ];
-
-        $tab[] = [
-            'id'            => 4,
-            'table'         => self::getTable(),
-            'field'         => 'action',
-            'name'          => __('Action'),
-            'datatype'      => 'specific',
-            'massiveaction' => false
-        ];
-
-        $tab[] = [
-            'id'            => 5,
-            'table'         => self::getTable(),
-            'field'              => 'types_id',
-            'name'               => __('Type of template', 'uninstall'),
-            'linkfield'          => '',
-            'datatype'           => 'specific',
-            'searchtype'         => 'equals',
-            'massiveaction' => false
-        ];
-
-        return $tab;
-    }
-
-    /**
-     * @param $field
-     * @param $values
-     * @param array $options
-     * @return string
-     */
-    public static function getSpecificValueToDisplay($field, $values, array $options = [])
-    {
-        if (!is_array($values)) {
-            $values = [$field => $values];
-        }
-        switch ($field) {
-            case 'itemtypes':
-                $types = json_decode($values[$field]);
-                $obj   = '';
-                $count = count($types);
-                $i     = 1;
-                foreach ($types as $type) {
-                    if (!class_exists($type)) {
-                        continue;
-                    }
-                    $name_type = getItemForItemtype($type);
-                    $obj .= $name_type->getTypeName(2);
-                    if ($count > $i) {
-                        $obj .= ", ";
-                    }
-                    $i++;
-                }
-                return $obj;
-            case 'action':
-                return self::getActions()[$values[$field]];
-            case 'model_type':
-                switch ($values['types_id']) {
-                    case PluginUninstallModel::TYPE_MODEL_UNINSTALL:
-                        return __('Uninstallation', 'uninstall');
-                    case PluginUninstallModel::TYPE_MODEL_REPLACEMENT:
-                        return __('Replacement', 'uninstall');
-                }
-                break;
-        }
-
-        return '';
-    }
-
-    public static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = [])
-    {
-        if (!is_array($values)) {
-            $values = [$field => $values];
-        }
-        switch ($field) {
-            case 'model_type':
-                $choices[1] = __('Uninstallation', 'uninstall');
-                $choices[2] = __('Replacement', 'uninstall');
-                return Dropdown::showFromArray($name, $choices, [
-                    'value' => $values[$field],
-                    'display' => false
-                ]);
-        }
-        return parent::getSpecificValueToSelect($field, $name, $values, $options);
     }
 
     /**
@@ -273,23 +154,15 @@ class PluginUninstallModelcontainer extends CommonDBTM
 
         $pluginFieldsContainer = new PluginFieldsContainer();
         if ($pluginFieldsContainer->getFromDB($this->fields['plugin_fields_containers_id'])) {
-            echo "<tr class='tab_bg_1 center'><td>";
-            $backUrl = '../front/model.form.php?forecetab=3&id='.$this->fields['plugin_uninstall_models_id'];
-            $backTitle = __('Blocs list', 'uninstall');
-            echo "<a href='$backUrl' title=\"$backTitle\"
-                  class='btn btn-sm btn-icon btn-ghost-secondary'
-                  data-bs-toggle='tooltip' data-bs-placement='bottom'>
-                  <i class='far fa-lg fa-list-alt'></i>
-                  <span class='ml-2'>$backTitle</span>
-               </a>";
-            echo "</td></tr>";
+            $model = new PluginUninstallModel();
+            $model->getFromDB($this->fields['plugin_uninstall_models_id']);
             echo "<tr class='tab_bg_1 center'>";
             echo "<th colspan='4'>" . __('Block informations', 'uninstall') .
                 "</th></tr>";
             echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" . __("Label") . " : </td>";
+            echo "<td>" . $pluginFieldsContainer->getTypeName() . " : </td>";
             echo "<td>";
-            echo $pluginFieldsContainer->fields['label'];
+            echo "<a href='" . $pluginFieldsContainer->getFormURLWithID($pluginFieldsContainer->getID()) . "'>" . $pluginFieldsContainer->fields['label'] . "</a>";
             echo "</td>";
             echo "<td>" . __("Associated item type") . " : </td>";
             echo "<td>";
@@ -315,14 +188,19 @@ class PluginUninstallModelcontainer extends CommonDBTM
             echo "</tr>";
 
             echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . __('Uninstall action', 'uninstall') .
+            $actionTitle = '';
+            if ($this->fields['model_type'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL) {
+                $actionTitle .= 'Uninstallation';
+            } else {
+                $actionTitle .= 'Replacement';
+            }
+            echo "<th colspan='4'>" . __('Action for ', 'uninstall') . __($actionTitle, 'uninstall') .
                 "</th></tr>";
             echo "<tr class='tab_bg_1 center'>";
             echo "<td>" . __('Action') . " :</td>";
             echo "<td colspan='3'>";
             $rand = mt_rand();
-            $model = new PluginUninstallModel();
-            $defaultValue = $this->fields['model_type'] == $model::TYPE_MODEL_UNINSTALL ? $this::ACTION_RAZ : $this::ACTION_NONE;
+            $defaultValue = $this->fields['model_type'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL ? $this::ACTION_RAZ : $this::ACTION_NONE;
             Dropdown::showFromArray(
                 "action",
                 self::getActions($this),
@@ -346,40 +224,111 @@ class PluginUninstallModelcontainer extends CommonDBTM
      * @param $type int const TYPE_MODEL from PluginUninstallModel
      * @return void
      */
-    public static function showListsForType($modelId, $type) {
-        echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
-        echo "<tr class='tab_bg_1 center'>";
-        $typeTitle = $type === PluginUninstallModel::TYPE_MODEL_UNINSTALL ? __('Uninstallation', 'uninstall') : __('Replacement', 'uninstall');
-        echo "<th colspan='4'>" . $typeTitle . ' - ' . __('Plugin additionnal fields blocks', 'uninstall') .
-            "</th></tr></table>";
-        $self = new self();
-        Search::showList(
-            __CLASS__,
-            [
-                'display_type' => Search::HTML_OUTPUT,
-                'criteria' => [
-                    $self->rawSearchOptions()
-                ]
-            ],
-            [
-                array_map(fn($e) => $e['field'], $self->rawSearchOptions())
-            ]
+    public static function showListsForType($modelId, $type)
+    {
+        $typeTitle = $type === PluginUninstallModel::TYPE_MODEL_UNINSTALL ? __('Uninstallation', 'uninstall') : __(
+            'Replacement',
+            'uninstall'
         );
+        echo "<h4>" . $typeTitle . ' - ' . __('Plugin additionnal fields blocks', 'uninstall') .
+            "</h4>";
+        $self = new self();
+        $uninstallContainers = $self->find([
+            'plugin_uninstall_models_id' => $modelId,
+            'model_type' => $type
+        ]);
+        $fieldContainer = new PluginFieldsContainer();
+        if (count($uninstallContainers)) {
+            echo "<table class='tab_cadre_fixe'>";
+            echo "<thead><tr>";
+            echo "<th>" . __('Block', 'fields') . "</th>";
+            echo "<th>" . __("Associated item type") . "</th>";
+            echo "<th>" . __("Action") . "</th>";
+            echo "</tr></thead>";
+            echo "<tbody>";
+
+            foreach($uninstallContainers as $uninstallContainer) {
+                if ($fieldContainer->getFromDB($uninstallContainer['plugin_fields_containers_id'])) {
+                    echo "<tr>";
+                    $link = PluginUninstallModelContainer::getFormURLWithID($uninstallContainer['id']);
+                    echo "<td>";
+                    echo "<a href='$link'>" . $fieldContainer->fields['label'] . "</a>";
+                    echo "</td>";
+                    $types = json_decode($fieldContainer->fields['itemtypes']);
+                    $obj = '';
+                    $count = count($types);
+                    $i = 1;
+                    foreach ($types as $type) {
+                        if (!class_exists($type)) {
+                            continue;
+                        }
+                        $name_type = getItemForItemtype($type);
+                        $obj .= $name_type->getTypeName(2);
+                        if ($count > $i) {
+                            $obj .= ", ";
+                        }
+                        $i++;
+                    }
+                    echo "<td>" . $obj . "</td>";
+                    echo "<td>" .  self::getActions()[$uninstallContainer['action']] . "</td>";
+                    echo "</tr>";
+                }
+            }
+            echo "</tbody>";
+            echo "</table>";
+        } else {
+            if (count(self::getContainerForItemtypes())) {
+                $link = PluginUninstallModel::getFormURLWithID($modelId) . "&load_fields=1";
+                echo "<a href='$link'>" . __('Load plugin data', 'uninstall') . "</a>";
+            }
+        }
     }
 
-    public function showFields($item) {
+    /**
+     * Get all containers from the plugin fields which are associated with an itemtype used by uninstall
+     * @param $ids array list of plugin fields container ids to exclude from the request
+     * @return array
+     */
+    public static function getContainerForItemtypes($ids = []) {
+        global $DB, $UNINSTALL_TYPES;
+        $query = "SELECT * FROM " . PluginFieldsContainer::getTable() . " WHERE ";
+        if (count($ids)) {
+            $query .= 'id NOT IN ('.implode(',', $ids).') AND (';
+        }
+        foreach($UNINSTALL_TYPES as $index => $type) {
+            $query .= 'itemtypes LIKE \'%"'.$type.'"%\' ';
+            if ($index != count($UNINSTALL_TYPES) - 1) {
+                $query .= 'OR ';
+            }
+        }
+        if (count($ids)) {
+            $query .= ')';
+        }
+        $return = [];
+        if ($result = $DB->doQuery($query)) {
+            if ($DB->numrows($result) > 0) {
+                while ($data = $DB->fetchAssoc($result)) {
+                    $return[] = $data;
+                }
+            }
+        }
+        return $return;
+    }
+
+    public function showFields($item)
+    {
         if ($item->fields['action'] == self::ACTION_CUSTOM) {
             echo "<table class='tab_cadre_fixe mb-3' cellpadding='5'>";
             echo "<tr class='tab_bg_1 center'>";
             echo "<th colspan='4'>" . __('Fields') .
                 "</th></tr></table>";
             $parameters = [
-                'start'      => 0,
+                'start' => 0,
                 'is_deleted' => 0,
-                'sort'       => 1,
-                'order'      => 'DESC',
-                'reset'      => 'reset',
-                'criteria'   => [],
+                'sort' => 1,
+                'order' => 'DESC',
+                'reset' => 'reset',
+                'criteria' => [],
             ];
             Search::showList(PluginUninstallModelcontainerfield::class, $parameters);
         }
@@ -400,20 +349,12 @@ class PluginUninstallModelcontainer extends CommonDBTM
                     `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
                     `plugin_uninstall_models_id` int {$default_key_sign} DEFAULT '0',
                     `plugin_fields_containers_id` tinyint NOT NULL DEFAULT '0',
-                    `action` int NOT NULL DEFAULT ". self::ACTION_NONE ." ,
+                    `model_type` int DEFAULT '0',
+                    `action` int NOT NULL DEFAULT " . self::ACTION_NONE . " ,
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
             $DB->queryOrDie($query, $DB->error());
-
-            $queryPreferences = "INSERT INTO `glpi_displaypreferences` (`itemtype`, `num`, `rank`, `users_id`)
-                VALUES 
-                    ('".self::class."', '2', '1', '0'),
-                    ('".self::class."', '3', '2', '0'),
-                    ('".self::class."', '4', '3', '0')
-                    ;";
-
-            $DB->queryOrDie($queryPreferences, $DB->error());
         }
         return true;
     }

@@ -28,11 +28,11 @@
  * -------------------------------------------------------------------------
  */
 
-class PluginUninstallModelcontainerfield extends CommonDBTM
+class PluginUninstallModelcontainerfield extends CommonDBChild
 {
     public $dohistory = true;
 
-    protected $displaylist = false;
+    protected $displaylist = true;
 
     public static $rightname = "uninstall:profile";
     // do nothing
@@ -43,6 +43,9 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
     const ACTION_NEW_VALUE = 2;
     // copy value, replace only
     const ACTION_COPY = 3;
+
+    public static $itemtype = 'PluginUninstallModelcontainer';
+    public static $items_id = 'plugin_uninstall_modelcontainers_id';
 
     public static function getTypeName($nb = 0)
     {
@@ -115,16 +118,6 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
         $pluginUninstallModel = new PluginUninstallModel();
         $pluginUninstallModel->getFromDB($pluginUninstallContainer->fields['plugin_uninstall_models_id']);
         if ($pluginFieldsField->getFromDB($this->fields['plugin_fields_fields_id'])) {
-            echo "<tr class='tab_bg_1 center'><td>";
-            $backUrl = '../front/modelcontainer.form.php?forecetab=2&id='.$pluginUninstallContainer->getID();
-            $backTitle = __('Fields list', 'uninstall');
-            echo "<a href='$backUrl' title=\"$backTitle\"
-                  class='btn btn-sm btn-icon btn-ghost-secondary'
-                  data-bs-toggle='tooltip' data-bs-placement='bottom'>
-                  <i class='far fa-lg fa-list-alt'></i>
-                  <span class='ml-2'>$backTitle</span>
-               </a>";
-            echo "</td></tr>";
             echo "<tr class='tab_bg_1 center'>";
             echo "<th colspan='4'>" . __('Field informations', 'uninstall') .
                 "</th></tr>";
@@ -151,7 +144,13 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             echo "</tr>";
 
             echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . __('Uninstall action', 'uninstall') .
+            $actionTitle = '';
+            if ($pluginUninstallContainer->fields['model_type'] == $pluginUninstallModel::TYPE_MODEL_UNINSTALL) {
+                $actionTitle .= 'Uninstallation';
+            } else {
+                $actionTitle .= 'Replacement';
+            }
+            echo "<th colspan='4'>" . __('Action for ', 'uninstall') . __($actionTitle, 'uninstall') .
                 "</th></tr>";
             echo "<tr class='tab_bg_1 center'>";
             echo "<td>" . __('Action') . " :</td>";
@@ -160,7 +159,7 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
             $options = [
                 self::ACTION_NONE => __('Do nothing'),
             ];
-            if ($pluginUninstallModel->fields['types_id'] == $pluginUninstallModel::TYPE_MODEL_UNINSTALL) {
+            if ($pluginUninstallContainer->fields['model_type'] == $pluginUninstallModel::TYPE_MODEL_UNINSTALL) {
                 $options[self::ACTION_RAZ] = __('Blank');
                 if ($pluginFieldsField->fields['type'] !== 'glpi_item') {
                     $options[self::ACTION_NEW_VALUE] = __('Set value', 'uninstall');

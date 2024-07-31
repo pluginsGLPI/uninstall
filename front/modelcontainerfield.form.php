@@ -41,7 +41,7 @@ if (isset($_POST["update"])) {
     Html::back();
 } else {
     Html::header(
-        PluginUninstallModel::getTypeName(),
+        PluginUninstallModelcontainerfield::getTypeName(),
         $_SERVER['PHP_SELF'],
         "admin",
         "PluginUninstallModel",
