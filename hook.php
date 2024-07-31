@@ -170,6 +170,7 @@ function plugin_uninstall_hook_purge_container($item)
     }
     global $DB;
     $containerId = $item->getID();
+    // all uninstall containers associated with the purged item
     $pluginUninstallContainers = $DB->request([
         'FROM' => PluginUninstallModelcontainer::getTable(),
         'SELECT' => 'id',
@@ -179,12 +180,14 @@ function plugin_uninstall_hook_purge_container($item)
     foreach($pluginUninstallContainers as $cont) {
         $ids[] = $cont['id'];
     }
+    // delete all uninstall fields associated with one of the previously fetched uninstall container
     if (count($ids)) {
         $DB->delete(
             PluginUninstallModelcontainerfield::getTable(),
             ['plugin_uninstall_modelcontainers_id' => $ids]
         );
     }
+    // delete all uninstall containers associated with the purged item
     $DB->delete(
         PluginUninstallModelcontainer::getTable(),
         ['plugin_fields_containers_id' => $containerId]

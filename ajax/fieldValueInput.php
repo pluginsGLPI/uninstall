@@ -107,6 +107,17 @@ switch ($_POST['action']) {
                     );
 
                     echo '</div>';
+                } else if ($type === 'yesno') {
+                    $value = 0;
+                    if ($pluginUninstallField->fields['new_value'] === 1 || $pluginUninstallField->fields['new_value'] === '1') {
+                        $value = 1;
+                    } else if ($pluginFieldsField->fields['default_value']) {
+                        $value = $pluginFieldsField->fields['default_value'];
+                    }
+                    Dropdown::showYesNo(
+                        'new_value',
+                        $value
+                    );
                 } else {
                     echo Html::input(
                         'new_value',
