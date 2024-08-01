@@ -1168,18 +1168,18 @@ class PluginUninstallReplace extends CommonDBTM
                         if ($pluginUninstallField->fields['action'] == $pluginUninstallField::ACTION_COPY) {
                             if ($overwrite || !$newItemValues->current()) {
                                 // overwrite or no record
-                                $parameters[$field['name']] = $newItemValues->current()[$field['name']];
+                                $parameters[$field['name']] = $oldItemValues->current()[$field['name']];
                             } else if (!$newItemValues->current()[$field['name']] && !$newItemValues->current()[$field['name']] !== 0 && !$newItemValues->current()[$field['name']] !== '0') {
                                 // null or empty string
-                                $parameters[$field['name']] = $newItemValues->current()[$field['name']];
+                                $parameters[$field['name']] = $oldItemValues->current()[$field['name']];
                             }
                         }
                     }
                 } else {
                     if ($overwrite || !$newItemValues->current()) {
-                        $parameters[$field['name']] = $newItemValues->current()[$field['name']];
+                        $parameters[$field['name']] = $oldItemValues->current()[$field['name']];
                     } else if (!$newItemValues->current()[$field['name']] && !$newItemValues->current()[$field['name']] !== 0 && !$newItemValues->current()[$field['name']] !== '0') {
-                        $parameters[$field['name']] = $newItemValues->current()[$field['name']];
+                        $parameters[$field['name']] = $oldItemValues->current()[$field['name']];
                     }
                 }
             }

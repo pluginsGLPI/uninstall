@@ -86,7 +86,6 @@ switch ($_POST['action']) {
 
                 if ($is_dropdown) {
                     $multiple = (bool)$pluginFieldsField->fields['multiple'];
-                    Toolbox::logInfo($multiple);
 
                     echo '<div style="line-height:var(--tblr-body-line-height);">';
 

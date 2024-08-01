@@ -86,6 +86,8 @@ function plugin_uninstall_install()
     require_once($dir . "/inc/model.class.php");
     require_once($dir . "/inc/replace.class.php");
     require_once($dir . "/inc/config.class.php");
+    require_once($dir . "/inc/modelcontainer.class.php");
+    require_once($dir . "/inc/modelcontainerfield.class.php");
 
     PluginUninstallProfile::install($migration);
     PluginUninstallModel::install($migration);
@@ -122,24 +124,29 @@ function plugin_uninstall_uninstall()
 
 function plugin_uninstall_hook_add_container($item)
 {
+    global $UNINSTALL_TYPES;
     if (!($item instanceof PluginFieldsContainer)) {
         return;
     }
-    $containerId = $item->getID();
-    $uninstallContainer = new PluginUninstallModelcontainer();
-    $model = new PluginUninstallModel();
-    $models = $model->find();
-    foreach ($models as $mod) {
-        $uninstallContainer->add([
-            'plugin_uninstall_models_id' => $mod['id'],
-            'plugin_fields_containers_id' => $containerId,
-            'model_type' => PluginUninstallModel::TYPE_MODEL_REPLACEMENT
-        ]);
-        $uninstallContainer->add([
-            'plugin_uninstall_models_id' => $mod['id'],
-            'plugin_fields_containers_id' => $containerId,
-            'model_type' => PluginUninstallModel::TYPE_MODEL_UNINSTALL
-        ]);
+    $types = json_decode($item->fields['itemtypes']);
+    // only create matching elements for containers concerning item types used by the plugin
+    if (!empty(array_intersect($types, $UNINSTALL_TYPES))) {
+        $containerId = $item->getID();
+        $uninstallContainer = new PluginUninstallModelcontainer();
+        $model = new PluginUninstallModel();
+        $models = $model->find();
+        foreach ($models as $mod) {
+            $uninstallContainer->add([
+                'plugin_uninstall_models_id' => $mod['id'],
+                'plugin_fields_containers_id' => $containerId,
+                'model_type' => PluginUninstallModel::TYPE_MODEL_REPLACEMENT
+            ]);
+            $uninstallContainer->add([
+                'plugin_uninstall_models_id' => $mod['id'],
+                'plugin_fields_containers_id' => $containerId,
+                'model_type' => PluginUninstallModel::TYPE_MODEL_UNINSTALL
+            ]);
+        }
     }
 }
 

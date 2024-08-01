@@ -856,17 +856,24 @@ class PluginUninstallModel extends CommonDBTM
         $plugin = new Plugin();
         if ($plugin->isActivated('fields')) {
             $advancedOptions = false;
-            if ($item->fields['action_plugin_fields_replace'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
-                $advancedOptions = true;
-                PluginUninstallModelcontainer::showListsForType($item->getID(),self::TYPE_MODEL_REPLACEMENT);
-            }
-            if ($item->fields['action_plugin_fields_uninstall'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
-                if ($advancedOptions) {
-                    echo "<div class='m-4'></div>";
+
+            if ($item->fields["types_id"] != self::TYPE_MODEL_UNINSTALL) {
+                if ($item->fields['action_plugin_fields_replace'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                    $advancedOptions = true;
+                    PluginUninstallModelcontainer::showListsForType($item->getID(),self::TYPE_MODEL_REPLACEMENT);
                 }
-                $advancedOptions = true;
-                PluginUninstallModelcontainer::showListsForType($item->getID(),self::TYPE_MODEL_UNINSTALL);
             }
+
+            if ($item->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
+                if ($item->fields['action_plugin_fields_uninstall'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                    if ($advancedOptions) {
+                        echo "<div class='m-4'></div>";
+                    }
+                    $advancedOptions = true;
+                    PluginUninstallModelcontainer::showListsForType($item->getID(),self::TYPE_MODEL_UNINSTALL);
+                }
+            }
+
             if (!$advancedOptions) {
                 echo "<span class='center b'>" . __("Select 'Advanced options' for the field 'Fields plugin informations' to access this tab.") . "</span>";
                 return false;
