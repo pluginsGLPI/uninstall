@@ -92,7 +92,7 @@ class PluginUninstallModel extends CommonDBTM
         if (array_key_exists('types_id', $input) && array_key_exists('replace_method', $input)) {
             if ($input['types_id'] == self::TYPE_MODEL_REPLACEMENT_UNINSTALL && $input['replace_method'] == PluginUninstallReplace::METHOD_PURGE) {
                 Session::addMessageAfterRedirect(
-                    __("The purge archiving method is not available for this type of model", 'uninstall'),
+                    __("The purge archiving method is not available for this model type", 'uninstall'),
                     true,
                     ERROR
                 );
@@ -150,9 +150,9 @@ class PluginUninstallModel extends CommonDBTM
    /**
     * Dropdown of method remplacement
     *
-    * @param $name   select name
+    * @param $name   string name
+    * @param $value  string|int default value (default '')
     * @param $type   int types_id
-    * @param $value  default value (default '')
    **/
     public static function dropdownMethodReplacement($name, $value = '', $type = self::TYPE_MODEL_REPLACEMENT)
     {
@@ -700,13 +700,17 @@ class PluginUninstallModel extends CommonDBTM
         echo "<form action='" . $item->getFormURL() . "' method='post'>";
         echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
-        if ($this->fields["types_id"] != self::TYPE_MODEL_UNINSTALL) {
-            // if Replacement or Replacement then uninstall is selected
-            self::showPartFormRemplacement();
-        }
-        if ($this->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
-           // if Uninstall or Replacement then uninstall is selected
-            self::showPartFormUninstall();
+        switch ($this->fields["types_id"]) {
+            case self::TYPE_MODEL_UNINSTALL:
+                self::showPartFormUninstall();
+                break;
+            case self::TYPE_MODEL_REPLACEMENT:
+                self::showPartFormRemplacement();
+                break;
+            case self::TYPE_MODEL_REPLACEMENT_UNINSTALL:
+                self::showPartFormRemplacement();
+                self::showPartFormUninstall();
+                break;
         }
 
         $plug = new Plugin();
