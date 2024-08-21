@@ -562,7 +562,7 @@ class PluginUninstallUninstall extends CommonDBTM
                                     case PluginUninstallModelcontainerfield::ACTION_RAZ:
                                         $razValue = null;
                                         // field types which doesn't accept NULL values
-                                        if (str_starts_with($field['type'], 'dropdown') || $field['type'] == 'glpi_item') {
+                                        if (str_starts_with($field['type'], 'dropdown') || $field['type'] == 'glpi_item' || $field['type'] == 'yesno') {
                                             $razValue = 0;
                                         }
                                         $DB->update(

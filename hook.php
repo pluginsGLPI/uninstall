@@ -122,18 +122,23 @@ function plugin_uninstall_uninstall()
 
 function plugin_uninstall_hook_add_container($item)
 {
+    global $UNINSTALL_TYPES;
     if (!($item instanceof PluginFieldsContainer)) {
         return;
     }
-    $containerId = $item->getID();
-    $uninstallContainer = new PluginUninstallModelcontainer();
-    $model = new PluginUninstallModel();
-    $models = $model->find();
-    foreach ($models as $mod) {
-        $uninstallContainer->add([
-            'plugin_uninstall_models_id' => $mod['id'],
-            'plugin_fields_containers_id' => $containerId
-        ]);
+    $types = json_decode($item->fields['itemtypes']);
+    // only create matching elements for containers concerning item types used by the plugin
+    if (!empty(array_intersect($types, $UNINSTALL_TYPES))) {
+        $containerId = $item->getID();
+        $uninstallContainer = new PluginUninstallModelcontainer();
+        $model = new PluginUninstallModel();
+        $models = $model->find();
+        foreach ($models as $mod) {
+            $uninstallContainer->add([
+                'plugin_uninstall_models_id' => $mod['id'],
+                'plugin_fields_containers_id' => $containerId
+            ]);
+        }
     }
 }
 
