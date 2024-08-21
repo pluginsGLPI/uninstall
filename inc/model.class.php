@@ -1646,7 +1646,7 @@ class PluginUninstallModel extends CommonDBTM
      */
     public function createPluginFieldsRelations($modelId)
     {
-        global $DB;
+        global $DB, $UNINSTALL_TYPES;
         if ($DB->tableExists('glpi_plugin_fields_containers')) {
             $uninstallContainer = new PluginUninstallModelcontainer();
             $uninstallContainers = $uninstallContainer->find(['plugin_uninstall_models_id' => $modelId]);
@@ -1663,18 +1663,22 @@ class PluginUninstallModel extends CommonDBTM
             $uninstallField = new PluginUninstallModelcontainerfield();
 
             foreach ($fieldsContainers as $container) {
-                $newId = $uninstallContainer->add([
-                    'plugin_uninstall_models_id' => $modelId,
-                    'plugin_fields_containers_id' => $container['id']
-                ]);
-
-                $fieldsFields = $fieldsField->find(['plugin_fields_containers_id' => $container['id']]);
-                foreach ($fieldsFields as $field) {
-                    $uninstallField->add([
-                        'plugin_fields_fields_id' => $field['id'],
-                        'plugin_uninstall_modelcontainers_id' => $newId,
-                        'action' => $uninstallField::ACTION_RAZ
+                $types = json_decode($container['itemtypes']);
+                // only create matching elements for containers concerning item types used by the plugin
+                if (!empty(array_intersect($types, $UNINSTALL_TYPES))) {
+                    $newId = $uninstallContainer->add([
+                        'plugin_uninstall_models_id' => $modelId,
+                        'plugin_fields_containers_id' => $container['id']
                     ]);
+
+                    $fieldsFields = $fieldsField->find(['plugin_fields_containers_id' => $container['id']]);
+                    foreach ($fieldsFields as $field) {
+                        $uninstallField->add([
+                            'plugin_fields_fields_id' => $field['id'],
+                            'plugin_uninstall_modelcontainers_id' => $newId,
+                            'action' => $uninstallField::ACTION_RAZ
+                        ]);
+                    }
                 }
             }
         }
