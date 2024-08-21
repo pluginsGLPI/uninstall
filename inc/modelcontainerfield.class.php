@@ -28,11 +28,11 @@
  * -------------------------------------------------------------------------
  */
 
-class PluginUninstallModelcontainerfield extends CommonDBTM
+class PluginUninstallModelcontainerfield extends CommonDBChild
 {
     public $dohistory = true;
 
-    protected $displaylist = false;
+    protected $displaylist = true;
 
     public static $rightname = "uninstall:profile";
     // do nothing
@@ -43,6 +43,9 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
     const ACTION_NEW_VALUE = 2;
     // copy value, replace only
     const ACTION_COPY = 3;
+
+    public static $itemtype = 'PluginUninstallModelcontainer';
+    public static $items_id = 'plugin_uninstall_modelcontainers_id';
 
     public static function getTypeName($nb = 0)
     {
@@ -116,16 +119,6 @@ class PluginUninstallModelcontainerfield extends CommonDBTM
         $pluginUninstallModel = new PluginUninstallModel();
         $pluginUninstallModel->getFromDB($pluginUninstallContainer->fields['plugin_uninstall_models_id']);
         if ($pluginFieldsField->getFromDB($this->fields['plugin_fields_fields_id'])) {
-            echo "<tr class='tab_bg_1 center'><td>";
-            $backUrl = '../front/modelcontainer.form.php?forecetab=2&id=' . $pluginUninstallContainer->getID();
-            $backTitle = __('Fields list', 'uninstall');
-            echo "<a href='$backUrl' title=\"$backTitle\"
-                  class='btn btn-sm btn-icon btn-ghost-secondary'
-                  data-bs-toggle='tooltip' data-bs-placement='bottom'>
-                  <i class='far fa-lg fa-list-alt'></i>
-                  <span class='ml-2'>$backTitle</span>
-               </a>";
-            echo "</td></tr>";
             echo "<tr class='tab_bg_1 center'>";
             echo "<th colspan='4'>" . __('Field informations', 'uninstall') .
                 "</th></tr>";
