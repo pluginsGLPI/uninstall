@@ -37,6 +37,7 @@ class PluginUninstallModel extends CommonDBTM
 
     const TYPE_MODEL_UNINSTALL   = 1;
     const TYPE_MODEL_REPLACEMENT = 2;
+    const TYPE_MODEL_REPLACEMENT_UNINSTALL = 3;
 
     public static function getTypeName($nb = 0)
     {
@@ -85,6 +86,21 @@ class PluginUninstallModel extends CommonDBTM
         return $menu;
     }
 
+    public function prepareInputForAdd($input)
+    {
+        $input = parent::prepareInputForadd($input);
+        if (array_key_exists('types_id', $input) && array_key_exists('replace_method', $input)) {
+            if ($input['types_id'] == self::TYPE_MODEL_REPLACEMENT_UNINSTALL && $input['replace_method'] == PluginUninstallReplace::METHOD_PURGE) {
+                Session::addMessageAfterRedirect(
+                    __("The purge archiving method is not available for this model type", 'uninstall'),
+                    true,
+                    ERROR
+                );
+                $input = [];
+            }
+        }
+        return $input;
+    }
 
     public function prepareInputForUpdate($input)
     {
@@ -96,15 +112,21 @@ class PluginUninstallModel extends CommonDBTM
     *
     * @param $name   select name (default 'types_id')
     * @param $value  default value (default '')
+    * @param bool $display echo or return string
+    * @return string|void
    **/
-    public static function dropdownType($name = 'types_id', $value = '')
+    public static function dropdownType($name = 'types_id', $value = '', $display = true)
     {
 
         $values[1] = __('Uninstallation', 'uninstall');
         if (self::canReplace()) {
             $values[2] = __('Replacement', 'uninstall');
+            $values[3] = __('Replacement then uninstallation', 'uninstall');
         }
-        Dropdown::showFromArray($name, $values, ['value' => $value]);
+        return Dropdown::showFromArray($name, $values, [
+            'value' => $value,
+            'display' => $display
+        ]);
     }
 
 
@@ -128,15 +150,20 @@ class PluginUninstallModel extends CommonDBTM
    /**
     * Dropdown of method remplacement
     *
-    * @param $name   select name
-    * @param $value  default value (default '')
+    * @param $name   string name
+    * @param $value  string|int default value (default '')
+    * @param $type   int types_id
    **/
-    public static function dropdownMethodReplacement($name, $value = '')
+    public static function dropdownMethodReplacement($name, $value = '', $type = self::TYPE_MODEL_REPLACEMENT)
     {
-
+        $methods = self::getReplacementMethods();
+        if ($type == PluginUninstallModel::TYPE_MODEL_REPLACEMENT_UNINSTALL) {
+            // can't purge to be able to apply uninstall after replacement
+            unset($methods[PluginUninstallReplace::METHOD_PURGE]);
+        }
         Dropdown::showFromArray(
             $name,
-            self::getReplacementMethods(),
+            $methods,
             ['value' => $value]
         );
     }
@@ -314,7 +341,7 @@ class PluginUninstallModel extends CommonDBTM
     public function showPartFormUninstall()
     {
         echo "<tr class='tab_bg_1 center'>";
-        echo "<th colspan='4'>" . __('Erase datas', 'uninstall') . "</th></tr>";
+        echo "<th colspan='4'>" . __('Uninstallation', 'uninstall') . ' - ' . __('Erase datas', 'uninstall') . "</th></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
         echo "<td>" . __('Delete software history (computers)', 'uninstall') . "</td>";
@@ -486,7 +513,7 @@ class PluginUninstallModel extends CommonDBTM
         echo "<td>" . __('Archiving method of the old material', 'uninstall') . "</td>";
         echo "<td colspan='2'>";
         $value = (isset($this->fields["replace_method"]) ? $this->fields["replace_method"] : 0);
-        self::dropdownMethodReplacement('replace_method', $value);
+        self::dropdownMethodReplacement('replace_method', $value, $this->fields['types_id']);
         echo "</td>";
         echo "<td>";
         $plug = new Plugin();
@@ -673,12 +700,17 @@ class PluginUninstallModel extends CommonDBTM
         echo "<form action='" . $item->getFormURL() . "' method='post'>";
         echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
-        if ($this->fields["types_id"] == self::TYPE_MODEL_UNINSTALL) {
-           // if Uninstall is selected
-            self::showPartFormUninstall();
-        } else {
-           // if Replacement is selected
-            self::showPartFormRemplacement();
+        switch ($this->fields["types_id"]) {
+            case self::TYPE_MODEL_UNINSTALL:
+                self::showPartFormUninstall();
+                break;
+            case self::TYPE_MODEL_REPLACEMENT:
+                self::showPartFormRemplacement();
+                break;
+            case self::TYPE_MODEL_REPLACEMENT_UNINSTALL:
+                self::showPartFormRemplacement();
+                self::showPartFormUninstall();
+                break;
         }
 
         $plug = new Plugin();
@@ -1103,11 +1135,15 @@ class PluginUninstallModel extends CommonDBTM
             break;
 
             case 'types_id':
-                if ($values['types_id'] == self::TYPE_MODEL_UNINSTALL) {
-                    return __('Uninstallation', 'uninstall');
+                switch ($values['types_id']) {
+                    case self::TYPE_MODEL_UNINSTALL:
+                        return __('Uninstallation', 'uninstall');
+                    case self::TYPE_MODEL_REPLACEMENT:
+                        return __('Replacement', 'uninstall');
+                    case self::TYPE_MODEL_REPLACEMENT_UNINSTALL:
+                        return __('Replacement then uninstallation', 'uninstall');
                 }
-                return __('Replacement', 'uninstall');
-            break;
+                break;
 
             case 'groups_id':
                 if ($values['groups_action'] === 'old') {
@@ -1144,13 +1180,7 @@ class PluginUninstallModel extends CommonDBTM
                 return Dropdown::showFromArray($name, self::getReplacementMethods(), $options);
 
             case 'types_id':
-                $types[self::TYPE_MODEL_UNINSTALL] = __('Uninstallation', 'uninstall');
-                if (self::canReplace()) {
-                    $types[self::TYPE_MODEL_REPLACEMENT] = __('Replacement', 'uninstall');
-                }
-                $options['value'] = $values[$field];
-                return Dropdown::showFromArray($name, $types, $options);
-
+                return self::dropdownType($name, $values[$field], false);
             case 'groups_id':
                 $options['name']        = $name;
                 $options['value']       = $values[$field];
@@ -1336,6 +1366,11 @@ class PluginUninstallModel extends CommonDBTM
             }
 
             $migration->migrationOneTable($table);
+
+            $self = new self();
+            if (!$self->find(['types_id' => self::TYPE_MODEL_REPLACEMENT_UNINSTALL])) {
+                self::createTransferModel('Replace then uninstall');
+            }
         } else {
            // plugin never installed
             $query = "CREATE TABLE IF NOT EXISTS `" . getTableForItemType(__CLASS__) . "` (
@@ -1390,6 +1425,7 @@ class PluginUninstallModel extends CommonDBTM
 
             self::createTransferModel('Uninstall');
             self::createTransferModel('Replace');
+            self::createTransferModel('Replace then uninstall');
         }
         return true;
     }
@@ -1452,8 +1488,10 @@ class PluginUninstallModel extends CommonDBTM
             $tmp['delete_ocs_link']            = 0;
             if ($name == 'Uninstall') {
                 $tmp['types_id']                = self::TYPE_MODEL_UNINSTALL;
-            } else {
+            } else if ($name == 'Replace') {
                 $tmp['types_id']                = self::TYPE_MODEL_REPLACEMENT;
+            } else {
+                $tmp['types_id']                = self::TYPE_MODEL_REPLACEMENT_UNINSTALL;
             }
             $tmp['replace_name']               = 1;
             $tmp['replace_serial']             = 1;
