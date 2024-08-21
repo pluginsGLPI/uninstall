@@ -51,7 +51,6 @@ if (isset($_POST["update"])) {
     if (isset($_GET["id"])) {
         PluginUninstallModelcontainerfield::displayFullPageForItem($_GET['id']);
     } else {
-
     }
 
 

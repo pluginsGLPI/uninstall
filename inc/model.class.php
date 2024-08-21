@@ -1698,8 +1698,9 @@ class PluginUninstallModel extends CommonDBTM
      * Create all non-existing relations between plugin fields containers and a model
      * @param $modelId int
      */
-    public function createPluginFieldsRelations($modelId) {
-        global $DB;
+    public function createPluginFieldsRelations($modelId)
+    {
+        global $DB, $UNINSTALL_TYPES;
         if ($DB->tableExists('glpi_plugin_fields_containers')) {
             $uninstallContainer = new PluginUninstallModelcontainer();
             $uninstallContainers = $uninstallContainer->find(['plugin_uninstall_models_id' => $modelId]);
@@ -1712,29 +1713,33 @@ class PluginUninstallModel extends CommonDBTM
             $uninstallField = new PluginUninstallModelcontainerfield();
 
             foreach($fieldsContainers as $container) {
-                $newIdReplace = $uninstallContainer->add([
-                    'plugin_uninstall_models_id' => $modelId,
-                    'plugin_fields_containers_id' => $container['id'],
-                    'model_type' => self::TYPE_MODEL_REPLACEMENT
-                ]);
-                $newIdUninstall = $uninstallContainer->add([
-                    'plugin_uninstall_models_id' => $modelId,
-                    'plugin_fields_containers_id' => $container['id'],
-                    'model_type' => self::TYPE_MODEL_UNINSTALL
-                ]);
+                $types = json_decode($container['itemtypes']);
+                // only create matching elements for containers concerning item types used by the plugin
+                if (!empty(array_intersect($types, $UNINSTALL_TYPES))) {
+                    $newIdReplace = $uninstallContainer->add([
+                        'plugin_uninstall_models_id' => $modelId,
+                        'plugin_fields_containers_id' => $container['id'],
+                        'model_type' => self::TYPE_MODEL_REPLACEMENT
+                    ]);
+                    $newIdUninstall = $uninstallContainer->add([
+                        'plugin_uninstall_models_id' => $modelId,
+                        'plugin_fields_containers_id' => $container['id'],
+                        'model_type' => self::TYPE_MODEL_UNINSTALL
+                    ]);
 
-                $fieldsFields = $fieldsField->find(['plugin_fields_containers_id' => $container['id']]);
-                foreach($fieldsFields as $field) {
-                    $uninstallField->add([
-                        'plugin_fields_fields_id' => $field['id'],
-                        'plugin_uninstall_modelcontainers_id' => $newIdReplace,
-                        'action' => $uninstallField::ACTION_RAZ
-                    ]);
-                    $uninstallField->add([
-                        'plugin_fields_fields_id' => $field['id'],
-                        'plugin_uninstall_modelcontainers_id' => $newIdUninstall,
-                        'action' => $uninstallField::ACTION_RAZ
-                    ]);
+                    $fieldsFields = $fieldsField->find(['plugin_fields_containers_id' => $container['id']]);
+                    foreach($fieldsFields as $field) {
+                        $uninstallField->add([
+                            'plugin_fields_fields_id' => $field['id'],
+                            'plugin_uninstall_modelcontainers_id' => $newIdReplace,
+                            'action' => $uninstallField::ACTION_RAZ
+                        ]);
+                        $uninstallField->add([
+                            'plugin_fields_fields_id' => $field['id'],
+                            'plugin_uninstall_modelcontainers_id' => $newIdUninstall,
+                            'action' => $uninstallField::ACTION_RAZ
+                        ]);
+                    }
                 }
             }
         }

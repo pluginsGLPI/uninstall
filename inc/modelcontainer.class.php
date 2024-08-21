@@ -323,12 +323,12 @@ class PluginUninstallModelcontainer extends CommonDBChild
             echo "<th colspan='4'>" . __('Fields') .
                 "</th></tr></table>";
             $parameters = [
-                'start' => 0,
+                'start'      => 0,
                 'is_deleted' => 0,
-                'sort' => 1,
-                'order' => 'DESC',
-                'reset' => 'reset',
-                'criteria' => [],
+                'sort'       => 1,
+                'order'      => 'DESC',
+                'reset'      => 'reset',
+                'criteria'   => [],
             ];
             Search::showList(PluginUninstallModelcontainerfield::class, $parameters);
         }

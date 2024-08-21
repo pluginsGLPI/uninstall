@@ -52,7 +52,8 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
         return __("Field");
     }
 
-    public function getName($options = []) {
+    public function getName($options = [])
+    {
         $field = new PluginFieldsField();
         $field->getFromDB($this->fields['plugin_fields_fields_id']);
         return $field->fields['label'];
@@ -179,7 +180,7 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
                 ]
             );
             echo "</td>";
-            echo "<td><span id='label-set-value' style='display: none'>".__('New value', 'uninstall')." : </span></td>";
+            echo "<td><span id='label-set-value' style='display: none'>" . __('New value', 'uninstall') . " : </span></td>";
             echo "<td id='container-set-value'>";
             if ($pluginFieldsField->fields['type'] === 'glpi_item') {
                 echo __('Action set value is not available for this field type', 'uninstall');
@@ -194,7 +195,7 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
                     const label = $('#label-set-value');
                     const inputContainer = $('#container-set-value');
                     select.change(e => {
-                        if (e.target.selectedIndex === ".self::ACTION_NEW_VALUE.") {
+                        if (e.target.selectedIndex === " . self::ACTION_NEW_VALUE . ") {
                             label[0].style.display = '';
                         } else {
                             label[0].style.display = 'none'
@@ -257,7 +258,7 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
                     `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
                     `plugin_uninstall_modelcontainers_id` int {$default_key_sign} DEFAULT '0',
                     `plugin_fields_fields_id` tinyint NOT NULL DEFAULT '0',
-                    `action` int NOT NULL DEFAULT ". self::ACTION_NONE ." ,
+                    `action` int NOT NULL DEFAULT " . self::ACTION_NONE . " ,
                     `new_value` varchar(255),
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
@@ -266,9 +267,9 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
 
             $queryPreferences = "INSERT INTO `glpi_displaypreferences` (`itemtype`, `num`, `rank`, `users_id`)
                 VALUES 
-                    ('".self::class."', '2', '1', '0'),
-                    ('".self::class."', '3', '2', '0'),
-                    ('".self::class."', '4', '3', '0')
+                    ('" . self::class . "', '2', '1', '0'),
+                    ('" . self::class . "', '3', '2', '0'),
+                    ('" . self::class . "', '4', '3', '0')
                     ;";
 
             $DB->queryOrDie($queryPreferences, $DB->error());
