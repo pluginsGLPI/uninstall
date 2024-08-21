@@ -1362,6 +1362,11 @@ class PluginUninstallModel extends CommonDBTM
             }
 
             $migration->migrationOneTable($table);
+
+            $self = new self();
+            if (!$self->find(['types_id' => self::TYPE_MODEL_REPLACEMENT_UNINSTALL])) {
+                self::createTransferModel('Replace then uninstall');
+            }
         } else {
            // plugin never installed
             $query = "CREATE TABLE IF NOT EXISTS `" . getTableForItemType(__CLASS__) . "` (
@@ -1416,6 +1421,7 @@ class PluginUninstallModel extends CommonDBTM
 
             self::createTransferModel('Uninstall');
             self::createTransferModel('Replace');
+            self::createTransferModel('Replace then uninstall');
         }
         return true;
     }
@@ -1478,8 +1484,10 @@ class PluginUninstallModel extends CommonDBTM
             $tmp['delete_ocs_link']            = 0;
             if ($name == 'Uninstall') {
                 $tmp['types_id']                = self::TYPE_MODEL_UNINSTALL;
-            } else {
+            } else if ($name == 'Replace') {
                 $tmp['types_id']                = self::TYPE_MODEL_REPLACEMENT;
+            } else {
+                $tmp['types_id']                = self::TYPE_MODEL_REPLACEMENT_UNINSTALL;
             }
             $tmp['replace_name']               = 1;
             $tmp['replace_serial']             = 1;
