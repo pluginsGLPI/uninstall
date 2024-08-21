@@ -160,9 +160,9 @@ class PluginUninstallModel extends CommonDBTM
    /**
     * Dropdown of method remplacement
     *
-    * @param $name   select name
+    * @param $name   string name
+    * @param $value  string|int default value (default '')
     * @param $type   int types_id
-    * @param $value  default value (default '')
    **/
     public static function dropdownMethodReplacement($name, $value = '', $type = self::TYPE_MODEL_REPLACEMENT)
     {
@@ -772,13 +772,17 @@ class PluginUninstallModel extends CommonDBTM
         echo "<form action='" . $item->getFormURL() . "' method='post'>";
         echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
-        if ($this->fields["types_id"] != self::TYPE_MODEL_UNINSTALL) {
-            // if Replacement or Replacement then uninstall is selected
-            self::showPartFormRemplacement();
-        }
-        if ($this->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
-           // if Uninstall or Replacement then uninstall is selected
-            self::showPartFormUninstall();
+        switch ($this->fields["types_id"]) {
+            case self::TYPE_MODEL_UNINSTALL:
+                self::showPartFormUninstall();
+                break;
+            case self::TYPE_MODEL_REPLACEMENT:
+                self::showPartFormRemplacement();
+                break;
+            case self::TYPE_MODEL_REPLACEMENT_UNINSTALL:
+                self::showPartFormRemplacement();
+                self::showPartFormUninstall();
+                break;
         }
 
         $plug = new Plugin();
@@ -1601,8 +1605,8 @@ class PluginUninstallModel extends CommonDBTM
             $tmp['raz_ocs_registrykeys']       = 1;
             $tmp['raz_glpiinventory']          = 1;
             $tmp['raz_fusioninventory']        = 1;
-            $tmp['action_plugin_fields_uninstall']          = 0;
-            $tmp['action_plugin_fields_replace']          = 0;
+            $tmp['action_plugin_fields_uninstall'] = 0;
+            $tmp['action_plugin_fields_replace'] = 0;
             $tmp['comment']                    = '';
             $tmp['groups_action']              = 'set';
             $tmp['groups_id']                  = 0;
