@@ -438,11 +438,8 @@ class PluginUninstallModelcontainer extends CommonDBChild
 
                         $fieldsField = new PluginFieldsField();
                         $types = $fieldsField->getTypes(true);
-                        Toolbox::logInfo($fields);
                         foreach ($fields as $fieldData) {
-                            Toolbox::logInfo($fieldData);
                             if ($fieldsField->getFromDB($fieldData['plugin_fields_fields_id'])) {
-                                Toolbox::logInfo($fieldsField->getID());
                                 echo "<tr>";
                                 $link = PluginUninstallModelcontainerfield::getFormURLWithID($fieldData['id']);
                                 echo "<td>";
