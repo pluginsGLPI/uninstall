@@ -59,52 +59,6 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
         return $field->fields['label'];
     }
 
-    public function rawSearchOptions()
-    {
-        $tab = [];
-
-        $tab[] = [
-            'id' => '1',
-            'table' => self::getTable(),
-            'field' => 'id',
-            'name' => __('ID'),
-            'massiveaction' => false,
-            'datatype' => 'itemlink'
-        ];
-
-        $tab[] = [
-            'id' => '2',
-            'table' => PluginFieldsField::getTable(),
-            'field' => 'label',
-            'name' => __('Label'),
-            'datatype' => 'text',
-            'linkfield' => 'plugin_fields_fields_id',
-        ];
-
-        // temp solution to the fact that the plugin Fields does not provide the specific value display for type
-        $tab[] = [
-            'id'            => 3,
-            'table'         => self::getTable(),
-            'field'         => 'plugin_fields_fields_id',
-            'name'          => __("Type"),
-            'datatype'      => 'specific',
-            'massiveaction' => false,
-            'nosearch'      => true,
-        ];
-
-        $tab[] = [
-            'id'            => 4,
-            'table'         => self::getTable(),
-            'field'         => 'action',
-            'name'          => __('Action'),
-            'datatype'      => 'specific',
-            'massiveaction' => true,
-            'nosearch'      => true,
-        ];
-
-        return $tab;
-    }
-
     public function showForm($ID, $options = [])
     {
         /** @var array $CFG_GLPI */
@@ -113,16 +67,36 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
         $this->initForm($ID, $options);
         $this->showFormHeader($options);
 
+        $uninstallContainer = new PluginUninstallModelcontainer();
+        $uninstallContainer->getFromDB($this->fields['plugin_uninstall_modelcontainers_id']);
+
+        $fieldsContainer = new PluginFieldsContainer();
+        $fieldsContainer->getFromDB($uninstallContainer->fields['plugin_fields_containers_id']);
+
+        $model = new PluginUninstallModel();
+        $model->getFromDB($uninstallContainer->fields['plugin_uninstall_models_id']);
+
         $pluginFieldsField = new PluginFieldsField();
-        $pluginUninstallContainer = new PluginUninstallModelcontainer();
-        $pluginUninstallContainer->getFromDB($this->fields['plugin_uninstall_modelcontainers_id']);
-        $pluginUninstallModel = new PluginUninstallModel();
-        $pluginUninstallModel->getFromDB($pluginUninstallContainer->fields['plugin_uninstall_models_id']);
         if ($pluginFieldsField->getFromDB($this->fields['plugin_fields_fields_id'])) {
+            // context
             echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . __('Field informations', 'uninstall') .
+            echo "<th colspan='4'>" . __('Parents', 'uninstall') .
                 "</th></tr>";
             echo "<tr class='tab_bg_1 center'>";
+            echo "<td>" . __('Model') . " : </td>";
+            echo "<td>";
+            echo "<a href='" . $model->getFormUrlWithID($model->getID()) . "'>" . $model->fields['name'] . "</a>";
+            echo "</td>";
+            echo "<td>" . __('Bloc') . " : </td>";
+            echo "<td>";
+            echo "<a href='" . $uninstallContainer->getFormUrlWithID($uninstallContainer->getID()) . "'>" . $fieldsContainer->fields['name'] . "</a>";
+            echo "</td>";
+            echo "</tr>";
+            echo "<tr class='tab_bg_1 center'>";
+            // field infos
+            echo "<th colspan='4' class='fs-2'>" . __('Field informations', 'uninstall') .
+                "</th></tr>";
+            echo "<tr class='tab_bg_1 center fw-bold'>";
             echo "<td>" . __("Label") . " : </td>";
             echo "<td>";
             echo $pluginFieldsField->fields['label'];
@@ -144,103 +118,116 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
             echo "</td>";
             echo "</tr>";
 
-            echo "<tr class='tab_bg_1 center'>";
-            $actionTitle = '';
-            if ($pluginUninstallContainer->fields['model_type'] == $pluginUninstallModel::TYPE_MODEL_UNINSTALL) {
-                $actionTitle .= 'Uninstallation';
-            } else {
-                $actionTitle .= 'Replacement';
-            }
-            echo "<th colspan='4'>" . __('Action for ', 'uninstall') . __($actionTitle, 'uninstall') .
-                "</th></tr>";
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" . __('Action') . " :</td>";
-            echo "<td>";
-            $rand = mt_rand();
-            $options = [
-                self::ACTION_NONE => __('Do nothing'),
-            ];
-            if ($pluginUninstallContainer->fields['model_type'] == $pluginUninstallModel::TYPE_MODEL_UNINSTALL) {
-                $options[self::ACTION_RAZ] = __('Blank');
-                if ($pluginFieldsField->fields['type'] !== 'glpi_item') {
-                    $options[self::ACTION_NEW_VALUE] = __('Set value', 'uninstall');
-                }
-            } else {
-                $options[self::ACTION_COPY] = __('Copy');
-            }
+            $actionFields = ['action_replace', 'action_uninstall'];
+            foreach($actionFields as $field) {
+                // model can use the property
+                if (($field === 'action_uninstall' && $model->fields['types_id'] != $model::TYPE_MODEL_REPLACEMENT)
+                    || ($field === 'action_replace' && $model->fields['types_id'] != $model::TYPE_MODEL_UNINSTALL)) {
+                    switch($field) {
+                        case 'action_uninstall':
+                            $typeTitle = __('Uninstallation', 'uninstall');
+                            $modelProperty = 'action_plugin_fields_uninstall';
+                            break;
+                        case 'action_replace' :
+                            $typeTitle = __('Replacement', 'uninstall');
+                            $modelProperty = 'action_plugin_fields_replace';
+                            break;
+                    }
 
-            Dropdown::showFromArray(
-                "action",
-                $options,
-                [
-                    'value' => (isset($this->fields["action"])
-                        ? $this->fields["action"] : self::ACTION_NONE),
-                    'width' => '100%',
-                    'rand' => $rand
-                ]
-            );
-            echo "</td>";
-            echo "<td><span id='label-set-value' style='display: none'>" . __('New value', 'uninstall') . " : </span></td>";
-            echo "<td id='container-set-value'>";
-            if ($pluginFieldsField->fields['type'] === 'glpi_item') {
-                echo __('Action set value is not available for this field type', 'uninstall');
-            }
-            echo "</td>";
-            echo "</tr>";
-            $url = Plugin::getWebDir('uninstall') . "/ajax/fieldValueInput.php";
-            echo "
-            <script>
-                $(document).ready(function() {
-                    const select = $('#dropdown_action$rand');
-                    const label = $('#label-set-value');
-                    const inputContainer = $('#container-set-value');
-                    select.change(e => {
-                        if (e.target.selectedIndex === " . self::ACTION_NEW_VALUE . ") {
-                            label[0].style.display = '';
+                    echo "<th colspan='4' class='center fs-3'>" . __('Action for ', 'uninstall') . $typeTitle .
+                        "</th></tr>";
+                    echo "<tr class='tab_bg_1 center'>";
+                    // model and container let the action be decided at this level, display dropdown
+                    if ($model->fields[$modelProperty] == $model::PLUGIN_FIELDS_ACTION_ADVANCED
+                        && $uninstallContainer->fields[$field] == $uninstallContainer::ACTION_CUSTOM) {
+
+                        echo "<td>" . __('Action') . " :</td>";
+                        $colspan = $field == 'action_uninstall' ? 1 : 3;
+                        echo "<td colspan='$colspan'>";
+                        $rand = mt_rand();
+                        $options = [
+                            self::ACTION_NONE => __('Do nothing'),
+                        ];
+                        if ($field == 'action_uninstall') {
+                            $options[self::ACTION_RAZ] = __('Blank');
+                            if ($pluginFieldsField->fields['type'] !== 'glpi_item') {
+                                $options[self::ACTION_NEW_VALUE] = __('Set value', 'uninstall');
+                            }
                         } else {
-                            label[0].style.display = 'none'
+                            $options[self::ACTION_COPY] = __('Copy');
                         }
-                        inputContainer.load('$url', {
-                            'id' : $ID,
-                            'action' : e.target.selectedIndex
-                        });
-                    })
-                    select.trigger('change');
-                });
-            </script>
-        ";
+
+                        Dropdown::showFromArray(
+                            $field,
+                            $options,
+                            [
+                                'value' => (isset($this->fields[$field])
+                                    ? $this->fields[$field] : self::ACTION_NONE),
+                                'width' => '100%',
+                                'rand' => $rand
+                            ]
+                        );
+                        echo "</td>";
+                        // for uninstall, show the part that allow for a new value to be set
+                        if ($field == 'action_uninstall') {
+                            echo "<td><span id='label-set-value' style='display: none'>" . __('New value', 'uninstall') . " : </span></td>";
+                            echo "<td id='container-set-value'>";
+                            if ($pluginFieldsField->fields['type'] === 'glpi_item') {
+                                echo __('Action set value is not available for this field type', 'uninstall');
+                            }
+                            echo "</td>";
+                            echo "</tr>";
+                            $url = Plugin::getWebDir('uninstall') . "/ajax/fieldValueInput.php";
+                            echo "
+                            <script>
+                                $(document).ready(function() {
+                                    const select = $('#dropdown_$field$rand');
+                                    const label = $('#label-set-value');
+                                    const inputContainer = $('#container-set-value');
+                                    select.change(e => {
+                                        if (e.target.selectedIndex === " . self::ACTION_NEW_VALUE . ") {
+                                            label[0].style.display = '';
+                                        } else {
+                                            label[0].style.display = 'none'
+                                        }
+                                        inputContainer.load('$url', {
+                                            'id' : $ID,
+                                            'action' : e.target.selectedIndex
+                                        });
+                                    })
+                                    select.trigger('change');
+                                });
+                            </script>
+                            ";
+                        }
+                    } else {
+                        if ($model->fields[$modelProperty] == $model::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                            echo "<td colspan='4'><strong>" . $uninstallContainer::getActions()[$uninstallContainer->fields[$field]] . "</strong> (". __('set by bloc', 'uninstall') .")</td>";
+                        } else {
+                            switch ($model->fields[$modelProperty]) {
+                                case $model::PLUGIN_FIELDS_ACTION_NONE :
+                                    $action = __('Do nothing');
+                                    break;
+                                case $model::PLUGIN_FIELDS_ACTION_RAZ :
+                                    $action = __('Blank');
+                                    break;
+                                case $model::PLUGIN_FIELDS_ACTION_COPY :
+                                    $action = __('Copy');
+                                    break;
+                            }
+
+                            echo "<td colspan='4'><strong>" . $action . "</strong> (" . __('set by model', 'uninstall') . ")</td>";
+                        }
+
+                    }
+                    echo "</tr>";
+                }
+            }
 
             $this->showFormButtons($options);
         }
 
         return true;
-    }
-
-    public static function getSpecificValueToDisplay($field, $values, array $options = [])
-    {
-        if (!is_array($values)) {
-            $values = [$field => $values];
-        }
-        switch ($field) {
-            case 'plugin_fields_fields_id':
-                $pluginField = new PluginFieldsField();
-                $pluginField->getFromDB($values[$field]);
-                $types = PluginFieldsField::getTypes(true);
-                return $types[$pluginField->fields['type']];
-            case 'action':
-                switch ($values[$field]) {
-                    case self::ACTION_NONE:
-                        return __('Do nothing');
-                    case self::ACTION_RAZ:
-                        return __('Blank');
-                    case self::ACTION_COPY:
-                        return __('Copy');
-                    case self::ACTION_NEW_VALUE:
-                        return __('Set value', 'uninstall');
-                }
-        }
-
-        return '';
     }
 
     public static function install($migration)
@@ -258,21 +245,13 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
                     `id` int {$default_key_sign} NOT NULL AUTO_INCREMENT,
                     `plugin_uninstall_modelcontainers_id` int {$default_key_sign} DEFAULT '0',
                     `plugin_fields_fields_id` tinyint NOT NULL DEFAULT '0',
-                    `action` int NOT NULL DEFAULT " . self::ACTION_NONE . " ,
+                    `action_uninstall` int NOT NULL DEFAULT '0',
+                    `action_replace` int NOT NULL DEFAULT '0',
                     `new_value` varchar(255),
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
             $DB->queryOrDie($query, $DB->error());
-
-            $queryPreferences = "INSERT INTO `glpi_displaypreferences` (`itemtype`, `num`, `rank`, `users_id`)
-                VALUES 
-                    ('" . self::class . "', '2', '1', '0'),
-                    ('" . self::class . "', '3', '2', '0'),
-                    ('" . self::class . "', '4', '3', '0')
-                    ;";
-
-            $DB->queryOrDie($queryPreferences, $DB->error());
         }
         return true;
     }

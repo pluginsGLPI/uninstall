@@ -538,16 +538,15 @@ class PluginUninstallUninstall extends CommonDBTM
             if (in_array($itemtype, $itemtypes)) {
                 if ($pluginUninstallContainer->getFromDBByCrit([
                     'plugin_uninstall_models_id' => $model->getID(),
-                    'plugin_fields_containers_id' => $fieldsContainer['id'],
-                    'model_type' => PluginUninstallModel::TYPE_MODEL_UNINSTALL
+                    'plugin_fields_containers_id' => $fieldsContainer['id']
                 ])) {
-                    if ($pluginUninstallContainer->fields['action'] != PluginUninstallModelcontainer::ACTION_NONE) {
+                    if ($pluginUninstallContainer->fields['action_uninstall'] != PluginUninstallModelcontainer::ACTION_NONE) {
                         $classname = 'PluginFields' . $itemtype . getSingular($fieldsContainer['name']);
                         $obj = new $classname();
-                        if ($pluginUninstallContainer->fields['action'] == PluginUninstallModelcontainer::ACTION_RAZ) {
+                        if ($pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_RAZ) {
                             // same as PluginFieldsContainer::preItemPurge
                             $obj->deleteByCriteria(['items_id' => $item->fields['id']], true);
-                        } else if ($pluginUninstallContainer->fields['action'] == PluginUninstallModelcontainer::ACTION_CUSTOM) {
+                        } else if ($pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_CUSTOM) {
                             $uninstallFields = $pluginUninstallField->find([
                                 'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID()
                             ]);
@@ -557,7 +556,7 @@ class PluginUninstallUninstall extends CommonDBTM
                             foreach ($uninstallFields as $setting) {
                                 $field = array_filter($fieldsFields, fn($e) => $e['id'] == $setting['plugin_fields_fields_id']);
                                 $field = reset($field);
-                                switch ($setting['action']) {
+                                switch ($setting['action_uninstall']) {
                                     case PluginUninstallModelcontainerfield::ACTION_RAZ :
                                         $razValue = null;
                                         // field types which doesn't accept NULL values

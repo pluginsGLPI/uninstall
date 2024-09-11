@@ -138,13 +138,7 @@ function plugin_uninstall_hook_add_container($item)
         foreach ($models as $mod) {
             $uninstallContainer->add([
                 'plugin_uninstall_models_id' => $mod['id'],
-                'plugin_fields_containers_id' => $containerId,
-                'model_type' => PluginUninstallModel::TYPE_MODEL_REPLACEMENT
-            ]);
-            $uninstallContainer->add([
-                'plugin_uninstall_models_id' => $mod['id'],
-                'plugin_fields_containers_id' => $containerId,
-                'model_type' => PluginUninstallModel::TYPE_MODEL_UNINSTALL
+                'plugin_fields_containers_id' => $containerId
             ]);
         }
     }
@@ -164,8 +158,7 @@ function plugin_uninstall_hook_add_field($item)
     foreach ($uninstallContainers as $container) {
         $uninstallField->add([
             'plugin_uninstall_modelcontainers_id' => $container['id'],
-            'plugin_fields_fields_id' => $fieldId,
-            'action' => $uninstallField::ACTION_NONE
+            'plugin_fields_fields_id' => $fieldId
         ]);
     }
 }

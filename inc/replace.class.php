@@ -450,24 +450,25 @@ class PluginUninstallReplace extends CommonDBTM
 
             if ($plug->isActivated('fields')) {
                 $pluginFieldsContainer = new PluginFieldsContainer();
+                // copy all
                 if ($model->fields['action_plugin_fields_replace'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_COPY) {
                     $containers = $pluginFieldsContainer->find(['itemtypes' => ['LIKE', "%\"$type\"%"]]);
                     foreach ($containers as $container) {
                         self::handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type);
                     }
                 }
+                // case by case for containers
                 if ($model->fields['action_plugin_fields_replace'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
                     $pluginUninstallContainer = new PluginUninstallModelcontainer();
                     $containers = $pluginFieldsContainer->find(['itemtypes' => ['LIKE', "%\"$type\"%"]]);
                     foreach ($containers as $container) {
                         $pluginUninstallContainer->getFromDBByCrit([
                             'plugin_fields_containers_id' => $container['id'],
-                            'plugin_uninstall_models_id' => $model->getID(),
-                            'model_type' => PluginUninstallModel::TYPE_MODEL_REPLACEMENT
+                            'plugin_uninstall_models_id' => $model->getID()
                         ]);
-                        if ($pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_COPY) {
+                        if ($pluginUninstallContainer->fields['action_replace'] == $pluginUninstallContainer::ACTION_COPY) {
                             self::handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type);
-                        } else if ($pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_CUSTOM) {
+                        } else if ($pluginUninstallContainer->fields['action_replace'] == $pluginUninstallContainer::ACTION_CUSTOM) {
                             self::handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type, $pluginUninstallContainer);
                         }
                     }
@@ -1131,7 +1132,7 @@ class PluginUninstallReplace extends CommonDBTM
      * @param $olditem CommonDBTM
      * @param $newitem CommonDBTM
      * @param $type string
-     * @param $pluginUninstallContainer PluginUninstallModelcontainer
+     * @param $pluginUninstallContainer PluginUninstallModelcontainer if not null, will see if it must do a case by case when handling the fields copies
      * @return void
      */
     public static function handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type, $pluginUninstallContainer = null)
@@ -1160,14 +1161,14 @@ class PluginUninstallReplace extends CommonDBTM
             $fields = $pluginFieldsField->find(['plugin_fields_containers_id' => $container['id']]);
             $parameters = [];
             foreach ($fields as $field) {
-                if ($pluginUninstallContainer && $pluginUninstallContainer->fields['action'] == $pluginUninstallContainer::ACTION_CUSTOM) {
+                if ($pluginUninstallContainer && $pluginUninstallContainer->fields['action_replace'] == $pluginUninstallContainer::ACTION_CUSTOM) {
                     if (
                         $pluginUninstallField->getFromDBByCrit([
                             'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID(),
                             'plugin_fields_fields_id' => $field['id']
                         ])
                     ) {
-                        if ($pluginUninstallField->fields['action'] == $pluginUninstallField::ACTION_COPY) {
+                        if ($pluginUninstallField->fields['action_replace'] == $pluginUninstallField::ACTION_COPY) {
                             if ($overwrite || !$newItemValues->current()) {
                                 // overwrite or no record
                                 $parameters[$field['name']] = $oldItemValues->current()[$field['name']];
