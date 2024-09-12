@@ -431,38 +431,122 @@ class PluginUninstallModelcontainer extends CommonDBChild
                         echo "<table class='tab_cadre_fixe'>";
                         echo "<thead><tr>";
                         echo "<th>" . __('Field') . "</th>";
-                        echo "<th>" . __("Action") . "</th>";
                         echo "<th>" . __("Type") . "</th>";
+                        echo "<th>" . __("Action") . "</th>";
+                        echo "<th></th>";
                         echo "</tr></thead>";
                         echo "<tbody>";
 
                         $fieldsField = new PluginFieldsField();
                         $types = $fieldsField->getTypes(true);
                         foreach ($fields as $fieldData) {
-                            if ($fieldsField->getFromDB($fieldData['plugin_fields_fields_id'])) {
+                            if ($fieldsField->getFromDB($fieldData['plugin_fields_fields_id'])
+                                && $uninstallField->getFromDB($fieldData['id'])) {
                                 echo "<tr>";
                                 $link = PluginUninstallModelcontainerfield::getFormURLWithID($fieldData['id']);
                                 echo "<td>";
                                 echo "<a href='$link'>" . $fieldsField->fields['label'] . "</a>";
                                 echo "</td>";
-                                echo "<td><strong>";
-                                switch ($fieldData[$field]) {
-                                    case $uninstallField::ACTION_NONE:
-                                        echo __('Do nothing');
-                                        break;
-                                    case $uninstallField::ACTION_RAZ:
-                                        echo __('Blank');
-                                        break;
-                                    case $uninstallField::ACTION_COPY:
-                                        echo __('Copy');
-                                        break;
-                                    case $uninstallField::ACTION_NEW_VALUE:
-                                        echo __('Set value', 'uninstall');
-                                        echo ' : "' . $fieldData['new_value'] . '"';
-                                        break;
-                                }
-                                echo "</strong></td>";
                                 echo "<td>" . $types[$fieldsField->fields['type']] . "</td>";
+                                echo "<td><div class='d-flex'>";
+                                $options = [
+                                    $uninstallField::ACTION_NONE => __('Do nothing'),
+                                ];
+                                if ($field == 'action_uninstall') {
+                                    $options[$uninstallField::ACTION_RAZ] = __('Blank');
+                                    if ($fieldsField->fields['type'] !== 'glpi_item') {
+                                        $options[$uninstallField::ACTION_NEW_VALUE] = __('Set value', 'uninstall');
+                                    }
+                                } else {
+                                    $options[$uninstallField::ACTION_COPY] = __('Copy');
+                                }
+                                $rand = mt_rand();
+                                echo "<div>";
+                                Dropdown::showFromArray(
+                                    $field,
+                                    $options,
+                                    [
+                                        'value' => (isset($uninstallField->fields[$field])
+                                            ? $uninstallField->fields[$field] : $uninstallField::ACTION_NONE),
+                                        'width' => '100%',
+                                        'rand' => $rand
+                                    ]
+                                );
+                                echo "</div>";
+                                $id = $uninstallField->getID();
+                                if ($field == 'action_uninstall') {
+                                    echo "<div class='d-flex align-items-center'><label id='label-set-value$field$rand' class='mx-2' style='display: none'>" . __('New value', 'uninstall') . "</label>";
+                                    echo "<div id='container-set-value$field$rand'>";
+                                    if ($fieldsField->fields['type'] === 'glpi_item') {
+                                        echo __('Action set value is not available for this field type', 'uninstall');
+                                    }
+                                    echo "</div>";
+                                    echo "</div>";
+                                    $url = Plugin::getWebDir('uninstall') . "/ajax/fieldValueInput.php";
+                                    echo "
+                                    <script>
+                                        $(document).ready(function() {
+                                            const select = $('#dropdown_$field$rand');
+                                            const label = $('#label-set-value$field$rand');
+                                            const inputContainer = $('#container-set-value$field$rand');
+                                            select.change(e => {
+                                                if (e.target.selectedIndex === " . $uninstallField::ACTION_NEW_VALUE . ") {
+                                                    label[0].style.display = '';
+                                                } else {
+                                                    label[0].style.display = 'none'
+                                                }
+                                                inputContainer.load('$url', {
+                                                    'id' : $id,
+                                                    'action' : e.target.selectedIndex,
+                                                    'rand' : '$rand'
+                                                });
+                                            })
+                                            select.trigger('change');
+                                        });
+                                    </script>
+                                    ";
+                                }
+                                echo "</div></td>";
+                                echo "<td>";
+                                echo "<div id='button$field$rand'>";
+                                echo "<button class='btn btn-primary me-2' id='update$field$rand'>";
+                                echo '<i class="far fa-save"></i>';
+                                echo "</button></div>";
+                                $saveUrl = Plugin::getWebDir('uninstall') . "/ajax/saveField.php";
+                                echo "
+                                    <script>
+                                        $(document).ready(function() {
+                                            const button = $('#update$field$rand');
+                                            const container = $('#button$field$rand');
+                                            button.click(e => {
+                                                container.addClass('d-none'); 
+                                                container.html('<i class=\"fas fa-2 fa-spinner fa-pulse m-1\"></i>');
+                                                const action = $('#dropdown_$field$rand').val();
+                                                let new_value = null;
+                                                if ($('".'[id$'."=\"new_value$rand\"]')) {
+                                                    new_value = $('".'[id$'."=\"new_value$rand\"]').val();   
+                                                }
+                                                $.ajax({
+                                                  method : 'POST',
+                                                  url: '$saveUrl',
+                                                  data: {
+                                                      'id' : $id,
+                                                      '$field' : action,
+                                                      'new_value' : new_value
+                                                  },
+                                                  success: function(e) {
+                                                      window.location.reload();
+                                                  },
+                                                  error: function(e) {
+                                                      window.location.reload();
+                                                  }
+                                                });
+                                            })
+                                           
+                                        });
+                                    </script>
+                                    ";
+                                echo "</td>";
                                 echo "</tr>";
                             }
                         }

@@ -33,7 +33,6 @@ header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
 Session::checkLoginUser();
-
 switch ($_POST['action']) {
     case PluginUninstallModelcontainerfield::ACTION_NONE:
     case PluginUninstallModelcontainerfield::ACTION_RAZ:
@@ -42,6 +41,11 @@ switch ($_POST['action']) {
 
     case PluginUninstallModelcontainerfield::ACTION_NEW_VALUE:
         if (isset($_POST['id']) && $_POST['id']) {
+            $rand = mt_rand();
+            if (isset($_POST['rand']) && $_POST['rand']) {
+                $rand = $_POST['rand'];
+            }
+
             $pluginUninstallField = new PluginUninstallModelcontainerfield();
             $pluginUninstallField->getFromDB($_POST['id']);
 
@@ -101,6 +105,7 @@ switch ($_POST['action']) {
                             'value' => $default_value,
                             'entity_restrict' => -1,
                             'multiple' => $multiple,
+                            'rand' => $rand
                         ]
                     );
 
@@ -114,13 +119,17 @@ switch ($_POST['action']) {
                     }
                     Dropdown::showYesNo(
                         'new_value',
-                        $value
+                        $value,
+                        -1,
+                        ['rand' => $rand]
                     );
                 } else {
+                    $id = 'new_value' . $rand;
                     echo Html::input(
                         'new_value',
                         [
                             'value' => $pluginUninstallField->fields['new_value'] ?? $pluginFieldsField->fields['default_value'],
+                            'id' => $id
                         ]
                     );
                 }

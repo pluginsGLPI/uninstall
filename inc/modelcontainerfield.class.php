@@ -170,8 +170,8 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
                         echo "</td>";
                         // for uninstall, show the part that allow for a new value to be set
                         if ($field == 'action_uninstall') {
-                            echo "<td><span id='label-set-value' style='display: none'>" . __('New value', 'uninstall') . " : </span></td>";
-                            echo "<td id='container-set-value'>";
+                            echo "<td><span id='label-set-value$rand' style='display: none'>" . __('New value', 'uninstall') . " : </span></td>";
+                            echo "<td id='container-set-value$rand'>";
                             if ($pluginFieldsField->fields['type'] === 'glpi_item') {
                                 echo __('Action set value is not available for this field type', 'uninstall');
                             }
@@ -182,8 +182,8 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
                             <script>
                                 $(document).ready(function() {
                                     const select = $('#dropdown_$field$rand');
-                                    const label = $('#label-set-value');
-                                    const inputContainer = $('#container-set-value');
+                                    const label = $('#label-set-value$rand');
+                                    const inputContainer = $('#container-set-value$rand');
                                     select.change(e => {
                                         if (e.target.selectedIndex === " . self::ACTION_NEW_VALUE . ") {
                                             label[0].style.display = '';
