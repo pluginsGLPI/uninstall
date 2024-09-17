@@ -119,16 +119,18 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
             echo "</tr>";
 
             $actionFields = ['action_replace', 'action_uninstall'];
-            foreach($actionFields as $field) {
+            foreach ($actionFields as $field) {
                 // model can use the property
-                if (($field === 'action_uninstall' && $model->fields['types_id'] != $model::TYPE_MODEL_REPLACEMENT)
-                    || ($field === 'action_replace' && $model->fields['types_id'] != $model::TYPE_MODEL_UNINSTALL)) {
-                    switch($field) {
+                if (
+                    ($field === 'action_uninstall' && $model->fields['types_id'] != $model::TYPE_MODEL_REPLACEMENT)
+                    || ($field === 'action_replace' && $model->fields['types_id'] != $model::TYPE_MODEL_UNINSTALL)
+                ) {
+                    switch ($field) {
                         case 'action_uninstall':
                             $typeTitle = __('Uninstallation', 'uninstall');
                             $modelProperty = 'action_plugin_fields_uninstall';
                             break;
-                        case 'action_replace' :
+                        case 'action_replace':
                             $typeTitle = __('Replacement', 'uninstall');
                             $modelProperty = 'action_plugin_fields_replace';
                             break;
@@ -138,9 +140,10 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
                         "</th></tr>";
                     echo "<tr class='tab_bg_1 center'>";
                     // model and container let the action be decided at this level, display dropdown
-                    if ($model->fields[$modelProperty] == $model::PLUGIN_FIELDS_ACTION_ADVANCED
-                        && $uninstallContainer->fields[$field] == $uninstallContainer::ACTION_CUSTOM) {
-
+                    if (
+                        $model->fields[$modelProperty] == $model::PLUGIN_FIELDS_ACTION_ADVANCED
+                        && $uninstallContainer->fields[$field] == $uninstallContainer::ACTION_CUSTOM
+                    ) {
                         echo "<td>" . __('Action') . " :</td>";
                         $colspan = $field == 'action_uninstall' ? 1 : 3;
                         echo "<td colspan='$colspan'>";
@@ -202,23 +205,22 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
                         }
                     } else {
                         if ($model->fields[$modelProperty] == $model::PLUGIN_FIELDS_ACTION_ADVANCED) {
-                            echo "<td colspan='4'><strong>" . $uninstallContainer::getActions()[$uninstallContainer->fields[$field]] . "</strong> (". __('set by bloc', 'uninstall') .")</td>";
+                            echo "<td colspan='4'><strong>" . $uninstallContainer::getActions()[$uninstallContainer->fields[$field]] . "</strong> (" . __('set by bloc', 'uninstall') . ")</td>";
                         } else {
                             switch ($model->fields[$modelProperty]) {
-                                case $model::PLUGIN_FIELDS_ACTION_NONE :
+                                case $model::PLUGIN_FIELDS_ACTION_NONE:
                                     $action = __('Do nothing');
                                     break;
-                                case $model::PLUGIN_FIELDS_ACTION_RAZ :
+                                case $model::PLUGIN_FIELDS_ACTION_RAZ:
                                     $action = __('Blank');
                                     break;
-                                case $model::PLUGIN_FIELDS_ACTION_COPY :
+                                case $model::PLUGIN_FIELDS_ACTION_COPY:
                                     $action = __('Copy');
                                     break;
                             }
 
                             echo "<td colspan='4'><strong>" . $action . "</strong> (" . __('set by model', 'uninstall') . ")</td>";
                         }
-
                     }
                     echo "</tr>";
                 }

@@ -112,8 +112,10 @@ class PluginUninstallModelcontainer extends CommonDBChild
                 $tab[1] = self::getTypeName(1);
                 $model = new PluginUninstallModel();
                 $model->getFromDB($item->fields['plugin_uninstall_models_id']);
-                if (($model->fields['types_id'] != $model::TYPE_MODEL_UNINSTALL && $item->fields['action_replace'] == self::ACTION_CUSTOM) ||
-                    ($model->fields['types_id'] != $model::TYPE_MODEL_REPLACEMENT && $item->fields['action_uninstall'] == self::ACTION_CUSTOM)) {
+                if (
+                    ($model->fields['types_id'] != $model::TYPE_MODEL_UNINSTALL && $item->fields['action_replace'] == self::ACTION_CUSTOM) ||
+                    ($model->fields['types_id'] != $model::TYPE_MODEL_REPLACEMENT && $item->fields['action_uninstall'] == self::ACTION_CUSTOM)
+                ) {
                     $tab[2] = __('Fields');
                 }
                 return $tab;
@@ -228,10 +230,10 @@ class PluginUninstallModelcontainer extends CommonDBChild
                     );
                 } else {
                     switch ($model->fields['action_plugin_fields_replace']) {
-                        case $model::PLUGIN_FIELDS_ACTION_NONE :
+                        case $model::PLUGIN_FIELDS_ACTION_NONE:
                             $action = __('Do nothing');
                             break;
-                        case $model::PLUGIN_FIELDS_ACTION_COPY :
+                        case $model::PLUGIN_FIELDS_ACTION_COPY:
                             $action = __('Copy');
                     }
 
@@ -257,10 +259,10 @@ class PluginUninstallModelcontainer extends CommonDBChild
                     );
                 } else {
                     switch ($model->fields['action_plugin_fields_uninstall']) {
-                        case $model::PLUGIN_FIELDS_ACTION_NONE :
+                        case $model::PLUGIN_FIELDS_ACTION_NONE:
                             $action = __('Do nothing');
                             break;
-                        case $model::PLUGIN_FIELDS_ACTION_RAZ :
+                        case $model::PLUGIN_FIELDS_ACTION_RAZ:
                             $action = __('Blank');
                     }
 
@@ -302,7 +304,7 @@ class PluginUninstallModelcontainer extends CommonDBChild
             echo "</tr></thead>";
             echo "<tbody>";
             $actionProperty = $type === PluginUninstallModel::TYPE_MODEL_UNINSTALL ? 'action_uninstall' : 'action_replace';
-            foreach($uninstallContainers as $uninstallContainer) {
+            foreach ($uninstallContainers as $uninstallContainer) {
                 if ($fieldContainer->getFromDB($uninstallContainer['plugin_fields_containers_id'])) {
                     echo "<tr>";
                     $link = PluginUninstallModelContainer::getFormURLWithID($uninstallContainer['id']);
@@ -344,14 +346,15 @@ class PluginUninstallModelcontainer extends CommonDBChild
      * @param $ids array list of plugin fields container ids to exclude from the request
      * @return array
      */
-    public static function getContainerForItemtypes($ids = []) {
+    public static function getContainerForItemtypes($ids = [])
+    {
         global $DB, $UNINSTALL_TYPES;
         $query = "SELECT * FROM " . PluginFieldsContainer::getTable() . " WHERE ";
         if (count($ids)) {
-            $query .= 'id NOT IN ('.implode(',', $ids).') AND (';
+            $query .= 'id NOT IN (' . implode(',', $ids) . ') AND (';
         }
-        foreach($UNINSTALL_TYPES as $index => $type) {
-            $query .= 'itemtypes LIKE \'%"'.$type.'"%\' ';
+        foreach ($UNINSTALL_TYPES as $index => $type) {
+            $query .= 'itemtypes LIKE \'%"' . $type . '"%\' ';
             if ($index != count($UNINSTALL_TYPES) - 1) {
                 $query .= 'OR ';
             }
@@ -383,19 +386,21 @@ class PluginUninstallModelcontainer extends CommonDBChild
         echo "<h3>" . __('Plugin additionnal fields field', 'uninstall') . "</h3>";
 
         echo "<p>" . __('Model') . " : " . "<a href='" . $model->getFormUrlWithID(
-                $model->getID()
-            ) . "'>" . $model->fields['name'] . "</a>" . "</p>";
+            $model->getID()
+        ) . "'>" . $model->fields['name'] . "</a>" . "</p>";
 
         $actionFields = ['action_replace', 'action_uninstall'];
         foreach ($actionFields as $field) {
-            if (($field === 'action_uninstall' && $model->fields['types_id'] != $model::TYPE_MODEL_REPLACEMENT)
-                || ($field === 'action_replace' && $model->fields['types_id'] != $model::TYPE_MODEL_UNINSTALL)) {
+            if (
+                ($field === 'action_uninstall' && $model->fields['types_id'] != $model::TYPE_MODEL_REPLACEMENT)
+                || ($field === 'action_replace' && $model->fields['types_id'] != $model::TYPE_MODEL_UNINSTALL)
+            ) {
                 switch ($field) {
                     case 'action_uninstall':
                         $typeTitle = __('Uninstallation', 'uninstall');
                         $modelProperty = 'action_plugin_fields_uninstall';
                         break;
-                    case 'action_replace' :
+                    case 'action_replace':
                         $typeTitle = __('Replacement', 'uninstall');
                         $modelProperty = 'action_plugin_fields_replace';
                         break;
@@ -403,13 +408,13 @@ class PluginUninstallModelcontainer extends CommonDBChild
                 $actionTitle = __('Action for ', 'uninstall') . $typeTitle . ' : ';
                 if ($model->fields[$modelProperty] != $model::PLUGIN_FIELDS_ACTION_ADVANCED) {
                     switch ($model->fields[$modelProperty]) {
-                        case $model::PLUGIN_FIELDS_ACTION_NONE :
+                        case $model::PLUGIN_FIELDS_ACTION_NONE:
                             $action = __('Do nothing');
                             break;
-                        case $model::PLUGIN_FIELDS_ACTION_RAZ :
+                        case $model::PLUGIN_FIELDS_ACTION_RAZ:
                             $action = __('Blank');
                             break;
-                        case $model::PLUGIN_FIELDS_ACTION_COPY :
+                        case $model::PLUGIN_FIELDS_ACTION_COPY:
                             $action = __('Copy');
                             break;
                     }
@@ -440,8 +445,10 @@ class PluginUninstallModelcontainer extends CommonDBChild
                         $fieldsField = new PluginFieldsField();
                         $types = $fieldsField->getTypes(true);
                         foreach ($fields as $fieldData) {
-                            if ($fieldsField->getFromDB($fieldData['plugin_fields_fields_id'])
-                                && $uninstallField->getFromDB($fieldData['id'])) {
+                            if (
+                                $fieldsField->getFromDB($fieldData['plugin_fields_fields_id'])
+                                && $uninstallField->getFromDB($fieldData['id'])
+                            ) {
                                 echo "<tr>";
                                 $link = PluginUninstallModelcontainerfield::getFormURLWithID($fieldData['id']);
                                 echo "<td>";
@@ -523,8 +530,8 @@ class PluginUninstallModelcontainer extends CommonDBChild
                                                 container.html('<i class=\"fas fa-2 fa-spinner fa-pulse m-1\"></i>');
                                                 const action = $('#dropdown_$field$rand').val();
                                                 let new_value = null;
-                                                if ($('".'[id$'."=\"new_value$rand\"]')) {
-                                                    new_value = $('".'[id$'."=\"new_value$rand\"]').val();   
+                                                if ($('" . '[id$' . "=\"new_value$rand\"]')) {
+                                                    new_value = $('" . '[id$' . "=\"new_value$rand\"]').val();   
                                                 }
                                                 $.ajax({
                                                   method : 'POST',

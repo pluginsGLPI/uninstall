@@ -89,7 +89,7 @@ if (isset($_POST["add"])) {
     $model->check($id, UPDATE);
     $model->createPluginFieldsRelations($id);
     Html::back();
-}else {
+} else {
     Html::header(
         PluginUninstallModel::getTypeName(),
         $_SERVER['PHP_SELF'],
