@@ -548,8 +548,10 @@ class PluginUninstallUninstall extends CommonDBTM
                         if ($pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_RAZ) {
                             // same as PluginFieldsContainer::preItemPurge
                             $obj->deleteByCriteria(['items_id' => $item->fields['id']], true);
-                        } else if ($pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_CUSTOM
-                        && $obj->getFromDBByCrit(['items_id' => $items_id])) {
+                        } else if (
+                            $pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_CUSTOM
+                            && $obj->getFromDBByCrit(['items_id' => $items_id])
+                        ) {
                             $uninstallFields = $pluginUninstallField->find([
                                 'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID()
                             ]);
@@ -563,14 +565,14 @@ class PluginUninstallUninstall extends CommonDBTM
                                 $field = reset($field);
 
                                 switch ($field['type']) {
-                                    case 'dropdown' :
+                                    case 'dropdown':
                                         $property = 'plugin_fields_' . $field['name'] . 'dropdowns_id';
                                         break;
-                                    case 'glpi_item' :
+                                    case 'glpi_item':
                                         $property = 'items_id_' . $field['name'];
                                         $itemtype = 'itemtype_' . $field['name'];
                                         break;
-                                    default :
+                                    default:
                                         $property = $field['name'];
                                         break;
                                 }

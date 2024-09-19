@@ -1162,14 +1162,14 @@ class PluginUninstallReplace extends CommonDBTM
             $parameters = [];
             foreach ($fields as $field) {
                 switch ($field['type']) {
-                    case 'dropdown' :
+                    case 'dropdown':
                         $property = 'plugin_fields_' . $field['name'] . 'dropdowns_id';
                         break;
-                    case 'glpi_item' :
+                    case 'glpi_item':
                         $property = 'items_id_' . $field['name'];
                         $itemtype = 'itemtype_' . $field['name'];
                         break;
-                    default :
+                    default:
                         $property = $field['name'];
                         break;
                 }
@@ -1182,7 +1182,8 @@ class PluginUninstallReplace extends CommonDBTM
                         ])
                     ) {
                         if ($pluginUninstallField->fields['action_replace'] == $pluginUninstallField::ACTION_COPY) {
-                            if ($overwrite // template setting say to overwrite
+                            if (
+                                $overwrite // template setting say to overwrite
                                 || !$newItemValues->current() // no plugin field data for new item
                                 || !$pluginUninstallField::fieldHasValue($field, $newItemValues->current()) // new item has no value for the field
                             ) {
@@ -1194,9 +1195,11 @@ class PluginUninstallReplace extends CommonDBTM
                         }
                     }
                 } else {
-                    if ($overwrite
+                    if (
+                        $overwrite
                         || !$newItemValues->current()
-                        || !$pluginUninstallField::fieldHasValue($field, $newItemValues->current())) {
+                        || !$pluginUninstallField::fieldHasValue($field, $newItemValues->current())
+                    ) {
                         $parameters[$property] = $oldItemValues->current()[$property];
                         if ($field['type'] == 'glpi_item') {
                             $parameters[$itemtype] = $oldItemValues->current()[$itemtype];
