@@ -37,7 +37,7 @@ Session::checkLoginUser();
 if (isset($_POST['id']) && $_POST['id']) {
     $field = new PluginUninstallModelcontainerfield();
     $field->check($_POST['id'], UPDATE);
-    if (!$field->update($_POST)) {
+    if ($field->update($_POST)) {
         Session::addMessageAfterRedirect(__('Field updated', 'uninstall'));
     } else {
         Session::addMessageAfterRedirect(__('An error has occured'), ERROR);

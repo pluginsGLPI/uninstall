@@ -232,6 +232,39 @@ class PluginUninstallModelcontainerfield extends CommonDBChild
         return true;
     }
 
+    /**
+     * Check whether a PluginFieldsField's value can be considered not empty
+     * @param array $field row of glpi_plugin_fields_fields
+     * @param array $values row of table used by plugin fields to save item data
+     * @return bool
+     */
+    public static function fieldHasValue(array $field, array $values): bool
+    {
+        if (str_starts_with($field['type'], 'dropdown')) {
+            if ($field['type'] == 'dropdown') {
+                $property = 'plugin_fields_' . $field['name'] . 'dropdowns_id';
+            } else { // for dropdown-$itemtype type
+                $property = $field['name'];
+            }
+
+            if ($field['multiple']) { // not null and not []
+                return $values[$property] && $values[$property] != '[]';
+            }
+
+            return $values[$property]; // not 0
+        }
+
+        if (in_array($field['type'], ['text', 'textarea', 'richtext', 'number'])) { // numbers also stored as varchar
+            return trim($values[$field['name']]) || trim($values[$field['name']]) === '0'; // not null or empty string
+        }
+
+        if ($field['type'] == 'glpi_item') {
+            return $values['items_id_' . $field['name']];
+        }
+
+        return $values[$field['name']];
+    }
+
     public static function install($migration)
     {
         /** @var DBmysql $DB */

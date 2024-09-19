@@ -1161,6 +1161,19 @@ class PluginUninstallReplace extends CommonDBTM
             $fields = $pluginFieldsField->find(['plugin_fields_containers_id' => $container['id']]);
             $parameters = [];
             foreach ($fields as $field) {
+                switch ($field['type']) {
+                    case 'dropdown' :
+                        $property = 'plugin_fields_' . $field['name'] . 'dropdowns_id';
+                        break;
+                    case 'glpi_item' :
+                        $property = 'items_id_' . $field['name'];
+                        $itemtype = 'itemtype_' . $field['name'];
+                        break;
+                    default :
+                        $property = $field['name'];
+                        break;
+                }
+
                 if ($pluginUninstallContainer && $pluginUninstallContainer->fields['action_replace'] == $pluginUninstallContainer::ACTION_CUSTOM) {
                     if (
                         $pluginUninstallField->getFromDBByCrit([
@@ -1169,23 +1182,29 @@ class PluginUninstallReplace extends CommonDBTM
                         ])
                     ) {
                         if ($pluginUninstallField->fields['action_replace'] == $pluginUninstallField::ACTION_COPY) {
-                            if ($overwrite || !$newItemValues->current()) {
-                                // overwrite or no record
-                                $parameters[$field['name']] = $oldItemValues->current()[$field['name']];
-                            } else if (!$newItemValues->current()[$field['name']] && !$newItemValues->current()[$field['name']] !== 0 && !$newItemValues->current()[$field['name']] !== '0') {
-                                // null or empty string
-                                $parameters[$field['name']] = $oldItemValues->current()[$field['name']];
+                            if ($overwrite // template setting say to overwrite
+                                || !$newItemValues->current() // no plugin field data for new item
+                                || !$pluginUninstallField::fieldHasValue($field, $newItemValues->current()) // new item has no value for the field
+                            ) {
+                                $parameters[$property] = $oldItemValues->current()[$property];
+                                if ($field['type'] == 'glpi_item') {
+                                    $parameters[$itemtype] = $oldItemValues->current()[$itemtype];
+                                }
                             }
                         }
                     }
                 } else {
-                    if ($overwrite || !$newItemValues->current()) {
-                        $parameters[$field['name']] = $oldItemValues->current()[$field['name']];
-                    } else if (!$newItemValues->current()[$field['name']] && !$newItemValues->current()[$field['name']] !== 0 && !$newItemValues->current()[$field['name']] !== '0') {
-                        $parameters[$field['name']] = $oldItemValues->current()[$field['name']];
+                    if ($overwrite
+                        || !$newItemValues->current()
+                        || !$pluginUninstallField::fieldHasValue($field, $newItemValues->current())) {
+                        $parameters[$property] = $oldItemValues->current()[$property];
+                        if ($field['type'] == 'glpi_item') {
+                            $parameters[$itemtype] = $oldItemValues->current()[$itemtype];
+                        }
                     }
                 }
             }
+
             if (count($parameters)) {
                 $DB->updateOrInsert(
                     $table,
