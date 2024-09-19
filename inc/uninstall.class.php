@@ -548,16 +548,33 @@ class PluginUninstallUninstall extends CommonDBTM
                         if ($pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_RAZ) {
                             // same as PluginFieldsContainer::preItemPurge
                             $obj->deleteByCriteria(['items_id' => $item->fields['id']], true);
-                        } else if ($pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_CUSTOM) {
+                        } else if ($pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_CUSTOM
+                        && $obj->getFromDBByCrit(['items_id' => $items_id])) {
                             $uninstallFields = $pluginUninstallField->find([
                                 'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID()
                             ]);
                             $fieldsFields = $pluginFieldsField->find([
                                 'plugin_fields_containers_id' => $fieldsContainer['id']
                             ]);
+
+                            $update = [];
                             foreach ($uninstallFields as $setting) {
                                 $field = array_filter($fieldsFields, fn($e) => $e['id'] == $setting['plugin_fields_fields_id']);
                                 $field = reset($field);
+
+                                switch ($field['type']) {
+                                    case 'dropdown' :
+                                        $property = 'plugin_fields_' . $field['name'] . 'dropdowns_id';
+                                        break;
+                                    case 'glpi_item' :
+                                        $property = 'items_id_' . $field['name'];
+                                        $itemtype = 'itemtype_' . $field['name'];
+                                        break;
+                                    default :
+                                        $property = $field['name'];
+                                        break;
+                                }
+
                                 switch ($setting['action_uninstall']) {
                                     case PluginUninstallModelcontainerfield::ACTION_RAZ:
                                         $razValue = null;
@@ -568,21 +585,26 @@ class PluginUninstallUninstall extends CommonDBTM
                                             || $field['type'] == 'yesno'
                                         ) {
                                             $razValue = 0;
+                                            if ($field['multiple']) {
+                                                $razValue = '[]';
+                                            }
                                         }
-                                        $DB->update(
-                                            $obj->getTable(),
-                                            [$field['name'] => $razValue],
-                                            ['items_id' => $items_id]
-                                        );
+                                        $update[$property] = $razValue;
+                                        if ($field['type'] == 'glpi_item') {
+                                            $update[$itemtype] = null;
+                                        }
                                         break;
                                     case PluginUninstallModelcontainerfield::ACTION_NEW_VALUE:
-                                        $DB->update(
-                                            $obj->getTable(),
-                                            [$field['name'] => $setting['new_value']],
-                                            ['items_id' => $items_id]
-                                        );
+                                        $update[$property] = $setting['new_value'];
                                         break;
                                 }
+                            }
+                            if ($update) {
+                                $DB->update(
+                                    $obj->getTable(),
+                                    $update,
+                                    ['items_id' => $items_id]
+                                );
                             }
                         }
                     }
