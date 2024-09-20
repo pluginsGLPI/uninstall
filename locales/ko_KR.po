@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 14:11+0000\n"
+"POT-Creation-Date: 2024-09-19 01:22+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020\n"
 "Language-Team: Korean (Korea) (https://app.transifex.com/teclib/teams/28042/ko_KR/)\n"
@@ -45,7 +45,7 @@ msgstr "모델 적용"
 msgid "Archive of old material"
 msgstr "이전 자료의 보관"
 
-#: inc/replace.class.php:652 inc/model.class.php:513 inc/model.class.php:1002
+#: inc/model.class.php:513 inc/model.class.php:1002 inc/replace.class.php:652
 msgid "Archiving method of the old material"
 msgstr "이전 자료의 보관 방법"
 
@@ -57,7 +57,7 @@ msgstr "CSV 보관"
 msgid "Choices for item to replace"
 msgstr "대체할 품목 선택"
 
-#: inc/replace.class.php:711 inc/model.class.php:536
+#: inc/model.class.php:536 inc/replace.class.php:711
 msgid "Connections with other materials"
 msgstr "다른 자료와 연결"
 
@@ -93,12 +93,12 @@ msgstr "소프트웨어 이력 삭제 (컴퓨터)"
 msgid "Delete the whole history"
 msgstr "전체 이력 삭제"
 
-#: inc/replace.class.php:756 inc/model.class.php:635
+#: inc/model.class.php:635 inc/replace.class.php:756
 msgid "Direct connections"
 msgstr "직접 연결"
 
-#: inc/preference.class.php:103 inc/replace.class.php:678
-#: ajax/locations.php:50
+#: ajax/locations.php:50 inc/preference.class.php:103
+#: inc/replace.class.php:678
 msgid "Empty location"
 msgstr "빈 위치"
 
@@ -106,7 +106,7 @@ msgstr "빈 위치"
 msgid "Erase datas"
 msgstr "데이터 소거"
 
-#: inc/replace.class.php:633 inc/model.class.php:473
+#: inc/model.class.php:473 inc/replace.class.php:633
 msgid "General informations"
 msgstr "일반 정보"
 
@@ -136,7 +136,7 @@ msgstr "품목이 모델 %s의 새것으로 교체됨"
 msgid "Item replacing an old one"
 msgstr "예전 것을 대체하는 품목"
 
-#: inc/uninstall.class.php:39 inc/config.class.php:41 inc/model.class.php:72
+#: inc/model.class.php:72 inc/config.class.php:41 inc/uninstall.class.php:39
 msgid "Item's Lifecycle"
 msgstr "품목 주기"
 
@@ -164,8 +164,8 @@ msgstr "유지 + 댓글"
 msgid "Keep in the current group"
 msgstr "현재 그룹 유지"
 
-#: inc/preference.class.php:102 inc/replace.class.php:674
-#: ajax/locations.php:49
+#: ajax/locations.php:49 inc/preference.class.php:102
+#: inc/replace.class.php:674
 msgid "Keep previous location"
 msgstr "이전 위치 유지"
 
@@ -193,7 +193,7 @@ msgstr "새 품목"
 msgid "New location of item"
 msgstr "품목의 새 위치"
 
-#: inc/replace.class.php:688 inc/model.class.php:280
+#: inc/model.class.php:280 inc/replace.class.php:688
 msgid "New status of the computer"
 msgstr "컴퓨터의 새 상태"
 
@@ -206,7 +206,7 @@ msgstr[0] "OCSNG 링크"
 msgid "Old item"
 msgstr "예전 품목"
 
-#: inc/replace.class.php:649 inc/model.class.php:504
+#: inc/model.class.php:504 inc/replace.class.php:649
 msgid "Overwrite informations (from old item to the new)"
 msgstr "정보 덮어쓰기 (이전 품목에서 새 품목으로)"
 
@@ -256,8 +256,8 @@ msgstr "대체"
 msgid "Replace status dropdown by plugin actions"
 msgstr "플러그인 동작으로 상태 드롭다운 교체"
 
-#: inc/replace.class.php:67 inc/replace.class.php:115 inc/model.class.php:123
-#: inc/model.class.php:1142
+#: inc/model.class.php:123 inc/model.class.php:1142 inc/replace.class.php:67
+#: inc/replace.class.php:115
 msgid "Replacement"
 msgstr "교체"
 
@@ -309,7 +309,7 @@ msgstr "사용할 전송 모델"
 msgid "Type of template"
 msgstr "견본 유형"
 
-#: hook.php:44 inc/uninstall.class.php:341
+#: inc/uninstall.class.php:341 hook.php:44
 msgid "Uninstall"
 msgstr "제거"
 

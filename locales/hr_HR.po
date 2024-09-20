@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 14:11+0000\n"
+"POT-Creation-Date: 2024-09-19 01:22+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2023\n"
 "Language-Team: Croatian (Croatia) (https://app.transifex.com/teclib/teams/28042/hr_HR/)\n"
@@ -45,7 +45,7 @@ msgstr "Primijeni model"
 msgid "Archive of old material"
 msgstr "Arhiva starog materijala"
 
-#: inc/replace.class.php:652 inc/model.class.php:513 inc/model.class.php:1002
+#: inc/model.class.php:513 inc/model.class.php:1002 inc/replace.class.php:652
 msgid "Archiving method of the old material"
 msgstr "Način arhiviranja starog materijala"
 
@@ -57,7 +57,7 @@ msgstr "CSV arhiviranje"
 msgid "Choices for item to replace"
 msgstr "Opcije za predmet koji se zamijenjuje"
 
-#: inc/replace.class.php:711 inc/model.class.php:536
+#: inc/model.class.php:536 inc/replace.class.php:711
 msgid "Connections with other materials"
 msgstr "Veze s ostalim materijalima"
 
@@ -95,12 +95,12 @@ msgstr "Izbriši povijest softvera (računala)"
 msgid "Delete the whole history"
 msgstr "Izbriši cijelu povijest"
 
-#: inc/replace.class.php:756 inc/model.class.php:635
+#: inc/model.class.php:635 inc/replace.class.php:756
 msgid "Direct connections"
 msgstr "Izravne veze"
 
-#: inc/preference.class.php:103 inc/replace.class.php:678
-#: ajax/locations.php:50
+#: ajax/locations.php:50 inc/preference.class.php:103
+#: inc/replace.class.php:678
 msgid "Empty location"
 msgstr "Prazna lokacija"
 
@@ -108,7 +108,7 @@ msgstr "Prazna lokacija"
 msgid "Erase datas"
 msgstr "Izbriši podatke"
 
-#: inc/replace.class.php:633 inc/model.class.php:473
+#: inc/model.class.php:473 inc/replace.class.php:633
 msgid "General informations"
 msgstr "Opće informacije"
 
@@ -138,7 +138,7 @@ msgstr "Predmet je zamijenjen jednim novim s modelom %s"
 msgid "Item replacing an old one"
 msgstr "Predmet zamijenjuje jedan stari"
 
-#: inc/uninstall.class.php:39 inc/config.class.php:41 inc/model.class.php:72
+#: inc/model.class.php:72 inc/config.class.php:41 inc/uninstall.class.php:39
 msgid "Item's Lifecycle"
 msgstr "Životni vijek predmeta"
 
@@ -166,8 +166,8 @@ msgstr "Zadrži i komentiraj"
 msgid "Keep in the current group"
 msgstr "Zadrži u trenutačnoj grupi"
 
-#: inc/preference.class.php:102 inc/replace.class.php:674
-#: ajax/locations.php:49
+#: ajax/locations.php:49 inc/preference.class.php:102
+#: inc/replace.class.php:674
 msgid "Keep previous location"
 msgstr "Zadrži prethodnu lokaciju"
 
@@ -195,7 +195,7 @@ msgstr "Novi predmet"
 msgid "New location of item"
 msgstr "Nova lokacija predmeta"
 
-#: inc/replace.class.php:688 inc/model.class.php:280
+#: inc/model.class.php:280 inc/replace.class.php:688
 msgid "New status of the computer"
 msgstr "Novo stanje računala"
 
@@ -210,7 +210,7 @@ msgstr[2] "OCSNG poveznice"
 msgid "Old item"
 msgstr "Stari predmet"
 
-#: inc/replace.class.php:649 inc/model.class.php:504
+#: inc/model.class.php:504 inc/replace.class.php:649
 msgid "Overwrite informations (from old item to the new)"
 msgstr "Prepiši informacije (od starog predmeta na novi)"
 
@@ -261,8 +261,8 @@ msgstr "Zamijeni"
 msgid "Replace status dropdown by plugin actions"
 msgstr "Zamijeni padajući popis stanja s radnjama dodatka"
 
-#: inc/replace.class.php:67 inc/replace.class.php:115 inc/model.class.php:123
-#: inc/model.class.php:1142
+#: inc/model.class.php:123 inc/model.class.php:1142 inc/replace.class.php:67
+#: inc/replace.class.php:115
 msgid "Replacement"
 msgstr "Zamjena"
 
@@ -314,7 +314,7 @@ msgstr "Model prijenosa koji se koristiti"
 msgid "Type of template"
 msgstr "Vrsta predloška"
 
-#: hook.php:44 inc/uninstall.class.php:341
+#: inc/uninstall.class.php:341 hook.php:44
 msgid "Uninstall"
 msgstr "Deinstaliraj"
 
