@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 14:11+0000\n"
+"POT-Creation-Date: 2024-09-19 01:22+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: INOUE Daisuke, 2023\n"
 "Language-Team: Japanese (Japan) (https://app.transifex.com/teclib/teams/28042/ja_JP/)\n"
@@ -45,7 +45,7 @@ msgstr "モデルの適用"
 msgid "Archive of old material"
 msgstr "古い機材のアーカイブ"
 
-#: inc/replace.class.php:652 inc/model.class.php:513 inc/model.class.php:1002
+#: inc/model.class.php:513 inc/model.class.php:1002 inc/replace.class.php:652
 msgid "Archiving method of the old material"
 msgstr "古い機材のアーカイブ方法"
 
@@ -57,7 +57,7 @@ msgstr "CSV にアーカイブ"
 msgid "Choices for item to replace"
 msgstr "置き換えるアイテムの選択"
 
-#: inc/replace.class.php:711 inc/model.class.php:536
+#: inc/model.class.php:536 inc/replace.class.php:711
 msgid "Connections with other materials"
 msgstr "他の機材への接続"
 
@@ -93,12 +93,12 @@ msgstr "ソフトウェアの履歴を削除（コンピューター）"
 msgid "Delete the whole history"
 msgstr "履歴をすべて削除"
 
-#: inc/replace.class.php:756 inc/model.class.php:635
+#: inc/model.class.php:635 inc/replace.class.php:756
 msgid "Direct connections"
 msgstr "直接接続"
 
-#: inc/preference.class.php:103 inc/replace.class.php:678
-#: ajax/locations.php:50
+#: ajax/locations.php:50 inc/preference.class.php:103
+#: inc/replace.class.php:678
 msgid "Empty location"
 msgstr "場所を初期状態に"
 
@@ -106,7 +106,7 @@ msgstr "場所を初期状態に"
 msgid "Erase datas"
 msgstr "データの消去"
 
-#: inc/replace.class.php:633 inc/model.class.php:473
+#: inc/model.class.php:473 inc/replace.class.php:633
 msgid "General informations"
 msgstr "全般情報"
 
@@ -136,7 +136,7 @@ msgstr "アイテムを %s モデルとして新しいものと置き換えま�
 msgid "Item replacing an old one"
 msgstr "置き換え中の古いアイテム"
 
-#: inc/uninstall.class.php:39 inc/config.class.php:41 inc/model.class.php:72
+#: inc/model.class.php:72 inc/config.class.php:41 inc/uninstall.class.php:39
 msgid "Item's Lifecycle"
 msgstr "アイテムのライフサイクル"
 
@@ -164,8 +164,8 @@ msgstr "維持 + コメント"
 msgid "Keep in the current group"
 msgstr "現在のグループに維持"
 
-#: inc/preference.class.php:102 inc/replace.class.php:674
-#: ajax/locations.php:49
+#: ajax/locations.php:49 inc/preference.class.php:102
+#: inc/replace.class.php:674
 msgid "Keep previous location"
 msgstr "以前の場所に維持"
 
@@ -193,7 +193,7 @@ msgstr "新しいアイテム"
 msgid "New location of item"
 msgstr "アイテムの新しい場所"
 
-#: inc/replace.class.php:688 inc/model.class.php:280
+#: inc/model.class.php:280 inc/replace.class.php:688
 msgid "New status of the computer"
 msgstr "コンピューターの新しい状態"
 
@@ -206,7 +206,7 @@ msgstr[0] "OCSNG リンク"
 msgid "Old item"
 msgstr "古いアイテム"
 
-#: inc/replace.class.php:649 inc/model.class.php:504
+#: inc/model.class.php:504 inc/replace.class.php:649
 msgid "Overwrite informations (from old item to the new)"
 msgstr "情報を上書き（古いアイテムから新しいアイテムへ）"
 
@@ -256,8 +256,8 @@ msgstr "置き換え"
 msgid "Replace status dropdown by plugin actions"
 msgstr "状態のドロップダウンをプラグインの操作に置き換える"
 
-#: inc/replace.class.php:67 inc/replace.class.php:115 inc/model.class.php:123
-#: inc/model.class.php:1142
+#: inc/model.class.php:123 inc/model.class.php:1142 inc/replace.class.php:67
+#: inc/replace.class.php:115
 msgid "Replacement"
 msgstr "置き換え"
 
@@ -309,7 +309,7 @@ msgstr "利用する転送モデル"
 msgid "Type of template"
 msgstr "テンプレート型"
 
-#: hook.php:44 inc/uninstall.class.php:341
+#: inc/uninstall.class.php:341 hook.php:44
 msgid "Uninstall"
 msgstr "撤去"
 

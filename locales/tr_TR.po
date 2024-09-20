@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2023
+# Kaya Zeren <kayazeren@gmail.com>, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 14:11+0000\n"
+"POT-Creation-Date: 2024-09-20 01:21+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2023\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2024\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/teclib/teams/28042/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,7 +45,7 @@ msgstr "Modeli uygula"
 msgid "Archive of old material"
 msgstr "Eski materyalin arşivi"
 
-#: inc/replace.class.php:652 inc/model.class.php:513 inc/model.class.php:1002
+#: inc/model.class.php:513 inc/model.class.php:1002 inc/replace.class.php:652
 msgid "Archiving method of the old material"
 msgstr "Eski materyali arşivleme yöntemi"
 
@@ -57,7 +57,7 @@ msgstr "CSV arşivleme"
 msgid "Choices for item to replace"
 msgstr "Değiştirilecek öge için seçenekler"
 
-#: inc/replace.class.php:711 inc/model.class.php:536
+#: inc/model.class.php:536 inc/replace.class.php:711
 msgid "Connections with other materials"
 msgstr "Diğer materyaller ile bağlantılar"
 
@@ -94,12 +94,12 @@ msgstr "Yazılım geçmişini sil (bilgisayarlar)"
 msgid "Delete the whole history"
 msgstr "Tüm geçmişi sil"
 
-#: inc/replace.class.php:756 inc/model.class.php:635
+#: inc/model.class.php:635 inc/replace.class.php:756
 msgid "Direct connections"
 msgstr "Doğrudan bağlantılar"
 
-#: inc/preference.class.php:103 inc/replace.class.php:678
-#: ajax/locations.php:50
+#: ajax/locations.php:50 inc/preference.class.php:103
+#: inc/replace.class.php:678
 msgid "Empty location"
 msgstr "Boş konum"
 
@@ -107,7 +107,7 @@ msgstr "Boş konum"
 msgid "Erase datas"
 msgstr "Verileri sil"
 
-#: inc/replace.class.php:633 inc/model.class.php:473
+#: inc/model.class.php:473 inc/replace.class.php:633
 msgid "General informations"
 msgstr "Genel bilgiler"
 
@@ -137,7 +137,7 @@ msgstr "Öge %s modeliyle yenisi ile değiştirildi"
 msgid "Item replacing an old one"
 msgstr "Eskinin yerine konulan öge"
 
-#: inc/uninstall.class.php:39 inc/config.class.php:41 inc/model.class.php:72
+#: inc/model.class.php:72 inc/config.class.php:41 inc/uninstall.class.php:39
 msgid "Item's Lifecycle"
 msgstr "Ögenin yaşam döngüsü"
 
@@ -165,8 +165,8 @@ msgstr "Koru ve açıklama yaz"
 msgid "Keep in the current group"
 msgstr "Geçerli grupta tut"
 
-#: inc/preference.class.php:102 inc/replace.class.php:674
-#: ajax/locations.php:49
+#: ajax/locations.php:49 inc/preference.class.php:102
+#: inc/replace.class.php:674
 msgid "Keep previous location"
 msgstr "Önceki konum korunsun"
 
@@ -194,7 +194,7 @@ msgstr "Yeni öge"
 msgid "New location of item"
 msgstr "Ögenin yeni konumu"
 
-#: inc/replace.class.php:688 inc/model.class.php:280
+#: inc/model.class.php:280 inc/replace.class.php:688
 msgid "New status of the computer"
 msgstr "Bilgisayarın yeni durumu"
 
@@ -208,7 +208,7 @@ msgstr[1] "OCSNG bağlantısı"
 msgid "Old item"
 msgstr "Eski öge"
 
-#: inc/replace.class.php:649 inc/model.class.php:504
+#: inc/model.class.php:504 inc/replace.class.php:649
 msgid "Overwrite informations (from old item to the new)"
 msgstr "Üzerine yazılacak bilgiler (eski ögeden yeniye)"
 
@@ -258,8 +258,8 @@ msgstr "Değiştir"
 msgid "Replace status dropdown by plugin actions"
 msgstr "Durum açılan kutusu uygulama eki işlemlerine göre değiştirilsin"
 
-#: inc/replace.class.php:67 inc/replace.class.php:115 inc/model.class.php:123
-#: inc/model.class.php:1142
+#: inc/model.class.php:123 inc/model.class.php:1142 inc/replace.class.php:67
+#: inc/replace.class.php:115
 msgid "Replacement"
 msgstr "Değişiklik"
 
@@ -269,7 +269,7 @@ msgstr "Değiştirildi"
 
 #: inc/model.class.php:124 inc/model.class.php:1144
 msgid "Replacement then uninstallation"
-msgstr ""
+msgstr "Değiştirme ve ardından kaldırma"
 
 #: inc/model.class.php:198
 msgid "Replacing data"
@@ -285,7 +285,7 @@ msgstr "Kısayollar"
 
 #: inc/model.class.php:95
 msgid "The purge archiving method is not available for this model type"
-msgstr ""
+msgstr "Bu model türü için arşivi temizleme yöntemi yok"
 
 #: inc/model.class.php:722
 msgid "These options only apply to computers coming from OCSNG"
@@ -312,7 +312,7 @@ msgstr "Kullanılacak aktarım modeli"
 msgid "Type of template"
 msgstr "Kalıp türü"
 
-#: hook.php:44 inc/uninstall.class.php:341
+#: inc/uninstall.class.php:341 hook.php:44
 msgid "Uninstall"
 msgstr "Kaldır"
 
