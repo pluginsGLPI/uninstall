@@ -448,6 +448,33 @@ class PluginUninstallReplace extends CommonDBTM
                 }
             }
 
+            if ($plug->isActivated('fields')) {
+                $pluginFieldsContainer = new PluginFieldsContainer();
+                // copy all
+                if ($model->fields['action_plugin_fields_replace'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_COPY) {
+                    $containers = $pluginFieldsContainer->find(['itemtypes' => ['LIKE', "%\"$type\"%"]]);
+                    foreach ($containers as $container) {
+                        self::handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type);
+                    }
+                }
+                // case by case for containers
+                if ($model->fields['action_plugin_fields_replace'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                    $pluginUninstallContainer = new PluginUninstallModelcontainer();
+                    $containers = $pluginFieldsContainer->find(['itemtypes' => ['LIKE', "%\"$type\"%"]]);
+                    foreach ($containers as $container) {
+                        $pluginUninstallContainer->getFromDBByCrit([
+                            'plugin_fields_containers_id' => $container['id'],
+                            'plugin_uninstall_models_id' => $model->getID()
+                        ]);
+                        if ($pluginUninstallContainer->fields['action_replace'] == $pluginUninstallContainer::ACTION_COPY) {
+                            self::handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type);
+                        } else if ($pluginUninstallContainer->fields['action_replace'] == $pluginUninstallContainer::ACTION_CUSTOM) {
+                            self::handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type, $pluginUninstallContainer);
+                        }
+                    }
+                }
+            }
+
            // METHOD REPLACEMENT 1 : Purge
             switch ($model->fields['replace_method']) {
                 case self::METHOD_PURGE:
@@ -1095,6 +1122,103 @@ class PluginUninstallReplace extends CommonDBTM
                 $tabs[] = $data['tabref'];
             }
             return $tabs;
+        }
+    }
+
+    /**
+     * Handle copy of values from the plugin fields
+     * @param $overwrite bool if true copy will replace values from newitem by those of olditem
+     * @param $container array data of PluginFieldsContainer
+     * @param $olditem CommonDBTM
+     * @param $newitem CommonDBTM
+     * @param $type string
+     * @param $pluginUninstallContainer PluginUninstallModelcontainer if not null, will see if it must do a case by case when handling the fields copies
+     * @return void
+     */
+    public static function handlePluginFieldsContainerValues($overwrite, $container, $olditem, $newitem, $type, $pluginUninstallContainer = null)
+    {
+        global $DB;
+        $pluginFieldsField = new PluginFieldsField();
+        $pluginUninstallField = new PluginUninstallModelcontainerfield();
+        $table = 'glpi_plugin_fields_' . strtolower($type) . $container['name'] . 's';
+        $oldItemValues = $DB->request([
+            'FROM' => $table,
+            'WHERE' => [
+                'items_id' => $olditem->getID(),
+                'itemtype' => $type,
+                'plugin_fields_containers_id' => $container['id']
+            ]
+        ]);
+        $newItemValues = $DB->request([
+            'FROM' => $table,
+            'WHERE' => [
+                'items_id' => $newitem->getID(),
+                'itemtype' => $type,
+                'plugin_fields_containers_id' => $container['id']
+            ]
+        ]);
+        if ($oldItemValues->count()) {
+            $fields = $pluginFieldsField->find(['plugin_fields_containers_id' => $container['id']]);
+            $parameters = [];
+            foreach ($fields as $field) {
+                switch ($field['type']) {
+                    case 'dropdown':
+                        $property = 'plugin_fields_' . $field['name'] . 'dropdowns_id';
+                        break;
+                    case 'glpi_item':
+                        $property = 'items_id_' . $field['name'];
+                        $itemtype = 'itemtype_' . $field['name'];
+                        break;
+                    default:
+                        $property = $field['name'];
+                        break;
+                }
+
+                if ($pluginUninstallContainer && $pluginUninstallContainer->fields['action_replace'] == $pluginUninstallContainer::ACTION_CUSTOM) {
+                    if (
+                        $pluginUninstallField->getFromDBByCrit([
+                            'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID(),
+                            'plugin_fields_fields_id' => $field['id']
+                        ])
+                    ) {
+                        if ($pluginUninstallField->fields['action_replace'] == $pluginUninstallField::ACTION_COPY) {
+                            if (
+                                $overwrite // template setting say to overwrite
+                                || !$newItemValues->current() // no plugin field data for new item
+                                || !$pluginUninstallField::fieldHasValue($field, $newItemValues->current()) // new item has no value for the field
+                            ) {
+                                $parameters[$property] = $oldItemValues->current()[$property];
+                                if ($field['type'] == 'glpi_item') {
+                                    $parameters[$itemtype] = $oldItemValues->current()[$itemtype];
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (
+                        $overwrite
+                        || !$newItemValues->current()
+                        || !$pluginUninstallField::fieldHasValue($field, $newItemValues->current())
+                    ) {
+                        $parameters[$property] = $oldItemValues->current()[$property];
+                        if ($field['type'] == 'glpi_item') {
+                            $parameters[$itemtype] = $oldItemValues->current()[$itemtype];
+                        }
+                    }
+                }
+            }
+
+            if (count($parameters)) {
+                $DB->updateOrInsert(
+                    $table,
+                    $parameters,
+                    [
+                        'items_id' => $newitem->getID(),
+                        'itemtype' => $type,
+                        'plugin_fields_containers_id' => $container['id']
+                    ]
+                );
+            }
         }
     }
 }

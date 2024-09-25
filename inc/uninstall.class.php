@@ -316,8 +316,11 @@ class PluginUninstallUninstall extends CommonDBTM
         }
 
         if ($plug->isActivated('fields')) {
-            if ($model->fields['raz_plugin_fields'] == 1) {
+            if ($model->fields['action_plugin_fields_uninstall'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_RAZ) {
                 self::deletePluginFieldsLink($type, $id);
+            }
+            if ($model->fields['action_plugin_fields_uninstall'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                self::handlePluginFieldsValues($type, $id, $model);
             }
         }
 
@@ -506,6 +509,110 @@ class PluginUninstallUninstall extends CommonDBTM
         $item->getFromDB($items_id);
         //@phpstan-ignore-next-line
         PluginFieldsContainer::preItemPurge($item);
+    }
+
+    /**
+     * Update information related to the Fields plugin
+     *
+     * @param $itemtype the asset type
+     * @param $items_id the asset's ID in GLPI
+     * @param $model PluginUninstallModel
+     *
+     */
+    public static function handlePluginFieldsValues($itemtype, $items_id, $model)
+    {
+        global $DB;
+        $item = new $itemtype();
+        $item->getFromDB($items_id);
+
+        $pluginFieldsContainer = new PluginFieldsContainer();
+        $pluginFieldsField = new PluginFieldsField();
+
+        $pluginUninstallContainer = new PluginUninstallModelcontainer();
+        $pluginUninstallField = new PluginUninstallModelcontainerfield();
+
+        // first level foreach & condition of first level if are copied from PluginFieldsContainer::preItemPurge
+        $existingFieldsContainers = $pluginFieldsContainer->find();
+        foreach ($existingFieldsContainers as $fieldsContainer) {
+            $itemtypes = json_decode($fieldsContainer['itemtypes']);
+            if (in_array($itemtype, $itemtypes)) {
+                if (
+                    $pluginUninstallContainer->getFromDBByCrit([
+                        'plugin_uninstall_models_id' => $model->getID(),
+                        'plugin_fields_containers_id' => $fieldsContainer['id']
+                    ])
+                ) {
+                    if ($pluginUninstallContainer->fields['action_uninstall'] != PluginUninstallModelcontainer::ACTION_NONE) {
+                        $classname = 'PluginFields' . $itemtype . getSingular($fieldsContainer['name']);
+                        $obj = new $classname();
+                        if ($pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_RAZ) {
+                            // same as PluginFieldsContainer::preItemPurge
+                            $obj->deleteByCriteria(['items_id' => $item->fields['id']], true);
+                        } else if (
+                            $pluginUninstallContainer->fields['action_uninstall'] == PluginUninstallModelcontainer::ACTION_CUSTOM
+                            && $obj->getFromDBByCrit(['items_id' => $items_id])
+                        ) {
+                            $uninstallFields = $pluginUninstallField->find([
+                                'plugin_uninstall_modelcontainers_id' => $pluginUninstallContainer->getID()
+                            ]);
+                            $fieldsFields = $pluginFieldsField->find([
+                                'plugin_fields_containers_id' => $fieldsContainer['id']
+                            ]);
+
+                            $update = [];
+                            foreach ($uninstallFields as $setting) {
+                                $field = array_filter($fieldsFields, fn($e) => $e['id'] == $setting['plugin_fields_fields_id']);
+                                $field = reset($field);
+
+                                switch ($field['type']) {
+                                    case 'dropdown':
+                                        $property = 'plugin_fields_' . $field['name'] . 'dropdowns_id';
+                                        break;
+                                    case 'glpi_item':
+                                        $property = 'items_id_' . $field['name'];
+                                        $itemtype = 'itemtype_' . $field['name'];
+                                        break;
+                                    default:
+                                        $property = $field['name'];
+                                        break;
+                                }
+
+                                switch ($setting['action_uninstall']) {
+                                    case PluginUninstallModelcontainerfield::ACTION_RAZ:
+                                        $razValue = null;
+                                        // field types which doesn't accept NULL values
+                                        if (
+                                            str_starts_with($field['type'], 'dropdown')
+                                            || $field['type'] == 'glpi_item'
+                                            || $field['type'] == 'yesno'
+                                        ) {
+                                            $razValue = 0;
+                                            if ($field['multiple']) {
+                                                $razValue = '[]';
+                                            }
+                                        }
+                                        $update[$property] = $razValue;
+                                        if ($field['type'] == 'glpi_item') {
+                                            $update[$itemtype] = null;
+                                        }
+                                        break;
+                                    case PluginUninstallModelcontainerfield::ACTION_NEW_VALUE:
+                                        $update[$property] = $setting['new_value'];
+                                        break;
+                                }
+                            }
+                            if ($update) {
+                                $DB->update(
+                                    $obj->getTable(),
+                                    $update,
+                                    ['items_id' => $items_id]
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
    /**
