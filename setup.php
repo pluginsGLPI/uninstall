@@ -30,7 +30,7 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_UNINSTALL_VERSION', '2.9.2');
+define('PLUGIN_UNINSTALL_VERSION', '2.9.3');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_UNINSTALL_MIN_GLPI", "10.0.7");
@@ -135,6 +135,17 @@ function plugin_init_uninstall()
             }
         }
         $PLUGIN_HOOKS['post_init']['uninstall'] = 'plugin_uninstall_postinit';
+
+        if ($plugin->isActivated('fields')) {
+            $PLUGIN_HOOKS[Hooks::ITEM_ADD]['uninstall'] = [
+                PluginFieldsContainer::class => 'plugin_uninstall_hook_add_container',
+                PluginFieldsField::class => 'plugin_uninstall_hook_add_field',
+            ];
+            $PLUGIN_HOOKS[Hooks::ITEM_PURGE]['uninstall'] = [
+                PluginFieldsContainer::class => 'plugin_uninstall_hook_purge_container',
+                PluginFieldsField::class => 'plugin_uninstall_hook_purge_field',
+            ];
+        }
     }
 }
 

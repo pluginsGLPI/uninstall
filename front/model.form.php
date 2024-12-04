@@ -48,16 +48,47 @@ $model = new PluginUninstallModel();
 
 if (isset($_POST["add"])) {
     $model->check(-1, UPDATE, $_POST);
-    $model->add($_POST);
+    if ($id = $model->add($_POST)) {
+        $relationsCreated = false;
+        if (isset($_POST['action_plugin_fields_uninstall'])) {
+            if ($_POST['action_plugin_fields_uninstall'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                $model->createPluginFieldsRelations($id);
+                $relationsCreated = true;
+            }
+        }
+        // possible that the relations were created in previous if for replace then uninstall model types
+        if (isset($_POST['action_plugin_fields_replace']) && !$relationsCreated) {
+            if ($_POST['action_plugin_fields_replace'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                $model->createPluginFieldsRelations($id);
+            }
+        }
+    }
     Html::back();
 } else if (isset($_POST["update"])) {
     $model->check($_POST['id'], UPDATE);
-    $model->update($_POST);
+    if ($model->update($_POST)) {
+        $relationsCreated = false;
+        if (isset($_POST['action_plugin_fields_uninstall'])) {
+            if ($_POST['action_plugin_fields_uninstall'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                $model->createPluginFieldsRelations($id);
+                $relationsCreated = true;
+            }
+        }
+        if (isset($_POST['action_plugin_fields_replace']) && !$relationsCreated) {
+            if ($_POST['action_plugin_fields_replace'] == PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                $model->createPluginFieldsRelations($id);
+            }
+        }
+    }
     Html::back();
 } else if (isset($_POST['purge'])) {
     $model->check($_POST['id'], DELETE);
     $model->delete($_POST);
     $model->redirectToList();
+} else if (isset($_GET["load_fields"])) {
+    $model->check($id, UPDATE);
+    $model->createPluginFieldsRelations($id);
+    Html::back();
 } else {
     Html::header(
         PluginUninstallModel::getTypeName(),
