@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 01:22+0000\n"
+"POT-Creation-Date: 2024-12-30 01:27+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: David Stepan <stepand@tiscali.cz>, 2024\n"
 "Language-Team: Czech (Czech Republic) (https://app.transifex.com/teclib/teams/28042/cs_CZ/)\n"
@@ -268,7 +268,7 @@ msgstr "Nahradit rozbalovací nabídku stavu akcí zásuvného modulu"
 msgid "Replacement"
 msgstr "Nahrazení"
 
-#: inc/replace.class.php:541 front/action.php:64
+#: front/action.php:64 inc/replace.class.php:541
 msgid "Replacement successful"
 msgstr "Nahrazení úspěšné"
 
@@ -324,6 +324,6 @@ msgstr "Odinstalovat"
 msgid "Uninstallation"
 msgstr "Odinstalace"
 
-#: inc/uninstall.class.php:367 front/action.php:114
+#: front/action.php:114 inc/uninstall.class.php:367
 msgid "Uninstallation successful"
 msgstr "Odinstalace úspěšná"

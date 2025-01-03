@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 01:21+0000\n"
+"POT-Creation-Date: 2024-12-30 01:27+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2024\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/teclib/teams/28042/tr_TR/)\n"
@@ -67,7 +67,7 @@ msgstr "Sil ve açıklama yaz"
 
 #: inc/model.class.php:773
 msgid "Delete Fields plugin informations"
-msgstr "Alanlar uygulama eki bilgilerini sil"
+msgstr "Alanlar eklentisi bilgilerini sil"
 
 #: inc/model.class.php:753
 msgid "Delete computer in FusionInventory"
@@ -226,13 +226,13 @@ msgstr "Lütfen bekleyin kaldırma işlemi sürüyor..."
 
 #: inc/model.class.php:522
 msgid "Plugin PDF is installed and activated"
-msgstr "PDF uygulama eki kuruldu ve etkinleştirildi"
+msgstr "PDF eklentisi kuruldu ve etkinleştirildi"
 
 #: inc/model.class.php:526
 msgid ""
 "Plugin PDF is not installed, you won't be able to use PDF format for "
 "archiving"
-msgstr "PDF uygulama eki kurulmamış, arşivleme için PDF biçimi kullanılamaz"
+msgstr "PDF eklentisi kurulmamış, arşivleme için PDF biçimi kullanılamaz"
 
 #: inc/model.class.php:143
 msgid "Purge"
@@ -256,14 +256,14 @@ msgstr "Değiştir"
 
 #: inc/config.class.php:99
 msgid "Replace status dropdown by plugin actions"
-msgstr "Durum açılan kutusu uygulama eki işlemlerine göre değiştirilsin"
+msgstr "Durum açılan kutusu eklenti işlemlerine göre değiştirilsin"
 
 #: inc/model.class.php:123 inc/model.class.php:1142 inc/replace.class.php:67
 #: inc/replace.class.php:115
 msgid "Replacement"
 msgstr "Değişiklik"
 
-#: inc/replace.class.php:541 front/action.php:64
+#: front/action.php:64 inc/replace.class.php:541
 msgid "Replacement successful"
 msgstr "Değiştirildi"
 
@@ -320,6 +320,6 @@ msgstr "Kaldır"
 msgid "Uninstallation"
 msgstr "Kaldırma"
 
-#: inc/uninstall.class.php:367 front/action.php:114
+#: front/action.php:114 inc/uninstall.class.php:367
 msgid "Uninstallation successful"
 msgstr "Kaldırıldı"
