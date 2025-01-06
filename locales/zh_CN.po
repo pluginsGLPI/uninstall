@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 01:22+0000\n"
+"POT-Creation-Date: 2024-12-30 01:27+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: 李赋 <fu792659@163.com>, 2018\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/teclib/teams/28042/zh_CN/)\n"
@@ -262,7 +262,7 @@ msgstr ""
 msgid "Replacement"
 msgstr "替代"
 
-#: inc/replace.class.php:541 front/action.php:64
+#: front/action.php:64 inc/replace.class.php:541
 msgid "Replacement successful"
 msgstr "置换成功"
 
@@ -318,6 +318,6 @@ msgstr "卸载"
 msgid "Uninstallation"
 msgstr "卸载"
 
-#: inc/uninstall.class.php:367 front/action.php:114
+#: front/action.php:114 inc/uninstall.class.php:367
 msgid "Uninstallation successful"
 msgstr "卸载成功"
