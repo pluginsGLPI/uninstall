@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 01:22+0000\n"
+"POT-Creation-Date: 2024-12-30 01:27+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Jacek Maciol <jmaciol@rabawyzna.pl>, 2017\n"
 "Language-Team: Polish (Poland) (https://app.transifex.com/teclib/teams/28042/pl_PL/)\n"
@@ -266,7 +266,7 @@ msgstr ""
 msgid "Replacement"
 msgstr "Wymiana"
 
-#: inc/replace.class.php:541 front/action.php:64
+#: front/action.php:64 inc/replace.class.php:541
 msgid "Replacement successful"
 msgstr "Wymiana zakończona powodzeniem"
 
@@ -322,6 +322,6 @@ msgstr "Odinstaluj"
 msgid "Uninstallation"
 msgstr "Dezinstalacja"
 
-#: inc/uninstall.class.php:367 front/action.php:114
+#: front/action.php:114 inc/uninstall.class.php:367
 msgid "Uninstallation successful"
 msgstr "Dezinstalacja zakończona sukcesem"
