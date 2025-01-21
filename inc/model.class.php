@@ -182,9 +182,11 @@ class PluginUninstallModel extends CommonDBTM
         return "";
     }
 
-   /**
-    * Définition du nom de l'onglet
-    **/
+    /**
+     * @param CommonGLPI $item
+     * @param mixed $withtemplate
+     * @return array|string
+     */
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
@@ -206,16 +208,15 @@ class PluginUninstallModel extends CommonDBTM
     **/
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        switch ($item->getType()) {
-            case __CLASS__:
-                switch ($tabnum) {
-                    case 1:
-                        $item->showForm($item->getID());
-                        break;
-                    case 2:
-                        $item->showFormAction($item);
-                        break;
-                }
+        if ($item instanceof self) {
+            switch ($tabnum) {
+                case 1:
+                    $item->showForm($item->getID());
+                    break;
+                case 2:
+                    $item->showFormAction($item);
+                    break;
+            }
         }
         return true;
     }
@@ -1132,7 +1133,6 @@ class PluginUninstallModel extends CommonDBTM
                     return self::getMethodReplacement($values['replace_method']);
                 }
                 return Dropdown::EMPTY_VALUE;
-            break;
 
             case 'types_id':
                 switch ($values['types_id']) {
@@ -1152,8 +1152,6 @@ class PluginUninstallModel extends CommonDBTM
                     return __('None');
                 }
                 return Dropdown::getDropdownName('glpi_groups', $values['groups_id']);
-
-            break;
         }
         return parent::getSpecificValueToDisplay($field, $values, $options);
     }
@@ -1195,7 +1193,7 @@ class PluginUninstallModel extends CommonDBTM
     *
     * @since version 0.84
     *
-    * @return an array of massive actions
+    * @return array of massive actions
     **/
     public function getForbiddenStandardMassiveAction()
     {
@@ -1524,10 +1522,10 @@ class PluginUninstallModel extends CommonDBTM
             case 'transfert':
                 Entity::dropdown();
                 echo "&nbsp;" .
-                  Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
+                Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
                 return true;
         }
-        return "";
+        return false;
     }
 
     public function getSpecificMassiveActions($checkitem = null)
@@ -1571,7 +1569,6 @@ class PluginUninstallModel extends CommonDBTM
                     }
                 }
                 return;
-               break;
         }
         return;
     }

@@ -1,7 +1,7 @@
 parameters:
     parallel:
         maximumNumberOfProcesses: 2
-    level: 1
+    level: 5
     bootstrapFiles:
         - ../../inc/based_config.php
     paths:
@@ -15,5 +15,10 @@ parameters:
         - ../../src
     stubFiles:
         - ../../stubs/glpi_constants.php
+    ignoreErrors:
+        - '#Instantiated class PluginOcsinventoryng[A-Za-z0-9_]+ not found\.#'
+        - '#Access to property \$[A-Za-z0-9_]+ on an unknown class PluginOcsinventoryng[A-Za-z0-9_]+\.#'
+        - '#Call to method [A-Za-z0-9_]+\(\) on an unknown class PluginOcsinventoryng[A-Za-z0-9_]+\.#'
+        - '#Call to method [A-Za-z0-9_]+\(\) on an unknown class PluginFusioninventory[A-Za-z0-9_]+\.#'
 rules:
     - GlpiProject\Tools\PHPStan\Rules\GlobalVarTypeRule

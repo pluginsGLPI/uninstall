@@ -89,8 +89,9 @@ class PluginUninstallReplace extends CommonDBTM
            //States
             if ($model->fields['states_id'] != 0) {
                 $olditem->update(
-                    ['id'           => $olditem_id,
-                        'is_dynamic'   => $olditem->fields['is_dynamic'], #to prevent locked field
+                    [
+                        'id'           => $olditem_id,
+                        'is_dynamic'   => $olditem->getField('is_dynamic'), #to prevent locked field
                         'states_id'    => $model->fields['states_id']
                     ],
                     false
@@ -227,7 +228,8 @@ class PluginUninstallReplace extends CommonDBTM
                 $contract_item = new Contract_Item();
                 foreach (self::getAssociatedContracts($olditem) as $contract) {
                     $contract_item->update(
-                        ['id'       => $contract['id'],
+                        [
+                            'id'       => $contract['id'],
                             'itemtype' => $type,
                             'items_id' => $newitem_id
                         ],
@@ -247,7 +249,7 @@ class PluginUninstallReplace extends CommonDBTM
                     if ($infocom->getFromDBforDevice($type, $newitem_id)) {
                         //Do not log infocom deletion in the new item's history
                         $infocom->dohistory = false;
-                        $infocom->deleteFromDB(1);
+                        $infocom->deleteFromDB(true);
                     }
                 }
 
@@ -283,7 +285,7 @@ class PluginUninstallReplace extends CommonDBTM
                         $resa_new->getFromDBbyItem($type, $newitem_id);
 
                         if (count($resa_new->fields)) {
-                            $resa_new->deleteFromDB(1);
+                            $resa_new->deleteFromDB(true);
                         }
                     }
                 }
@@ -316,7 +318,7 @@ class PluginUninstallReplace extends CommonDBTM
                 if (
                     $model->fields["replace_users"]
                     && $newitem->isField('users_id')
-                    && ($overwrite || empty($data['users_id']))
+                    && ($overwrite || empty($newitem->getField('users_id')))
                 ) {
                     $data['users_id'] = $olditem->getField('users_id');
                 }
@@ -324,7 +326,7 @@ class PluginUninstallReplace extends CommonDBTM
                 if (
                     $model->fields["replace_contact"]
                     && $newitem->isField('contact')
-                    && ($overwrite || empty($data['contact']))
+                    && ($overwrite || empty($newitem->getField('contact')))
                 ) {
                     $data['contact'] = $olditem->getField('contact');
                 }
@@ -332,7 +334,7 @@ class PluginUninstallReplace extends CommonDBTM
                 if (
                     $model->fields["replace_contact_num"]
                     && $newitem->isField('contact_num')
-                    && ($overwrite || empty($data['contact_num']))
+                    && ($overwrite || empty($newitem->getField('contact_num')))
                 ) {
                     $data['contact_num'] = $olditem->getField('contact_num');
                 }
@@ -347,7 +349,7 @@ class PluginUninstallReplace extends CommonDBTM
             ) {
                 if (
                     $newitem->isField('groups_id')
-                    && ($overwrite || empty($data['groups_id']))
+                    && ($overwrite || empty($newitem->isField('groups_id')))
                 ) {
                     $newitem->update(
                         ['id'        => $newitem_id,
@@ -422,7 +424,7 @@ class PluginUninstallReplace extends CommonDBTM
                     default:
                         $olditem->update(
                             ['id'           => $olditem_id,
-                                'is_dynamic'   => $olditem->fields['is_dynamic'], #to prevent locked field
+                                'is_dynamic'   => $olditem->getField('is_dynamic'), #to prevent locked field
                                 'locations_id' => $location
                             ],
                             false
@@ -485,8 +487,8 @@ class PluginUninstallReplace extends CommonDBTM
                     $commentnew .= self::getCommentsForReplacement($olditem, true);
 
                    // Retrieve && Compute comment for olditem (with newitem)
-                    if (!empty($olditem->fields['comment'])) {
-                        $commentold = stripslashes($olditem->fields['comment']);
+                    if (!empty($olditem->getField('comment'))) {
+                        $commentold = stripslashes($olditem->getField('comment'));
                     } else {
                         $commentold = "";
                     }
@@ -503,7 +505,7 @@ class PluginUninstallReplace extends CommonDBTM
                    // Update comment for olditem
                     $olditem->update(
                         ['id'           => $olditem_id,
-                            'is_dynamic'   => $olditem->fields['is_dynamic'], #to prevent locked field
+                            'is_dynamic'   => $olditem->getField('is_dynamic'), #to prevent locked field
                             'comment'      => Toolbox::addslashes_deep($commentold)
                         ],
                         false
@@ -566,7 +568,7 @@ class PluginUninstallReplace extends CommonDBTM
     * @param $new is          the item a new item (true) or the old one (false) (true by default)
     * @param $display_message (true by default)
     *
-    * @return the comments generated
+    * @return string comments generated
    **/
     public static function getCommentsForReplacement(CommonDBTM $item, $new = true, $display_message = true)
     {
@@ -916,7 +918,7 @@ class PluginUninstallReplace extends CommonDBTM
     *
     * @param $item            CommonDBTM : object wanted
     *
-    * @return Nothing (display)
+    * @return array
    **/
     public static function getAssociatedContracts(CommonDBTM $item)
     {
@@ -1038,7 +1040,7 @@ class PluginUninstallReplace extends CommonDBTM
     *
     * @param $comp Computer object
     *
-    * @return Nothing (call to classes members)
+    * @return array
    **/
     public static function getAssociatedItems(Computer $comp)
     {
@@ -1067,7 +1069,7 @@ class PluginUninstallReplace extends CommonDBTM
    /**
    * Get tabs to export in PDF, as defined in user's preferences
    * @param $itemtype itemtype to export in PDF
-   * @return an array of tabs to export
+   * @return array of tabs to export
    */
     public static function getPdfUserPreference($item)
     {

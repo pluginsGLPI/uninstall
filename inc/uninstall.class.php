@@ -51,7 +51,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
         foreach ($ma->getItems() as $itemtype => $data) {
             if (!in_array($itemtype, $UNINSTALL_TYPES)) {
-                return "";
+                return false;
             }
         }
 
@@ -67,7 +67,7 @@ class PluginUninstallUninstall extends CommonDBTM
                   Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
                 return true;
         }
-        return "";
+        return false;
     }
 
 
@@ -92,7 +92,6 @@ class PluginUninstallUninstall extends CommonDBTM
                 Html::redirect(Plugin::getWebDir('uninstall') . '/front/action.php?device_type=' .
                   $itemtype . "&model_id=" . $_POST["model_id"]);
                 return;
-            break;
         }
         return;
     }
@@ -394,12 +393,10 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function deleteOcsLink($computers_id)
     {
-        //@phpstan-ignore-next-line
         $link = new PluginOcsinventoryngOcslink();
         $link->dohistory = false;
         $link->deleteByCriteria(['computers_id' => $computers_id]);
 
-        //@phpstan-ignore-next-line
         $reg = new PluginOcsinventoryngRegistryKey();
         $reg->deleteByCriteria(['computers_id' => $computers_id]);
     }
@@ -407,7 +404,6 @@ class PluginUninstallUninstall extends CommonDBTM
 
     public static function deleteRegistryKeys($computers_id)
     {
-        //@phpstan-ignore-next-line
         $key = new PluginOcsinventoryngRegistryKey();
         $key->deleteByCriteria(['computers_id' => $computers_id]);
     }
@@ -415,7 +411,7 @@ class PluginUninstallUninstall extends CommonDBTM
    /**
     * Remove a computer in the OCS database
     *
-    * @param computer_id the computer's ID in GLPI
+    * @param $computer_id the computer's ID in GLPI
     *
     * @return void
    **/
@@ -1045,8 +1041,11 @@ class PluginUninstallUninstall extends CommonDBTM
         /** @var array $UNINSTALL_TYPES */
         global $UNINSTALL_TYPES;
 
-        if (in_array($item->getType(), $UNINSTALL_TYPES)) {
-            self::showFormUninstallation($item->fields['id'], $item, Session::getLoginUserID());
+        if (
+            is_subclass_of($item, CommonDBTM::class)
+            && in_array($item->getType(), $UNINSTALL_TYPES)
+        ) {
+            self::showFormUninstallation($item->getField('id'), $item, Session::getLoginUserID());
         }
         return true;
     }

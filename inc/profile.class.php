@@ -36,7 +36,7 @@ class PluginUninstallProfile extends Profile
     *
     * Get rights matrix for plugin
     *
-    * @return array:array:string rights matrix
+    * @return array rights matrix
     */
     public function getGeneralRights()
     {
@@ -181,7 +181,7 @@ class PluginUninstallProfile extends Profile
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
-        if ($item->getType() == 'Profile') {
+        if ($item instanceof Profile) {
             if ($item->getField('interface') == 'central') {
                 return PluginUninstallUninstall::getTypeName();
             }
@@ -221,7 +221,7 @@ class PluginUninstallProfile extends Profile
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
 
-        if ($item->getType() == 'Profile') {
+        if ($item instanceof Profile) {
             $ID = $item->getID();
             $prof = new self();
 

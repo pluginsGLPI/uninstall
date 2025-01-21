@@ -62,9 +62,8 @@ class PluginUninstallConfig extends Config
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        switch ($item->getType()) {
-            case "Config":
-                return self::showForConfig($item, $withtemplate);
+        if ($item instanceof Config) {
+            return self::showForConfig($item, $withtemplate);
         }
 
         return true;
@@ -86,9 +85,9 @@ class PluginUninstallConfig extends Config
 
         echo "<ul class='shortcuts'>";
         echo "<li><a href='" . PluginUninstallModel::getSearchURL() . "' class='vsubmit'>" .
-            PluginUninstallModel::getTypeName(Session::getPluralNumber()) . "</a><li>";
+        PluginUninstallModel::getTypeName(Session::getPluralNumber()) . "</a><li>";
         echo "<li><a href='preference.php?forcetab=PluginUninstallPreference$1' class='vsubmit'>" .
-            __("Location preferences", 'uninstall') . "</a><li>";
+        __("Location preferences", 'uninstall') . "</a><li>";
         echo "</ul>";
 
         echo "<h2 class='header'>" . __("Configuration") . "</h2>";
@@ -167,7 +166,7 @@ class PluginUninstallConfig extends Config
             // Even if config already exists, it is submitted on `inventory` context and will therefore be
             // considered as new. We have to call `Config::setConfigurationValues()` using the good context to be able to
             // trigger `add` or `update` whether config already exists or not.
-            $config->input = false;
+            $config->input = [];
             Config::setConfigurationValues('plugin:uninstall', ['stale_agents_uninstall' => $value]);
         }
     }
