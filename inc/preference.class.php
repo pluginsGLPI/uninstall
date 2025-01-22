@@ -328,7 +328,7 @@ class PluginUninstallPreference extends CommonDBTM
                      `locations_id` int {$default_key_sign} DEFAULT '0',
                      PRIMARY KEY (`id`)
                      ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQueryOrDie($query, $DB->error());
         }
         return true;
     }
@@ -338,6 +338,6 @@ class PluginUninstallPreference extends CommonDBTM
     {
         /** @var DBmysql $DB */
         global $DB;
-        $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
+        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
     }
 }

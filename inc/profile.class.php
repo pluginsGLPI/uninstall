@@ -287,7 +287,7 @@ class PluginUninstallProfile extends Profile
                     `replace` tinyint NOT NULL default '0',
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQueryOrDie($query, $DB->error());
             self::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
         }
         return true;
@@ -298,6 +298,6 @@ class PluginUninstallProfile extends Profile
         /** @var DBmysql $DB */
         global $DB;
 
-        $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
+        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
     }
 }

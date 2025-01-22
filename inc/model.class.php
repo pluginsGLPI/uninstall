@@ -1419,7 +1419,7 @@ class PluginUninstallModel extends CommonDBTM
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQueryOrDie($query, $DB->error());
 
             self::createTransferModel('Uninstall');
             self::createTransferModel('Replace');
@@ -1434,7 +1434,7 @@ class PluginUninstallModel extends CommonDBTM
         /** @var DBmysql $DB */
         global $DB;
 
-        $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
+        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
 
        //If a transfer model exists for this plugin -> delete it
         $transfer_id     = PluginUninstallUninstall::getUninstallTransferModelID(false);
