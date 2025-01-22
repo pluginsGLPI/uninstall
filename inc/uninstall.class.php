@@ -393,19 +393,22 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function deleteOcsLink($computers_id)
     {
+        /** @phpstan-ignore-next-line */
         $link = new PluginOcsinventoryngOcslink();
-        $link->dohistory = false;
-        $link->deleteByCriteria(['computers_id' => $computers_id]);
+        $link->dohistory = false; // @phpstan-ignore-line
+        $link->deleteByCriteria(['computers_id' => $computers_id]); // @phpstan-ignore-line
 
+        /** @phpstan-ignore-next-line */
         $reg = new PluginOcsinventoryngRegistryKey();
-        $reg->deleteByCriteria(['computers_id' => $computers_id]);
+        $reg->deleteByCriteria(['computers_id' => $computers_id]); // @phpstan-ignore-line
     }
 
 
     public static function deleteRegistryKeys($computers_id)
     {
+        /** @phpstan-ignore-next-line */
         $key = new PluginOcsinventoryngRegistryKey();
-        $key->deleteByCriteria(['computers_id' => $computers_id]);
+        $key->deleteByCriteria(['computers_id' => $computers_id]); // @phpstan-ignore-line
     }
 
    /**
@@ -485,7 +488,7 @@ class PluginUninstallUninstall extends CommonDBTM
             return false;
         }
 
-        $DBocs = $dbClient->getDB();
+        $DBocs = $dbClient->getDB(); // @phpstan-ignore-line
         return $DBocs->tableExists($tablename);
     }
 
@@ -519,7 +522,7 @@ class PluginUninstallUninstall extends CommonDBTM
             $item->getFromDB($items_id);
             //@phpstan-ignore-next-line
             $agent = new PluginFusioninventoryAgent();
-            $agents = $agent->getAgentsFromComputers([$items_id]);
+            $agents = $agent->getAgentsFromComputers([$items_id]); // @phpstan-ignore-line
 
            // clean item associated to agents
             plugin_pre_item_purge_fusioninventory($item);
@@ -527,13 +530,13 @@ class PluginUninstallUninstall extends CommonDBTM
             if ($itemtype == 'Computer') {
                 // remove agent(s)
                 foreach ($agents as $current_agent) {
-                    $agent->deleteByCriteria(['id' => $current_agent['id']], true);
+                    $agent->deleteByCriteria(['id' => $current_agent['id']], true); // @phpstan-ignore-line
                 }
 
                 // remove licences
                 //@phpstan-ignore-next-line
                 $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
-                $pfComputerLicenseInfo->deleteByCriteria(['computers_id' => $items_id]);
+                $pfComputerLicenseInfo->deleteByCriteria(['computers_id' => $items_id]); // @phpstan-ignore-line
             }
         }
     }
