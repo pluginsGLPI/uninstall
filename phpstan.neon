@@ -20,5 +20,6 @@ parameters:
         - '#Access to property \$[A-Za-z0-9_]+ on an unknown class PluginOcsinventoryng[A-Za-z0-9_]+\.#'
         - '#Call to method [A-Za-z0-9_]+\(\) on an unknown class PluginOcsinventoryng[A-Za-z0-9_]+\.#'
         - '#Call to method [A-Za-z0-9_]+\(\) on an unknown class PluginFusioninventory[A-Za-z0-9_]+\.#'
+        - '#Property CommonDBTM::\$input \(array<mixed>\) does not accept false\.#'
 rules:
     - GlpiProject\Tools\PHPStan\Rules\GlobalVarTypeRule

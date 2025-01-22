@@ -166,7 +166,7 @@ class PluginUninstallConfig extends Config
             // Even if config already exists, it is submitted on `inventory` context and will therefore be
             // considered as new. We have to call `Config::setConfigurationValues()` using the good context to be able to
             // trigger `add` or `update` whether config already exists or not.
-            $config->input = [];
+            $config->input = false;
             Config::setConfigurationValues('plugin:uninstall', ['stale_agents_uninstall' => $value]);
         }
     }
