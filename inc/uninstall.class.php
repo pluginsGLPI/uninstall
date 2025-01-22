@@ -1042,7 +1042,7 @@ class PluginUninstallUninstall extends CommonDBTM
         global $UNINSTALL_TYPES;
 
         if (
-            is_subclass_of($item, CommonDBTM::class)
+            ($item instanceof CommonDBTM)
             && in_array($item->getType(), $UNINSTALL_TYPES)
         ) {
             self::showFormUninstallation($item->getField('id'), $item, Session::getLoginUserID());
