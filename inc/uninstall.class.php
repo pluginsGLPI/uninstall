@@ -393,22 +393,24 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function deleteOcsLink($computers_id)
     {
-        /** @phpstan-ignore-next-line */
-        $link = new PluginOcsinventoryngOcslink();
-        $link->dohistory = false; // @phpstan-ignore-line
-        $link->deleteByCriteria(['computers_id' => $computers_id]); // @phpstan-ignore-line
-
-        /** @phpstan-ignore-next-line */
-        $reg = new PluginOcsinventoryngRegistryKey();
-        $reg->deleteByCriteria(['computers_id' => $computers_id]); // @phpstan-ignore-line
+        if (class_exists('PluginOcsinventoryngOcslink')) {
+            $link = new \PluginOcsinventoryngOcslink();
+            $link->dohistory = false;
+            $link->deleteByCriteria(['computers_id' => $computers_id]);
+        }
+        if (class_exists('PluginOcsinventoryngRegistryKey')) {
+            $reg = new PluginOcsinventoryngRegistryKey();
+            $reg->deleteByCriteria(['computers_id' => $computers_id]);
+        }
     }
 
 
     public static function deleteRegistryKeys($computers_id)
     {
-        /** @phpstan-ignore-next-line */
-        $key = new PluginOcsinventoryngRegistryKey();
-        $key->deleteByCriteria(['computers_id' => $computers_id]); // @phpstan-ignore-line
+        if (class_exists('PluginOcsinventoryngRegistryKey')) {
+            $key = new PluginOcsinventoryngRegistryKey();
+            $key->deleteByCriteria(['computers_id' => $computers_id]);
+        }
     }
 
    /**
@@ -445,51 +447,57 @@ class PluginUninstallUninstall extends CommonDBTM
     {
         /** @var DBmysql $DB */
         global $DB;
-        //@phpstan-ignore-next-line
-        $DBocs = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id)->getDB();
+        if (class_exists('PluginOcsinventoryngOcsServer')) {
+            $DBocs = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id)->getDB();
 
-        //First try to remove all the network ports
-        $query = "DELETE
-                FROM `netmap`
-                WHERE `MAC` IN (SELECT `MACADDR`
-                                FROM `networks`
-                                WHERE `networks`.`HARDWARE_ID` = '" . $ocs_id . "')";
-        $DBocs->query($query);
+            //First try to remove all the network ports
+            $query = "DELETE
+                    FROM `netmap`
+                    WHERE `MAC` IN (SELECT `MACADDR`
+                                    FROM `networks`
+                                    WHERE `networks`.`HARDWARE_ID` = '" . $ocs_id . "')";
+            $DBocs->query($query);
 
-        $tables =  ["accesslog", "accountinfo", "bios", "controllers", "devices", "drives",
-            "download_history", "download_servers", "groups_cache", "inputs",
-            "memories", "modems", "monitors", "networks", "ports", "printers",
-            "registry", "slots", "softwares", "sounds", "storages", "videos"
-        ];
+            $tables =  ["accesslog", "accountinfo", "bios", "controllers", "devices", "drives",
+                "download_history", "download_servers", "groups_cache", "inputs",
+                "memories", "modems", "monitors", "networks", "ports", "printers",
+                "registry", "slots", "softwares", "sounds", "storages", "videos"
+            ];
 
-        foreach ($tables as $table) {
-            if (self::ocsTableExists($ocs_server_id, $table)) {
-                $query = "DELETE
-                      FROM `" . $table . "`
-                      WHERE `hardware_id` = '" . $ocs_id . "'";
-                $DBocs->query($query);
+            foreach ($tables as $table) {
+                if (self::ocsTableExists($ocs_server_id, $table)) {
+                    $query = "DELETE
+                        FROM `" . $table . "`
+                        WHERE `hardware_id` = '" . $ocs_id . "'";
+                    $DBocs->query($query);
+                }
             }
-        }
 
-        $query = "DELETE
-                FROM `hardware`
-                WHERE `ID` = '" . $ocs_id . "'";
-        $DBocs->query($query);
+            $query = "DELETE
+                    FROM `hardware`
+                    WHERE `ID` = '" . $ocs_id . "'";
+            $DBocs->query($query);
+        }
     }
 
 
     public static function ocsTableExists($ocs_server_id, $tablename)
     {
-        //@phpstan-ignore-next-line
-        $dbClient = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id);
+        if (class_exists('PluginOcsinventoryngOcsServer')) {
+            $dbClient = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id);
 
-        //@phpstan-ignore-next-line
-        if (!($dbClient instanceof PluginOcsinventoryngOcsDbClient)) {
-            return false;
+            if (
+                class_exists('PluginOcsinventoryngOcsDbClient')
+                && !($dbClient instanceof PluginOcsinventoryngOcsDbClient)
+            ) {
+                return false;
+            }
+
+            $DBocs = $dbClient->getDB();
+            return $DBocs->tableExists($tablename);
         }
 
-        $DBocs = $dbClient->getDB(); // @phpstan-ignore-line
-        return $DBocs->tableExists($tablename);
+        return false;
     }
 
    /**
@@ -501,10 +509,11 @@ class PluginUninstallUninstall extends CommonDBTM
    */
     public static function deletePluginFieldsLink($itemtype, $items_id)
     {
-        $item = new $itemtype();
-        $item->getFromDB($items_id);
-        //@phpstan-ignore-next-line
-        PluginFieldsContainer::preItemPurge($item);
+        if (class_exists('PluginFieldsContainer')) {
+            $item = new $itemtype();
+            $item->getFromDB($items_id);
+            PluginFieldsContainer::preItemPurge($item);
+        }
     }
 
    /**
@@ -517,12 +526,15 @@ class PluginUninstallUninstall extends CommonDBTM
    **/
     public static function deleteFusionInventoryLink($itemtype, $items_id)
     {
-        if (function_exists('plugin_pre_item_purge_fusioninventory')) {
+        if (
+            class_exists('PluginFusioninventoryAgent')
+            && function_exists('plugin_pre_item_purge_fusioninventory')
+        ) {
             $item = new $itemtype();
             $item->getFromDB($items_id);
-            //@phpstan-ignore-next-line
+
             $agent = new PluginFusioninventoryAgent();
-            $agents = $agent->getAgentsFromComputers([$items_id]); // @phpstan-ignore-line
+            $agents = $agent->getAgentsFromComputers([$items_id]);
 
            // clean item associated to agents
             plugin_pre_item_purge_fusioninventory($item);
@@ -530,13 +542,14 @@ class PluginUninstallUninstall extends CommonDBTM
             if ($itemtype == 'Computer') {
                 // remove agent(s)
                 foreach ($agents as $current_agent) {
-                    $agent->deleteByCriteria(['id' => $current_agent['id']], true); // @phpstan-ignore-line
+                    $agent->deleteByCriteria(['id' => $current_agent['id']], true);
                 }
 
-                // remove licences
-                //@phpstan-ignore-next-line
-                $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
-                $pfComputerLicenseInfo->deleteByCriteria(['computers_id' => $items_id]); // @phpstan-ignore-line
+                if (class_exists('PluginFusioninventoryComputerLicenseInfo')) {
+                    // remove licences
+                    $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
+                    $pfComputerLicenseInfo->deleteByCriteria(['computers_id' => $items_id]);
+                }
             }
         }
     }
