@@ -116,14 +116,16 @@ class PluginUninstallReplace extends CommonDBTM
                     $out = __('Replacement', 'uninstall') . "\r\n";
 
                     $datas = $olditem->fields;
-                    //@phpstan-ignore-next-line
-                    unset($datas['comment']);
                     foreach ($datas as $k => $v) {
-                        $out .= $k . ";";
+                        if ($k !== 'comment') {
+                            $out .= $k . ";";
+                        }
                     }
                     $out .= "\r\n";
                     foreach ($datas as $k => $v) {
-                        $out .= $v . ";";
+                        if ($k !== 'comment') {
+                            $out .= $v . ";";
+                        }
                     }
 
                    // USE CSV EXPORT
