@@ -36,7 +36,7 @@ class PluginUninstallProfile extends Profile
     *
     * Get rights matrix for plugin
     *
-    * @return array:array:string rights matrix
+    * @return array rights matrix
     */
     public function getGeneralRights()
     {
@@ -181,7 +181,7 @@ class PluginUninstallProfile extends Profile
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
-        if ($item->getType() == 'Profile') {
+        if ($item instanceof Profile) {
             if ($item->getField('interface') == 'central') {
                 return PluginUninstallUninstall::getTypeName();
             }
@@ -221,7 +221,7 @@ class PluginUninstallProfile extends Profile
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
 
-        if ($item->getType() == 'Profile') {
+        if ($item instanceof Profile) {
             $ID = $item->getID();
             $prof = new self();
 
@@ -287,7 +287,7 @@ class PluginUninstallProfile extends Profile
                     `replace` tinyint NOT NULL default '0',
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->queryOrDie($query, $DB->error());
+            $DB->doQueryOrDie($query, $DB->error());
             self::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
         }
         return true;
@@ -298,6 +298,6 @@ class PluginUninstallProfile extends Profile
         /** @var DBmysql $DB */
         global $DB;
 
-        $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
+        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
     }
 }
