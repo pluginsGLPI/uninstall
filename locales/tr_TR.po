@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 01:27+0000\n"
+"POT-Creation-Date: 2025-02-27 01:26+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2024\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/teclib/teams/28042/tr_TR/)\n"
@@ -21,31 +21,31 @@ msgstr ""
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: inc/model.class.php:289 inc/model.class.php:991
+#: inc/model.class.php:290 inc/model.class.php:992
 msgid "Action on group"
 msgstr "Gruba uygulanacak işlem"
 
-#: inc/model.class.php:329
+#: inc/model.class.php:330
 msgid "Add template"
 msgstr "Kalıp ekle"
 
-#: inc/model.class.php:769
+#: inc/model.class.php:770
 msgid "Additionnal fields"
 msgstr "Ek alanlar"
 
-#: inc/model.class.php:294
+#: inc/model.class.php:295
 msgid "Affect to a new group"
 msgstr "Yeni bir gruba etki"
 
-#: inc/uninstall.class.php:895
+#: inc/uninstall.class.php:907
 msgid "Apply model"
 msgstr "Modeli uygula"
 
-#: inc/replace.class.php:143
+#: inc/replace.class.php:145
 msgid "Archive of old material"
 msgstr "Eski materyalin arşivi"
 
-#: inc/model.class.php:513 inc/model.class.php:1002 inc/replace.class.php:652
+#: inc/replace.class.php:655 inc/model.class.php:514 inc/model.class.php:1003
 msgid "Archiving method of the old material"
 msgstr "Eski materyali arşivleme yöntemi"
 
@@ -53,11 +53,11 @@ msgstr "Eski materyali arşivleme yöntemi"
 msgid "CSV Archiving"
 msgstr "CSV arşivleme"
 
-#: inc/replace.class.php:768
+#: inc/replace.class.php:771
 msgid "Choices for item to replace"
 msgstr "Değiştirilecek öge için seçenekler"
 
-#: inc/model.class.php:536 inc/replace.class.php:711
+#: inc/replace.class.php:714 inc/model.class.php:537
 msgid "Connections with other materials"
 msgstr "Diğer materyaller ile bağlantılar"
 
@@ -65,79 +65,79 @@ msgstr "Diğer materyaller ile bağlantılar"
 msgid "Delete + Comment"
 msgstr "Sil ve açıklama yaz"
 
-#: inc/model.class.php:773
+#: inc/model.class.php:774
 msgid "Delete Fields plugin informations"
 msgstr "Alanlar eklentisi bilgilerini sil"
 
-#: inc/model.class.php:753
+#: inc/model.class.php:754
 msgid "Delete computer in FusionInventory"
 msgstr "FusionInventory üzerinden bilgisayar sil"
 
-#: inc/model.class.php:727 inc/model.class.php:964
+#: inc/model.class.php:728 inc/model.class.php:965
 msgid "Delete computer in OCSNG"
 msgstr "OCSNG üzerinden bilgisayar sil"
 
-#: inc/model.class.php:456
+#: inc/model.class.php:457
 msgid "Delete inventory data (dynamic flag, locks, agent information, ...)"
 msgstr ""
 "Envanter verilerini sil (devingen işaret, kilit, uygulama bilgileri...)"
 
-#: inc/model.class.php:737 inc/model.class.php:972
+#: inc/model.class.php:738 inc/model.class.php:973
 msgid "Delete link with computer in OCSNG"
 msgstr "OCSNG üzerinden bilgisayar bağlantısını sil"
 
-#: inc/model.class.php:347 inc/model.class.php:853
+#: inc/model.class.php:348 inc/model.class.php:854
 msgid "Delete software history (computers)"
 msgstr "Yazılım geçmişini sil (bilgisayarlar)"
 
-#: inc/model.class.php:354 inc/model.class.php:1012
+#: inc/model.class.php:355 inc/model.class.php:1013
 msgid "Delete the whole history"
 msgstr "Tüm geçmişi sil"
 
-#: inc/model.class.php:635 inc/replace.class.php:756
+#: inc/replace.class.php:759 inc/model.class.php:636
 msgid "Direct connections"
 msgstr "Doğrudan bağlantılar"
 
-#: ajax/locations.php:50 inc/preference.class.php:103
-#: inc/replace.class.php:678
+#: inc/preference.class.php:103 inc/replace.class.php:681
+#: ajax/locations.php:50
 msgid "Empty location"
 msgstr "Boş konum"
 
-#: inc/model.class.php:344
+#: inc/model.class.php:345
 msgid "Erase datas"
 msgstr "Verileri sil"
 
-#: inc/model.class.php:473 inc/replace.class.php:633
+#: inc/replace.class.php:636 inc/model.class.php:474
 msgid "General informations"
 msgstr "Genel bilgiler"
 
-#: inc/model.class.php:472 inc/model.class.php:535
+#: inc/model.class.php:473 inc/model.class.php:536
 msgid "Informations replacement"
 msgstr "Bilgi değişikliği"
 
-#: inc/uninstall.class.php:760
+#: inc/uninstall.class.php:772
 msgid "Item is now uninstalled"
 msgstr "Öge kaldırıldı"
 
-#: inc/uninstall.class.php:763
+#: inc/uninstall.class.php:775
 #, php-format
 msgid "Item is now uninstalled with model %s"
 msgstr "Öge %s modeliyle kaldırıldı"
 
-#: inc/uninstall.class.php:770
+#: inc/uninstall.class.php:782
 msgid "Item replaced by a new one"
 msgstr "Yenisi ile değiştirilen öge"
 
-#: inc/uninstall.class.php:773
+#: inc/uninstall.class.php:785
 #, php-format
 msgid "Item replaced by a new one with model %s"
 msgstr "Öge %s modeliyle yenisi ile değiştirildi"
 
-#: inc/uninstall.class.php:780
+#: inc/uninstall.class.php:792
 msgid "Item replacing an old one"
 msgstr "Eskinin yerine konulan öge"
 
-#: inc/model.class.php:72 inc/config.class.php:41 inc/uninstall.class.php:39
+#: inc/uninstall.class.php:39 inc/model.class.php:72 inc/config.class.php:41
 msgid "Item's Lifecycle"
 msgstr "Ögenin yaşam döngüsü"
 
@@ -145,7 +145,7 @@ msgstr "Ögenin yaşam döngüsü"
 msgid "Item's Lifecycle (uninstall)"
 msgstr "Ögenin yaşam döngüsü (kaldır)"
 
-#: inc/uninstall.class.php:919
+#: inc/uninstall.class.php:931
 msgid "Item's location after applying model"
 msgstr "Model uygulandıktan sonra ögenin konumu"
 
@@ -161,54 +161,54 @@ msgstr "Ögenin değişikilği"
 msgid "Keep + Comment"
 msgstr "Koru ve açıklama yaz"
 
-#: inc/model.class.php:293 inc/model.class.php:1150
+#: inc/model.class.php:294 inc/model.class.php:1150
 msgid "Keep in the current group"
 msgstr "Geçerli grupta tut"
 
-#: ajax/locations.php:49 inc/preference.class.php:102
-#: inc/replace.class.php:674
+#: inc/preference.class.php:102 inc/replace.class.php:677
+#: ajax/locations.php:49
 msgid "Keep previous location"
 msgstr "Önceki konum korunsun"
 
-#: inc/uninstall.class.php:1036
+#: inc/uninstall.class.php:1048
 msgid "Lifecycle"
 msgstr "Yaşam döngüsü"
 
-#: inc/config.class.php:91
+#: inc/config.class.php:90
 msgid "Location preferences"
 msgstr "Konum ayarları"
 
-#: inc/model.class.php:332
+#: inc/model.class.php:333
 msgid "Manage templates"
 msgstr "Kalıp yönetimi"
 
-#: inc/model.class.php:309
+#: inc/model.class.php:310
 msgid "New group"
 msgstr "Yeni grup"
 
-#: inc/replace.class.php:781
+#: inc/replace.class.php:784
 msgid "New item"
 msgstr "Yeni öge"
 
-#: inc/replace.class.php:671
+#: inc/replace.class.php:674
 msgid "New location of item"
 msgstr "Ögenin yeni konumu"
 
-#: inc/model.class.php:280 inc/replace.class.php:688
+#: inc/replace.class.php:691 inc/model.class.php:281
 msgid "New status of the computer"
 msgstr "Bilgisayarın yeni durumu"
 
-#: inc/model.class.php:719
+#: inc/model.class.php:720
 msgid "OCSNG link"
 msgid_plural "OCSNG links"
 msgstr[0] "OCSNG bağlantısı"
 msgstr[1] "OCSNG bağlantısı"
 
-#: inc/replace.class.php:771
+#: inc/replace.class.php:774
 msgid "Old item"
 msgstr "Eski öge"
 
-#: inc/model.class.php:504 inc/replace.class.php:649
+#: inc/replace.class.php:652 inc/model.class.php:505
 msgid "Overwrite informations (from old item to the new)"
 msgstr "Üzerine yazılacak bilgiler (eski ögeden yeniye)"
 
@@ -220,15 +220,15 @@ msgstr "PDF arşivleme"
 msgid "Please wait, replacement is running..."
 msgstr "Lütfen bekleyin, değişiklik yapılıyor..."
 
-#: inc/uninstall.class.php:345
+#: inc/uninstall.class.php:344
 msgid "Please wait, uninstallation is running..."
 msgstr "Lütfen bekleyin kaldırma işlemi sürüyor..."
 
-#: inc/model.class.php:522
+#: inc/model.class.php:523
 msgid "Plugin PDF is installed and activated"
 msgstr "PDF eklentisi kuruldu ve etkinleştirildi"
 
-#: inc/model.class.php:526
+#: inc/model.class.php:527
 msgid ""
 "Plugin PDF is not installed, you won't be able to use PDF format for "
 "archiving"
@@ -238,32 +238,32 @@ msgstr "PDF eklentisi kurulmamış, arşivleme için PDF biçimi kullanılamaz"
 msgid "Purge"
 msgstr "Boşalt"
 
-#: inc/replace.class.php:632 inc/replace.class.php:710
+#: inc/replace.class.php:635 inc/replace.class.php:713
 msgid "Reminder of the replacement model"
 msgstr "Değişiklik modeli anımsatıcı"
 
-#: inc/replace.class.php:784
+#: inc/replace.class.php:787
 msgid "Remove"
 msgstr "Sil"
 
-#: inc/uninstall.class.php:786
+#: inc/uninstall.class.php:798
 msgid "Removed from OCSNG with ID"
 msgstr "OCSNG üzerinden kimlik ile kaldırıldı"
 
-#: inc/replace.class.php:830
+#: inc/replace.class.php:833
 msgid "Replace"
 msgstr "Değiştir"
 
-#: inc/config.class.php:99
+#: inc/config.class.php:98
 msgid "Replace status dropdown by plugin actions"
 msgstr "Durum açılan kutusu eklenti işlemlerine göre değiştirilsin"
 
-#: inc/model.class.php:123 inc/model.class.php:1142 inc/replace.class.php:67
-#: inc/replace.class.php:115
+#: inc/replace.class.php:67 inc/replace.class.php:116 inc/model.class.php:123
+#: inc/model.class.php:1142
 msgid "Replacement"
 msgstr "Değişiklik"
 
-#: front/action.php:64 inc/replace.class.php:541
+#: inc/replace.class.php:544 front/action.php:64
 msgid "Replacement successful"
 msgstr "Değiştirildi"
 
@@ -271,15 +271,15 @@ msgstr "Değiştirildi"
 msgid "Replacement then uninstallation"
 msgstr "Değiştirme ve ardından kaldırma"
 
-#: inc/model.class.php:198
+#: inc/model.class.php:200
 msgid "Replacing data"
 msgstr "Değişiklik bilgileri"
 
-#: inc/replace.class.php:462
+#: inc/replace.class.php:465
 msgid "See attached document"
 msgstr "Ekli belgeye bakın"
 
-#: inc/config.class.php:85
+#: inc/config.class.php:84
 msgid "Shortcuts"
 msgstr "Kısayollar"
 
@@ -287,39 +287,39 @@ msgstr "Kısayollar"
 msgid "The purge archiving method is not available for this model type"
 msgstr "Bu model türü için arşivi temizleme yöntemi yok"
 
-#: inc/model.class.php:722
+#: inc/model.class.php:723
 msgid "These options only apply to computers coming from OCSNG"
 msgstr ""
 "Bu ayarlar yalnız bilgileri OCSNG üzerinden alınan bilgisayarlara uygulanır"
 
-#: inc/replace.class.php:138
+#: inc/replace.class.php:140
 msgid "This document is the archive of this replaced item"
 msgstr "Bu belge, bu değiştirilmiş ögenin arşividir"
 
-#: inc/replace.class.php:578
+#: inc/replace.class.php:581
 msgid "This item is a replacement for item"
 msgstr "Bu öge şu ögenin yerine değiştirildi"
 
-#: inc/replace.class.php:580
+#: inc/replace.class.php:583
 msgid "This item was replaced by"
 msgstr "Bu öge şu kişi tarafından değiştirildi"
 
-#: inc/model.class.php:259 inc/model.class.php:945
+#: inc/model.class.php:260 inc/model.class.php:946
 msgid "Transfer's model to use"
 msgstr "Kullanılacak aktarım modeli"
 
-#: inc/model.class.php:250 inc/model.class.php:981
+#: inc/model.class.php:251 inc/model.class.php:982
 msgid "Type of template"
 msgstr "Kalıp türü"
 
-#: inc/uninstall.class.php:341 hook.php:44
+#: inc/uninstall.class.php:340 hook.php:44
 msgid "Uninstall"
 msgstr "Kaldır"
 
-#: inc/model.class.php:121 inc/model.class.php:344 inc/model.class.php:1140
+#: inc/model.class.php:121 inc/model.class.php:345 inc/model.class.php:1140
 msgid "Uninstallation"
 msgstr "Kaldırma"
 
-#: front/action.php:114 inc/uninstall.class.php:367
+#: inc/uninstall.class.php:366 front/action.php:114
 msgid "Uninstallation successful"
 msgstr "Kaldırıldı"
