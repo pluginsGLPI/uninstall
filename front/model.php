@@ -35,7 +35,7 @@ Html::header(
     '',
     "admin",
     "PluginUninstallModel",
-    "model"
+    "model",
 );
 
 if (Session::haveRight(PluginUninstallModel::$rightname, READ)) {

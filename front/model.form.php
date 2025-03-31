@@ -38,7 +38,7 @@ if (!isset($_GET["withtemplate"])) {
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
-} else if (isset($_POST["id"])) {
+} elseif (isset($_POST["id"])) {
     $id = $_POST["id"];
 } else {
     $id = -1;
@@ -50,11 +50,11 @@ if (isset($_POST["add"])) {
     $model->check(-1, UPDATE, $_POST);
     $model->add($_POST);
     Html::back();
-} else if (isset($_POST["update"])) {
+} elseif (isset($_POST["update"])) {
     $model->check($_POST['id'], UPDATE);
     $model->update($_POST);
     Html::back();
-} else if (isset($_POST['purge'])) {
+} elseif (isset($_POST['purge'])) {
     $model->check($_POST['id'], DELETE);
     $model->delete($_POST);
     $model->redirectToList();
@@ -64,7 +64,7 @@ if (isset($_POST["add"])) {
         $_SERVER['PHP_SELF'],
         "admin",
         "PluginUninstallModel",
-        "model"
+        "model",
     );
 
     if ($model->getFromDB($id)) {
@@ -72,7 +72,7 @@ if (isset($_POST["add"])) {
             if (
                 !Session::haveRight(
                     'uninstall:profile',
-                    PluginUninstallProfile::RIGHT_REPLACE
+                    PluginUninstallProfile::RIGHT_REPLACE,
                 )
             ) {
                 Html::displayRightError();
@@ -81,7 +81,7 @@ if (isset($_POST["add"])) {
     }
 
     $model->display(['id'           => $id,
-        'withtemplate' => $_GET["withtemplate"]
+        'withtemplate' => $_GET["withtemplate"],
     ]);
 
     Html::footer();

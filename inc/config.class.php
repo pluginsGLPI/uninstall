@@ -34,18 +34,18 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginUninstallConfig extends Config
 {
-    const CFG_CTXT = 'plugin:uninstall';
+    public const CFG_CTXT = 'plugin:uninstall';
 
     public static function getTypeName($nb = 0)
     {
         return __("Item's Lifecycle", 'uninstall');
     }
 
-   /**
-    * Return the current config of the plugin store in the glpi config table
-    *
-    * @return array config with keys => values
-    */
+    /**
+     * Return the current config of the plugin store in the glpi config table
+     *
+     * @return array config with keys => values
+     */
     public static function getConfig()
     {
         return Config::getConfigurationValues(self::CFG_CTXT);
@@ -107,7 +107,7 @@ class PluginUninstallConfig extends Config
             echo Html::hidden('config_context', ['value' => self::CFG_CTXT]);
             echo Html::submit(_sx('button', 'Save'), [
                 'name' => 'update',
-                'class' => 'vsubmit'
+                'class' => 'vsubmit',
             ]);
         }
 
@@ -116,17 +116,17 @@ class PluginUninstallConfig extends Config
     }
 
 
-   /**
-    * Database table installation for the item type
-    *
-    * @param Migration $migration
-    * @return boolean True on success
-    */
+    /**
+     * Database table installation for the item type
+     *
+     * @param Migration $migration
+     * @return boolean True on success
+     */
     public static function install(Migration $migration)
     {
         $current_config = self::getConfig();
 
-       // fill config table with default values if missing
+        // fill config table with default values if missing
         foreach (['replace_status_dropdown' => 0] as $key => $value) {
             if (!isset($current_config[$key])) {
                 Config::setConfigurationValues(self::CFG_CTXT, [$key => $value]);
@@ -136,11 +136,11 @@ class PluginUninstallConfig extends Config
         return true;
     }
 
-   /**
-    * Database table uninstallation for the item type
-    *
-    * @return boolean True on success
-    */
+    /**
+     * Database table uninstallation for the item type
+     *
+     * @return boolean True on success
+     */
     public static function uninstall()
     {
         $config = new Config();
@@ -149,12 +149,12 @@ class PluginUninstallConfig extends Config
         return true;
     }
 
-   /**
-    * Callback for Config `pre_item_add` hook.
-    *
-    * @param Config $config
-    * @return void
-    */
+    /**
+     * Callback for Config `pre_item_add` hook.
+     *
+     * @param Config $config
+     * @return void
+     */
     public static function preConfigSet(Config $config): void
     {
         if (
@@ -187,7 +187,7 @@ class PluginUninstallConfig extends Config
             'value' => $stale_agents_uninstall ?? 0,
             'entity' => $_SESSION['glpiactive_entity'],
             'condition' => [
-                'types_id' => \PluginUninstallModel::TYPE_MODEL_UNINSTALL
+                'types_id' => \PluginUninstallModel::TYPE_MODEL_UNINSTALL,
             ],
             'display' => false,
         ]);

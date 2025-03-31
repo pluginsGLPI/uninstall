@@ -30,14 +30,14 @@
 
 class PluginUninstallProfile extends Profile
 {
-    const RIGHT_REPLACE = 128;
+    public const RIGHT_REPLACE = 128;
 
-   /**
-    *
-    * Get rights matrix for plugin
-    *
-    * @return array rights matrix
-    */
+    /**
+     *
+     * Get rights matrix for plugin
+     *
+     * @return array rights matrix
+     */
     public function getGeneralRights()
     {
         $rights = [
@@ -47,8 +47,8 @@ class PluginUninstallProfile extends Profile
                 'field'     => "uninstall:profile",
                 'rights'    => [READ                => __('Read'),
                     UPDATE              => __('Write'),
-                    self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName()
-                ]
+                    self::RIGHT_REPLACE => PluginUninstallReplace::getTypeName(),
+                ],
             ],
         ];
         return $rights;
@@ -74,7 +74,7 @@ class PluginUninstallProfile extends Profile
 
         $rights = $this->getGeneralRights();
         $profile->displayRightsChoiceMatrix($rights, ['canedit'       => $canedit,
-            'default_class' => 'tab_bg_2'
+            'default_class' => 'tab_bg_2',
         ]);
         if ($canedit) {
             $options['candel'] = false;
@@ -89,16 +89,16 @@ class PluginUninstallProfile extends Profile
         self::addDefaultProfileInfos(
             $ID,
             ['uninstall:profile' => UPDATE | READ | self::RIGHT_REPLACE,
-                'plugin_uninstall_replace'         => 1
+                'plugin_uninstall_replace'         => 1,
             ],
-            true
+            true,
         );
     }
 
-   /**
-    * Init profiles
-    *
-    **/
+    /**
+     * Init profiles
+     *
+     **/
     public static function translateARight($old_right)
     {
         switch ($old_right) {
@@ -117,16 +117,16 @@ class PluginUninstallProfile extends Profile
         }
     }
 
-   /**
-    * @since 0.85
-    * Migration rights from old system to the new one for one profile
-    * @param $profiles_id the profile ID
-    */
+    /**
+     * @since 0.85
+     * Migration rights from old system to the new one for one profile
+     * @param $profiles_id the profile ID
+     */
     public static function migrateOneProfile($profiles_id)
     {
         /** @var DBmysql $DB */
         global $DB;
-       //Cannot launch migration if there's nothing to migrate...
+        //Cannot launch migration if there's nothing to migrate...
         if (!$DB->tableExists('glpi_plugin_uninstall_profiles')) {
             return true;
         }
@@ -134,7 +134,7 @@ class PluginUninstallProfile extends Profile
         foreach (
             $DB->request(
                 'glpi_plugin_uninstall_profiles',
-                "`id`='$profiles_id'"
+                "`id`='$profiles_id'",
             ) as $profile_data
         ) {
             $translatedRight = self::translateARight($profile_data["use"]);
@@ -143,25 +143,25 @@ class PluginUninstallProfile extends Profile
         }
     }
 
-   /**
-    * Initialize profiles, and migrate it necessary
-    */
+    /**
+     * Initialize profiles, and migrate it necessary
+     */
     public static function migrateAllProfiles()
     {
         /** @var DBmysql $DB */
         global $DB;
 
-       //Add new rights in glpi_profilerights table
+        //Add new rights in glpi_profilerights table
         foreach ([PluginUninstallProfile::$rightname] as $field) {
             if (!countElementsInTable("glpi_profilerights", ['name' => $field])) {
                 ProfileRight::addProfileRights([$field]);
             }
         }
 
-       //Migration old rights in new ones
+        //Migration old rights in new ones
         $profiles_it = $DB->request([
             'SELECT' => ['id'],
-            'FROM'   => 'glpi_profiles'
+            'FROM'   => 'glpi_profiles',
         ]);
         foreach ($profiles_it as $prof) {
             self::migrateOneProfile($prof['id']);
@@ -170,8 +170,8 @@ class PluginUninstallProfile extends Profile
             'FROM' => 'glpi_profilerights',
             'WHERE' => [
                 'profiles_id' => $_SESSION['glpiactiveprofile']['id'],
-                'name' => ['LIKE', '%plugin_uninstall%']
-            ]
+                'name' => ['LIKE', '%plugin_uninstall%'],
+            ],
         ]);
         foreach ($rights_it as $prof) {
             $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
@@ -196,7 +196,7 @@ class PluginUninstallProfile extends Profile
             if (
                 countElementsInTable(
                     'glpi_profilerights',
-                    ['profiles_id' => $profiles_id, 'name' => $right]
+                    ['profiles_id' => $profiles_id, 'name' => $right],
                 ) && $drop_existing
             ) {
                 $profileRight->deleteByCriteria(['profiles_id' => $profiles_id, 'name' => $right]);
@@ -204,7 +204,7 @@ class PluginUninstallProfile extends Profile
             if (
                 !countElementsInTable(
                     'glpi_profilerights',
-                    ['profiles_id' => $profiles_id, 'name' => $right]
+                    ['profiles_id' => $profiles_id, 'name' => $right],
                 )
             ) {
                 $myright['profiles_id'] = $profiles_id;
@@ -227,7 +227,7 @@ class PluginUninstallProfile extends Profile
 
             self::addDefaultProfileInfos(
                 $ID,
-                [PluginUninstallProfile::$rightname     => 0]
+                [PluginUninstallProfile::$rightname     => 0],
             );
             $prof->showForm($ID);
         }
@@ -243,35 +243,35 @@ class PluginUninstallProfile extends Profile
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
-       // From 0.2 to 1.0.0
+        // From 0.2 to 1.0.0
         $table = 'glpi_plugin_uninstallcomputer_profiles';
         if ($DB->tableExists($table)) {
             $migration->changeField($table, 'use', 'use', "char", ['value' => '0']);
             $migration->migrationOneTable($table);
 
             $DB->updateOrDie($table, [
-                'use' => 'r'
+                'use' => 'r',
             ], ['use' => '1'], "change value use (1 to r) for $table");
 
             $migration->renameTable($table, 'glpi_plugin_uninstall_profiles');
         }
 
         $table = 'glpi_plugin_uninstall_profiles';
-       // Plugin already installed
+        // Plugin already installed
         if ($DB->tableExists($table)) {
-           // From 1.0.0 to 1.3.0
+            // From 1.0.0 to 1.3.0
             if ($DB->fieldExists($table, 'ID')) {
                 $migration->changeField($table, 'ID', 'id', 'autoincrement');
                 $migration->changeField($table, 'use', 'use', "varchar(1) DEFAULT ''");
             }
 
-           // From 1.3.0 to 2.0.0
+            // From 1.3.0 to 2.0.0
             if (!$DB->fieldExists($table, 'replace')) {
                 $migration->addField($table, 'replace', "bool");
                 $migration->migrationOneTable($table);
-               // UPDATE replace access for current user
+                // UPDATE replace access for current user
                 $DB->update('glpi_plugin_uninstall_profiles', [
-                    'replace' => 1
+                    'replace' => 1,
                 ], ['id' => $_SESSION['glpiactiveprofile']['id']]);
             }
 
@@ -279,7 +279,7 @@ class PluginUninstallProfile extends Profile
 
             $migration->dropTable($table);
         } else {
-           // plugin never installed
+            // plugin never installed
             $query = "CREATE TABLE `" . $table . "` (
                     `id` int {$default_key_sign} NOT NULL DEFAULT '0',
                     `profile` varchar(255) NOT NULL DEFAULT '0',

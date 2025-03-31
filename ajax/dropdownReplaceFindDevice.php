@@ -65,11 +65,11 @@ if (isset($_REQUEST['displaywith'])) {
 
 $criteria = [
     'FROM' => $table,
-    'WHERE' => []
+    'WHERE' => [],
 ];
 
 if ($item->isEntityAssign()) {
-   // allow opening ticket on recursive object (printer, software, ...)
+    // allow opening ticket on recursive object (printer, software, ...)
     $criteria['WHERE'] = getEntitiesRestrictCriteria($table, '', $_SESSION['glpiactiveentities'], $item->maybeRecursive());
 }
 
@@ -92,8 +92,8 @@ if (
             'name' => ['LIKE', $search_val],
             'id' => ['LIKE', $search_val],
             'serial' => ['LIKE', $search_val],
-            'otherserial' => ['LIKE', $search_val]
-        ]
+            'otherserial' => ['LIKE', $search_val],
+        ],
     ];
 }
 
@@ -107,7 +107,7 @@ if (isset($_REQUEST['used'])) {
 
     if (count($used)) {
         $criteria['WHERE'][] = [
-            'NOT' => ["$table.id" => $used]
+            'NOT' => ["$table.id" => $used],
         ];
     }
 }
@@ -138,7 +138,7 @@ foreach ($it as $data) {
                 if (isForeignKeyField($key)) {
                     $withoutput = Dropdown::getDropdownName(
                         getTableNameForForeignKeyField($key),
-                        $data[$key]
+                        $data[$key],
                     );
                 }
                 if ((strlen($withoutput) > 0) && ($withoutput != '&nbsp;')) {
@@ -162,12 +162,12 @@ foreach ($it as $data) {
     }
     array_push($options, ['id'     => $ID,
         'text'  => $outputval,
-        'title' => $title
+        'title' => $title,
     ]);
     $count++;
 }
 
 
 echo json_encode(['results' => $options,
-    'count'    => $count
+    'count'    => $count,
 ]);
