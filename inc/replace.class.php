@@ -30,9 +30,9 @@
 
 class PluginUninstallReplace extends CommonDBTM
 {
-    const METHOD_PURGE              = 1;
-    const METHOD_DELETE_AND_COMMENT = 2;
-    const METHOD_KEEP_AND_COMMENT   = 3;
+    public const METHOD_PURGE              = 1;
+    public const METHOD_DELETE_AND_COMMENT = 2;
+    public const METHOD_KEEP_AND_COMMENT   = 3;
 
     public static $rightname = "uninstall:profile";
 
@@ -42,12 +42,12 @@ class PluginUninstallReplace extends CommonDBTM
     }
 
 
-   /**
-    * @param $type
-    * @param $model_id
-    * @param $tab_ids
-    * @param $location
-   **/
+    /**
+     * @param $type
+     * @param $model_id
+     * @param $tab_ids
+     * @param $location
+    **/
     public static function replace($type, $model_id, $tab_ids, $location)
     {
         /**
@@ -78,27 +78,27 @@ class PluginUninstallReplace extends CommonDBTM
             $newitem = new $type();
             $newitem->getFromDB($newitem_id);
 
-           //Hook to perform actions before item is being replaced
+            //Hook to perform actions before item is being replaced
             $olditem->fields['_newid'] = $newitem_id;
             $olditem->fields['_uninstall_event'] = $model_id;
             $olditem->fields['_action'] = 'replace';
             Plugin::doHook("plugin_uninstall_replace_before", $olditem);
 
-           // Retrieve information
+            // Retrieve information
 
-           //States
+            //States
             if ($model->fields['states_id'] != 0) {
                 $olditem->update(
                     [
                         'id'           => $olditem_id,
                         'is_dynamic'   => $olditem->getField('is_dynamic'), #to prevent locked field
-                        'states_id'    => $model->fields['states_id']
+                        'states_id'    => $model->fields['states_id'],
                     ],
-                    false
+                    false,
                 );
             }
 
-           // METHOD REPLACEMENT 1 : Archive
+            // METHOD REPLACEMENT 1 : Archive
             if ($model->fields['replace_method'] == self::METHOD_PURGE) {
                 $name_out = str_shuffle(Toolbox::getRandomString(5) . time());
 
@@ -112,7 +112,7 @@ class PluginUninstallReplace extends CommonDBTM
                     $out = $itempdf->generatePDF([$olditem_id], $tab, 1, false);
                     $name_out .= ".pdf";
                 } else {
-                   //TODO Which datas ? Add Defaults...
+                    //TODO Which datas ? Add Defaults...
                     $out = __('Replacement', 'uninstall') . "\r\n";
 
                     $datas = $olditem->fields;
@@ -127,20 +127,20 @@ class PluginUninstallReplace extends CommonDBTM
                         $out .= $v . ";";
                     }
 
-                   // USE CSV EXPORT
+                    // USE CSV EXPORT
                     $name_out .= ".csv";
                 }
 
-               // Write document
+                // Write document
                 $out_file  = GLPI_UPLOAD_DIR . "/" . $name_out;
                 $open_file = fopen($out_file, 'a');
                 fwrite($open_file, $out);
                 fclose($open_file);
-               // Compute comment text
+                // Compute comment text
                 $comment  = __('This document is the archive of this replaced item', 'uninstall') . " " .
                         self::getCommentsForReplacement($olditem, false, false);
 
-               // Create & Attach new document to current item
+                // Create & Attach new document to current item
                 $doc   = new Document();
                 $input = ['name'                  => addslashes(__('Archive of old material', 'uninstall')),
                     'upload_file'           => $name_out,
@@ -151,13 +151,13 @@ class PluginUninstallReplace extends CommonDBTM
                     'link'                  => "",
                     'documentcategories_id' => 0,
                     'items_id'              => $olditem_id,
-                    'itemtype'              => $type
+                    'itemtype'              => $type,
                 ];
 
-               //Attached the document to the old item, to generate an accurate name
+                //Attached the document to the old item, to generate an accurate name
                 $document_added = $doc->add($input);
 
-               //Attach the document to the new item, once the document's name is correct
+                //Attach the document to the new item, once the document's name is correct
 
                 $docItem = new Document_Item();
                 $docItemId = $docItem->add([
@@ -167,44 +167,44 @@ class PluginUninstallReplace extends CommonDBTM
                 ]);
             }
 
-           // General Information - NAME
+            // General Information - NAME
             if ($model->fields["replace_name"]) {
                 if ($overwrite || empty($newitem->fields['name'])) {
                     $newitem->update(
                         ['id'  => $newitem_id,
-                            'name' => $olditem->getField('name')
+                            'name' => $olditem->getField('name'),
                         ],
-                        false
+                        false,
                     );
                 }
             }
 
             $data['id'] = $newitem->getID();
-           // General Informations - SERIAL
+            // General Informations - SERIAL
             if ($model->fields["replace_serial"]) {
                 if ($overwrite || empty($newitem->fields['serial'])) {
                     $newitem->update(
                         ['id'     => $newitem_id,
-                            'serial' => $olditem->getField('serial')
+                            'serial' => $olditem->getField('serial'),
                         ],
-                        false
+                        false,
                     );
                 }
             }
 
-           // General Informations - OTHERSERIAL
+            // General Informations - OTHERSERIAL
             if ($model->fields["replace_otherserial"]) {
                 if ($overwrite || empty($newitem->fields['otherserial'])) {
                     $newitem->update(
                         ['id'          => $newitem_id,
-                            'otherserial' => $olditem->getField('otherserial')
+                            'otherserial' => $olditem->getField('otherserial'),
                         ],
-                        false
+                        false,
                     );
                 }
             }
 
-           // Documents
+            // Documents
             if (
                 $model->fields["replace_documents"]
                 && in_array($type, $CFG_GLPI["document_types"])
@@ -214,14 +214,14 @@ class PluginUninstallReplace extends CommonDBTM
                     $doc_item->update(
                         ['id'       => $document['assocID'],
                             'itemtype' => $type,
-                            'items_id' => $newitem_id
+                            'items_id' => $newitem_id,
                         ],
-                        false
+                        false,
                     );
                 }
             }
 
-           // Contracts
+            // Contracts
             if (
                 $model->fields["replace_contracts"]
                 && in_array($type, $CFG_GLPI["contract_types"])
@@ -232,21 +232,21 @@ class PluginUninstallReplace extends CommonDBTM
                         [
                             'id'       => $contract['id'],
                             'itemtype' => $type,
-                            'items_id' => $newitem_id
+                            'items_id' => $newitem_id,
                         ],
-                        false
+                        false,
                     );
                 }
             }
 
-           // Infocoms
+            // Infocoms
             if (
                 $model->fields["replace_infocoms"]
                 && in_array($type, $CFG_GLPI["infocom_types"])
             ) {
                 $infocom = new Infocom();
                 if ($overwrite) {
-                   // Delete current Infocoms of new item
+                    // Delete current Infocoms of new item
                     if ($infocom->getFromDBforDevice($type, $newitem_id)) {
                         //Do not log infocom deletion in the new item's history
                         $infocom->dohistory = false;
@@ -262,22 +262,22 @@ class PluginUninstallReplace extends CommonDBTM
                             [
                                 'id'       => $infocom->getID(),
                                 'itemtype' => $type,
-                                'items_id' => $newitem_id
+                                'items_id' => $newitem_id,
                             ],
-                            false
+                            false,
                         );
                     }
                 }
             }
 
-           // Reservations
+            // Reservations
             if (
                 $model->fields["replace_reservations"]
                 && in_array($type, $CFG_GLPI["reservation_types"])
             ) {
                 $resaitem = new ReservationItem();
                 if ($overwrite) {
-                   // Delete current reservation of new item
+                    // Delete current reservation of new item
                     $resa_new = new Reservation();
                     $resa_new->getFromDB($newitem_id);
 
@@ -291,7 +291,7 @@ class PluginUninstallReplace extends CommonDBTM
                     }
                 }
 
-               // Update old reservation for attribute to new item
+                // Update old reservation for attribute to new item
                 $resa_old = new Reservation();
                 $resa_old->getFromDB($olditem_id);
 
@@ -303,15 +303,15 @@ class PluginUninstallReplace extends CommonDBTM
                         $resa_old->update(
                             ['id'       => $resa_old->getID(),
                                 'itemtype' => $type,
-                                'items_id' => $newitem_id
+                                'items_id' => $newitem_id,
                             ],
-                            false
+                            false,
                         );
                     }
                 }
             }
 
-           // User
+            // User
             if (in_array($type, $CFG_GLPI["linkuser_types"])) {
                 $data        = [];
                 $data['id']  = $newitem->getID();
@@ -343,7 +343,7 @@ class PluginUninstallReplace extends CommonDBTM
                 $newitem->update($data, false);
             }
 
-           // Group
+            // Group
             if (
                 $model->fields["replace_groups"]
                 && in_array($type, $CFG_GLPI["linkgroup_types"])
@@ -354,14 +354,14 @@ class PluginUninstallReplace extends CommonDBTM
                 ) {
                     $newitem->update(
                         ['id'        => $newitem_id,
-                            'groups_id' => $olditem->getField('groups_id')
+                            'groups_id' => $olditem->getField('groups_id'),
                         ],
-                        false
+                        false,
                     );
                 }
             }
 
-           // Tickets
+            // Tickets
             if (
                 $model->fields["replace_tickets"]
                 && in_array($type, $CFG_GLPI["ticket_types"])
@@ -370,15 +370,15 @@ class PluginUninstallReplace extends CommonDBTM
                 foreach (self::getAssociatedTickets($type, $olditem_id) as $ticket) {
                     $ticket_item->update(
                         ['id'       => $ticket['id'],
-                            'items_id' => $newitem_id
+                            'items_id' => $newitem_id,
                         ],
-                        false
+                        false,
                     );
                 }
             }
 
             $networkport_types = $CFG_GLPI["networkport_types"];
-           // NetPorts
+            // NetPorts
             if (
                 $model->fields["replace_netports"]
                 && in_array($type, $networkport_types)
@@ -388,14 +388,14 @@ class PluginUninstallReplace extends CommonDBTM
                     $netport_item->update(
                         ['id'       => $netport['id'],
                             'itemtype' => $type,
-                            'items_id' => $newitem_id
+                            'items_id' => $newitem_id,
                         ],
-                        false
+                        false,
                     );
                 }
             }
 
-           // Directs connections
+            // Directs connections
             if (
                 $model->fields["replace_direct_connections"]
                 && (in_array($type, ['Computer']))
@@ -407,15 +407,15 @@ class PluginUninstallReplace extends CommonDBTM
                         $comp_item->update(
                             ['id'           => $connection['id'],
                                 'computers_id' => $newitem_id,
-                                'itemtype'     => $itemtype
+                                'itemtype'     => $itemtype,
                             ],
-                            false
+                            false,
                         );
                     }
                 }
             }
 
-           // Location
+            // Location
             if ($location != 0 && $olditem->isField('locations_id')) {
                 $olditem->getFromDB($olditem_id);
                 switch ($location) {
@@ -426,20 +426,20 @@ class PluginUninstallReplace extends CommonDBTM
                         $olditem->update(
                             ['id'           => $olditem_id,
                                 'is_dynamic'   => $olditem->getField('is_dynamic'), #to prevent locked field
-                                'locations_id' => $location
+                                'locations_id' => $location,
                             ],
-                            false
+                            false,
                         );
                         break;
                 }
             }
 
             if ($plug->isActivated('ocsinventoryng')) {
-               //Delete computer from OCS
+                //Delete computer from OCS
                 if ($model->fields["remove_from_ocs"] == 1) {
                     PluginUninstallUninstall::deleteComputerInOCSByGlpiID($olditem_id);
                 }
-               //Delete link in glpi_ocs_link
+                //Delete link in glpi_ocs_link
                 if ($model->fields["delete_ocs_link"] || $model->fields["remove_from_ocs"]) {
                     PluginUninstallUninstall::deleteOcsLink($olditem_id);
                 }
@@ -451,10 +451,10 @@ class PluginUninstallReplace extends CommonDBTM
                 }
             }
 
-           // METHOD REPLACEMENT 1 : Purge
+            // METHOD REPLACEMENT 1 : Purge
             switch ($model->fields['replace_method']) {
                 case self::METHOD_PURGE:
-                   // Retrieve, Compute && Update NEW comment field
+                    // Retrieve, Compute && Update NEW comment field
                     if (!empty($newitem->fields['comment'])) {
                         $comment = stripslashes($newitem->fields['comment']);
                     } else {
@@ -465,13 +465,13 @@ class PluginUninstallReplace extends CommonDBTM
                     $comment .= "\n- " . __('See attached document', 'uninstall');
                     $newitem->update(
                         ['id'      => $newitem_id,
-                            'comment' => addslashes($comment)
+                            'comment' => addslashes($comment),
                         ],
-                        false
+                        false,
                     );
 
-                   // If old item is attached in PDF/CSV
-                   // Delete AND Purge it in DB
+                    // If old item is attached in PDF/CSV
+                    // Delete AND Purge it in DB
                     if (isset($document_added) && $document_added) {
                         $olditem->delete(['id' => $olditem_id], true);
                     }
@@ -479,7 +479,7 @@ class PluginUninstallReplace extends CommonDBTM
 
                 case self::METHOD_DELETE_AND_COMMENT:
                 case self::METHOD_KEEP_AND_COMMENT:
-                   // Retrieve && Compute comment for newitem (with olditem)
+                    // Retrieve && Compute comment for newitem (with olditem)
                     if (!empty($newitem->fields['comment'])) {
                         $commentnew = stripslashes($newitem->fields['comment']);
                     } else {
@@ -487,7 +487,7 @@ class PluginUninstallReplace extends CommonDBTM
                     }
                     $commentnew .= self::getCommentsForReplacement($olditem, true);
 
-                   // Retrieve && Compute comment for olditem (with newitem)
+                    // Retrieve && Compute comment for olditem (with newitem)
                     if (!empty($olditem->getField('comment'))) {
                         $commentold = stripslashes($olditem->getField('comment'));
                     } else {
@@ -495,24 +495,24 @@ class PluginUninstallReplace extends CommonDBTM
                     }
                     $commentold .= self::getCommentsForReplacement($newitem, false);
 
-                   // Update comment for newitem
+                    // Update comment for newitem
                     $newitem->update(
                         ['id'      => $newitem_id,
-                            'comment' => Toolbox::addslashes_deep($commentnew)
+                            'comment' => Toolbox::addslashes_deep($commentnew),
                         ],
-                        false
+                        false,
                     );
 
-                   // Update comment for olditem
+                    // Update comment for olditem
                     $olditem->update(
                         ['id'           => $olditem_id,
                             'is_dynamic'   => $olditem->getField('is_dynamic'), #to prevent locked field
-                            'comment'      => Toolbox::addslashes_deep($commentold)
+                            'comment'      => Toolbox::addslashes_deep($commentold),
                         ],
-                        false
+                        false,
                     );
 
-                   // Delete OLD item from DB (not PURGE) only if delete is requested
+                    // Delete OLD item from DB (not PURGE) only if delete is requested
                     PluginUninstallUninstall::addUninstallLog([
                         'itemtype'  => $type,
                         'items_id'  => $olditem_id,
@@ -520,15 +520,15 @@ class PluginUninstallReplace extends CommonDBTM
                         'models_id' => $model_id,
                     ]);
                     if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
-                          $olditem->delete(['id' => $olditem_id], 0, false);
+                        $olditem->delete(['id' => $olditem_id], 0, false);
                     }
                     break;
             }
 
-           //Plugin hook after replacement
+            //Plugin hook after replacement
             Plugin::doHook("plugin_uninstall_replace_after", $olditem);
 
-           //Add history
+            //Add history
             PluginUninstallUninstall::addUninstallLog([
                 'itemtype'  => $type,
                 'items_id'  => $newitem_id,
@@ -541,7 +541,7 @@ class PluginUninstallReplace extends CommonDBTM
         Html::changeProgressBarPosition(
             $count,
             $tot,
-            __('Replacement successful', 'uninstall')
+            __('Replacement successful', 'uninstall'),
         );
 
         echo "</td></tr>";
@@ -556,21 +556,21 @@ class PluginUninstallReplace extends CommonDBTM
                 $type,
                 $model->getID(),
                 [$type => $uninstallArray],
-                $location
+                $location,
             );
         }
     }
 
 
-   /**
-    * Build the comments associated with an item
-    *
-    * @param $item            CommonDBTM object
-    * @param $new is          the item a new item (true) or the old one (false) (true by default)
-    * @param $display_message (true by default)
-    *
-    * @return string comments generated
-   **/
+    /**
+     * Build the comments associated with an item
+     *
+     * @param $item            CommonDBTM object
+     * @param $new is          the item a new item (true) or the old one (false) (true by default)
+     * @param $display_message (true by default)
+     *
+     * @return string comments generated
+    **/
     public static function getCommentsForReplacement(CommonDBTM $item, $new = true, $display_message = true)
     {
 
@@ -600,16 +600,16 @@ class PluginUninstallReplace extends CommonDBTM
             $string .= "\n " . sprintf(
                 __('%1$s: %2$s'),
                 __('Inventory number'),
-                $item->getField('otherserial')
+                $item->getField('otherserial'),
             );
         }
         return $string;
     }
 
 
-   /**
-    * @param $field
-   **/
+    /**
+     * @param $field
+    **/
     public static function coloredYN($field)
     {
 
@@ -621,8 +621,8 @@ class PluginUninstallReplace extends CommonDBTM
 
     public static function showReplacementForm($type, $model_id, $tab_ids, $location)
     {
-       // Retrieve model information and show details
-       // It's just for helping user!
+        // Retrieve model information and show details
+        // It's just for helping user!
         $model = new PluginUninstallModel();
         $model->getConfig($model_id);
 
@@ -633,7 +633,7 @@ class PluginUninstallReplace extends CommonDBTM
            "<th colspan='6'>" . sprintf(
                __('%1$s - %2$s'),
                __('Reminder of the replacement model', 'uninstall'),
-               __('General informations', 'uninstall')
+               __('General informations', 'uninstall'),
            ) .
            "</th></tr>";
 
@@ -703,7 +703,7 @@ class PluginUninstallReplace extends CommonDBTM
         echo "</table>";
         echo "</div>";
 
-       // CONNEXIONS with other items
+        // CONNEXIONS with other items
         echo "<div class='firstbloc'>";
         echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
@@ -711,7 +711,7 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<th colspan='4'>" . sprintf(
             __('%1$s - %2$s'),
             __('Reminder of the replacement model', 'uninstall'),
-            __('Connections with other materials', 'uninstall')
+            __('Connections with other materials', 'uninstall'),
         ) .
            "</th></tr>";
 
@@ -726,7 +726,7 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<td>" . sprintf(
             __('%1$s %2$s'),
             __('Copy'),
-            __('Financial and administratives information')
+            __('Financial and administratives information'),
         ) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_infocoms"]) . "</td>";
         echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2)) . "</td>";
@@ -749,8 +749,8 @@ class PluginUninstallReplace extends CommonDBTM
             sprintf(
                 __('%1$s %2$s'),
                 _n('Connection', 'Connections', 2),
-                _n('Network', 'Networks', 2)
-            )
+                _n('Network', 'Networks', 2),
+            ),
         ) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_netports"]) . "</td>";
         echo "</tr>";
@@ -761,14 +761,14 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<td colspan='2'></td>";
         echo "</tr></table></div>";
 
-       // Show form for selecting new items
+        // Show form for selecting new items
 
         echo "<form action='../front/action.php' method='post'>";
         echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
         echo "<tr class='tab_bg_1 center'>";
         count($tab_ids[$type]) > 1 ? $colspan = 5 : $colspan = 4;
-        echo "<th colspan='"  . $colspan . "'>" . __('Choices for item to replace', 'uninstall') . "</th></tr>";
+        echo "<th colspan='" . $colspan . "'>" . __('Choices for item to replace', 'uninstall') . "</th></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
         echo "<th>" . __('Old item', 'uninstall') . "</th>";
@@ -809,7 +809,7 @@ class PluginUninstallReplace extends CommonDBTM
                 'name'        => "newItems[$id]",
                 'displaywith' => ['serial', 'otherserial'],
                 'url'         => Plugin::getWebDir('uninstall') . "/ajax/dropdownReplaceFindDevice.php",
-                'used'        => array_keys($tab_ids[$type])
+                'used'        => array_keys($tab_ids[$type]),
             ]);
             echo "</td>";
 
@@ -838,12 +838,12 @@ class PluginUninstallReplace extends CommonDBTM
         Html::closeForm();
     }
 
-   /**
-    * Get documents associated to an item
-    *
-    * @param $item            CommonDBTM object for which associated documents must be displayed
-    * @param $withtemplate    (default '')
-   **/
+    /**
+     * Get documents associated to an item
+     *
+     * @param $item            CommonDBTM object for which associated documents must be displayed
+     * @param $withtemplate    (default '')
+    **/
     public static function getAssociatedDocuments(CommonDBTM $item, $withtemplate = '')
     {
         /**
@@ -883,20 +883,20 @@ class PluginUninstallReplace extends CommonDBTM
                 'glpi_documents' => [
                     'ON' => [
                         'glpi_documents_items' => 'documents_id',
-                        'glpi_documents' => 'id'
-                    ]
+                        'glpi_documents' => 'id',
+                    ],
                 ],
                 'glpi_entities' => [
                     'ON' => [
                         'glpi_documents' => 'entities_id',
-                        'glpi_entities' => 'id'
-                    ]
-                ]
+                        'glpi_entities' => 'id',
+                    ],
+                ],
             ],
             'WHERE' => [
                 'glpi_documents_items.items_id' => $item->getField('id'),
-                'glpi_documents_items.itemtype' => $item->getType()
-            ]
+                'glpi_documents_items.itemtype' => $item->getType(),
+            ],
         ];
 
         if (Session::getLoginUserID()) {
@@ -914,13 +914,13 @@ class PluginUninstallReplace extends CommonDBTM
     }
 
 
-   /**
-    * Get contracts associated to an item
-    *
-    * @param $item            CommonDBTM : object wanted
-    *
-    * @return array
-   **/
+    /**
+     * Get contracts associated to an item
+     *
+     * @param $item            CommonDBTM : object wanted
+     *
+     * @return array
+    **/
     public static function getAssociatedContracts(CommonDBTM $item)
     {
         /** @var DBmysql $DB */
@@ -939,20 +939,20 @@ class PluginUninstallReplace extends CommonDBTM
                 'glpi_contracts' => [
                     'ON' => [
                         'glpi_contracts_items' => 'contracts_id',
-                        'glpi_contracts' => 'id'
-                    ]
+                        'glpi_contracts' => 'id',
+                    ],
                 ],
                 'glpi_entities' => [
                     'ON' => [
                         'glpi_contracts' => 'entities_id',
-                        'glpi_entities' => 'id'
-                    ]
-                ]
+                        'glpi_entities' => 'id',
+                    ],
+                ],
             ],
             'WHERE' => [
                 'glpi_contracts_items.items_id' => $item->getField('id'),
                 'glpi_contracts_items.itemtype' => $item->getType(),
-            ] + getEntitiesRestrictCriteria('glpi_contracts', '', '', true)
+            ] + getEntitiesRestrictCriteria('glpi_contracts', '', '', true),
         ];
         $it = $DB->request($criteria);
         foreach ($it as $data) {
@@ -963,14 +963,14 @@ class PluginUninstallReplace extends CommonDBTM
     }
 
 
-   /**
-   * Get tickets for an item
-    *
-    * @param $itemtype
-    * @param $items_id
-    *
-    * @return array
-   **/
+    /**
+    * Get tickets for an item
+     *
+     * @param $itemtype
+     * @param $items_id
+     *
+     * @return array
+    **/
     public static function getAssociatedTickets($itemtype, $items_id)
     {
         /** @var DBmysql $DB */
@@ -993,7 +993,7 @@ class PluginUninstallReplace extends CommonDBTM
             'WHERE' => [
                 'itemtype' => $itemtype,
                 'items_id' => $items_id,
-            ] + getEntitiesRestrictCriteria('glpi_tickets')
+            ] + getEntitiesRestrictCriteria('glpi_tickets'),
         ]);
         foreach ($it as $data) {
             $tickets[] = $data;
@@ -1002,12 +1002,12 @@ class PluginUninstallReplace extends CommonDBTM
     }
 
 
-   /**
-    * Get ports for an item
-    *
-    * @param $itemtype     integer  item type
-    * @param $ID           integer  item ID
-   **/
+    /**
+     * Get ports for an item
+     *
+     * @param $itemtype     integer  item type
+     * @param $ID           integer  item ID
+    **/
     public static function getAssociatedNetports($itemtype, $ID)
     {
         /** @var DBmysql $DB */
@@ -1027,7 +1027,7 @@ class PluginUninstallReplace extends CommonDBTM
             'WHERE' => [
                 'itemtype' => $itemtype,
                 'items_id' => $ID,
-            ]
+            ],
         ]);
         foreach ($it as $data) {
             $netports[] = $data;
@@ -1036,13 +1036,13 @@ class PluginUninstallReplace extends CommonDBTM
     }
 
 
-   /**
-    * Get local connection for computer
-    *
-    * @param $comp Computer object
-    *
-    * @return array
-   **/
+    /**
+     * Get local connection for computer
+     *
+     * @param $comp Computer object
+     *
+     * @return array
+    **/
     public static function getAssociatedItems(Computer $comp)
     {
         /** @var array $UNINSTALL_DIRECT_CONNECTIONS_TYPE */
@@ -1056,10 +1056,10 @@ class PluginUninstallReplace extends CommonDBTM
             if ($item->canView()) {
                 $datas = getAllDataFromTable(
                     'glpi_computers_items',
-                    ['computers_id' => $ID, 'itemtype' => $itemtype]
+                    ['computers_id' => $ID, 'itemtype' => $itemtype],
                 );
                 foreach ($datas as $computer_item) {
-                     $data[$itemtype][] = $computer_item;
+                    $data[$itemtype][] = $computer_item;
                 }
             }
         }
@@ -1067,11 +1067,11 @@ class PluginUninstallReplace extends CommonDBTM
         return $data;
     }
 
-   /**
-   * Get tabs to export in PDF, as defined in user's preferences
-   * @param $itemtype itemtype to export in PDF
-   * @return array of tabs to export
-   */
+    /**
+    * Get tabs to export in PDF, as defined in user's preferences
+    * @param $itemtype itemtype to export in PDF
+    * @return array of tabs to export
+    */
     public static function getPdfUserPreference($item)
     {
         /** @var DBmysql $DB */
@@ -1081,14 +1081,14 @@ class PluginUninstallReplace extends CommonDBTM
             'FROM' => 'glpi_plugin_pdf_preferences',
             'WHERE' => [
                 'users_ID' => $_SESSION['glpiID'],
-                'itemtype' => $item->getType()
-            ]
+                'itemtype' => $item->getType(),
+            ],
         ]);
         if (!count($iterator)) {
-           //Get all item's tabs
+            //Get all item's tabs
             $tab = array_keys($item->defineTabs());
 
-           //Tell PDF to also export item's main tab, and in first position
+            //Tell PDF to also export item's main tab, and in first position
             array_unshift($tab, "_main_");
 
             return $tab;

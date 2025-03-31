@@ -56,13 +56,13 @@ class PluginUninstallState
             'complete' => true,
         ]);
 
-       // get form for uninstall actions
+        // get form for uninstall actions
         ob_start();
         PluginUninstallUninstall::showFormUninstallation($items_id, $item, $users_id);
         $html_modal = ob_get_contents();
         ob_end_clean();
 
-       // we json encore to pass it to js (auto-escaping)
+        // we json encore to pass it to js (auto-escaping)
         $html = json_encode("
          $states_name
          <a href='#' id='uninstall_actions_open' class='vsubmit'>" .

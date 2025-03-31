@@ -35,7 +35,7 @@ function plugin_uninstall_MassiveActions($type)
     /** @var array $UNINSTALL_TYPES */
     global $UNINSTALL_TYPES;
 
-   // Like GLPI 0.84, this plugin don't support massive actions in Global item page.
+    // Like GLPI 0.84, this plugin don't support massive actions in Global item page.
     if (isset($_REQUEST['container']) && $_REQUEST['container'] == 'massformAllAssets') {
         return [];
     }
@@ -69,7 +69,7 @@ function plugin_uninstall_install()
     $plugin_infos = plugin_version_uninstall();
     $migration    = new Migration($plugin_infos['version']);
 
-   //Plugin classes are not loaded when plugin is not activated : force class loading
+    //Plugin classes are not loaded when plugin is not activated : force class loading
     require_once($dir . "/inc/uninstall.class.php");
     require_once($dir . "/inc/profile.class.php");
     require_once($dir . "/inc/preference.class.php");

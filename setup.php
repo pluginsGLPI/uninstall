@@ -58,16 +58,16 @@ function plugin_init_uninstall()
     if ($plugin->isActivated('uninstall')) {
         $UNINSTALL_TYPES                    = ['Computer', 'Monitor',
             'NetworkEquipment',
-            'Peripheral', 'Phone', 'Printer'
+            'Peripheral', 'Phone', 'Printer',
         ];
         $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = ['Monitor', 'Peripheral', 'Phone',
-            'Printer'
+            'Printer',
         ];
 
         if (Session::getLoginUserID()) {
-           // config page
+            // config page
             Plugin::registerClass('PluginUninstallConfig', [
-                'addtabon' => 'Config'
+                'addtabon' => 'Config',
             ]);
             $PLUGIN_HOOKS['config_page']['uninstall'] = 'front/config.form.php';
             $uninstallconfig = PluginUninstallConfig::getConfig();
@@ -77,23 +77,23 @@ function plugin_init_uninstall()
             ];
 
             if ($uninstallconfig['replace_status_dropdown']) {
-               // replace item state by uninstall list
+                // replace item state by uninstall list
                 $PLUGIN_HOOKS['post_item_form']['uninstall'] = [
-                    'PluginUninstallState', 'replaceState'
+                    'PluginUninstallState', 'replaceState',
                 ];
             } else {
-               // add tabs to items
+                // add tabs to items
                 foreach ($UNINSTALL_TYPES as $type) {
                     Plugin::registerClass('PluginUninstallUninstall', [
-                        'addtabon' => $type
+                        'addtabon' => $type,
                     ]);
                 }
             }
 
-           // As config update is submitted using the `context` inventory, it will always be considered as "new" and will
-           // be processed by an `add` operation.
+            // As config update is submitted using the `context` inventory, it will always be considered as "new" and will
+            // be processed by an `add` operation.
             $PLUGIN_HOOKS['pre_item_add']['uninstall'] = [
-                'Config' => ['PluginUninstallConfig', 'preConfigSet']
+                'Config' => ['PluginUninstallConfig', 'preConfigSet'],
             ];
 
             $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
@@ -108,26 +108,26 @@ function plugin_init_uninstall()
                         }
                         \PluginUninstallUninstall::doStaleAgentUninstall($item);
                         return true;
-                    }
-                ]
+                    },
+                ],
             ];
 
             if (Session::haveRight('uninstall:profile', READ)) {
                 $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
 
                 if (Session::haveRight('uninstall:profile', UPDATE)) {
-                   // Add link in GLPI plugins list :
+                    // Add link in GLPI plugins list :
                     $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = ['admin' => 'PluginUninstallModel'];
                 }
 
-               //Item actions
+                //Item actions
                 $PLUGIN_HOOKS['item_update']['uninstall']
                 = ['PluginUninstallModel'
-                  => ['PluginUninstallPreference', 'afterUpdateModel']
+                  => ['PluginUninstallPreference', 'afterUpdateModel'],
                 ];
                 $PLUGIN_HOOKS['item_delete']['uninstall']
                 = ['PluginUninstallModel'
-                  => ['PluginUninstallPreference', 'beforeItemPurge']
+                  => ['PluginUninstallPreference', 'beforeItemPurge'],
                 ];
 
                 $PLUGIN_HOOKS['pre_item_purge']['uninstall']
@@ -151,7 +151,7 @@ function plugin_version_uninstall()
                 'min' => PLUGIN_UNINSTALL_MIN_GLPI,
                 'max' => PLUGIN_UNINSTALL_MAX_GLPI,
                 'dev' => true, //Required to allow 9.2-dev
-            ]
-        ]
+            ],
+        ],
     ];
 }
