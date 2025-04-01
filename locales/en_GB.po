@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-12 01:35+0000\n"
-"PO-Revision-Date: 2025-03-12 01:35+0000\n"
+"POT-Creation-Date: 2025-04-01 01:49+0000\n"
+"PO-Revision-Date: 2025-04-01 01:49+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -221,14 +221,6 @@ msgstr "Please wait, uninstallation is running..."
 msgid "Plugin PDF is installed and activated"
 msgstr "Plugin PDF is installed and activated"
 
-#: inc/model.class.php:527
-msgid ""
-"Plugin PDF is not installed, you won't be able to use PDF format for "
-"archiving"
-msgstr ""
-"Plugin PDF is not installed, you won't be able to use PDF format for "
-"archiving"
-
 #: inc/model.class.php:143
 msgid "Purge"
 msgstr "Purge"
@@ -281,10 +273,6 @@ msgstr "Shortcuts"
 #: inc/model.class.php:95
 msgid "The purge archiving method is not available for this model type"
 msgstr "The purge archiving method is not available for this model type"
-
-#: inc/model.class.php:723
-msgid "These options only apply to computers coming from OCSNG"
-msgstr "These options only apply to computers coming from OCSNG"
 
 #: inc/replace.class.php:140
 msgid "This document is the archive of this replaced item"

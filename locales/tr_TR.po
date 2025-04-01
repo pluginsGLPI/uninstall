@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-27 01:26+0000\n"
+"POT-Creation-Date: 2025-04-01 01:49+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2024\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/teclib/teams/28042/tr_TR/)\n"
@@ -228,12 +228,6 @@ msgstr "Lütfen bekleyin kaldırma işlemi sürüyor..."
 msgid "Plugin PDF is installed and activated"
 msgstr "PDF eklentisi kuruldu ve etkinleştirildi"
 
-#: inc/model.class.php:527
-msgid ""
-"Plugin PDF is not installed, you won't be able to use PDF format for "
-"archiving"
-msgstr "PDF eklentisi kurulmamış, arşivleme için PDF biçimi kullanılamaz"
-
 #: inc/model.class.php:143
 msgid "Purge"
 msgstr "Boşalt"
@@ -286,11 +280,6 @@ msgstr "Kısayollar"
 #: inc/model.class.php:95
 msgid "The purge archiving method is not available for this model type"
 msgstr "Bu model türü için arşivi temizleme yöntemi yok"
-
-#: inc/model.class.php:723
-msgid "These options only apply to computers coming from OCSNG"
-msgstr ""
-"Bu ayarlar yalnız bilgileri OCSNG üzerinden alınan bilgisayarlara uygulanır"
 
 #: inc/replace.class.php:140
 msgid "This document is the archive of this replaced item"

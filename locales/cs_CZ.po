@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-27 01:26+0000\n"
+"POT-Creation-Date: 2025-04-01 01:49+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: David Stepan <stepand@tiscali.cz>, 2024\n"
 "Language-Team: Czech (Czech Republic) (https://app.transifex.com/teclib/teams/28042/cs_CZ/)\n"
@@ -231,14 +231,6 @@ msgstr "Čekejte, probíhá odinstalace…"
 msgid "Plugin PDF is installed and activated"
 msgstr "Zásuvný modul pro PDF je nainstalovaný a zapnutý"
 
-#: inc/model.class.php:527
-msgid ""
-"Plugin PDF is not installed, you won't be able to use PDF format for "
-"archiving"
-msgstr ""
-"Zásuvný modul pro PDF není nainstalován, proto nebude možné pro archivaci "
-"použít PDF formát"
-
 #: inc/model.class.php:143
 msgid "Purge"
 msgstr "Trvale smazat"
@@ -291,10 +283,6 @@ msgstr "Zkratky"
 #: inc/model.class.php:95
 msgid "The purge archiving method is not available for this model type"
 msgstr ""
-
-#: inc/model.class.php:723
-msgid "These options only apply to computers coming from OCSNG"
-msgstr "Tyto volby jsou uplatněny pouze na počítače pocházející z OCSNG"
 
 #: inc/replace.class.php:140
 msgid "This document is the archive of this replaced item"
