@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-27 01:26+0000\n"
+"POT-Creation-Date: 2025-04-01 01:49+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020\n"
 "Language-Team: Korean (Korea) (https://app.transifex.com/teclib/teams/28042/ko_KR/)\n"
@@ -226,12 +226,6 @@ msgstr "기다리세요, 제거 중입니다..."
 msgid "Plugin PDF is installed and activated"
 msgstr "플러그인 PDF가 설치되어 활성화 되었습니다"
 
-#: inc/model.class.php:527
-msgid ""
-"Plugin PDF is not installed, you won't be able to use PDF format for "
-"archiving"
-msgstr "플러그인 PDF가 설치되지 않았기에, 보관용 PDF 형식을 사용할 수 없습니다"
-
 #: inc/model.class.php:143
 msgid "Purge"
 msgstr "제거"
@@ -284,10 +278,6 @@ msgstr "바로가기"
 #: inc/model.class.php:95
 msgid "The purge archiving method is not available for this model type"
 msgstr ""
-
-#: inc/model.class.php:723
-msgid "These options only apply to computers coming from OCSNG"
-msgstr "이 옵션들은 OCSNG에서 가져온 컴퓨터들에만 적용됩니다"
 
 #: inc/replace.class.php:140
 msgid "This document is the archive of this replaced item"

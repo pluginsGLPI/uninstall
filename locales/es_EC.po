@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-27 01:26+0000\n"
+"POT-Creation-Date: 2025-04-01 01:49+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Soporte Infraestructura Standby, 2023\n"
 "Language-Team: Spanish (Ecuador) (https://app.transifex.com/teclib/teams/28042/es_EC/)\n"
@@ -230,14 +230,6 @@ msgstr "Por favor espere, la desinstalación se está ejecutando..."
 msgid "Plugin PDF is installed and activated"
 msgstr "Complemento PDF instalado y activado"
 
-#: inc/model.class.php:527
-msgid ""
-"Plugin PDF is not installed, you won't be able to use PDF format for "
-"archiving"
-msgstr ""
-"Si el complemento PDF no está instalado, no podrá utilizar el formato PDF "
-"para archivar"
-
 #: inc/model.class.php:143
 msgid "Purge"
 msgstr "Depurar"
@@ -291,11 +283,6 @@ msgstr "Accesos directos"
 #: inc/model.class.php:95
 msgid "The purge archiving method is not available for this model type"
 msgstr ""
-
-#: inc/model.class.php:723
-msgid "These options only apply to computers coming from OCSNG"
-msgstr ""
-"Estas opciones sólo se aplican a los computadores procedentes de OCSNG"
 
 #: inc/replace.class.php:140
 msgid "This document is the archive of this replaced item"
