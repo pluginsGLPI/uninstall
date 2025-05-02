@@ -30,6 +30,8 @@
 
 include('../../../inc/includes.php');
 
+Session::checkLoginUser();
+
 // Save user preferences
 if (isset($_POST['update_user_preferences_uninstall'])) {
     $pref = new PluginUninstallPreference();

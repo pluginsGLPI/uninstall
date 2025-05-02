@@ -38,7 +38,7 @@ Html::header(
     "model",
 );
 
-if (Session::haveRight(PluginUninstallModel::$rightname, READ)) {
+if (Session::checkRight(PluginUninstallModel::$rightname, READ)) {
     Search::show("PluginUninstallModel");
 } else {
     Html::displayRightError();
