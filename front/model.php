@@ -30,6 +30,8 @@
 
 include('../../../inc/includes.php');
 
+Session::checkRight(PluginUninstallModel::$rightname, READ);
+
 Html::header(
     PluginUninstallModel::getTypeName(Session::getPluralNumber()),
     '',
@@ -38,9 +40,5 @@ Html::header(
     "model",
 );
 
-if (Session::checkRight(PluginUninstallModel::$rightname, READ)) {
-    Search::show("PluginUninstallModel");
-} else {
-    Html::displayRightError();
-}
+Search::show("PluginUninstallModel");
 Html::footer();
