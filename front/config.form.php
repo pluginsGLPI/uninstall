@@ -30,7 +30,7 @@
 
 include("../../../inc/includes.php");
 
-Session::checkLoginUser();
+Session::checkRight('config', UPDATE);
 
 /** @var array $CFG_GLPI */
 Html::redirect($CFG_GLPI["root_doc"] . "/front/config.form.php?forcetab=PluginUninstallConfig\$1");

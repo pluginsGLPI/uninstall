@@ -30,7 +30,7 @@
 
 include('../../../inc/includes.php');
 
-Session::checkLoginUser();
+Session::checkRight(PluginUninstallPreference::$rightname, UPDATE);
 
 // Save user preferences
 if (isset($_POST['update_user_preferences_uninstall'])) {
