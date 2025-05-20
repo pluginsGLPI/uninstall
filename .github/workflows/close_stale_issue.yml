@@ -5,7 +5,7 @@ on:
 
 jobs:
   stale:
-    if: github.repository == 'glpi-plugin/uninstall'
+    if: github.repository == 'pluginsGLPI/uninstall'
     permissions:
       issues: write  # for actions/stale to close stale issues
     runs-on: ubuntu-latest
