@@ -990,6 +990,14 @@ class PluginUninstallReplace extends CommonDBTM
         $tickets = [];
         $it = $DB->request([
             'FROM' => 'glpi_items_tickets',
+            'JOIN'  => [
+                'glpi_tickets' => [
+                    'ON' => [
+                        'glpi_tickets' => 'id',
+                        'glpi_items_tickets' => 'ticket_id',
+                    ],
+                ],
+            ],
             'WHERE' => [
                 'itemtype' => $itemtype,
                 'items_id' => $items_id,
