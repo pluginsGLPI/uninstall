@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [UNRELEASE]
+
+### Fixed
+- Fix SQL error during replace tickets
+
 ## [2.9.3] - 2025-04-01
 
 ### Fixed
