@@ -177,4 +177,3 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
 } else {
     throw new BadRequestHttpException();
 }
-
