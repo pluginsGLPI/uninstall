@@ -28,6 +28,37 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Api\Deprecated\Computer_Item;
+use Glpi\Asset\Asset_PeripheralAsset;
+
+/**
+ * -------------------------------------------------------------------------
+ * Uninstall plugin for GLPI
+ * -------------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of Uninstall.
+ *
+ * Uninstall is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Uninstall is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Uninstall. If not, see <http://www.gnu.org/licenses/>.
+ * -------------------------------------------------------------------------
+ * @copyright Copyright (C) 2015-2023 by Teclib'.
+ * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ * @link      https://github.com/pluginsGLPI/uninstall
+ * -------------------------------------------------------------------------
+ */
+
 class PluginUninstallReplace extends CommonDBTM
 {
     public const METHOD_PURGE              = 1;
@@ -68,10 +99,17 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<tr class='tab_bg_2'><td>";
         $count = 0;
         $tot   = count($tab_ids);
+
+        /** @phpstan-ignore-next-line */
         Html::createProgressBar(__('Please wait, replacement is running...', 'uninstall'));
 
         foreach ($tab_ids as $olditem_id => $newitem_id) {
             $count++;
+
+            if (!class_exists($type) || !is_a($type, CommonDBTM::class, true)) {
+                continue;
+            }
+
             $olditem = new $type();
             $olditem->getFromDB($olditem_id);
 
@@ -107,10 +145,14 @@ class PluginUninstallReplace extends CommonDBTM
                     $plug->load('pdf', true);
 
                     $tab = self::getPdfUserPreference($olditem);
-                    $itempdf = new $PLUGIN_HOOKS['plugin_pdf'][$type]($olditem);
 
-                    $out = $itempdf->generatePDF([$olditem_id], $tab, 1, false);
+                    $out = "";
+                    if (class_exists(PluginPdfCommon::class) && is_a($PLUGIN_HOOKS['plugin_pdf'][$type], PluginPdfCommon::class, true)) {
+                        $itempdf = new $PLUGIN_HOOKS['plugin_pdf'][$type]($olditem);
+                        $out = $itempdf->generatePDF([$olditem_id], $tab, 1, false);
+                    }
                     $name_out .= ".pdf";
+
                 } else {
                     //TODO Which datas ? Add Defaults...
                     $out = __('Replacement', 'uninstall') . "\r\n";
@@ -364,7 +406,7 @@ class PluginUninstallReplace extends CommonDBTM
             ) {
                 if (
                     $newitem->isField('groups_id')
-                    && ($overwrite || empty($newitem->isField('groups_id')))
+                    && ($overwrite || empty($newitem->fields['groups_id']))
                 ) {
                     $newitem->update(
                         ['id'        => $newitem_id,
@@ -415,22 +457,25 @@ class PluginUninstallReplace extends CommonDBTM
                 && (in_array($type, ['Computer']))
                 && $newitem_id
             ) { #do not update computer_item if no computer
-                $comp_item = new Computer_Item();
-                foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
-                    foreach ($connections as $connection) {
-                        $comp_item->update(
-                            ['id'           => $connection['id'],
-                                'computers_id' => $newitem_id,
-                                'itemtype'     => $itemtype,
-                            ],
-                            false,
-                        );
+                $comp_item = new Asset_PeripheralAsset();
+                if (is_a($olditem, Computer::class, true)) {
+                    foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
+                        foreach ($connections as $connection) {
+                            $comp_item->update(
+                                ['id'           => $connection['id'],
+                                    'computers_id' => $newitem_id,
+                                    'itemtype'     => $itemtype,
+                                ],
+                                false,
+                            );
+                        }
                     }
                 }
+
             }
 
             // Location
-            if ($location != 0 && $olditem->isField('locations_id')) {
+            if ((int) $location != 0 && $olditem->isField('locations_id')) {
                 $olditem->getFromDB($olditem_id);
                 switch ($location) {
                     case -1:
@@ -440,7 +485,7 @@ class PluginUninstallReplace extends CommonDBTM
                         $olditem->update(
                             ['id'           => $olditem_id,
                                 'is_dynamic'   => $olditem->getField('is_dynamic'), #to prevent locked field
-                                'locations_id' => $location,
+                                'locations_id' => (int) $location,
                             ],
                             false,
                         );
@@ -512,7 +557,7 @@ class PluginUninstallReplace extends CommonDBTM
                     // Update comment for newitem
                     $newitem->update(
                         ['id'      => $newitem_id,
-                            'comment' => Toolbox::addslashes_deep($commentnew),
+                            'comment' => $commentnew,
                         ],
                         false,
                     );
@@ -521,7 +566,7 @@ class PluginUninstallReplace extends CommonDBTM
                     $olditem->update(
                         ['id'           => $olditem_id,
                             'is_dynamic'   => $olditem->getField('is_dynamic'), #to prevent locked field
-                            'comment'      => Toolbox::addslashes_deep($commentold),
+                            'comment'      => $commentold,
                         ],
                         false,
                     );
@@ -534,7 +579,7 @@ class PluginUninstallReplace extends CommonDBTM
                         'models_id' => $model_id,
                     ]);
                     if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
-                        $olditem->delete(['id' => $olditem_id], 0, false);
+                        $olditem->delete(['id' => $olditem_id], false, false);
                     }
                     break;
             }
@@ -549,9 +594,11 @@ class PluginUninstallReplace extends CommonDBTM
                 'action'    => 'replace',
                 'models_id' => $model_id,
             ]);
+            /** @phpstan-ignore-next-line */
             Html::changeProgressBarPosition($count, $tot + 1);
         }
 
+        /** @phpstan-ignore-next-line */
         Html::changeProgressBarPosition(
             $count,
             $tot,
@@ -635,6 +682,11 @@ class PluginUninstallReplace extends CommonDBTM
 
     public static function showReplacementForm($type, $model_id, $tab_ids, $location)
     {
+        /**
+         * @var array $CFG_GLPI
+         */
+        global $CFG_GLPI;
+
         // Retrieve model information and show details
         // It's just for helping user!
         $model = new PluginUninstallModel();
@@ -803,39 +855,42 @@ class PluginUninstallReplace extends CommonDBTM
 
         echo "</tr>";
 
-        $commonitem = new $type();
-        foreach ($tab_ids[$type] as $id => $value) {
-            $commonitem->getFromDB($id);
+        if (class_exists($type) && is_a($type, CommonDBTM::class, true)) {
+            $commonitem = new $type();
+            foreach ($tab_ids[$type] as $id => $value) {
+                $commonitem->getFromDB($id);
 
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" . $commonitem->getName() . "</td>";
+                echo "<tr class='tab_bg_1 center'>";
+                echo "<td>" . $commonitem->getName() . "</td>";
 
-            if (Search::getOptionNumber($type, 'otherserial')) {
-                echo "<td>" . $commonitem->fields['otherserial'] . "</td>";
-            }
+                if (Search::getOptionNumber($type, 'otherserial')) {
+                    echo "<td>" . $commonitem->fields['otherserial'] . "</td>";
+                }
 
-            if (Search::getOptionNumber($type, 'serial')) {
-                echo "<td>" . $commonitem->fields['serial'] . "</td>";
-            }
+                if (Search::getOptionNumber($type, 'serial')) {
+                    echo "<td>" . $commonitem->fields['serial'] . "</td>";
+                }
 
-            echo "<td>";
-            $type::dropdown([
-                'name'        => "newItems[$id]",
-                'displaywith' => ['serial', 'otherserial'],
-                'url'         => Plugin::getWebDir('uninstall') . "/ajax/dropdownReplaceFindDevice.php",
-                'used'        => array_keys($tab_ids[$type]),
-            ]);
-            echo "</td>";
-
-            if (count($tab_ids[$type]) > 1) {
                 echo "<td>";
-                $button = "<button type='button' onclick=\"$(this).closest('tr').remove();\" ><i class='ti ti-trash'></i></button>";
-                echo $button;
-                echo "<td>";
-            }
+                $type::dropdown([
+                    'name'        => "newItems[$id]",
+                    'displaywith' => ['serial', 'otherserial'],
+                    'url'         => $CFG_GLPI['root_doc'] . "/plugins/uninstall/ajax/dropdownReplaceFindDevice.php",
+                    'used'        => array_keys($tab_ids[$type]),
+                ]);
+                echo "</td>";
 
-            echo"</tr>";
+                if (count($tab_ids[$type]) > 1) {
+                    echo "<td>";
+                    $button = "<button type='button' onclick=\"$(this).closest('tr').remove();\" ><i class='ti ti-trash'></i></button>";
+                    echo $button;
+                    echo "<td>";
+                }
+
+                echo"</tr>";
+            }
         }
+
 
         echo "<tr class='tab_bg_1 center'>";
         echo "<td colspan='4' class='center'>";
@@ -1008,7 +1063,7 @@ class PluginUninstallReplace extends CommonDBTM
                 'glpi_tickets' => [
                     'ON' => [
                         'glpi_tickets' => 'id',
-                        'glpi_items_tickets' => 'ticket_id',
+                        'glpi_items_tickets' => 'tickets_id',
                     ],
                 ],
             ],
@@ -1074,6 +1129,9 @@ class PluginUninstallReplace extends CommonDBTM
 
         $data  = [];
         foreach ($UNINSTALL_DIRECT_CONNECTIONS_TYPE as $itemtype) {
+            if (!class_exists($itemtype)  || !is_a($itemtype, CommonDBTM::class, true)) {
+                continue;
+            }
             $item = new $itemtype();
             if ($item->canView()) {
                 $datas = getAllDataFromTable(
@@ -1121,5 +1179,10 @@ class PluginUninstallReplace extends CommonDBTM
             }
             return $tabs;
         }
+    }
+
+    public static function getIcon()
+    {
+        return "ti ti-recycle";
     }
 }

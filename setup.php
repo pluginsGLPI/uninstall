@@ -30,12 +30,9 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_UNINSTALL_VERSION', '2.9.4');
-
-// Minimal GLPI version, inclusive
-define("PLUGIN_UNINSTALL_MIN_GLPI", "10.0.7");
-// Maximum GLPI version, exclusive
-define("PLUGIN_UNINSTALL_MAX_GLPI", "10.0.99");
+define('PLUGIN_UNINSTALL_VERSION', '2.10.0-beta2');
+define("PLUGIN_UNINSTALL_MIN_GLPI", "11.0.0");
+define("PLUGIN_UNINSTALL_MAX_GLPI", "11.0.99");
 
 /**
  * Function Init
@@ -49,42 +46,29 @@ function plugin_init_uninstall()
      */
     global $PLUGIN_HOOKS, $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
-    $PLUGIN_HOOKS['csrf_compliant']['uninstall'] = true;
-
-    Plugin::registerClass('PluginUninstallPreference', ['addtabon' => ['Preference']]);
-    Plugin::registerClass('PluginUninstallProfile', ['addtabon' => ['Profile']]);
+    Plugin::registerClass(PluginUninstallPreference::class, ['addtabon' => [Preference::class]]);
+    Plugin::registerClass(PluginUninstallProfile::class, ['addtabon' => [Profile::class]]);
 
     $plugin = new Plugin();
     if ($plugin->isActivated('uninstall')) {
-        $UNINSTALL_TYPES                    = ['Computer', 'Monitor',
-            'NetworkEquipment',
-            'Peripheral', 'Phone', 'Printer',
-        ];
-        $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = ['Monitor', 'Peripheral', 'Phone',
-            'Printer',
-        ];
+        $UNINSTALL_TYPES                    = [Computer::class, Monitor::class, NetworkEquipment::class, Peripheral::class, Phone::class, Printer::class];
+        $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = [Monitor::class, Peripheral::class, Phone::class, Printer::class];
 
         if (Session::getLoginUserID()) {
             // config page
-            Plugin::registerClass('PluginUninstallConfig', [
-                'addtabon' => 'Config',
-            ]);
-            $PLUGIN_HOOKS['config_page']['uninstall'] = 'front/config.form.php';
+            Plugin::registerClass(PluginUninstallConfig::class, ['addtabon' => Config::class]);
+            $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['uninstall'] = 'front/config.form.php';
             $uninstallconfig = PluginUninstallConfig::getConfig();
 
-            $PLUGIN_HOOKS['add_css']['uninstall'] = [
-                'css/uninstall.css',
-            ];
+            $PLUGIN_HOOKS[Hooks::ADD_CSS]['uninstall'] = ['public/css/uninstall.css'];
 
             if ($uninstallconfig['replace_status_dropdown']) {
                 // replace item state by uninstall list
-                $PLUGIN_HOOKS['post_item_form']['uninstall'] = [
-                    'PluginUninstallState', 'replaceState',
-                ];
+                $PLUGIN_HOOKS['post_item_form']['uninstall'] = [PluginUninstallState::class, 'replaceState'];
             } else {
                 // add tabs to items
                 foreach ($UNINSTALL_TYPES as $type) {
-                    Plugin::registerClass('PluginUninstallUninstall', [
+                    Plugin::registerClass(PluginUninstallUninstall::class, [
                         'addtabon' => $type,
                     ]);
                 }
@@ -92,9 +76,7 @@ function plugin_init_uninstall()
 
             // As config update is submitted using the `context` inventory, it will always be considered as "new" and will
             // be processed by an `add` operation.
-            $PLUGIN_HOOKS['pre_item_add']['uninstall'] = [
-                'Config' => ['PluginUninstallConfig', 'preConfigSet'],
-            ];
+            $PLUGIN_HOOKS[Hooks::PRE_ITEM_ADD]['uninstall'] = ['Config::class' => [PluginUninstallConfig::class, 'preConfigSet']];
 
             $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
                 [
@@ -113,28 +95,20 @@ function plugin_init_uninstall()
             ];
 
             if (Session::haveRight('uninstall:profile', READ)) {
-                $PLUGIN_HOOKS['use_massive_action']['uninstall'] = true;
+                $PLUGIN_HOOKS[Hooks::USE_MASSIVE_ACTION]['uninstall'] = true;
 
                 if (Session::haveRight('uninstall:profile', UPDATE)) {
                     // Add link in GLPI plugins list :
-                    $PLUGIN_HOOKS["menu_toadd"]['uninstall'] = ['admin' => 'PluginUninstallModel'];
+                    $PLUGIN_HOOKS[Hooks::MENU_TOADD]['uninstall'] = ['admin' => PluginUninstallModel::class];
                 }
 
                 //Item actions
-                $PLUGIN_HOOKS['item_update']['uninstall']
-                = ['PluginUninstallModel'
-                  => ['PluginUninstallPreference', 'afterUpdateModel'],
-                ];
-                $PLUGIN_HOOKS['item_delete']['uninstall']
-                = ['PluginUninstallModel'
-                  => ['PluginUninstallPreference', 'beforeItemPurge'],
-                ];
-
-                $PLUGIN_HOOKS['pre_item_purge']['uninstall']
-                = ['User' => ['PluginUninstallPreference', 'beforeItemPurge']];
+                $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['uninstall'] = [PluginUninstallModel::class => [PluginUninstallPreference::class, 'afterUpdateModel']];
+                $PLUGIN_HOOKS[Hooks::ITEM_DELETE]['uninstall'] = [PluginUninstallModel::class => [PluginUninstallPreference::class, 'beforeItemPurge']];
+                $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['uninstall'] = ['User' => [PluginUninstallPreference::class, 'beforeItemPurge']];
             }
         }
-        $PLUGIN_HOOKS['post_init']['uninstall'] = 'plugin_uninstall_postinit';
+        $PLUGIN_HOOKS[Hooks::POST_INIT]['uninstall'] = 'plugin_uninstall_postinit';
     }
 }
 
