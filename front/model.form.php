@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
+
 include('../../../inc/includes.php');
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
@@ -75,7 +77,7 @@ if (isset($_POST["add"])) {
                     PluginUninstallProfile::RIGHT_REPLACE,
                 )
             ) {
-                Html::displayRightError();
+                throw new AccessDeniedHttpException();
             }
         }
     }
