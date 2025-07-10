@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASE]
 
+## [2.9.4] - 2025-07-10
+
 ### Fixed
 - Improved access control checks when updating user preferences
 - Fix SQL error during replace tickets

@@ -31,6 +31,11 @@
          <download_url>https://github.com/pluginsGLPI/uninstall/releases/download/2.10.0-beta1/glpi-uninstall-2.10.0-beta1.tar.bz2</download_url>
       </version>
       <version>
+         <num>2.9.4</num>
+         <compatibility>~10.0.11</compatibility>
+         <download_url>https://github.com/pluginsGLPI/uninstall/releases/download/2.9.4/glpi-uninstall-2.9.4.tar.bz2</download_url>
+      </version>
+      <version>
          <num>2.9.3</num>
          <compatibility>~10.0.7</compatibility>
          <download_url>https://github.com/pluginsGLPI/uninstall/releases/download/2.9.3/glpi-uninstall-2.9.3.tar.bz2</download_url>
