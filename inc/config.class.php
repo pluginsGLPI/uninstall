@@ -28,10 +28,6 @@
  * -------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
-
 class PluginUninstallConfig extends Config
 {
     public const CFG_CTXT = 'plugin:uninstall';
@@ -55,7 +51,7 @@ class PluginUninstallConfig extends Config
     {
         switch ($item->getType()) {
             case "Config":
-                return self::createTabEntry(self::getTypeName());
+                return self::createTabEntry(self::getTypeName(), 0, $item::getType(), PluginUninstallReplace::getIcon());
         }
         return '';
     }

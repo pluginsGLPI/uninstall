@@ -30,6 +30,8 @@
 
 include('../../../inc/includes.php');
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
+
 Session::checkRight(PluginUninstallPreference::$rightname, UPDATE);
 
 // Save user preferences
@@ -41,7 +43,7 @@ if (isset($_POST['update_user_preferences_uninstall'])) {
         if ($pref->getFromDB($_POST["id"]) && $pref->fields['users_id'] == Session::getLoginUserID()) {
             $pref->update($values);
         } else {
-            Html::displayRightError("You don't have permission to perform this action");
+            throw new AccessDeniedHttpException();
         }
     }
     Html::back();

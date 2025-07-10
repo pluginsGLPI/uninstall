@@ -328,7 +328,7 @@ class PluginUninstallPreference extends CommonDBTM
                      `locations_id` int {$default_key_sign} DEFAULT '0',
                      PRIMARY KEY (`id`)
                      ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->doQueryOrDie($query, $DB->error());
+            $DB->doQuery($query);
         }
         return true;
     }

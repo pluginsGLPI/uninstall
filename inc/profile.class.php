@@ -133,8 +133,12 @@ class PluginUninstallProfile extends Profile
 
         foreach (
             $DB->request(
-                'glpi_plugin_uninstall_profiles',
-                "`id`='$profiles_id'",
+                [
+                    'FROM' => 'glpi_plugin_uninstall_profiles',
+                    'WHERE' => [
+                        'id' => $profiles_id,
+                    ],
+                ],
             ) as $profile_data
         ) {
             $translatedRight = self::translateARight($profile_data["use"]);
@@ -249,9 +253,15 @@ class PluginUninstallProfile extends Profile
             $migration->changeField($table, 'use', 'use', "char", ['value' => '0']);
             $migration->migrationOneTable($table);
 
-            $DB->updateOrDie($table, [
-                'use' => 'r',
-            ], ['use' => '1'], "change value use (1 to r) for $table");
+            $DB->update(
+                $table,
+                [
+                    'use' => 'r',
+                ],
+                [
+                    'use' => '1',
+                ],
+            );
 
             $migration->renameTable($table, 'glpi_plugin_uninstall_profiles');
         }
@@ -287,7 +297,7 @@ class PluginUninstallProfile extends Profile
                     `replace` tinyint NOT NULL default '0',
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->doQueryOrDie($query, $DB->error());
+            $DB->doQuery($query);
             self::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
         }
         return true;

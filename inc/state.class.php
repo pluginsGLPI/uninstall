@@ -28,10 +28,6 @@
  * -------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
-
 class PluginUninstallState
 {
     public static function replaceState($params = [])

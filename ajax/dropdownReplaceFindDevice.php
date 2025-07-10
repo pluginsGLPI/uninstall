@@ -30,6 +30,8 @@
 
 include('../../../inc/includes.php');
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
+use Glpi\Exception\Http\BadRequestHttpException;
 use Glpi\Toolbox\Sanitizer;
 
 header("Content-Type: text/html; charset=UTF-8");
@@ -46,128 +48,132 @@ Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT
 global $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE, $CFG_GLPI, $DB;
 
 if (!in_array($_REQUEST['itemtype'], array_merge($UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE))) {
-    Html::displayErrorAndDie(__("You don't have permission to perform this action."));
+    throw new AccessDeniedHttpException(__("You don't have permission to perform this action."));
 }
 
-$itemtypeisplugin = isPluginItemType($_REQUEST['itemtype']);
-$item             = new $_REQUEST['itemtype']();
-$table            = getTableForItemType($_REQUEST['itemtype']);
-$options          = [];
-$count            = 0;
-$datastoadd       = [];
+if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBTM::class, true)) {
+    $itemtypeisplugin = isPluginItemType($_REQUEST['itemtype']);
+    $item             = new $_REQUEST['itemtype']();
+    $table            = getTableForItemType($_REQUEST['itemtype']);
+    $options          = [];
+    $count            = 0;
+    $datastoadd       = [];
 
-$displaywith = false;
-if (isset($_REQUEST['displaywith'])) {
-    if (is_array($_REQUEST['displaywith']) && count($_REQUEST['displaywith'])) {
-        $displaywith = true;
+    $displaywith = false;
+    if (isset($_REQUEST['displaywith'])) {
+        if (is_array($_REQUEST['displaywith']) && count($_REQUEST['displaywith'])) {
+            $displaywith = true;
+        }
     }
-}
 
-$criteria = [
-    'FROM' => $table,
-    'WHERE' => [],
-];
-
-if ($item->isEntityAssign()) {
-    // allow opening ticket on recursive object (printer, software, ...)
-    $criteria['WHERE'] = getEntitiesRestrictCriteria($table, '', $_SESSION['glpiactiveentities'], $item->maybeRecursive());
-}
-
-if ($item->maybeDeleted()) {
-    $criteria['WHERE']['is_deleted'] = 0;
-}
-if ($item->maybeTemplate()) {
-    $criteria['WHERE']['is_template'] = 0;
-}
-
-if (
-    isset($_REQUEST['searchText'])
-    && strlen($_REQUEST['searchText']) > 0
-    && $_REQUEST['searchText'] != $CFG_GLPI["ajax_wildcard"]
-) {
-    // isset already makes sure the search value isn't null
-    $search_val = Search::makeTextSearchValue($_REQUEST['searchText']);
-    $criteria['WHERE'][] = [
-        'OR' => [
-            'name' => ['LIKE', $search_val],
-            'id' => ['LIKE', $search_val],
-            'serial' => ['LIKE', $search_val],
-            'otherserial' => ['LIKE', $search_val],
-        ],
+    $criteria = [
+        'FROM' => $table,
+        'WHERE' => [],
     ];
-}
 
-//If software or plugins : filter to display only the objects that are allowed to be visible in Helpdesk
-if (in_array($_REQUEST['itemtype'], $CFG_GLPI["helpdesk_visible_types"])) {
-    $criteria['WHERE']['is_helpdesk_visible'] = 1;
-}
+    if ($item->isEntityAssign()) {
+        // allow opening ticket on recursive object (printer, software, ...)
+        $criteria['WHERE'] = getEntitiesRestrictCriteria($table, '', $_SESSION['glpiactiveentities'], $item->maybeRecursive());
+    }
 
-if (isset($_REQUEST['used'])) {
-    $used = $_REQUEST['used'];
+    if ($item->maybeDeleted()) {
+        $criteria['WHERE']['is_deleted'] = 0;
+    }
+    if ($item->maybeTemplate()) {
+        $criteria['WHERE']['is_template'] = 0;
+    }
 
-    if (count($used)) {
+    if (
+        isset($_REQUEST['searchText'])
+        && strlen($_REQUEST['searchText']) > 0
+        && $_REQUEST['searchText'] != $CFG_GLPI["ajax_wildcard"]
+    ) {
+        // isset already makes sure the search value isn't null
+        $search_val = Search::makeTextSearchValue($_REQUEST['searchText']);
         $criteria['WHERE'][] = [
-            'NOT' => ["$table.id" => $used],
+            'OR' => [
+                'name' => ['LIKE', $search_val],
+                'id' => ['LIKE', $search_val],
+                'serial' => ['LIKE', $search_val],
+                'otherserial' => ['LIKE', $search_val],
+            ],
         ];
     }
-}
 
-if (isset($_REQUEST['current_item']) && ($_REQUEST['current_item'] > 0)) {
-    $criteria['WHERE']['id'] = ['!=', $_REQUEST['current_item']];
-}
+    //If software or plugins : filter to display only the objects that are allowed to be visible in Helpdesk
+    if (in_array($_REQUEST['itemtype'], $CFG_GLPI["helpdesk_visible_types"])) {
+        $criteria['WHERE']['is_helpdesk_visible'] = 1;
+    }
 
-$criteria['START'] = 0;
-$criteria['LIMIT'] = $CFG_GLPI["dropdown_max"];
-$criteria['ORDER'] = ['name'];
+    if (isset($_REQUEST['used'])) {
+        $used = $_REQUEST['used'];
 
-if (
-    isset($_REQUEST['searchText'])
-    && $_REQUEST['searchText'] == $CFG_GLPI["ajax_wildcard"]
-) {
-    unset($criteria['LIMIT']);
-}
+        if (count($used)) {
+            $criteria['WHERE'][] = [
+                'NOT' => ["$table.id" => $used],
+            ];
+        }
+    }
 
-$it = $DB->request($criteria);
-foreach ($it as $data) {
-    $outputval = Sanitizer::unsanitize($data["name"]);
+    if (isset($_REQUEST['current_item']) && ($_REQUEST['current_item'] > 0)) {
+        $criteria['WHERE']['id'] = ['!=', $_REQUEST['current_item']];
+    }
 
-    if ($displaywith) {
-        foreach ($_REQUEST['displaywith'] as $key) {
-            if (isset($data[$key])) {
-                $withoutput = $data[$key];
-                if (isForeignKeyField($key)) {
-                    $withoutput = Dropdown::getDropdownName(
-                        getTableNameForForeignKeyField($key),
-                        $data[$key],
-                    );
-                }
-                if ((strlen($withoutput) > 0) && ($withoutput != '&nbsp;')) {
-                    $outputval = sprintf(__('%1$s - %2$s'), $outputval, $withoutput);
+    $criteria['START'] = 0;
+    $criteria['LIMIT'] = $CFG_GLPI["dropdown_max"];
+    $criteria['ORDER'] = ['name'];
+
+    if (
+        isset($_REQUEST['searchText'])
+        && $_REQUEST['searchText'] == $CFG_GLPI["ajax_wildcard"]
+    ) {
+        unset($criteria['LIMIT']);
+    }
+
+    $it = $DB->request($criteria);
+    foreach ($it as $data) {
+        $outputval = $data["name"];
+
+        if ($displaywith) {
+            foreach ($_REQUEST['displaywith'] as $key) {
+                if (isset($data[$key])) {
+                    $withoutput = $data[$key];
+                    if (isForeignKeyField($key)) {
+                        $withoutput = Dropdown::getDropdownName(
+                            getTableNameForForeignKeyField($key),
+                            $data[$key],
+                        );
+                    }
+                    if ((strlen($withoutput) > 0) && ($withoutput != '&nbsp;')) {
+                        $outputval = sprintf(__('%1$s - %2$s'), $outputval, $withoutput);
+                    }
                 }
             }
         }
+        $ID         = $data['id'];
+        $addcomment = "";
+        $title      = $outputval;
+        if (isset($data["comment"])) {
+            $addcomment .= $data["comment"];
+            $title = sprintf(__('%1$s - %2$s'), $title, $addcomment);
+        }
+        if (
+            $_SESSION["glpiis_ids_visible"]
+            || (strlen($outputval) == 0)
+        ) {
+            $outputval = sprintf(__('%1$s (%2$s)'), $outputval, $ID);
+        }
+        array_push($options, ['id'     => $ID,
+            'text'  => $outputval,
+            'title' => $title,
+        ]);
+        $count++;
     }
-    $ID         = $data['id'];
-    $addcomment = "";
-    $title      = $outputval;
-    if (isset($data["comment"])) {
-        $addcomment .= $data["comment"];
-        $title = sprintf(__('%1$s - %2$s'), $title, $addcomment);
-    }
-    if (
-        $_SESSION["glpiis_ids_visible"]
-        || (strlen($outputval) == 0)
-    ) {
-        $outputval = sprintf(__('%1$s (%2$s)'), $outputval, $ID);
-    }
-    array_push($options, ['id'     => $ID,
-        'text'  => $outputval,
-        'title' => $title,
+
+
+    echo json_encode(['results' => $options,
+        'count'    => $count,
     ]);
-    $count++;
+} else {
+    throw new BadRequestHttpException();
 }
-
-
-echo json_encode(['results' => $options,
-    'count'    => $count,
-]);
