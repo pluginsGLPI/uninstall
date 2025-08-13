@@ -30,7 +30,7 @@
 
 class PluginUninstallPreference extends CommonDBTM
 {
-    public static $rightname = "uninstall:replace";
+    public static $rightname = "uninstall:profile";
 
     public function prepareInputForAdd($input)
     {
@@ -64,6 +64,7 @@ class PluginUninstallPreference extends CommonDBTM
             true,
         );
         $data       = plugin_version_uninstall();
+        $from = $this->getFormURL();
 
         echo "<form action='" . $this->getFormURL() . "' method='post'>";
         echo "<div class='center'>";
