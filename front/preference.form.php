@@ -38,7 +38,7 @@ if (isset($_POST['update_user_preferences_uninstall'])) {
     foreach ($_POST["id"] as $prefid => $values) {
         $pref = new PluginUninstallPreference();
         // load preferences and check if current user is the related user
-        if ($pref->getFromDB($_POST["id"]) && $pref->fields['users_id'] == Session::getLoginUserID()) {
+        if ($pref->getFromDB($values["id"]) && $pref->fields['users_id'] == Session::getLoginUserID()) {
             $pref->update($values);
         } else {
             Html::displayRightError("You don't have permission to perform this action");

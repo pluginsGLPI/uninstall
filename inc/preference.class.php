@@ -30,7 +30,7 @@
 
 class PluginUninstallPreference extends CommonDBTM
 {
-    public static $rightname = "uninstall:replace";
+    public static $rightname = "uninstall:profile";
 
     public function prepareInputForAdd($input)
     {
