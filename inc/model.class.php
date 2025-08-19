@@ -1,8 +1,5 @@
 <?php
 
-use Glpi\Application\View\TemplateRenderer;
-use SebastianBergmann\Template\Template;
-
 /**
  * -------------------------------------------------------------------------
  * Uninstall plugin for GLPI
@@ -30,6 +27,8 @@ use SebastianBergmann\Template\Template;
  * @link      https://github.com/pluginsGLPI/uninstall
  * -------------------------------------------------------------------------
  */
+
+use Glpi\Application\View\TemplateRenderer;
 
 class PluginUninstallModel extends CommonDBTM
 {
