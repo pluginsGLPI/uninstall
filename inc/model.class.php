@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+use Glpi\Application\View\TemplateRenderer;
+
 class PluginUninstallModel extends CommonDBTM
 {
     public static $rightname         = "uninstall:profile";
@@ -148,24 +150,20 @@ class PluginUninstallModel extends CommonDBTM
 
 
     /**
-     * Dropdown of method remplacement
+     * Dropdown list of method remplacement
      *
      * @param $name   string name
      * @param $value  string|int default value (default '')
      * @param $type   int types_id
     **/
-    public static function dropdownMethodReplacement($name, $value = '', $type = self::TYPE_MODEL_REPLACEMENT)
+    public static function getDropdownListMethodReplacement($type = self::TYPE_MODEL_REPLACEMENT)
     {
         $methods = self::getReplacementMethods();
         if ($type == PluginUninstallModel::TYPE_MODEL_REPLACEMENT_UNINSTALL) {
             // can't purge to be able to apply uninstall after replacement
             unset($methods[PluginUninstallReplace::METHOD_PURGE]);
         }
-        Dropdown::showFromArray(
-            $name,
-            $methods,
-            ['value' => $value],
-        );
+        return $methods;
     }
 
 
@@ -467,209 +465,17 @@ class PluginUninstallModel extends CommonDBTM
 
     public function showPartFormRemplacement()
     {
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<th colspan='4'>" . sprintf(
-            __('%1$s - %2$s'),
-            __('Informations replacement', 'uninstall'),
-            __('General informations', 'uninstall'),
-        ) . "</th></tr>";
-
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td><td>";
-        Dropdown::showYesNo(
-            "replace_name",
-            (isset($this->fields["replace_name"])
-                           ? $this->fields["replace_name"] : 1),
-            -1,
-            ['width' => '100%'],
-        );
-        echo "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number')) . "</td><td>";
-        Dropdown::showYesNo(
-            "replace_serial",
-            (isset($this->fields["replace_serial"])
-            ? $this->fields["replace_serial"] : 1),
-        );
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Inventory number')) . "</td><td>";
-        Dropdown::showYesNo(
-            "replace_otherserial",
-            (isset($this->fields["replace_otherserial"])
-                           ? $this->fields["replace_otherserial"] : 1),
-            -1,
-            ['width' => '100%'],
-        );
-        echo "</td>";
-        echo "<td>" . __('Overwrite informations (from old item to the new)', 'uninstall') . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "overwrite",
-            (isset($this->fields["overwrite"]) ? $this->fields["overwrite"] : 1),
-        );
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . __('Archiving method of the old material', 'uninstall') . "</td>";
-        echo "<td colspan='2'>";
-        $value = (isset($this->fields["replace_method"]) ? $this->fields["replace_method"] : 0);
-        self::dropdownMethodReplacement('replace_method', $value, $this->fields['types_id']);
-        echo "</td>";
-        echo "<td>";
         $plug = new Plugin();
-        if ($plug->isActivated('PDF')) {
-            echo "<span class='green b tracking_small'>" .
-                __('Plugin PDF is installed and activated', 'uninstall') . "</span>";
-        } else {
-            echo "<span class='red b tracking_small'>" .
-                __(
-                    "Plugin PDF is not installed, you won't be able to use PDF format for archiving",
-                    "uninstall",
-                ) . "</span>";
-        }
-        echo "</td></tr>";
+        $methods = self::getDropdownListMethodReplacement($this->fields['types_id']);
 
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<th colspan='4'>" . sprintf(
-            __('%1$s - %2$s'),
-            __('Informations replacement', 'uninstall'),
-            __('Connections with other materials', 'uninstall'),
-        );
-        echo "</th></tr>";
-
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Document', 'Documents', 2)) . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "replace_documents",
-            (isset($this->fields["replace_documents"])
-                           ? $this->fields["replace_documents"] : 1),
-            -1,
-            ['width' => '100%'],
-        );
-        echo "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2)) . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "replace_contracts",
-            (isset($this->fields["replace_contracts"])
-            ? $this->fields["replace_contracts"] : 1),
-        );
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(
-            __('%1$s %2$s'),
-            __('Copy'),
-            __('Financial and administratives information'),
-        ) . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "replace_infocoms",
-            (isset($this->fields["replace_infocoms"])
-                           ? $this->fields["replace_infocoms"] : 1),
-            -1,
-            ['width' => '100%'],
-        );
-        echo "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2));
-        echo "</td>";
-        echo "<td>";
-        if (isset($this->fields["replace_reservations"])) {
-            $reservation = $this->fields["replace_reservations"];
-        } else {
-            $reservation = 1;
-        }
-        Dropdown::showYesNo("replace_reservations", $reservation);
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('User')) . "</td>";
-        echo "<td>";
-        if (isset($this->fields["replace_users"])) {
-            $user = $this->fields["replace_users"];
-        } else {
-            $user = 1;
-        }
-        Dropdown::showYesNo("replace_users", $user, -1, ['width' => '100%']);
-        echo "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "replace_groups",
-            (isset($this->fields["replace_groups"])
-            ? $this->fields["replace_groups"] : 1),
-        );
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Ticket', 'Tickets', 2)) . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "replace_tickets",
-            (isset($this->fields["replace_tickets"])
-                           ? $this->fields["replace_tickets"] : 1),
-            -1,
-            ['width' => '100%'],
-        );
-        echo "</td>";
-        echo "<td>" . sprintf(
-            __('%1$s %2$s'),
-            __('Copy'),
-            sprintf(
-                __('%1$s %2$s'),
-                _n('Connection', 'Connections', 2),
-                _n('Network', 'Networks', 2),
-            ),
-        ) . "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "replace_netports",
-            (isset($this->fields["replace_netports"])
-            ? $this->fields["replace_netports"] : 1),
-        );
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Direct connections', 'uninstall'));
-        echo "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "replace_direct_connections",
-            (isset($this->fields["replace_direct_connections"])
-                           ? $this->fields["replace_direct_connections"] : 1),
-            -1,
-            ['width' => '100%'],
-        );
-        echo "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Alternate username'));
-        echo "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "replace_contact",
-            (isset($this->fields["replace_contact"])
-                           ? $this->fields["replace_contact"] : 1),
-            -1,
-            ['width' => '100%'],
-        );
-        echo "</td>";
-        echo "</tr>";
-
-        echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Alternate username number'));
-        echo "</td>";
-        echo "<td>";
-        Dropdown::showYesNo(
-            "replace_contact_num",
-            (isset($this->fields["replace_contact_num"])
-                           ? $this->fields["replace_contact_num"] : 1),
-            -1,
-            ['width' => '100%'],
-        );
-        echo "</td>";
-        echo "</tr>";
+        TemplateRenderer::getInstance()->display('@uninstall/model_config.html.twig', [
+            'item' => $this,
+            'replace_reservations' => $this->fields["replace_reservations"] ?? 1,
+            'replace_users' => $this->fields["replace_users"] ?? 1,
+            'replace_method' => $this->fields["replace_method"] ?? 0,
+            'methods_list' => $methods,
+            'pdf_activated' => $plug->isActivated('PDF'),
+        ]);
     }
 
     /**
