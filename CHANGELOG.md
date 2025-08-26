@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASE]
 
+### Improvement
+- Redesign of the configuration page
+
 ## [2.9.4] - 2025-07-10
 
 ### Fixed

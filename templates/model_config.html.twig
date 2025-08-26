@@ -1,0 +1,198 @@
+{#
+ # -------------------------------------------------------------------------
+ # Uninstall plugin for GLPI
+ # -------------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of Uninstall.
+ #
+ # Uninstall is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #
+ # Uninstall is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with Uninstall. If not, see <http://www.gnu.org/licenses/>.
+ # -------------------------------------------------------------------------
+ # @copyright Copyright (C) 2015-2023 by Teclib'.
+ # @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+ # @link      https://github.com/pluginsGLPI/uninstall
+ # -------------------------------------------------------------------------
+ #}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+{% set field_options = {'field_class': 'col-6', 'label_class': 'col-6 col-sm-8', 'input_class': 'col-6 col-sm-4', 'full_width': false} %}
+
+<div class="hr-text mt-3">
+    <i class="fa-2x ti ti-replace"></i>
+    <span>{{ __('%1$s - %2$s')|format(__('Informations replacement', 'uninstall'), __('General informations', 'uninstall')) }}</span>
+</div>
+
+<div class='row tab_bg_1 text-center'>
+    {% set table_field_options = {no_label: true, field_class: 'm-0 p-0', mb: 'mb-0', use_checkbox: true} %}
+    <div class="col-12 d-flex justify-content-center">
+        <table class="table table-bordered text-center mx-auto" style="max-width: 50%; margin: 0 auto;">
+            <tbody>
+                <tr class="bg-body-tertiary">
+                    <th style="background-color:rgb(235, 235, 235);"></th>
+                    <th style="background-color:rgb(248, 248, 248);">{{ __('Copy in new item', 'uninstall') }}</th>
+                </tr>
+                <tr>
+                    <th style="background-color:rgb(248, 248, 248);">{{ __('Name') }}</th>
+                    <td>
+                        {{ fields.dropdownYesNo(
+                            'replace_name',
+                            item.fields.replace_name ?? 1,
+                            '',
+                            table_field_options
+                        ) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th style="background-color:rgb(248, 248, 248);">{{ __('Serial number') }}</th>
+                    <td>
+                        {{ fields.dropdownYesNo(
+                            'replace_serial',
+                            item.fields.replace_serial ?? 1,
+                            '',
+                            table_field_options
+                        ) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th style="background-color:rgb(248, 248, 248);">{{ __('Inventory number') }}</th>
+                    <td>
+                        {{ fields.dropdownYesNo(
+                            'replace_otherserial',
+                            item.fields.replace_otherserial ?? 1,
+                            '',
+                            table_field_options
+                        ) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="hr-text mt-4">
+    <i class="fa-2x ti ti-writing"></i>
+    <span>{{ __('Overwrite informations (from old item to the new)', 'uninstall') }}</span>
+</div>
+
+<div class='row tab_bg_1 text-center'>
+    <div class='row tab_bg_1 text-center'>
+        {{ fields.sliderField(
+            'overwrite',
+            item.fields.overwrite ?? 1,
+            __('Overwrite informations (from old item to the new)', 'uninstall'),
+            {
+                'label_class': 'col-6',
+                'input_class': 'col-3',
+                'field_class': 'col-12',
+                'helper': '<li>' ~ __('Alternate username number') ~ '</li><li>' ~ __('Alternate username') ~ '</li><li>' ~ __('User') ~ '</li><li>' ~ __('Group') ~ '</li>'
+            }
+        ) }}
+    </div>
+
+    {{ fields.dropdownArrayField(
+        'replace_method',
+        item.fields.replace_method ?? 0,
+        methods_list,
+        __('Archiving method of the old material', 'uninstall'),
+        {'label_class': 'col-6', 'input_class': 'col-3', 'field_class': 'col-12'}
+    ) }}
+    <div class='col-12 pb-2'>
+        {% if pdf_activated %}
+            <span class='green i tracking_small'>
+                {{ __('Plugin PDF is installed and activated', 'uninstall') }}
+            </span>
+        {% else %}
+            <span class='red i tracking_small'>
+                {{ __("Plugin PDF is not installed, you won't be able to use PDF format for archiving", "uninstall") }}
+            </span>
+        {% endif %}
+    </div>
+</div>
+
+<div class="hr-text mt-4">
+    <i class="fa-2x ti ti-link"></i>
+    <span>{{ __('%1$s - %2$s')|format(__('Informations replacement', 'uninstall'), __('Connections with other materials', 'uninstall')) }}</span>
+</div>
+
+<div class='row tab_bg_1 text-center'>
+        {{ fields.sliderField(
+            'replace_documents',
+            item.fields.replace_documents ?? 1,
+            __('%1$s %2$s')|format(__('Copy'), _n('Document', 'Documents', 2)),
+            field_options
+        ) }}
+        {{ fields.sliderField(
+            'replace_contracts',
+            item.fields.replace_contracts ?? 1,
+            __('%1$s %2$s')|format(__('Copy'), _n('Contract', 'Contracts', 2)),
+            field_options
+        ) }}
+        {{ fields.sliderField(
+            'replace_infocoms',
+            item.fields.replace_infocoms ?? 1,
+            __('%1$s %2$s')|format(__('Copy'), __('Financial and administratives information')),
+            field_options
+        ) }}
+        {% set reservation = item.fields.replace_reservations ?? 1 %}
+        {{ fields.sliderField(
+            'replace_reservations',
+            reservation,
+            __('%1$s %2$s')|format(__('Copy'), _n('Reservation', 'Reservations', 2)),
+            field_options
+        ) }}
+        {% set user = item.fields.replace_users ?? 1 %}
+        {{ fields.sliderField(
+            'replace_users',
+            user,
+            __('%1$s %2$s')|format(__('Copy'), __('User')),
+            field_options
+        ) }}
+        {{ fields.sliderField(
+            'replace_groups',
+            item.fields.replace_groups ?? 1,
+            __('%1$s %2$s')|format(__('Copy'), __('Group')),
+            field_options
+        ) }}
+        {{ fields.sliderField(
+            'replace_tickets',
+            item.fields.replace_tickets ?? 1,
+            __('%1$s %2$s')|format(__('Copy'), _n('Ticket', 'Tickets', 2)),
+            field_options
+        ) }}
+        {{ fields.sliderField(
+            'replace_netports',
+            item.fields.replace_netports ?? 1,
+            __('%1$s %2$s')|format(__('Copy'), __('%1$s %2$s')|format(_n('Connection', 'Connections', 2), _n('Network', 'Networks', 2))),
+            field_options
+        ) }}
+        {{ fields.sliderField(
+            'replace_direct_connections',
+            item.fields.replace_direct_connections ?? 1,
+            __('%1$s %2$s')|format(__('Copy'), __('Direct connections', 'uninstall')),
+            field_options
+        ) }}
+        {{ fields.sliderField(
+            'replace_contact',
+            item.fields.replace_contact ?? 1,
+            __('%1$s %2$s')|format(__('Copy'), __('Alternate username')),
+            field_options
+        ) }}
+        {{ fields.sliderField(
+            'replace_contact_num',
+            item.fields.replace_contact_num ?? 1,
+            __('%1$s %2$s')|format(__('Copy'), __('Alternate username number')),
+            field_options
+        ) }}
+</div>
