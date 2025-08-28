@@ -211,13 +211,27 @@ class PluginUninstallReplace extends CommonDBTM
             ) {
                 $doc_item = new Document_Item();
                 foreach (self::getAssociatedDocuments($olditem) as $document) {
-                    $doc_item->update(
-                        ['id'       => $document['assocID'],
-                            'itemtype' => $type,
-                            'items_id' => $newitem_id,
-                        ],
-                        false,
-                    );
+                    $existing = $doc_item->find([
+                        'documents_id' => $document['assocID'],
+                        'itemtype'     => $type,
+                        'items_id'     => $newitem_id,
+                    ]);
+                    if (empty($existing)) {
+                        $doc_item->update(
+                            [
+                                'id'       => $document['assocID'],
+                                'itemtype' => $type,
+                                'items_id' => $newitem_id,
+                            ],
+                            false,
+                        );
+                    } else {
+                        $doc_item->deleteByCriteria([
+                            'documents_id' => $document['assocID'],
+                            'itemtype'     => $type,
+                            'items_id'     => $olditem->getID(),
+                        ]);
+                    }
                 }
             }
 
