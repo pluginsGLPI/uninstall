@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-03 01:39+0000\n"
+"POT-Creation-Date: 2025-08-28 01:40+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: INOUE Daisuke, 2025\n"
 "Language-Team: Japanese (Japan) (https://app.transifex.com/teclib/teams/28042/ja_JP/)\n"
@@ -21,98 +21,90 @@ msgstr ""
 "Language: ja_JP\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: inc/model.class.php:290 inc/model.class.php:992
-msgid "Action on group"
-msgstr "グループの操作"
+#: templates/model_config.html.twig
+msgid "Informations replacement"
+msgstr "情報の置き換え"
 
-#: inc/model.class.php:330
-msgid "Add template"
-msgstr "テンプレート追加"
-
-#: inc/model.class.php:770
-msgid "Additionnal fields"
-msgstr "追加のフィールド"
-
-#: inc/model.class.php:295
-msgid "Affect to a new group"
-msgstr "新しいグループに変更"
-
-#: inc/uninstall.class.php:907
-msgid "Apply model"
-msgstr "モデルの適用"
-
-#: inc/replace.class.php:145
-msgid "Archive of old material"
-msgstr "古い機材のアーカイブ"
-
-#: inc/replace.class.php:655 inc/model.class.php:514 inc/model.class.php:1003
-msgid "Archiving method of the old material"
-msgstr "古い機材のアーカイブ方法"
-
-#: inc/model.class.php:140
-msgid "CSV Archiving"
-msgstr "CSV にアーカイブ"
-
-#: inc/replace.class.php:771
-msgid "Choices for item to replace"
-msgstr "置き換えるアイテムの選択"
-
-#: inc/replace.class.php:714 inc/model.class.php:537
-msgid "Connections with other materials"
-msgstr "他の機材への接続"
-
-#: inc/model.class.php:144
-msgid "Delete + Comment"
-msgstr "削除 + コメント"
-
-#: inc/model.class.php:774
-msgid "Delete Fields plugin informations"
-msgstr "追加のフィールド情報を削除"
-
-#: inc/model.class.php:754
-msgid "Delete computer in FusionInventory"
-msgstr "FusionInventory のコンピューターを削除"
-
-#: inc/model.class.php:728 inc/model.class.php:965
-msgid "Delete computer in OCSNG"
-msgstr "OCSNG のコンピューターを削除"
-
-#: inc/model.class.php:457
-msgid "Delete inventory data (dynamic flag, locks, agent information, ...)"
-msgstr "インベントリー データ（動的フラグ、ロック、エージェント情報...）削除"
-
-#: inc/model.class.php:738 inc/model.class.php:973
-msgid "Delete link with computer in OCSNG"
-msgstr "OCSNG のコンピューターとのリンクを削除"
-
-#: inc/model.class.php:348 inc/model.class.php:854
-msgid "Delete software history (computers)"
-msgstr "ソフトウェアの履歴を削除（コンピューター）"
-
-#: inc/model.class.php:355 inc/model.class.php:1013
-msgid "Delete the whole history"
-msgstr "履歴をすべて削除"
-
-#: inc/replace.class.php:759 inc/model.class.php:636
-msgid "Direct connections"
-msgstr "直接接続"
-
-#: inc/preference.class.php:103 inc/replace.class.php:681
-#: ajax/locations.php:50
-msgid "Empty location"
-msgstr "場所を初期状態に"
-
-#: inc/model.class.php:345
-msgid "Erase datas"
-msgstr "データの消去"
-
-#: inc/replace.class.php:636 inc/model.class.php:474
+#: templates/model_config.html.twig inc/replace.class.php:636
 msgid "General informations"
 msgstr "全般情報"
 
-#: inc/model.class.php:473 inc/model.class.php:536
-msgid "Informations replacement"
-msgstr "情報の置き換え"
+#: templates/model_config.html.twig
+msgid "Copy in new item"
+msgstr ""
+
+#: templates/model_config.html.twig inc/replace.class.php:652
+msgid "Overwrite informations (from old item to the new)"
+msgstr "情報を上書き（古いアイテムから新しいアイテムへ）"
+
+#: templates/model_config.html.twig inc/replace.class.php:655
+#: inc/model.class.php:809
+msgid "Archiving method of the old material"
+msgstr "古い機材のアーカイブ方法"
+
+#: templates/model_config.html.twig
+msgid "Plugin PDF is installed and activated"
+msgstr "PDF プラグインはインストール済みで有効"
+
+#: templates/model_config.html.twig
+msgid ""
+"Plugin PDF is not installed, you won't be able to use PDF format for "
+"archiving"
+msgstr ""
+
+#: templates/model_config.html.twig inc/replace.class.php:714
+msgid "Connections with other materials"
+msgstr "他の機材への接続"
+
+#: templates/model_config.html.twig inc/replace.class.php:759
+msgid "Direct connections"
+msgstr "直接接続"
+
+#: setup.php:144
+msgid "Item's Lifecycle (uninstall)"
+msgstr "アイテムのライフサイクル（撤去）"
+
+#: ajax/locations.php:49 inc/preference.class.php:102
+#: inc/replace.class.php:677
+msgid "Keep previous location"
+msgstr "以前の場所に維持"
+
+#: ajax/locations.php:50 inc/preference.class.php:103
+#: inc/replace.class.php:681
+msgid "Empty location"
+msgstr "場所を初期状態に"
+
+#: hook.php:44 inc/uninstall.class.php:340
+msgid "Uninstall"
+msgstr "撤去"
+
+#: front/action.php:64 inc/replace.class.php:544
+msgid "Replacement successful"
+msgstr "置き換えに成功しました"
+
+#: front/action.php:114 inc/uninstall.class.php:366
+msgid "Uninstallation successful"
+msgstr "撤去しました"
+
+#: inc/config.class.php:41 inc/uninstall.class.php:39 inc/model.class.php:74
+msgid "Item's Lifecycle"
+msgstr "アイテムのライフサイクル"
+
+#: inc/config.class.php:84
+msgid "Shortcuts"
+msgstr "ショートカット"
+
+#: inc/config.class.php:90
+msgid "Location preferences"
+msgstr "場所の設定"
+
+#: inc/config.class.php:98
+msgid "Replace status dropdown by plugin actions"
+msgstr "状態のドロップダウンをプラグインの操作に置き換える"
+
+#: inc/uninstall.class.php:344
+msgid "Please wait, uninstallation is running..."
+msgstr "撤去を実行しています... お待ちください。"
 
 #: inc/uninstall.class.php:772
 msgid "Item is now uninstalled"
@@ -136,17 +128,21 @@ msgstr "アイテムを %s モデルとして新しいものと置き換えま�
 msgid "Item replacing an old one"
 msgstr "置き換え中の古いアイテム"
 
-#: inc/uninstall.class.php:39 inc/model.class.php:72 inc/config.class.php:41
-msgid "Item's Lifecycle"
-msgstr "アイテムのライフサイクル"
+#: inc/uninstall.class.php:798
+msgid "Removed from OCSNG with ID"
+msgstr "ID で OCSNG から削除済み"
 
-#: setup.php:144
-msgid "Item's Lifecycle (uninstall)"
-msgstr "アイテムのライフサイクル（撤去）"
+#: inc/uninstall.class.php:907
+msgid "Apply model"
+msgstr "モデルの適用"
 
 #: inc/uninstall.class.php:931
 msgid "Item's location after applying model"
 msgstr "モデル適用後のアイテムの場所"
+
+#: inc/uninstall.class.php:1048
+msgid "Lifecycle"
+msgstr "ライフサイクル"
 
 #: inc/preference.class.php:77
 msgid "Item's location after uninstall"
@@ -156,132 +152,26 @@ msgstr "撤去後のアイテムの場所"
 msgid "Item's replacement"
 msgstr "アイテムの置き換え"
 
-#: inc/model.class.php:145
-msgid "Keep + Comment"
-msgstr "維持 + コメント"
-
-#: inc/model.class.php:294 inc/model.class.php:1150
-msgid "Keep in the current group"
-msgstr "現在のグループに維持"
-
-#: inc/preference.class.php:102 inc/replace.class.php:677
-#: ajax/locations.php:49
-msgid "Keep previous location"
-msgstr "以前の場所に維持"
-
-#: inc/uninstall.class.php:1048
-msgid "Lifecycle"
-msgstr "ライフサイクル"
-
-#: inc/config.class.php:90
-msgid "Location preferences"
-msgstr "場所の設定"
-
-#: inc/model.class.php:333
-msgid "Manage templates"
-msgstr "テンプレートの管理"
-
-#: inc/model.class.php:310
-msgid "New group"
-msgstr "新しいグループ"
-
-#: inc/replace.class.php:784
-msgid "New item"
-msgstr "新しいアイテム"
-
-#: inc/replace.class.php:674
-msgid "New location of item"
-msgstr "アイテムの新しい場所"
-
-#: inc/replace.class.php:691 inc/model.class.php:281
-msgid "New status of the computer"
-msgstr "コンピューターの新しい状態"
-
-#: inc/model.class.php:720
-msgid "OCSNG link"
-msgid_plural "OCSNG links"
-msgstr[0] "OCSNG リンク"
-
-#: inc/replace.class.php:774
-msgid "Old item"
-msgstr "古いアイテム"
-
-#: inc/replace.class.php:652 inc/model.class.php:505
-msgid "Overwrite informations (from old item to the new)"
-msgstr "情報を上書き（古いアイテムから新しいアイテムへ）"
-
-#: inc/model.class.php:138
-msgid "PDF Archiving"
-msgstr "PDF でアーカイブ"
+#: inc/replace.class.php:67 inc/replace.class.php:116 inc/model.class.php:125
+#: inc/model.class.php:948
+msgid "Replacement"
+msgstr "置き換え"
 
 #: inc/replace.class.php:71
 msgid "Please wait, replacement is running..."
 msgstr "置き換えを実行しています... お待ちください。"
 
-#: inc/uninstall.class.php:344
-msgid "Please wait, uninstallation is running..."
-msgstr "撤去を実行しています... お待ちください。"
+#: inc/replace.class.php:140
+msgid "This document is the archive of this replaced item"
+msgstr "この文書は置き換えたアイテムのアーカイブです"
 
-#: inc/model.class.php:523
-msgid "Plugin PDF is installed and activated"
-msgstr "PDF プラグインはインストール済みで有効"
-
-#: inc/model.class.php:143
-msgid "Purge"
-msgstr "抹消"
-
-#: inc/replace.class.php:635 inc/replace.class.php:713
-msgid "Reminder of the replacement model"
-msgstr "置き換えモデルのリマインダー"
-
-#: inc/replace.class.php:787
-msgid "Remove"
-msgstr "削除"
-
-#: inc/uninstall.class.php:798
-msgid "Removed from OCSNG with ID"
-msgstr "ID で OCSNG から削除済み"
-
-#: inc/replace.class.php:833
-msgid "Replace"
-msgstr "置き換え"
-
-#: inc/config.class.php:98
-msgid "Replace status dropdown by plugin actions"
-msgstr "状態のドロップダウンをプラグインの操作に置き換える"
-
-#: inc/replace.class.php:67 inc/replace.class.php:116 inc/model.class.php:123
-#: inc/model.class.php:1142
-msgid "Replacement"
-msgstr "置き換え"
-
-#: inc/replace.class.php:544 front/action.php:64
-msgid "Replacement successful"
-msgstr "置き換えに成功しました"
-
-#: inc/model.class.php:124 inc/model.class.php:1144
-msgid "Replacement then uninstallation"
-msgstr "置き換えて撤去"
-
-#: inc/model.class.php:200
-msgid "Replacing data"
-msgstr "データの置き換え"
+#: inc/replace.class.php:145
+msgid "Archive of old material"
+msgstr "古い機材のアーカイブ"
 
 #: inc/replace.class.php:465
 msgid "See attached document"
 msgstr "添付文書を表示"
-
-#: inc/config.class.php:84
-msgid "Shortcuts"
-msgstr "ショートカット"
-
-#: inc/model.class.php:95
-msgid "The purge archiving method is not available for this model type"
-msgstr "アーカイブの抹消はこのモデル型では実行できません。"
-
-#: inc/replace.class.php:140
-msgid "This document is the archive of this replaced item"
-msgstr "この文書は置き換えたアイテムのアーカイブです"
 
 #: inc/replace.class.php:581
 msgid "This item is a replacement for item"
@@ -291,22 +181,143 @@ msgstr "このアイテムは置き換えです"
 msgid "This item was replaced by"
 msgstr "このアイテムの置き換え元 : "
 
-#: inc/model.class.php:260 inc/model.class.php:946
-msgid "Transfer's model to use"
-msgstr "利用する転送モデル"
+#: inc/replace.class.php:635 inc/replace.class.php:713
+msgid "Reminder of the replacement model"
+msgstr "置き換えモデルのリマインダー"
 
-#: inc/model.class.php:251 inc/model.class.php:982
-msgid "Type of template"
-msgstr "テンプレート型"
+#: inc/replace.class.php:674
+msgid "New location of item"
+msgstr "アイテムの新しい場所"
 
-#: inc/uninstall.class.php:340 hook.php:44
-msgid "Uninstall"
-msgstr "撤去"
+#: inc/replace.class.php:691 inc/model.class.php:279
+msgid "New status of the computer"
+msgstr "コンピューターの新しい状態"
 
-#: inc/model.class.php:121 inc/model.class.php:345 inc/model.class.php:1140
+#: inc/replace.class.php:771
+msgid "Choices for item to replace"
+msgstr "置き換えるアイテムの選択"
+
+#: inc/replace.class.php:774
+msgid "Old item"
+msgstr "古いアイテム"
+
+#: inc/replace.class.php:784
+msgid "New item"
+msgstr "新しいアイテム"
+
+#: inc/replace.class.php:787
+msgid "Remove"
+msgstr "削除"
+
+#: inc/replace.class.php:833
+msgid "Replace"
+msgstr "置き換え"
+
+#: inc/model.class.php:97
+msgid "The purge archiving method is not available for this model type"
+msgstr "アーカイブの抹消はこのモデル型では実行できません。"
+
+#: inc/model.class.php:123 inc/model.class.php:343 inc/model.class.php:946
 msgid "Uninstallation"
 msgstr "撤去"
 
-#: inc/uninstall.class.php:366 front/action.php:114
-msgid "Uninstallation successful"
-msgstr "撤去しました"
+#: inc/model.class.php:126 inc/model.class.php:950
+msgid "Replacement then uninstallation"
+msgstr "置き換えて撤去"
+
+#: inc/model.class.php:140
+msgid "PDF Archiving"
+msgstr "PDF でアーカイブ"
+
+#: inc/model.class.php:142
+msgid "CSV Archiving"
+msgstr "CSV にアーカイブ"
+
+#: inc/model.class.php:145
+msgid "Purge"
+msgstr "抹消"
+
+#: inc/model.class.php:146
+msgid "Delete + Comment"
+msgstr "削除 + コメント"
+
+#: inc/model.class.php:147
+msgid "Keep + Comment"
+msgstr "維持 + コメント"
+
+#: inc/model.class.php:198
+msgid "Replacing data"
+msgstr "データの置き換え"
+
+#: inc/model.class.php:249 inc/model.class.php:788
+msgid "Type of template"
+msgstr "テンプレート型"
+
+#: inc/model.class.php:258 inc/model.class.php:752
+msgid "Transfer's model to use"
+msgstr "利用する転送モデル"
+
+#: inc/model.class.php:288 inc/model.class.php:798
+msgid "Action on group"
+msgstr "グループの操作"
+
+#: inc/model.class.php:292 inc/model.class.php:956
+msgid "Keep in the current group"
+msgstr "現在のグループに維持"
+
+#: inc/model.class.php:293
+msgid "Affect to a new group"
+msgstr "新しいグループに変更"
+
+#: inc/model.class.php:308
+msgid "New group"
+msgstr "新しいグループ"
+
+#: inc/model.class.php:328
+msgid "Add template"
+msgstr "テンプレート追加"
+
+#: inc/model.class.php:331
+msgid "Manage templates"
+msgstr "テンプレートの管理"
+
+#: inc/model.class.php:343
+msgid "Erase datas"
+msgstr "データの消去"
+
+#: inc/model.class.php:346 inc/model.class.php:660
+msgid "Delete software history (computers)"
+msgstr "ソフトウェアの履歴を削除（コンピューター）"
+
+#: inc/model.class.php:353 inc/model.class.php:819
+msgid "Delete the whole history"
+msgstr "履歴をすべて削除"
+
+#: inc/model.class.php:455
+msgid "Delete inventory data (dynamic flag, locks, agent information, ...)"
+msgstr "インベントリー データ（動的フラグ、ロック、エージェント情報...）削除"
+
+#: inc/model.class.php:526
+msgid "OCSNG link"
+msgid_plural "OCSNG links"
+msgstr[0] "OCSNG リンク"
+
+#: inc/model.class.php:534 inc/model.class.php:771
+msgid "Delete computer in OCSNG"
+msgstr "OCSNG のコンピューターを削除"
+
+#: inc/model.class.php:544 inc/model.class.php:779
+msgid "Delete link with computer in OCSNG"
+msgstr "OCSNG のコンピューターとのリンクを削除"
+
+#: inc/model.class.php:560
+msgid "Delete computer in FusionInventory"
+msgstr "FusionInventory のコンピューターを削除"
+
+#: inc/model.class.php:576
+msgid "Additionnal fields"
+msgstr "追加のフィールド"
+
+#: inc/model.class.php:580
+msgid "Delete Fields plugin informations"
+msgstr "追加のフィールド情報を削除"
