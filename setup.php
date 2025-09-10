@@ -60,7 +60,7 @@ function plugin_init_uninstall()
             $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['uninstall'] = 'front/config.form.php';
             $uninstallconfig = PluginUninstallConfig::getConfig();
 
-            $PLUGIN_HOOKS[Hooks::ADD_CSS]['uninstall'] = ['public/css/uninstall.css'];
+            $PLUGIN_HOOKS[Hooks::ADD_CSS]['uninstall'] = ['css/uninstall.css'];
 
             if ($uninstallconfig['replace_status_dropdown']) {
                 // replace item state by uninstall list
