@@ -46,17 +46,17 @@ class PluginUninstallModel extends CommonDBTM
         return _n("Template", "Templates", $nb);
     }
 
-    public static function canDelete()
+    public static function canDelete(): bool
     {
         return self::canUpdate();
     }
 
-    public static function canPurge()
+    public static function canPurge(): bool
     {
         return self::canUpdate();
     }
 
-    public static function canCreate()
+    public static function canCreate(): bool
     {
         return self::canUpdate();
     }
@@ -68,20 +68,26 @@ class PluginUninstallModel extends CommonDBTM
 
     public static function getMenuContent()
     {
+        /**
+         * @var array $CFG_GLPI
+         */
+        global $CFG_GLPI;
+
         $menu = [];
 
         // get Menu name :
         $menu['title'] = __("Item's Lifecycle", 'uninstall');
-        $menu['page']  = '/' . Plugin::getWebDir('uninstall', false) . '/front/model.php';
-        $menu['icon']  = self::getIcon();
+        $menu['page']  = $CFG_GLPI['root_doc'] . '/plugins/uninstall/front/model.php';
+        $menu['icon']  = PluginUninstallReplace::getIcon();
 
         if (Session::haveRight(PluginUninstallProfile::$rightname, READ)) {
             $menu['options']['model']['title'] = self::getTypeName(Session::getPluralNumber());
-            $menu['options']['model']['page'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
-            $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl('PluginUninstallModel', false);
+            $menu['options']['model']['page'] = Toolbox::getItemTypeSearchUrl(PluginUninstallModel::class, false);
+            $menu['options']['model']['links']['search'] = Toolbox::getItemTypeSearchUrl(PluginUninstallModel::class, false);
+            $menu['options']['model']['icon']  = self::getIcon();
 
             if (Session::haveRight(PluginUninstallProfile::$rightname, UPDATE)) {
-                $menu['options']['model']['links']['add'] = Toolbox::getItemTypeFormUrl('PluginUninstallModel', false);
+                $menu['options']['model']['links']['add'] = Toolbox::getItemTypeFormUrl(PluginUninstallModel::class, false);
             }
         }
 
@@ -194,8 +200,8 @@ class PluginUninstallModel extends CommonDBTM
 
             case __CLASS__:
                 $tab = [];
-                $tab[1] = self::getTypeName(1);
-                $tab[2] = __('Replacing data', 'uninstall');
+                $tab[1] = self::createTabEntry(self::getTypeName(1), 0, $item::getType(), self::getIcon());
+                $tab[2] = self::createTabEntry(__('Replacing data', 'uninstall'), 0, $item::getType(), PluginUninstallReplace::getIcon());
                 return $tab;
         }
         return '';
@@ -1030,7 +1036,7 @@ class PluginUninstallModel extends CommonDBTM
 
             $migration->migrationOneTable($table);
             $ID = PluginUninstallUninstall::getUninstallTransferModelID();
-            $DB->insertOrDie('glpi_plugin_uninstall_models', [
+            $DB->insert('glpi_plugin_uninstall_models', [
                 'FK_entities' => 0,
                 'recursive'   => 1,
                 'name'        => 'Uninstall',
@@ -1044,7 +1050,7 @@ class PluginUninstallModel extends CommonDBTM
                 'raz_network' => 1,
                 'raz_soft_history' => 0,
                 'raz_budget'  => 0,
-            ], "add uninstall model in $table");
+            ]);
         }
 
         // Plugin already installed
@@ -1081,11 +1087,15 @@ class PluginUninstallModel extends CommonDBTM
             if (!$DB->fieldExists($table, 'types_id')) {
                 $migration->addField($table, 'types_id', "int {$default_key_sign} NOT NULL DEFAULT 0");
                 $migration->migrationOneTable($table);
-                $DB->updateOrDie($table, [
-                    'types_id' => 1,
-                ], [
-                    'types_id' => 0,
-                ], "update types_id of $table");
+                $DB->update(
+                    $table,
+                    [
+                        'types_id' => 1,
+                    ],
+                    [
+                        'types_id' => 0,
+                    ],
+                );
 
                 $migration->addField($table, 'replace_name', "bool");
                 $migration->addField($table, 'replace_serial', "bool");
@@ -1120,23 +1130,23 @@ class PluginUninstallModel extends CommonDBTM
             }
             if ($migration->addField($table, 'raz_contact_num', "bool")) {
                 $migration->migrationOneTable($table);
-                $DB->updateOrDie('glpi_plugin_uninstall_models', [
-                    'raz_contact_num' => new QueryExpression($DB::quoteName('raz_contact')),
-                ], [new QueryExpression('1')], "Fill raz_contact_num");
+                $DB->update('glpi_plugin_uninstall_models', [
+                    'raz_contact_num' => new \Glpi\DBAL\QueryExpression($DB::quoteName('raz_contact')),
+                ], [new \Glpi\DBAL\QueryExpression('1')]);
             }
 
             if ($migration->addField($table, 'replace_contact', "bool")) {
                 $migration->migrationOneTable($table);
-                $DB->updateOrDie('glpi_plugin_uninstall_models', [
-                    'replace_contact' => new QueryExpression($DB::quoteName('replace_users')),
-                ], [new QueryExpression('1')], "Fill replace_contact");
+                $DB->update('glpi_plugin_uninstall_models', [
+                    'replace_contact' => new \Glpi\DBAL\QueryExpression($DB::quoteName('replace_users')),
+                ], [new \Glpi\DBAL\QueryExpression('1')]);
             }
 
             if ($migration->addField($table, 'replace_contact_num', "bool")) {
                 $migration->migrationOneTable($table);
-                $DB->updateOrDie('glpi_plugin_uninstall_models', [
-                    'replace_contact_num' => new QueryExpression($DB::quoteName('replace_contact')),
-                ], [new QueryExpression('1')], "Fill replace_contact_num");
+                $DB->update('glpi_plugin_uninstall_models', [
+                    'replace_contact_num' => new \Glpi\DBAL\QueryExpression($DB::quoteName('replace_contact')),
+                ], [new \Glpi\DBAL\QueryExpression('1')]);
             }
             if (!$DB->fieldExists($table, 'raz_plugin_fields')) {
                 $migration->addField($table, 'raz_plugin_fields', "bool");
@@ -1225,7 +1235,7 @@ class PluginUninstallModel extends CommonDBTM
                     PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
-            $DB->doQueryOrDie($query, $DB->error());
+            $DB->doQuery($query);
 
             self::createTransferModel('Uninstall');
             self::createTransferModel('Replace');
@@ -1381,6 +1391,6 @@ class PluginUninstallModel extends CommonDBTM
 
     public static function getIcon()
     {
-        return "fas fa-recycle";
+        return "ti ti-template";
     }
 }
