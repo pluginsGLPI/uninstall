@@ -375,7 +375,6 @@ class PluginUninstallUninstall extends CommonDBTM
         $count = 0;
         $tot   = count($tab_ids[$type]);
 
-        /** @phpstan-ignore-next-line */
         Html::createProgressBar(__('Please wait, uninstallation is running...', 'uninstall'));
 
         foreach ($tab_ids[$type] as $id => $value) {
@@ -389,7 +388,6 @@ class PluginUninstallUninstall extends CommonDBTM
                     'location' => $location,
                 ]);
 
-                /** @phpstan-ignore-next-line */
                 Html::changeProgressBarPosition($count, $tot + 1);
 
                 //Add line in machine's history to say that machine was uninstalled
@@ -401,7 +399,6 @@ class PluginUninstallUninstall extends CommonDBTM
             }
         }
 
-        /** @phpstan-ignore-next-line */
         Html::changeProgressBarPosition($count, $tot, __('Uninstallation successful', 'uninstall'));
 
         echo "</td></tr>";
