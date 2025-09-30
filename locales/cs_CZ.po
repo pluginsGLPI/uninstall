@@ -5,16 +5,16 @@
 # 
 # Translators:
 # Pavel Borecki <pavel.borecki@gmail.com>, 2018
-# David Stepan <stepand@tiscali.cz>, 2024
+# David Stepan <stepand@tiscali.cz>, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-28 01:40+0000\n"
+"POT-Creation-Date: 2025-09-30 01:45+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
-"Last-Translator: David Stepan <stepand@tiscali.cz>, 2024\n"
+"Last-Translator: David Stepan <stepand@tiscali.cz>, 2025\n"
 "Language-Team: Czech (Czech Republic) (https://app.transifex.com/teclib/teams/28042/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +32,7 @@ msgstr "Obecné informace"
 
 #: templates/model_config.html.twig
 msgid "Copy in new item"
-msgstr ""
+msgstr "Kopírovat do nové položky"
 
 #: templates/model_config.html.twig inc/replace.class.php:652
 msgid "Overwrite informations (from old item to the new)"
@@ -52,6 +52,7 @@ msgid ""
 "Plugin PDF is not installed, you won't be able to use PDF format for "
 "archiving"
 msgstr ""
+"Plugin PDF není nainstalován, nebudete moci použít formát PDF pro archivaci"
 
 #: templates/model_config.html.twig inc/replace.class.php:714
 msgid "Connections with other materials"
@@ -65,47 +66,35 @@ msgstr "Přímá propojení"
 msgid "Item's Lifecycle (uninstall)"
 msgstr "Životní cyklus položky (odinstalace)"
 
-#: ajax/locations.php:49 inc/preference.class.php:102
-#: inc/replace.class.php:677
+#: inc/preference.class.php:77
+msgid "Item's location after uninstall"
+msgstr "Umístění položky po odinstalaci"
+
+#: inc/preference.class.php:102 inc/replace.class.php:677
+#: ajax/locations.php:49
 msgid "Keep previous location"
 msgstr "Ponechat předchozí umístění"
 
-#: ajax/locations.php:50 inc/preference.class.php:103
-#: inc/replace.class.php:681
+#: inc/preference.class.php:103 inc/replace.class.php:681
+#: ajax/locations.php:50
 msgid "Empty location"
 msgstr "Prázdné umístění"
 
-#: hook.php:44 inc/uninstall.class.php:340
-msgid "Uninstall"
-msgstr "Odinstalovat"
-
-#: front/action.php:64 inc/replace.class.php:544
-msgid "Replacement successful"
-msgstr "Nahrazení úspěšné"
-
-#: front/action.php:114 inc/uninstall.class.php:366
-msgid "Uninstallation successful"
-msgstr "Odinstalace úspěšná"
-
-#: inc/config.class.php:41 inc/uninstall.class.php:39 inc/model.class.php:74
+#: inc/uninstall.class.php:39 inc/model.class.php:74 inc/config.class.php:41
 msgid "Item's Lifecycle"
 msgstr "Životní cyklus položky"
 
-#: inc/config.class.php:84
-msgid "Shortcuts"
-msgstr "Zkratky"
-
-#: inc/config.class.php:90
-msgid "Location preferences"
-msgstr "Preference umístění"
-
-#: inc/config.class.php:98
-msgid "Replace status dropdown by plugin actions"
-msgstr "Nahradit rozbalovací nabídku stavu akcí zásuvného modulu"
+#: inc/uninstall.class.php:340 hook.php:44
+msgid "Uninstall"
+msgstr "Odinstalovat"
 
 #: inc/uninstall.class.php:344
 msgid "Please wait, uninstallation is running..."
 msgstr "Čekejte, probíhá odinstalace…"
+
+#: inc/uninstall.class.php:366 front/action.php:114
+msgid "Uninstallation successful"
+msgstr "Odinstalace úspěšná"
 
 #: inc/uninstall.class.php:772
 msgid "Item is now uninstalled"
@@ -145,10 +134,6 @@ msgstr "Umístění položky po uplatnění modelu"
 msgid "Lifecycle"
 msgstr "Životní cyklus"
 
-#: inc/preference.class.php:77
-msgid "Item's location after uninstall"
-msgstr "Umístění položky po odinstalaci"
-
 #: inc/replace.class.php:41
 msgid "Item's replacement"
 msgstr "Nahrazení položky"
@@ -173,6 +158,10 @@ msgstr "Archiv starého materiálu"
 #: inc/replace.class.php:465
 msgid "See attached document"
 msgstr "Zobrazit přiložený dokument"
+
+#: inc/replace.class.php:544 front/action.php:64
+msgid "Replacement successful"
+msgstr "Nahrazení úspěšné"
 
 #: inc/replace.class.php:581
 msgid "This item is a replacement for item"
@@ -216,7 +205,7 @@ msgstr "Nahradit"
 
 #: inc/model.class.php:97
 msgid "The purge archiving method is not available for this model type"
-msgstr ""
+msgstr "Metoda archivace s vyčištěním není pro tento typ modelu k dispozici."
 
 #: inc/model.class.php:123 inc/model.class.php:343 inc/model.class.php:946
 msgid "Uninstallation"
@@ -224,7 +213,7 @@ msgstr "Odinstalace"
 
 #: inc/model.class.php:126 inc/model.class.php:950
 msgid "Replacement then uninstallation"
-msgstr ""
+msgstr "Výměna a následná odinstalace"
 
 #: inc/model.class.php:140
 msgid "PDF Archiving"
@@ -326,3 +315,15 @@ msgstr "Další kolonky"
 #: inc/model.class.php:580
 msgid "Delete Fields plugin informations"
 msgstr "Smazat informace zásuvného modulu Kolonky"
+
+#: inc/config.class.php:84
+msgid "Shortcuts"
+msgstr "Zkratky"
+
+#: inc/config.class.php:90
+msgid "Location preferences"
+msgstr "Preference umístění"
+
+#: inc/config.class.php:98
+msgid "Replace status dropdown by plugin actions"
+msgstr "Nahradit rozbalovací nabídku stavu akcí zásuvného modulu"

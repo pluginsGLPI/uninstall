@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-28 01:40+0000\n"
+"POT-Creation-Date: 2025-09-25 01:40+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: INOUE Daisuke, 2025\n"
 "Language-Team: Japanese (Japan) (https://app.transifex.com/teclib/teams/28042/ja_JP/)\n"
@@ -64,47 +64,35 @@ msgstr "直接接続"
 msgid "Item's Lifecycle (uninstall)"
 msgstr "アイテムのライフサイクル（撤去）"
 
-#: ajax/locations.php:49 inc/preference.class.php:102
-#: inc/replace.class.php:677
+#: inc/preference.class.php:77
+msgid "Item's location after uninstall"
+msgstr "撤去後のアイテムの場所"
+
+#: inc/preference.class.php:102 inc/replace.class.php:677
+#: ajax/locations.php:49
 msgid "Keep previous location"
 msgstr "以前の場所に維持"
 
-#: ajax/locations.php:50 inc/preference.class.php:103
-#: inc/replace.class.php:681
+#: inc/preference.class.php:103 inc/replace.class.php:681
+#: ajax/locations.php:50
 msgid "Empty location"
 msgstr "場所を初期状態に"
 
-#: hook.php:44 inc/uninstall.class.php:340
-msgid "Uninstall"
-msgstr "撤去"
-
-#: front/action.php:64 inc/replace.class.php:544
-msgid "Replacement successful"
-msgstr "置き換えに成功しました"
-
-#: front/action.php:114 inc/uninstall.class.php:366
-msgid "Uninstallation successful"
-msgstr "撤去しました"
-
-#: inc/config.class.php:41 inc/uninstall.class.php:39 inc/model.class.php:74
+#: inc/uninstall.class.php:39 inc/model.class.php:74 inc/config.class.php:41
 msgid "Item's Lifecycle"
 msgstr "アイテムのライフサイクル"
 
-#: inc/config.class.php:84
-msgid "Shortcuts"
-msgstr "ショートカット"
-
-#: inc/config.class.php:90
-msgid "Location preferences"
-msgstr "場所の設定"
-
-#: inc/config.class.php:98
-msgid "Replace status dropdown by plugin actions"
-msgstr "状態のドロップダウンをプラグインの操作に置き換える"
+#: inc/uninstall.class.php:340 hook.php:44
+msgid "Uninstall"
+msgstr "撤去"
 
 #: inc/uninstall.class.php:344
 msgid "Please wait, uninstallation is running..."
 msgstr "撤去を実行しています... お待ちください。"
+
+#: inc/uninstall.class.php:366 front/action.php:114
+msgid "Uninstallation successful"
+msgstr "撤去しました"
 
 #: inc/uninstall.class.php:772
 msgid "Item is now uninstalled"
@@ -144,10 +132,6 @@ msgstr "モデル適用後のアイテムの場所"
 msgid "Lifecycle"
 msgstr "ライフサイクル"
 
-#: inc/preference.class.php:77
-msgid "Item's location after uninstall"
-msgstr "撤去後のアイテムの場所"
-
 #: inc/replace.class.php:41
 msgid "Item's replacement"
 msgstr "アイテムの置き換え"
@@ -172,6 +156,10 @@ msgstr "古い機材のアーカイブ"
 #: inc/replace.class.php:465
 msgid "See attached document"
 msgstr "添付文書を表示"
+
+#: inc/replace.class.php:544 front/action.php:64
+msgid "Replacement successful"
+msgstr "置き換えに成功しました"
 
 #: inc/replace.class.php:581
 msgid "This item is a replacement for item"
@@ -321,3 +309,15 @@ msgstr "追加のフィールド"
 #: inc/model.class.php:580
 msgid "Delete Fields plugin informations"
 msgstr "追加のフィールド情報を削除"
+
+#: inc/config.class.php:84
+msgid "Shortcuts"
+msgstr "ショートカット"
+
+#: inc/config.class.php:90
+msgid "Location preferences"
+msgstr "場所の設定"
+
+#: inc/config.class.php:98
+msgid "Replace status dropdown by plugin actions"
+msgstr "状態のドロップダウンをプラグインの操作に置き換える"
