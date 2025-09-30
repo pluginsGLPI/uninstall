@@ -30,7 +30,7 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_UNINSTALL_VERSION', '2.10.0-beta2');
+define('PLUGIN_UNINSTALL_VERSION', '2.10.0');
 define("PLUGIN_UNINSTALL_MIN_GLPI", "11.0.0");
 define("PLUGIN_UNINSTALL_MAX_GLPI", "11.0.99");
 

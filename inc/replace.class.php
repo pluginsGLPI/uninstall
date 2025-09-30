@@ -100,7 +100,6 @@ class PluginUninstallReplace extends CommonDBTM
         $count = 0;
         $tot   = count($tab_ids);
 
-        /** @phpstan-ignore-next-line */
         Html::createProgressBar(__('Please wait, replacement is running...', 'uninstall'));
 
         foreach ($tab_ids as $olditem_id => $newitem_id) {
@@ -594,11 +593,9 @@ class PluginUninstallReplace extends CommonDBTM
                 'action'    => 'replace',
                 'models_id' => $model_id,
             ]);
-            /** @phpstan-ignore-next-line */
             Html::changeProgressBarPosition($count, $tot + 1);
         }
 
-        /** @phpstan-ignore-next-line */
         Html::changeProgressBarPosition(
             $count,
             $tot,
