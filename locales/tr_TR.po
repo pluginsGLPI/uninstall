@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-29 01:41+0000\n"
+"POT-Creation-Date: 2025-09-25 01:40+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>, 2025\n"
 "Language-Team: Turkish (Turkey) (https://app.transifex.com/teclib/teams/28042/tr_TR/)\n"
@@ -64,47 +64,35 @@ msgstr "Doğrudan bağlantılar"
 msgid "Item's Lifecycle (uninstall)"
 msgstr "Ögenin yaşam döngüsü (kaldır)"
 
-#: ajax/locations.php:49 inc/preference.class.php:102
-#: inc/replace.class.php:677
+#: inc/preference.class.php:77
+msgid "Item's location after uninstall"
+msgstr "Kaldırma sonrası öge konumu"
+
+#: inc/preference.class.php:102 inc/replace.class.php:677
+#: ajax/locations.php:49
 msgid "Keep previous location"
 msgstr "Önceki konum korunsun"
 
-#: ajax/locations.php:50 inc/preference.class.php:103
-#: inc/replace.class.php:681
+#: inc/preference.class.php:103 inc/replace.class.php:681
+#: ajax/locations.php:50
 msgid "Empty location"
 msgstr "Boş konum"
 
-#: hook.php:44 inc/uninstall.class.php:340
-msgid "Uninstall"
-msgstr "Kaldır"
-
-#: front/action.php:64 inc/replace.class.php:544
-msgid "Replacement successful"
-msgstr "Değiştirildi"
-
-#: front/action.php:114 inc/uninstall.class.php:366
-msgid "Uninstallation successful"
-msgstr "Kaldırıldı"
-
-#: inc/config.class.php:41 inc/uninstall.class.php:39 inc/model.class.php:74
+#: inc/uninstall.class.php:39 inc/model.class.php:74 inc/config.class.php:41
 msgid "Item's Lifecycle"
 msgstr "Ögenin yaşam döngüsü"
 
-#: inc/config.class.php:84
-msgid "Shortcuts"
-msgstr "Kısayollar"
-
-#: inc/config.class.php:90
-msgid "Location preferences"
-msgstr "Konum ayarları"
-
-#: inc/config.class.php:98
-msgid "Replace status dropdown by plugin actions"
-msgstr "Durum açılan kutusu eklenti işlemlerine göre değiştirilsin"
+#: inc/uninstall.class.php:340 hook.php:44
+msgid "Uninstall"
+msgstr "Kaldır"
 
 #: inc/uninstall.class.php:344
 msgid "Please wait, uninstallation is running..."
 msgstr "Lütfen bekleyin kaldırma işlemi sürüyor..."
+
+#: inc/uninstall.class.php:366 front/action.php:114
+msgid "Uninstallation successful"
+msgstr "Kaldırıldı"
 
 #: inc/uninstall.class.php:772
 msgid "Item is now uninstalled"
@@ -144,10 +132,6 @@ msgstr "Model uygulandıktan sonra ögenin konumu"
 msgid "Lifecycle"
 msgstr "Yaşam döngüsü"
 
-#: inc/preference.class.php:77
-msgid "Item's location after uninstall"
-msgstr "Kaldırma sonrası öge konumu"
-
 #: inc/replace.class.php:41
 msgid "Item's replacement"
 msgstr "Ögenin değişikilği"
@@ -172,6 +156,10 @@ msgstr "Eski materyalin arşivi"
 #: inc/replace.class.php:465
 msgid "See attached document"
 msgstr "Ekli belgeye bakın"
+
+#: inc/replace.class.php:544 front/action.php:64
+msgid "Replacement successful"
+msgstr "Değiştirildi"
 
 #: inc/replace.class.php:581
 msgid "This item is a replacement for item"
@@ -323,3 +311,15 @@ msgstr "Ek alanlar"
 #: inc/model.class.php:580
 msgid "Delete Fields plugin informations"
 msgstr "Alanlar eklentisi bilgilerini sil"
+
+#: inc/config.class.php:84
+msgid "Shortcuts"
+msgstr "Kısayollar"
+
+#: inc/config.class.php:90
+msgid "Location preferences"
+msgstr "Konum ayarları"
+
+#: inc/config.class.php:98
+msgid "Replace status dropdown by plugin actions"
+msgstr "Durum açılan kutusu eklenti işlemlerine göre değiştirilsin"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-28 01:40+0000\n"
+"POT-Creation-Date: 2025-09-25 01:40+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2023\n"
 "Language-Team: Croatian (Croatia) (https://app.transifex.com/teclib/teams/28042/hr_HR/)\n"
@@ -64,47 +64,35 @@ msgstr "Izravne veze"
 msgid "Item's Lifecycle (uninstall)"
 msgstr "Životni vijek predmeta (deinstaliraj)"
 
-#: ajax/locations.php:49 inc/preference.class.php:102
-#: inc/replace.class.php:677
+#: inc/preference.class.php:77
+msgid "Item's location after uninstall"
+msgstr "Lokacija predmeta nakon deinstaliranja"
+
+#: inc/preference.class.php:102 inc/replace.class.php:677
+#: ajax/locations.php:49
 msgid "Keep previous location"
 msgstr "Zadrži prethodnu lokaciju"
 
-#: ajax/locations.php:50 inc/preference.class.php:103
-#: inc/replace.class.php:681
+#: inc/preference.class.php:103 inc/replace.class.php:681
+#: ajax/locations.php:50
 msgid "Empty location"
 msgstr "Prazna lokacija"
 
-#: hook.php:44 inc/uninstall.class.php:340
-msgid "Uninstall"
-msgstr "Deinstaliraj"
-
-#: front/action.php:64 inc/replace.class.php:544
-msgid "Replacement successful"
-msgstr "Zamjena uspješna"
-
-#: front/action.php:114 inc/uninstall.class.php:366
-msgid "Uninstallation successful"
-msgstr "Deinstalacija uspješna"
-
-#: inc/config.class.php:41 inc/uninstall.class.php:39 inc/model.class.php:74
+#: inc/uninstall.class.php:39 inc/model.class.php:74 inc/config.class.php:41
 msgid "Item's Lifecycle"
 msgstr "Životni vijek predmeta"
 
-#: inc/config.class.php:84
-msgid "Shortcuts"
-msgstr "Prečaci"
-
-#: inc/config.class.php:90
-msgid "Location preferences"
-msgstr "Postavke lokacije"
-
-#: inc/config.class.php:98
-msgid "Replace status dropdown by plugin actions"
-msgstr "Zamijeni padajući popis stanja s radnjama dodatka"
+#: inc/uninstall.class.php:340 hook.php:44
+msgid "Uninstall"
+msgstr "Deinstaliraj"
 
 #: inc/uninstall.class.php:344
 msgid "Please wait, uninstallation is running..."
 msgstr "Pričekaj, deinstalacija je u tijeku …"
+
+#: inc/uninstall.class.php:366 front/action.php:114
+msgid "Uninstallation successful"
+msgstr "Deinstalacija uspješna"
 
 #: inc/uninstall.class.php:772
 msgid "Item is now uninstalled"
@@ -144,10 +132,6 @@ msgstr "Lokacija predmeta nakon primjenjivanja modela"
 msgid "Lifecycle"
 msgstr "Životni vijek"
 
-#: inc/preference.class.php:77
-msgid "Item's location after uninstall"
-msgstr "Lokacija predmeta nakon deinstaliranja"
-
 #: inc/replace.class.php:41
 msgid "Item's replacement"
 msgstr "Zamjena predmeta"
@@ -172,6 +156,10 @@ msgstr "Arhiva starog materijala"
 #: inc/replace.class.php:465
 msgid "See attached document"
 msgstr "Pogledaj priloženi dokument"
+
+#: inc/replace.class.php:544 front/action.php:64
+msgid "Replacement successful"
+msgstr "Zamjena uspješna"
 
 #: inc/replace.class.php:581
 msgid "This item is a replacement for item"
@@ -325,3 +313,15 @@ msgstr "Dodatna polja"
 #: inc/model.class.php:580
 msgid "Delete Fields plugin informations"
 msgstr "Izbriši informacije dodatka „Polja”"
+
+#: inc/config.class.php:84
+msgid "Shortcuts"
+msgstr "Prečaci"
+
+#: inc/config.class.php:90
+msgid "Location preferences"
+msgstr "Postavke lokacije"
+
+#: inc/config.class.php:98
+msgid "Replace status dropdown by plugin actions"
+msgstr "Zamijeni padajući popis stanja s radnjama dodatka"

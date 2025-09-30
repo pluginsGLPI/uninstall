@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-29 01:41+0000\n"
+"POT-Creation-Date: 2025-09-30 01:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,44 +61,32 @@ msgstr ""
 msgid "Item's Lifecycle (uninstall)"
 msgstr ""
 
-#: ajax/locations.php:49 inc/preference.class.php:102 inc/replace.class.php:677
+#: inc/preference.class.php:77
+msgid "Item's location after uninstall"
+msgstr ""
+
+#: inc/preference.class.php:102 inc/replace.class.php:677 ajax/locations.php:49
 msgid "Keep previous location"
 msgstr ""
 
-#: ajax/locations.php:50 inc/preference.class.php:103 inc/replace.class.php:681
+#: inc/preference.class.php:103 inc/replace.class.php:681 ajax/locations.php:50
 msgid "Empty location"
 msgstr ""
 
-#: hook.php:44 inc/uninstall.class.php:340
-msgid "Uninstall"
-msgstr ""
-
-#: front/action.php:64 inc/replace.class.php:544
-msgid "Replacement successful"
-msgstr ""
-
-#: front/action.php:114 inc/uninstall.class.php:366
-msgid "Uninstallation successful"
-msgstr ""
-
-#: inc/config.class.php:41 inc/uninstall.class.php:39 inc/model.class.php:74
+#: inc/uninstall.class.php:39 inc/model.class.php:74 inc/config.class.php:41
 msgid "Item's Lifecycle"
 msgstr ""
 
-#: inc/config.class.php:84
-msgid "Shortcuts"
-msgstr ""
-
-#: inc/config.class.php:90
-msgid "Location preferences"
-msgstr ""
-
-#: inc/config.class.php:98
-msgid "Replace status dropdown by plugin actions"
+#: inc/uninstall.class.php:340 hook.php:44
+msgid "Uninstall"
 msgstr ""
 
 #: inc/uninstall.class.php:344
 msgid "Please wait, uninstallation is running..."
+msgstr ""
+
+#: inc/uninstall.class.php:366 front/action.php:114
+msgid "Uninstallation successful"
 msgstr ""
 
 #: inc/uninstall.class.php:772
@@ -139,10 +127,6 @@ msgstr ""
 msgid "Lifecycle"
 msgstr ""
 
-#: inc/preference.class.php:77
-msgid "Item's location after uninstall"
-msgstr ""
-
 #: inc/replace.class.php:41
 msgid "Item's replacement"
 msgstr ""
@@ -166,6 +150,10 @@ msgstr ""
 
 #: inc/replace.class.php:465
 msgid "See attached document"
+msgstr ""
+
+#: inc/replace.class.php:544 front/action.php:64
+msgid "Replacement successful"
 msgstr ""
 
 #: inc/replace.class.php:581
@@ -316,4 +304,16 @@ msgstr ""
 
 #: inc/model.class.php:580
 msgid "Delete Fields plugin informations"
+msgstr ""
+
+#: inc/config.class.php:84
+msgid "Shortcuts"
+msgstr ""
+
+#: inc/config.class.php:90
+msgid "Location preferences"
+msgstr ""
+
+#: inc/config.class.php:98
+msgid "Replace status dropdown by plugin actions"
 msgstr ""
