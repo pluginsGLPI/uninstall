@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
 
+## [2.10.1] - 2025-10-24
+
 ### Fixed
 
 - Fix get associated items (move `glpi_computers_items` to `glpi_assets_assets_peripheralassets`)
