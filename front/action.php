@@ -28,9 +28,7 @@
  * -------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
-
-Html::header(__('Transfer'), $_SERVER['PHP_SELF'], "admin", "transfer");
+Html::header(__s('Transfer'), $_SERVER['PHP_SELF'], "admin", "transfer");
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
@@ -61,7 +59,7 @@ if (isset($_REQUEST["replace"])) {
     );
 
     unset($_SESSION['glpi_uninstalllist']);
-    Session::addMessageAfterRedirect(__('Replacement successful', 'uninstall'));
+    Session::addMessageAfterRedirect(__s('Replacement successful', 'uninstall'));
 
     Html::footer();
 
@@ -98,34 +96,31 @@ if (isset($_REQUEST["uninstall"])) {
         );
         Html::footer();
     }
-} else {
-    if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL) {
-        //Massive uninstallation
-        if (isset($_SESSION['glpi_uninstalllist'])) {
-            PluginUninstallUninstall::uninstall(
-                $_REQUEST["device_type"],
-                $_REQUEST["model_id"],
-                $_SESSION['glpi_uninstalllist'],
-                $location,
-            );
-        }
-
-        unset($_SESSION['glpi_uninstalllist']);
-        Session::addMessageAfterRedirect(__('Uninstallation successful', 'uninstall'));
-
-        Html::footer();
-
-        $device_type = $_REQUEST["device_type"];
-        Html::redirect($device_type::getSearchURL());
-    } else {
-        if (isset($_SESSION['glpi_uninstalllist'])) {
-            PluginUninstallReplace::showReplacementForm(
-                $_REQUEST["device_type"],
-                $_REQUEST["model_id"],
-                $_SESSION['glpi_uninstalllist'],
-                $location,
-            );
-        }
-        Html::footer();
+} elseif ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL) {
+    //Massive uninstallation
+    if (isset($_SESSION['glpi_uninstalllist'])) {
+        PluginUninstallUninstall::uninstall(
+            $_REQUEST["device_type"],
+            $_REQUEST["model_id"],
+            $_SESSION['glpi_uninstalllist'],
+            $location,
+        );
     }
+
+    unset($_SESSION['glpi_uninstalllist']);
+    Session::addMessageAfterRedirect(__s('Uninstallation successful', 'uninstall'));
+    Html::footer();
+    $device_type = $_REQUEST["device_type"];
+    Html::redirect($device_type::getSearchURL());
+} else {
+    if (isset($_SESSION['glpi_uninstalllist'])) {
+        PluginUninstallReplace::showReplacementForm(
+            $_REQUEST["device_type"],
+            $_REQUEST["model_id"],
+            $_SESSION['glpi_uninstalllist'],
+            $location,
+        );
+    }
+
+    Html::footer();
 }

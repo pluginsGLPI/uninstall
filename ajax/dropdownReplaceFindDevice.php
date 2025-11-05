@@ -28,11 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
-
 use Glpi\Exception\Http\AccessDeniedHttpException;
 use Glpi\Exception\Http\BadRequestHttpException;
-use Glpi\Toolbox\Sanitizer;
 
 use function Safe\json_encode;
 
@@ -50,7 +47,7 @@ Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT
 global $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE, $CFG_GLPI, $DB;
 
 if (!in_array($_REQUEST['itemtype'], array_merge($UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE))) {
-    throw new AccessDeniedHttpException(__("You don't have permission to perform this action."));
+    throw new AccessDeniedHttpException(__s("You don't have permission to perform this action."));
 }
 
 if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBTM::class, true)) {
@@ -62,10 +59,8 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
     $datastoadd       = [];
 
     $displaywith = false;
-    if (isset($_REQUEST['displaywith'])) {
-        if (is_array($_REQUEST['displaywith']) && count($_REQUEST['displaywith'])) {
-            $displaywith = true;
-        }
+    if (isset($_REQUEST['displaywith']) && (is_array($_REQUEST['displaywith']) && count($_REQUEST['displaywith']))) {
+        $displaywith = true;
     }
 
     $criteria = [
@@ -81,6 +76,7 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
     if ($item->maybeDeleted()) {
         $criteria['WHERE']['is_deleted'] = 0;
     }
+
     if ($item->maybeTemplate()) {
         $criteria['WHERE']['is_template'] = 0;
     }
@@ -110,9 +106,9 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
     if (isset($_REQUEST['used'])) {
         $used = $_REQUEST['used'];
 
-        if (count($used)) {
+        if (count($used) > 0) {
             $criteria['WHERE'][] = [
-                'NOT' => ["$table.id" => $used],
+                'NOT' => [$table . '.id' => $used],
             ];
         }
     }
@@ -146,29 +142,33 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
                             $data[$key],
                         );
                     }
-                    if ((strlen($withoutput) > 0) && ($withoutput != '&nbsp;')) {
-                        $outputval = sprintf(__('%1$s - %2$s'), $outputval, $withoutput);
+
+                    if ((strlen((string) $withoutput) > 0) && ($withoutput != '&nbsp;')) {
+                        $outputval = sprintf(__s('%1$s - %2$s'), $outputval, $withoutput);
                     }
                 }
             }
         }
+
         $ID         = $data['id'];
         $addcomment = "";
         $title      = $outputval;
         if (isset($data["comment"])) {
             $addcomment .= $data["comment"];
-            $title = sprintf(__('%1$s - %2$s'), $title, $addcomment);
+            $title = sprintf(__s('%1$s - %2$s'), $title, $addcomment);
         }
+
         if (
             $_SESSION["glpiis_ids_visible"]
-            || (strlen($outputval) == 0)
+            || (strlen((string) $outputval) == 0)
         ) {
-            $outputval = sprintf(__('%1$s (%2$s)'), $outputval, $ID);
+            $outputval = sprintf(__s('%1$s (%2$s)'), $outputval, $ID);
         }
-        array_push($options, ['id'     => $ID,
+
+        $options[] = ['id'     => $ID,
             'text'  => $outputval,
             'title' => $title,
-        ]);
+        ];
         $count++;
     }
 

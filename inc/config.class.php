@@ -34,7 +34,7 @@ class PluginUninstallConfig extends Config
 
     public static function getTypeName($nb = 0)
     {
-        return __("Item's Lifecycle", 'uninstall');
+        return __s("Item's Lifecycle", 'uninstall');
     }
 
     /**
@@ -49,10 +49,10 @@ class PluginUninstallConfig extends Config
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-        switch ($item->getType()) {
-            case "Config":
-                return self::createTabEntry(self::getTypeName(), 0, $item::getType(), PluginUninstallReplace::getIcon());
+        if ($item->getType() === "Config") {
+            return self::createTabEntry(self::getTypeName(), 0, $item::getType(), PluginUninstallReplace::getIcon());
         }
+
         return '';
     }
 
@@ -77,21 +77,22 @@ class PluginUninstallConfig extends Config
         if ($canedit) {
             echo "<form name='form' action='" . Toolbox::getItemTypeFormURL("Config") . "' method='post'>";
         }
-        echo "<h2 class='header'>" . __("Shortcuts", 'uninstall') . "</h2>";
+
+        echo "<h2 class='header'>" . __s("Shortcuts", 'uninstall') . "</h2>";
 
         echo "<ul class='shortcuts'>";
         echo "<li><a href='" . PluginUninstallModel::getSearchURL() . "' class='vsubmit'>"
         . PluginUninstallModel::getTypeName(Session::getPluralNumber()) . "</a><li>";
         echo "<li><a href='preference.php?forcetab=PluginUninstallPreference$1' class='vsubmit'>"
-        . __("Location preferences", 'uninstall') . "</a><li>";
+        . __s("Location preferences", 'uninstall') . "</a><li>";
         echo "</ul>";
 
-        echo "<h2 class='header'>" . __("Configuration") . "</h2>";
+        echo "<h2 class='header'>" . __s("Configuration") . "</h2>";
 
         $rand = mt_rand();
         echo "<div class='field'>";
-        echo "<label for='dropdown_replace_status_dropdown$rand'>"
-           . __("Replace status dropdown by plugin actions", 'uninstall')
+        echo sprintf("<label for='dropdown_replace_status_dropdown%d'>", $rand)
+           . __s("Replace status dropdown by plugin actions", 'uninstall')
            . "</label>";
         Dropdown::showYesNo("replace_status_dropdown", $cfg['replace_status_dropdown'], -1, [
             'rand' => $rand,
@@ -99,7 +100,7 @@ class PluginUninstallConfig extends Config
         echo "</div>";
 
         if ($canedit) {
-            echo Html::hidden('config_class', ['value' => __CLASS__]);
+            echo Html::hidden('config_class', ['value' => self::class]);
             echo Html::hidden('config_context', ['value' => self::CFG_CTXT]);
             echo Html::submit(_sx('button', 'Save'), [
                 'name' => 'update',
@@ -109,13 +110,13 @@ class PluginUninstallConfig extends Config
 
         Html::closeForm();
         echo "</div>"; //.uninstall_config
+        return null;
     }
 
 
     /**
      * Database table installation for the item type
      *
-     * @param Migration $migration
      * @return boolean True on success
      */
     public static function install(Migration $migration)
@@ -147,9 +148,6 @@ class PluginUninstallConfig extends Config
 
     /**
      * Callback for Config `pre_item_add` hook.
-     *
-     * @param Config $config
-     * @return void
      */
     public static function preConfigSet(Config $config): void
     {
@@ -175,15 +173,16 @@ class PluginUninstallConfig extends Config
     public static function renderStaleAgentConfigField()
     {
         $stale_agents_uninstall = Config::getConfigurationValue('plugin:uninstall', 'stale_agents_uninstall');
-        if (!\PluginUninstallModel::canView()) {
+        if (!PluginUninstallModel::canView()) {
             return false;
         }
-        return \PluginUninstallModel::dropdown([
+
+        return PluginUninstallModel::dropdown([
             'name' => '_stale_agents_uninstall',
             'value' => $stale_agents_uninstall ?? 0,
             'entity' => $_SESSION['glpiactive_entity'],
             'condition' => [
-                'types_id' => \PluginUninstallModel::TYPE_MODEL_UNINSTALL,
+                'types_id' => PluginUninstallModel::TYPE_MODEL_UNINSTALL,
             ],
             'display' => false,
         ]);

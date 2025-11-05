@@ -28,22 +28,30 @@
  * -------------------------------------------------------------------------
  */
 
-use Glpi\Exception\Http\AccessDeniedHttpException;
+require_once __DIR__ . '/../../src/Plugin.php';
 
-Session::checkRight(PluginUninstallPreference::$rightname, UPDATE);
+use Rector\Caching\ValueObject\Storage\FileCacheStorage;
+use Rector\Config\RectorConfig;
+use Rector\ValueObject\PhpVersion;
 
-// Save user preferences
-if (isset($_POST['update_user_preferences_uninstall'])) {
-    $pref = new PluginUninstallPreference();
-    foreach ($_POST["id"] as $values) {
-        $pref = new PluginUninstallPreference();
-        // load preferences and check if current user is the related user
-        if ($pref->getFromDB($values["id"]) && $pref->fields['users_id'] == Session::getLoginUserID()) {
-            $pref->update($values);
-        } else {
-            throw new AccessDeniedHttpException();
-        }
-    }
-
-    Html::back();
-}
+return RectorConfig::configure()
+    ->withPaths([
+        __DIR__ . '/ajax',
+        __DIR__ . '/front',
+        __DIR__ . '/inc',
+    ])
+    ->withPhpVersion(PhpVersion::PHP_82)
+    ->withCache(
+        cacheDirectory: __DIR__ . '/var/rector',
+        cacheClass: FileCacheStorage::class,
+    )
+    ->withRootFiles()
+    ->withParallel(timeoutSeconds: 300)
+    ->withImportNames(removeUnusedImports: true)
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        codingStyle: true,
+    )
+    ->withPhpSets(php82: true) // apply PHP sets up to PHP 8.2
+;

@@ -28,8 +28,6 @@
  * -------------------------------------------------------------------------
  */
 
-include("../../../inc/includes.php");
-
 Session::checkRight('config', UPDATE);
 
 /** @var array $CFG_GLPI */

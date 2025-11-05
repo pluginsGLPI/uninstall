@@ -41,8 +41,9 @@ function plugin_uninstall_MassiveActions($type)
     }
 
     if (in_array($type, $UNINSTALL_TYPES)) {
-        return ["PluginUninstallUninstall:uninstall" => "<i class='" . PluginUninstallReplace::getIcon() . "'></i>" . __("Uninstall", 'uninstall')];
+        return ["PluginUninstallUninstall:uninstall" => "<i class='" . PluginUninstallReplace::getIcon() . "'></i>" . __s("Uninstall", 'uninstall')];
     }
+
     return [];
 }
 
@@ -50,14 +51,11 @@ function plugin_uninstall_MassiveActions($type)
 
 function plugin_uninstall_addDefaultWhere($itemtype)
 {
-
-    switch ($itemtype) {
-        case 'PluginUninstallModel':
-            if (!PluginUninstallModel::canReplace()) {
-                return "`glpi_plugin_uninstall_models`.`types_id` = '1'";
-            }
-            break;
+    if ($itemtype === 'PluginUninstallModel' && !PluginUninstallModel::canReplace()) {
+        return "`glpi_plugin_uninstall_models`.`types_id` = '1'";
     }
+
+    return null;
 }
 
 // ** Install / Uninstall plugin **

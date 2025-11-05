@@ -66,7 +66,7 @@ function plugin_init_uninstall()
 
             if ($uninstallconfig['replace_status_dropdown']) {
                 // replace item state by uninstall list
-                $PLUGIN_HOOKS['post_item_form']['uninstall'] = [PluginUninstallState::class, 'replaceState'];
+                $PLUGIN_HOOKS['post_item_form']['uninstall'] = PluginUninstallState::replaceState(...);
             } else {
                 // add tabs to items
                 foreach ($UNINSTALL_TYPES as $type) {
@@ -78,19 +78,18 @@ function plugin_init_uninstall()
 
             // As config update is submitted using the `context` inventory, it will always be considered as "new" and will
             // be processed by an `add` operation.
-            $PLUGIN_HOOKS[Hooks::PRE_ITEM_ADD]['uninstall'] = ['Config::class' => [PluginUninstallConfig::class, 'preConfigSet']];
+            $PLUGIN_HOOKS[Hooks::PRE_ITEM_ADD]['uninstall'] = ['Config::class' => PluginUninstallConfig::preConfigSet(...)];
 
             $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
                 [
                     'label' => __s('Apply uninstall profile'),
-                    'render_callback' => static function ($config) {
-                        return PluginUninstallConfig::renderStaleAgentConfigField();
-                    },
+                    'render_callback' => static fn($config) => PluginUninstallConfig::renderStaleAgentConfigField(),
                     'action_callback' => static function (Agent $agent, array $config, ?CommonDBTM $item): bool {
-                        if ($item === null) {
+                        if (!$item instanceof CommonDBTM) {
                             return false;
                         }
-                        \PluginUninstallUninstall::doStaleAgentUninstall($item);
+
+                        PluginUninstallUninstall::doStaleAgentUninstall($item);
                         return true;
                     },
                 ],
@@ -105,11 +104,12 @@ function plugin_init_uninstall()
                 }
 
                 //Item actions
-                $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['uninstall'] = [PluginUninstallModel::class => [PluginUninstallPreference::class, 'afterUpdateModel']];
-                $PLUGIN_HOOKS[Hooks::ITEM_DELETE]['uninstall'] = [PluginUninstallModel::class => [PluginUninstallPreference::class, 'beforeItemPurge']];
-                $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['uninstall'] = ['User' => [PluginUninstallPreference::class, 'beforeItemPurge']];
+                $PLUGIN_HOOKS[Hooks::ITEM_UPDATE]['uninstall'] = [PluginUninstallModel::class => PluginUninstallPreference::afterUpdateModel(...)];
+                $PLUGIN_HOOKS[Hooks::ITEM_DELETE]['uninstall'] = [PluginUninstallModel::class => PluginUninstallPreference::beforeItemPurge(...)];
+                $PLUGIN_HOOKS[Hooks::PRE_ITEM_PURGE]['uninstall'] = ['User' => PluginUninstallPreference::beforeItemPurge(...)];
             }
         }
+
         $PLUGIN_HOOKS[Hooks::POST_INIT]['uninstall'] = 'plugin_uninstall_postinit';
     }
 }
@@ -117,7 +117,7 @@ function plugin_init_uninstall()
 function plugin_version_uninstall()
 {
     return [
-        'name'           => __("Item's Lifecycle (uninstall)", 'uninstall'),
+        'name'           => __s("Item's Lifecycle (uninstall)", 'uninstall'),
         'author'         => 'Walid Nouh, François Legastelois, Remi Collet',
         'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
         'version'        => PLUGIN_UNINSTALL_VERSION,
