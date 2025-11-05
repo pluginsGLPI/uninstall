@@ -75,7 +75,7 @@ class PluginUninstallPreference extends CommonDBTM
         if (!empty($templates)) {
             echo "<tr class='tab_bg_1 center'>";
             echo "<th>" . PluginUninstallModel::getTypeName() . "</th>";
-            echo "<th>" . __("Item's location after uninstall", "uninstall") . "</th>";
+            echo "<th>" . __s("Item's location after uninstall", "uninstall") . "</th>";
             echo "</tr>";
 
             foreach ($templates as $ID => $name) {
@@ -100,8 +100,8 @@ class PluginUninstallPreference extends CommonDBTM
                     'value'     => ($value == '' ? 0 : $value),
                     'comments'  => 1,
                     'entity'    => $entity,
-                    'toadd'     => [-1 => __('Keep previous location', 'uninstall'),
-                        0  => __('Empty location', 'uninstall'),
+                    'toadd'     => [-1 => __s('Keep previous location', 'uninstall'),
+                        0  => __s('Empty location', 'uninstall'),
                     ],
                 ]);
 

@@ -68,7 +68,7 @@ class PluginUninstallState
         $html = json_encode("
          {$states_name}
          <a href='#' id='uninstall_actions_open' class='vsubmit'>"
-            . __("Update")
+            . __s("Update")
          . "</a>");
         $modal_body = json_encode($html_modal);
 

@@ -34,7 +34,7 @@ class PluginUninstallConfig extends Config
 
     public static function getTypeName($nb = 0)
     {
-        return __("Item's Lifecycle", 'uninstall');
+        return __s("Item's Lifecycle", 'uninstall');
     }
 
     /**
@@ -78,21 +78,21 @@ class PluginUninstallConfig extends Config
             echo "<form name='form' action='" . Toolbox::getItemTypeFormURL("Config") . "' method='post'>";
         }
 
-        echo "<h2 class='header'>" . __("Shortcuts", 'uninstall') . "</h2>";
+        echo "<h2 class='header'>" . __s("Shortcuts", 'uninstall') . "</h2>";
 
         echo "<ul class='shortcuts'>";
         echo "<li><a href='" . PluginUninstallModel::getSearchURL() . "' class='vsubmit'>"
         . PluginUninstallModel::getTypeName(Session::getPluralNumber()) . "</a><li>";
         echo "<li><a href='preference.php?forcetab=PluginUninstallPreference$1' class='vsubmit'>"
-        . __("Location preferences", 'uninstall') . "</a><li>";
+        . __s("Location preferences", 'uninstall') . "</a><li>";
         echo "</ul>";
 
-        echo "<h2 class='header'>" . __("Configuration") . "</h2>";
+        echo "<h2 class='header'>" . __s("Configuration") . "</h2>";
 
         $rand = mt_rand();
         echo "<div class='field'>";
         echo sprintf("<label for='dropdown_replace_status_dropdown%d'>", $rand)
-           . __("Replace status dropdown by plugin actions", 'uninstall')
+           . __s("Replace status dropdown by plugin actions", 'uninstall')
            . "</label>";
         Dropdown::showYesNo("replace_status_dropdown", $cfg['replace_status_dropdown'], -1, [
             'rand' => $rand,

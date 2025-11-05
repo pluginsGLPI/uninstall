@@ -41,7 +41,7 @@ function plugin_uninstall_MassiveActions($type)
     }
 
     if (in_array($type, $UNINSTALL_TYPES)) {
-        return ["PluginUninstallUninstall:uninstall" => "<i class='" . PluginUninstallReplace::getIcon() . "'></i>" . __("Uninstall", 'uninstall')];
+        return ["PluginUninstallUninstall:uninstall" => "<i class='" . PluginUninstallReplace::getIcon() . "'></i>" . __s("Uninstall", 'uninstall')];
     }
 
     return [];

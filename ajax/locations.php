@@ -45,8 +45,8 @@ if (
     Location::dropdown(['value'     => ($location == '' ? 0 : $location),
         'comments'  => 1,
         'entity'    => $_POST["entity"],
-        'toadd'     => [-1 => __('Keep previous location', 'uninstall'),
-            0  => __('Empty location', 'uninstall'),
+        'toadd'     => [-1 => __s('Keep previous location', 'uninstall'),
+            0  => __s('Empty location', 'uninstall'),
         ],
     ]);
 }

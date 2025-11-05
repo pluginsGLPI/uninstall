@@ -47,7 +47,7 @@ Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT
 global $UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE, $CFG_GLPI, $DB;
 
 if (!in_array($_REQUEST['itemtype'], array_merge($UNINSTALL_TYPES, $UNINSTALL_DIRECT_CONNECTIONS_TYPE))) {
-    throw new AccessDeniedHttpException(__("You don't have permission to perform this action."));
+    throw new AccessDeniedHttpException(__s("You don't have permission to perform this action."));
 }
 
 if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBTM::class, true)) {
@@ -144,7 +144,7 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
                     }
 
                     if ((strlen((string) $withoutput) > 0) && ($withoutput != '&nbsp;')) {
-                        $outputval = sprintf(__('%1$s - %2$s'), $outputval, $withoutput);
+                        $outputval = sprintf(__s('%1$s - %2$s'), $outputval, $withoutput);
                     }
                 }
             }
@@ -155,14 +155,14 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
         $title      = $outputval;
         if (isset($data["comment"])) {
             $addcomment .= $data["comment"];
-            $title = sprintf(__('%1$s - %2$s'), $title, $addcomment);
+            $title = sprintf(__s('%1$s - %2$s'), $title, $addcomment);
         }
 
         if (
             $_SESSION["glpiis_ids_visible"]
             || (strlen((string) $outputval) == 0)
         ) {
-            $outputval = sprintf(__('%1$s (%2$s)'), $outputval, $ID);
+            $outputval = sprintf(__s('%1$s (%2$s)'), $outputval, $ID);
         }
 
         $options[] = ['id'     => $ID,

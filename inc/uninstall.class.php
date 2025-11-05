@@ -68,7 +68,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
     public static function getTypeName($nb = 0)
     {
-        return __("Item's Lifecycle", 'uninstall');
+        return __s("Item's Lifecycle", 'uninstall');
     }
 
     /**
@@ -118,7 +118,7 @@ class PluginUninstallUninstall extends CommonDBTM
             $itemtype = $ma->getItemtype(false);
             foreach ($ids as $id) {
                 if ($item->getFromDB($id)) {
-                    //Session::addMessageAfterRedirect(sprintf(__('Form duplicated: %s', 'formcreator'), $item->getName()));
+                    //Session::addMessageAfterRedirect(sprintf(__s('Form duplicated: %s', 'formcreator'), $item->getName()));
                     $_SESSION['glpi_uninstalllist'][$itemtype][$id] = $id;
                     $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
                 }
@@ -362,12 +362,12 @@ class PluginUninstallUninstall extends CommonDBTM
         $transfer->getFromDB($model->fields["transfers_id"]);
 
         echo "<div class='center'>";
-        echo "<table class='tab_cadre_fixe'><tr><th>" . __('Uninstall', 'uninstall') . "</th></tr>";
+        echo "<table class='tab_cadre_fixe'><tr><th>" . __s('Uninstall', 'uninstall') . "</th></tr>";
         echo "<tr class='tab_bg_2'><td>";
         $count = 0;
         $tot   = count($tab_ids[$type]);
 
-        $message = __('Please wait, uninstallation is running...', 'uninstall');
+        $message = __s('Please wait, uninstallation is running...', 'uninstall');
 
         foreach ($tab_ids[$type] as $id => $value) {
             $count++;
@@ -792,10 +792,10 @@ class PluginUninstallUninstall extends CommonDBTM
 
         switch ($params['action']) {
             case 'uninstall':
-                $changes[2] = __('Item is now uninstalled', 'uninstall');
+                $changes[2] = __s('Item is now uninstalled', 'uninstall');
                 if (isset($params['models_id'])) {
                     $changes[2] = sprintf(
-                        __('Item is now uninstalled with model %s', 'uninstall'),
+                        __s('Item is now uninstalled with model %s', 'uninstall'),
                         $model->getName(),
                     );
                 }
@@ -803,10 +803,10 @@ class PluginUninstallUninstall extends CommonDBTM
                 break;
 
             case 'replaced_by':
-                $changes[2] = __('Item replaced by a new one', 'uninstall');
+                $changes[2] = __s('Item replaced by a new one', 'uninstall');
                 if (isset($params['models_id'])) {
                     $changes[2] = sprintf(
-                        __('Item replaced by a new one with model %s', 'uninstall'),
+                        __s('Item replaced by a new one with model %s', 'uninstall'),
                         $model->getName(),
                     );
                 }
@@ -814,13 +814,13 @@ class PluginUninstallUninstall extends CommonDBTM
                 break;
 
             case 'replace':
-                $changes[2] = __('Item replacing an old one', 'uninstall');
+                $changes[2] = __s('Item replacing an old one', 'uninstall');
                 break;
 
             case 'removeFromOCS':
                 $changes[2] = addslashes(sprintf(
-                    __('%1$s %2$s'),
-                    __('Removed from OCSNG with ID', 'uninstall'),
+                    __s('%1$s %2$s'),
+                    __s('Removed from OCSNG with ID', 'uninstall'),
                     $params['ocs_id'],
                 ));
                 break;
@@ -937,9 +937,9 @@ class PluginUninstallUninstall extends CommonDBTM
              method='post'>";
         echo Html::hidden('device_type', ['value' => $type]);
         echo "<table class='tab_cadre_fixe' cellpadding='5'>";
-        echo "<tr><th colspan='3'>" . __("Apply model", 'uninstall') . "</th></tr>";
+        echo "<tr><th colspan='3'>" . __s("Apply model", 'uninstall') . "</th></tr>";
 
-        echo "<tr class='tab_bg_1'><td>" . __("Model") . "</td><td>";
+        echo "<tr class='tab_bg_1'><td>" . __s("Model") . "</td><td>";
         if (class_exists($type) && is_a($type, CommonDBTM::class, true)) {
 
             $item = new $type();
@@ -965,7 +965,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
         }
 
-        echo "<tr class='tab_bg_1'><td>" . __("Item's location after applying model", "uninstall") . "</td>";
+        echo "<tr class='tab_bg_1'><td>" . __s("Item's location after applying model", "uninstall") . "</td>";
         echo "<td><span id='show_objects'>\n" . Dropdown::EMPTY_VALUE . "</span></td>\n";
         echo "</tr>";
 
@@ -1086,7 +1086,7 @@ class PluginUninstallUninstall extends CommonDBTM
         if (
             self::canView() && in_array($item->getType(), $UNINSTALL_TYPES) && !$withtemplate
         ) {
-            return __('Lifecycle', 'uninstall');
+            return __s('Lifecycle', 'uninstall');
         }
 
         return '';

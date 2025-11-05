@@ -75,7 +75,7 @@ class PluginUninstallReplace extends CommonDBTM
 
     public static function getTypeName($nb = 0)
     {
-        return __("Item's replacement", 'uninstall');
+        return __s("Item's replacement", 'uninstall');
     }
 
 
@@ -101,7 +101,7 @@ class PluginUninstallReplace extends CommonDBTM
         $overwrite = $model->fields["overwrite"];
 
         echo "<div class='center'>";
-        echo "<table class='tab_cadre_fixe'><tr><th>" . __('Replacement', 'uninstall') . "</th></tr>";
+        echo "<table class='tab_cadre_fixe'><tr><th>" . __s('Replacement', 'uninstall') . "</th></tr>";
         echo "<tr class='tab_bg_2'><td>";
         $count = 0;
         $tot   = count($tab_ids);
@@ -159,7 +159,7 @@ class PluginUninstallReplace extends CommonDBTM
 
                 } else {
                     //TODO Which datas ? Add Defaults...
-                    $out = __('Replacement', 'uninstall') . "\r\n";
+                    $out = __s('Replacement', 'uninstall') . "\r\n";
 
                     $datas = $olditem->fields;
                     // hack for phpstan to avoid error
@@ -184,15 +184,15 @@ class PluginUninstallReplace extends CommonDBTM
                 fwrite($open_file, $out);
                 fclose($open_file);
                 // Compute comment text
-                $comment  = __('This document is the archive of this replaced item', 'uninstall') . " "
+                $comment  = __s('This document is the archive of this replaced item', 'uninstall') . " "
                         . self::getCommentsForReplacement($olditem, false, false);
 
                 // Create & Attach new document to current item
                 $doc   = new Document();
-                $input = ['name'                  => addslashes(__('Archive of old material', 'uninstall')),
+                $input = ['name'                  => addslashes(__s('Archive of old material', 'uninstall')),
                     'upload_file'           => $name_out,
                     'comment'               => addslashes($comment),
-                    'add'                   => __('Add'),
+                    'add'                   => __s('Add'),
                     'entities_id'           => $newitem->getEntityID(),
                     'is_recursive'          => $newitem->isRecursive(),
                     'link'                  => "",
@@ -505,7 +505,7 @@ class PluginUninstallReplace extends CommonDBTM
                     $comment = empty($newitem->fields['comment']) ? "" : stripslashes((string) $newitem->fields['comment']);
 
                     $comment .= self::getCommentsForReplacement($olditem, true);
-                    $comment .= "\n- " . __('See attached document', 'uninstall');
+                    $comment .= "\n- " . __s('See attached document', 'uninstall');
                     $newitem->update(
                         ['id'      => $newitem_id,
                             'comment' => addslashes($comment),
@@ -612,28 +612,28 @@ class PluginUninstallReplace extends CommonDBTM
 
         if ($display_message) {
             if ($new) {
-                $string .= "\n" . __('This item is a replacement for item', 'uninstall') . " ";
+                $string .= "\n" . __s('This item is a replacement for item', 'uninstall') . " ";
             } else {
-                $string .= "\n" . __('This item was replaced by', 'uninstall') . " ";
+                $string .= "\n" . __s('This item was replaced by', 'uninstall') . " ";
             }
         }
 
         if ($item->isField('id')) {
-            $string .= "\n " . sprintf(__('%1$s: %2$s'), __('ID'), $item->getField('id'));
+            $string .= "\n " . sprintf(__s('%1$s: %2$s'), __s('ID'), $item->getField('id'));
         }
 
         if ($item->isField('name')) {
-            $string .= "\n " . sprintf(__('%1$s: %2$s'), __('Name'), $item->getField('name'));
+            $string .= "\n " . sprintf(__s('%1$s: %2$s'), __s('Name'), $item->getField('name'));
         }
 
         if ($item->isField('serial')) {
-            $string .= "\n " . sprintf(__('%1$s: %2$s'), __('Serial number'), $item->getField('serial'));
+            $string .= "\n " . sprintf(__s('%1$s: %2$s'), __s('Serial number'), $item->getField('serial'));
         }
 
         if ($item->isField('otherserial')) {
             $string .= "\n " . sprintf(
-                __('%1$s: %2$s'),
-                __('Inventory number'),
+                __s('%1$s: %2$s'),
+                __s('Inventory number'),
                 $item->getField('otherserial'),
             );
         }
@@ -649,8 +649,8 @@ class PluginUninstallReplace extends CommonDBTM
     {
 
         return ($field == 1)
-               ? "<span class='green b'>" . __('Yes') . "</span>"
-               : "<span class='red b'>" . __('No') . "</span>";
+               ? "<span class='green b'>" . __s('Yes') . "</span>"
+               : "<span class='red b'>" . __s('No') . "</span>";
     }
 
 
@@ -671,28 +671,28 @@ class PluginUninstallReplace extends CommonDBTM
 
         echo "<tr class='tab_bg_1 center'>"
            . "<th colspan='6'>" . sprintf(
-               __('%1$s - %2$s'),
-               __('Reminder of the replacement model', 'uninstall'),
-               __('General informations', 'uninstall'),
+               __s('%1$s - %2$s'),
+               __s('Reminder of the replacement model', 'uninstall'),
+               __s('General informations', 'uninstall'),
            )
            . "</th></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), __s('Name')) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_name"]) . "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Serial number')) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), __s('Serial number')) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_serial"]) . "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Inventory number')) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), __s('Inventory number')) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_otherserial"]) . "</td>";
         echo "</tr>";
 
         echo "<tr><td colspan='6'></td></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
-        echo "<td colspan='2'>" . __('Overwrite informations (from old item to the new)', 'uninstall')
+        echo "<td colspan='2'>" . __s('Overwrite informations (from old item to the new)', 'uninstall')
            . "</td>";
         echo "<td>" . self::coloredYN($model->fields["overwrite"]) . "</td>";
-        echo "<td colspan='2'>" . __('Archiving method of the old material', 'uninstall') . "</td>";
+        echo "<td colspan='2'>" . __s('Archiving method of the old material', 'uninstall') . "</td>";
         echo "<td>";
         $methods = PluginUninstallModel::getReplacementMethods();
         switch ($model->fields["replace_method"]) {
@@ -712,14 +712,14 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<tr><td colspan='6'></td></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
-        echo "<td></td><td>" . __('New location of item', 'uninstall') . "</td>";
+        echo "<td></td><td>" . __s('New location of item', 'uninstall') . "</td>";
         switch ($location) {
             case -1:
-                echo "<td><span class='red b'>" . __('Keep previous location', 'uninstall') . "</span></td>";
+                echo "<td><span class='red b'>" . __s('Keep previous location', 'uninstall') . "</span></td>";
                 break;
 
             case 0:
-                echo "<td><span class='red b'>" . __('Empty location', 'uninstall') . "</span></td>";
+                echo "<td><span class='red b'>" . __s('Empty location', 'uninstall') . "</span></td>";
                 break;
 
             default:
@@ -729,10 +729,10 @@ class PluginUninstallReplace extends CommonDBTM
                 break;
         }
 
-        echo "<td>" . __('New status of the computer', 'uninstall') . "</td>";
+        echo "<td>" . __s('New status of the computer', 'uninstall') . "</td>";
         echo "<td>";
         if ($model->fields['states_id'] == 0) {
-            echo "<span class='red b'>" . __('Status') . "</span>";
+            echo "<span class='red b'>" . __s('Status') . "</span>";
         } else {
             echo "<span class='green b'>";
             echo Dropdown::getDropdownName('glpi_states', $model->fields['states_id']);
@@ -751,54 +751,54 @@ class PluginUninstallReplace extends CommonDBTM
 
         echo "<tr class='tab_bg_1 center'>";
         echo "<th colspan='4'>" . sprintf(
-            __('%1$s - %2$s'),
-            __('Reminder of the replacement model', 'uninstall'),
-            __('Connections with other materials', 'uninstall'),
+            __s('%1$s - %2$s'),
+            __s('Reminder of the replacement model', 'uninstall'),
+            __s('Connections with other materials', 'uninstall'),
         )
            . "</th></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Document', 'Documents', 2)) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), _sn('Document', 'Documents', 2)) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_documents"]) . "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Contract', 'Contracts', 2)) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), _sn('Contract', 'Contracts', 2)) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_contracts"]) . "</td>";
         echo "</tr>";
 
         echo "<tr class='tab_bg_1 center'>";
         echo "<td>" . sprintf(
-            __('%1$s %2$s'),
-            __('Copy'),
-            __('Financial and administratives information'),
+            __s('%1$s %2$s'),
+            __s('Copy'),
+            __s('Financial and administratives information'),
         ) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_infocoms"]) . "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Reservation', 'Reservations', 2)) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), _sn('Reservation', 'Reservations', 2)) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_reservations"]) . "</td>";
         echo "</tr>";
 
         echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('User')) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), __s('User')) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_users"]) . "</td>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Group')) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), __s('Group')) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_groups"]) . "</td>";
         echo "</tr>";
 
         echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Ticket', 'Tickets', 2)) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), _sn('Ticket', 'Tickets', 2)) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_tickets"]) . "</td>";
         echo "<td>" . sprintf(
-            __('%1$s %2$s'),
-            __('Copy'),
+            __s('%1$s %2$s'),
+            __s('Copy'),
             sprintf(
-                __('%1$s %2$s'),
-                _n('Connection', 'Connections', 2),
-                _n('Network', 'Networks', 2),
+                __s('%1$s %2$s'),
+                _sn('Connection', 'Connections', 2),
+                _sn('Network', 'Networks', 2),
             ),
         ) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_netports"]) . "</td>";
         echo "</tr>";
 
         echo "<tr class='tab_bg_1 center'>";
-        echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Direct connections', 'uninstall')) . "</td>";
+        echo "<td>" . sprintf(__s('%1$s %2$s'), __s('Copy'), __s('Direct connections', 'uninstall')) . "</td>";
         echo "<td>" . self::coloredYN($model->fields["replace_direct_connections"]) . "</td>";
         echo "<td colspan='2'></td>";
         echo "</tr></table></div>";
@@ -810,23 +810,23 @@ class PluginUninstallReplace extends CommonDBTM
 
         echo "<tr class='tab_bg_1 center'>";
         $colspan = count($tab_ids[$type]) > 1 ? 5 : 4;
-        echo "<th colspan='" . $colspan . "'>" . __('Choices for item to replace', 'uninstall') . "</th></tr>";
+        echo "<th colspan='" . $colspan . "'>" . __s('Choices for item to replace', 'uninstall') . "</th></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
-        echo "<th>" . __('Old item', 'uninstall') . "</th>";
+        echo "<th>" . __s('Old item', 'uninstall') . "</th>";
 
         if (Search::getOptionNumber($type, 'otherserial')) {
-            echo "<th>" . __('Inventory number') . "</th>";
+            echo "<th>" . __s('Inventory number') . "</th>";
         }
 
         if (Search::getOptionNumber($type, 'serial')) {
-            echo "<th>" . __('Serial number') . "</th>";
+            echo "<th>" . __s('Serial number') . "</th>";
         }
 
-        echo "<th>" . __('New item', 'uninstall') . "</th>";
+        echo "<th>" . __s('New item', 'uninstall') . "</th>";
 
         if (count($tab_ids[$type]) > 1) {
-            echo "<th>" . __('Remove', 'uninstall') . "</th>";
+            echo "<th>" . __s('Remove', 'uninstall') . "</th>";
         }
 
         echo "</tr>";
@@ -871,11 +871,11 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<tr class='tab_bg_1 center'>";
         echo "<td colspan='4' class='center'>";
 
-        echo "<input type='hidden' name='device_type' value='" . $type . "' />";
-        echo "<input type='hidden' name='model_id' value='" . $model_id . "' />";
-        echo "<input type='hidden' name='locations_id' value='" . $location . "' />";
+        echo "<input type='hidden' name='device_type' value='" . htmlentities((string) $type) . "' />";
+        echo "<input type='hidden' name='model_id' value='" . htmlentities((string) $model_id) . "' />";
+        echo "<input type='hidden' name='locations_id' value='" . htmlentities((string) $location) . "' />";
 
-        echo "<input type='submit' name='replace' value=\"" . __('Replace', 'uninstall') . "\"
+        echo "<input type='submit' name='replace' value=\"" . __s('Replace', 'uninstall') . "\"
              class='submit'>";
         echo "</td></tr>";
 

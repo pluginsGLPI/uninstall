@@ -28,7 +28,7 @@
  * -------------------------------------------------------------------------
  */
 
-Html::header(__('Transfer'), $_SERVER['PHP_SELF'], "admin", "transfer");
+Html::header(__s('Transfer'), $_SERVER['PHP_SELF'], "admin", "transfer");
 
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
@@ -59,7 +59,7 @@ if (isset($_REQUEST["replace"])) {
     );
 
     unset($_SESSION['glpi_uninstalllist']);
-    Session::addMessageAfterRedirect(__('Replacement successful', 'uninstall'));
+    Session::addMessageAfterRedirect(__s('Replacement successful', 'uninstall'));
 
     Html::footer();
 
@@ -108,7 +108,7 @@ if (isset($_REQUEST["uninstall"])) {
     }
 
     unset($_SESSION['glpi_uninstalllist']);
-    Session::addMessageAfterRedirect(__('Uninstallation successful', 'uninstall'));
+    Session::addMessageAfterRedirect(__s('Uninstallation successful', 'uninstall'));
     Html::footer();
     $device_type = $_REQUEST["device_type"];
     Html::redirect($device_type::getSearchURL());
