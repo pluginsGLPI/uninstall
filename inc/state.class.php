@@ -41,17 +41,19 @@ class PluginUninstallState
 
         if (
             !array_key_exists('item', $params)
-            || !in_array(get_class($params['item']), $UNINSTALL_TYPES)
+            || !in_array($params['item']::class, $UNINSTALL_TYPES)
             || !isset($params['item']->fields['id'])
             || !$params['item']->can($params['item']->fields['id'], UPDATE)
         ) {
             return false;
         }
+
         $item        = $params['item'];
         $items_id    = $item->fields['id'];
         $users_id    = Session::getLoginUserID();
         $state       = new State();
         $state->getFromDB($item->fields['states_id']);
+
         $states_name = $state->getName([
             'complete' => true,
         ]);
@@ -64,7 +66,7 @@ class PluginUninstallState
 
         // we json encore to pass it to js (auto-escaping)
         $html = json_encode("
-         $states_name
+         {$states_name}
          <a href='#' id='uninstall_actions_open' class='vsubmit'>"
             . __("Update")
          . "</a>");
@@ -86,5 +88,6 @@ class PluginUninstallState
       });
 JAVASCRIPT;
         echo Html::scriptBlock($JS);
+        return null;
     }
 }

@@ -52,6 +52,7 @@ class PluginUninstallPreference extends CommonDBTM
                 $input['locations_action'] = 'set';
             }
         }
+
         return $input;
     }
 
@@ -88,14 +89,14 @@ class PluginUninstallPreference extends CommonDBTM
 
                 echo "<tr class='tab_bg_1'><td>" . $name . "</td>";
                 echo "<td>";
-                $value = (isset($this->fields["locations_id"]) ? $this->fields["locations_id"] : 0);
+                $value = ($this->fields["locations_id"] ?? 0);
 
                 // Handle "old" special value, dropdown expect "-1" in this case
                 if ($this->fields['locations_action'] == "old" && $value == 0) {
                     $value = -1;
                 }
 
-                Location::dropdown(['name'      => "id[$pref_ID][locations_id]",
+                Location::dropdown(['name'      => sprintf('id[%s][locations_id]', $pref_ID),
                     'value'     => ($value == '' ? 0 : $value),
                     'comments'  => 1,
                     'entity'    => $entity,
@@ -165,7 +166,8 @@ class PluginUninstallPreference extends CommonDBTM
                 'NOT' => ['entities_id' => $except_entity],
             ];
         }
-        $DB->delete(getTableForItemType(__CLASS__), $criteria);
+
+        $DB->delete(getTableForItemType(self::class), $criteria);
     }
 
 
@@ -191,14 +193,14 @@ class PluginUninstallPreference extends CommonDBTM
 
         $it = $DB->request([
             'SELECT' => ['id'],
-            'FROM' => getTableForItemType(__CLASS__),
+            'FROM' => getTableForItemType(self::class),
             'WHERE' => [
                 'users_id' => $user_id,
                 'entities_id' => $entity,
                 'templates_id' => $template,
             ],
         ]);
-        return count($it) ? $it->current()['id'] : 0;
+        return count($it) > 0 ? $it->current()['id'] : 0;
     }
 
 
@@ -256,6 +258,7 @@ class PluginUninstallPreference extends CommonDBTM
         if ($item->getType() == 'Preference' && Session::haveRight('uninstall:profile', READ)) {
             return PluginUninstallUninstall::getTypeName();
         }
+
         return '';
     }
 
@@ -266,6 +269,7 @@ class PluginUninstallPreference extends CommonDBTM
             $pref = new self();
             $pref->showFormUserPreferences();
         }
+
         return true;
     }
 
@@ -284,19 +288,19 @@ class PluginUninstallPreference extends CommonDBTM
         if ($DB->tableExists($table)) {
             $migration->changeField($table, 'user_id', 'FK_users', "integer");
             $migration->addField($table, 'FK_template', 'integer');
-            $migration->renameTable($table, getTableForItemType(__CLASS__));
+            $migration->renameTable($table, getTableForItemType(self::class));
         }
 
-        $table = getTableForItemType(__CLASS__);
+        $table = getTableForItemType(self::class);
         // plugin already installed
         if ($DB->tableExists($table)) {
             // from 1.0.0 to 1.3.0
             if ($DB->fieldExists($table, 'ID')) {
                 $migration->changeField($table, 'ID', 'id', 'autoincrement');
-                $migration->changeField($table, 'FK_users', 'users_id', "int {$default_key_sign} NOT NULL");
-                $migration->changeField($table, 'FK_entities', 'entities_id', "int {$default_key_sign} DEFAULT 0");
-                $migration->changeField($table, 'FK_template', 'templates_id', "int {$default_key_sign} DEFAULT 0");
-                $migration->changeField($table, 'location', 'locations_id', "int {$default_key_sign} DEFAULT 0");
+                $migration->changeField($table, 'FK_users', 'users_id', sprintf('int %s NOT NULL', $default_key_sign));
+                $migration->changeField($table, 'FK_entities', 'entities_id', sprintf('int %s DEFAULT 0', $default_key_sign));
+                $migration->changeField($table, 'FK_template', 'templates_id', sprintf('int %s DEFAULT 0', $default_key_sign));
+                $migration->changeField($table, 'location', 'locations_id', sprintf('int %s DEFAULT 0', $default_key_sign));
             }
 
             // 2.7.2
@@ -330,6 +334,7 @@ class PluginUninstallPreference extends CommonDBTM
                      ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
             $DB->doQuery($query);
         }
+
         return true;
     }
 
@@ -338,6 +343,6 @@ class PluginUninstallPreference extends CommonDBTM
     {
         /** @var DBmysql $DB */
         global $DB;
-        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
+        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(self::class) . "`");
     }
 }

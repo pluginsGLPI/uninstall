@@ -28,8 +28,6 @@
  * -------------------------------------------------------------------------
  */
 
-include('../../../inc/includes.php');
-
 Session::checkRight(PluginUninstallModel::$rightname, READ);
 
 Html::header(

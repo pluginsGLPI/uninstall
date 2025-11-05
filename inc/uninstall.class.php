@@ -87,18 +87,18 @@ class PluginUninstallUninstall extends CommonDBTM
             }
         }
 
-        switch ($ma->getAction()) {
-            case 'uninstall':
-                $uninst = new PluginUninstallUninstall();
-                $uninst->dropdownUninstallModels(
-                    "model_id",
-                    $_SESSION["glpiID"],
-                    $_SESSION["glpiactive_entity"],
-                );
-                echo "&nbsp;"
-                  . Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
-                return true;
+        if ($ma->getAction() === 'uninstall') {
+            $uninst = new PluginUninstallUninstall();
+            $uninst->dropdownUninstallModels(
+                "model_id",
+                $_SESSION["glpiID"],
+                $_SESSION["glpiactive_entity"],
+            );
+            echo "&nbsp;"
+              . Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
+            return true;
         }
+
         return false;
     }
 
@@ -114,26 +114,22 @@ class PluginUninstallUninstall extends CommonDBTM
          * @var array $CFG_GLPI
          */
         global $CFG_GLPI;
-
-        switch ($ma->getAction()) {
-            case "uninstall":
-                $itemtype = $ma->getItemtype(false);
-
-                foreach ($ids as $id) {
-                    if ($item->getFromDB($id)) {
-                        //Session::addMessageAfterRedirect(sprintf(__('Form duplicated: %s', 'formcreator'), $item->getName()));
-                        $_SESSION['glpi_uninstalllist'][$itemtype][$id] = $id;
-                        $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
-                    }
+        if ($ma->getAction() === "uninstall") {
+            $itemtype = $ma->getItemtype(false);
+            foreach ($ids as $id) {
+                if ($item->getFromDB($id)) {
+                    //Session::addMessageAfterRedirect(sprintf(__('Form duplicated: %s', 'formcreator'), $item->getName()));
+                    $_SESSION['glpi_uninstalllist'][$itemtype][$id] = $id;
+                    $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
                 }
-                Html::redirect($CFG_GLPI['root_doc'] . '/plugins/uninstall/front/action.php?device_type=' . $itemtype . "&model_id=" . $_POST["model_id"]);
+            }
+
+            Html::redirect($CFG_GLPI['root_doc'] . '/plugins/uninstall/front/action.php?device_type=' . $itemtype . "&model_id=" . $_POST["model_id"]);
         }
-        return;
     }
 
     /**
      * Do uninstall process on a single item
-     * @return void
      */
     private static function doOneUninstall(PluginUninstallModel $model, Transfer $transfer, CommonDBTM $item, array $options = []): void
     {
@@ -160,6 +156,7 @@ class PluginUninstallUninstall extends CommonDBTM
         if ($model->fields['raz_glpiinventory'] == 1) {
             self::deleteGlpiInventoryLink($item);
         }
+
         $input['is_dynamic']  = $item->fields['is_dynamic']; #to prevent locked field
 
         //--------------------//
@@ -182,10 +179,8 @@ class PluginUninstallUninstall extends CommonDBTM
         }
 
         //RAZ contact number
-        if ($item->isField('contact') && ($model->fields["raz_contact_num"] == 1)) {
-            if ($item->isField('contact_num')) {
-                $fields["contact_num"] = '';
-            }
+        if ($item->isField('contact') && $model->fields["raz_contact_num"] == 1 && $item->isField('contact_num')) {
+            $fields["contact_num"] = '';
         }
 
         //RAZ user
@@ -207,6 +202,7 @@ class PluginUninstallUninstall extends CommonDBTM
             if ($location == '') {
                 $location = 0;
             }
+
             switch ($location) {
                 case -1:
                     break;
@@ -249,13 +245,8 @@ class PluginUninstallUninstall extends CommonDBTM
                 $fields["autoupdatesystems_id"] = 0;
             }
 
-            if ($plug->isActivated('ocsinventoryng')) {
-                if (
-                    $item->fields["is_dynamic"]
-                    && ($model->fields["remove_from_ocs"] || $model->fields["delete_ocs_link"])
-                ) {
-                    $input["is_dynamic"] = 0;
-                }
+            if ($plug->isActivated('ocsinventoryng') && ($item->fields["is_dynamic"] && ($model->fields["remove_from_ocs"] || $model->fields["delete_ocs_link"]))) {
+                $input["is_dynamic"] = 0;
             }
 
             //RAZ network
@@ -272,6 +263,7 @@ class PluginUninstallUninstall extends CommonDBTM
             if ($item->isField('ip')) {
                 $fields['ip'] = '';
             }
+
             if ($item->isField('mac')) {
                 $fields['mac'] = '';
             }
@@ -279,7 +271,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
         foreach ($fields as $name => $value) {
             if (
-                !($item->getField($name) != NOT_AVAILABLE)
+                $item->getField($name) == NOT_AVAILABLE
                 || ($item->getField($name) != $value)
             ) {
                 $input[$name] = $value;
@@ -328,11 +320,13 @@ class PluginUninstallUninstall extends CommonDBTM
                 if ($model->fields["remove_from_ocs"] == 1) {
                     self::deleteComputerInOCSByGlpiID($id);
                 }
+
                 //Delete link in glpi_ocs_link
                 if ($model->fields["delete_ocs_link"] || $model->fields["remove_from_ocs"]) {
                     self::deleteOcsLink($id);
                 }
             }
+
             //Should never happend that transfer_id = 0, but just in case
             if ($model->fields["transfers_id"] > 0) {
                 $transfer->moveItems(
@@ -343,16 +337,12 @@ class PluginUninstallUninstall extends CommonDBTM
             }
         }
 
-        if ($plug->isActivated('fusioninventory')) {
-            if ($model->fields['raz_fusioninventory'] == 1) {
-                self::deleteFusionInventoryLink($type, $id);
-            }
+        if ($plug->isActivated('fusioninventory') && $model->fields['raz_fusioninventory'] == 1) {
+            self::deleteFusionInventoryLink($type, $id);
         }
 
-        if ($plug->isActivated('fields')) {
-            if ($model->fields['raz_plugin_fields'] == 1) {
-                self::deletePluginFieldsLink($type, $id);
-            }
+        if ($plug->isActivated('fields') && $model->fields['raz_plugin_fields'] == 1) {
+            self::deletePluginFieldsLink($type, $id);
         }
 
         //Plugin hook after uninstall
@@ -361,7 +351,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
     public static function uninstall($type, $model_id, $tab_ids, $location)
     {
-        $plug = new Plugin();
+        new Plugin();
 
         //Get the model
         $model = new PluginUninstallModel();
@@ -408,14 +398,13 @@ class PluginUninstallUninstall extends CommonDBTM
 
     /**
      * Do the configured uninstall action for the item related to the stale agent being cleaned.
-     * @param CommonDBTM $item
-     * @return void
      */
     public static function doStaleAgentUninstall(CommonDBTM $item): void
     {
         $stale_agents_uninstall = Config::getConfigurationValue('plugin:uninstall', 'stale_agents_uninstall');
         $model = new PluginUninstallModel();
         $model->getConfig($stale_agents_uninstall);
+
         $transfer = new Transfer();
         $transfer->getFromDB($model->fields["transfers_id"]);
         self::doOneUninstall($model, $transfer, $item);
@@ -431,10 +420,11 @@ class PluginUninstallUninstall extends CommonDBTM
     public static function deleteOcsLink($computers_id)
     {
         if (class_exists('PluginOcsinventoryngOcslink')) {
-            $link = new \PluginOcsinventoryngOcslink();
+            $link = new PluginOcsinventoryngOcslink();
             $link->dohistory = false;
             $link->deleteByCriteria(['computers_id' => $computers_id]);
         }
+
         if (class_exists('PluginOcsinventoryngRegistryKey')) {
             $reg = new PluginOcsinventoryngRegistryKey();
             $reg->deleteByCriteria(['computers_id' => $computers_id]);
@@ -563,32 +553,23 @@ class PluginUninstallUninstall extends CommonDBTM
     **/
     public static function deleteFusionInventoryLink($itemtype, $items_id)
     {
-        if (
-            class_exists('PluginFusioninventoryAgent')
-            && function_exists('plugin_pre_item_purge_fusioninventory')
-        ) {
+        if (class_exists('PluginFusioninventoryAgent') && function_exists('plugin_pre_item_purge_fusioninventory') && (class_exists($itemtype) && is_a($itemtype, CommonDBTM::class, true))) {
+            $item = new $itemtype();
+            $item->getFromDB($items_id);
+            $agent = new PluginFusioninventoryAgent();
+            $agents = $agent->getAgentsFromComputers([$items_id]);
+            // clean item associated to agents
+            plugin_pre_item_purge_fusioninventory($item);
+            if ($itemtype === 'Computer') {
+                // remove agent(s)
+                foreach ($agents as $current_agent) {
+                    $agent->deleteByCriteria(['id' => $current_agent['id']], true);
+                }
 
-            if (class_exists($itemtype) && is_a($itemtype, CommonDBTM::class, true)) {
-                $item = new $itemtype();
-                $item->getFromDB($items_id);
-
-                $agent = new PluginFusioninventoryAgent();
-                $agents = $agent->getAgentsFromComputers([$items_id]);
-
-                // clean item associated to agents
-                plugin_pre_item_purge_fusioninventory($item);
-
-                if ($itemtype == 'Computer') {
-                    // remove agent(s)
-                    foreach ($agents as $current_agent) {
-                        $agent->deleteByCriteria(['id' => $current_agent['id']], true);
-                    }
-
-                    if (class_exists('PluginFusioninventoryComputerLicenseInfo')) {
-                        // remove licences
-                        $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
-                        $pfComputerLicenseInfo->deleteByCriteria(['computers_id' => $items_id]);
-                    }
+                if (class_exists('PluginFusioninventoryComputerLicenseInfo')) {
+                    // remove licences
+                    $pfComputerLicenseInfo = new PluginFusioninventoryComputerLicenseInfo();
+                    $pfComputerLicenseInfo->deleteByCriteria(['computers_id' => $items_id]);
                 }
             }
         }
@@ -661,7 +642,7 @@ class PluginUninstallUninstall extends CommonDBTM
         if (isset($RELATION[$item->getTable()])) {
             foreach ($RELATION[$item->getTable()] as $tablename => $fields) {
                 if ($tablename[0] == '_') {
-                    $tablename = ltrim($tablename, '_');
+                    $tablename = ltrim((string) $tablename, '_');
                 }
 
                 $sub_itemtype = getItemTypeForTable($tablename);
@@ -671,7 +652,7 @@ class PluginUninstallUninstall extends CommonDBTM
                     continue;
                 }
 
-                if (in_array(get_class($sub_item), [Agent::class, Asset_PeripheralAsset::class, Lockedfield::class, NetworkName::class])) {
+                if (in_array($sub_item::class, [Agent::class, Asset_PeripheralAsset::class, Lockedfield::class, NetworkName::class])) {
                     // Specific handling
                     continue;
                 }
@@ -689,6 +670,7 @@ class PluginUninstallUninstall extends CommonDBTM
                             $itemtype_field = reset($itemtype_matches);
                             $items_id_field = reset($items_id_matches);
                         }
+
                         $DB->update(
                             $tablename,
                             [
@@ -817,6 +799,7 @@ class PluginUninstallUninstall extends CommonDBTM
                         $model->getName(),
                     );
                 }
+
                 break;
 
             case 'replaced_by':
@@ -827,6 +810,7 @@ class PluginUninstallUninstall extends CommonDBTM
                         $model->getName(),
                     );
                 }
+
                 break;
 
             case 'replace':
@@ -841,11 +825,12 @@ class PluginUninstallUninstall extends CommonDBTM
                 ));
                 break;
         }
+
         Log::history(
             $params['items_id'],
             $params['itemtype'],
             $changes,
-            __CLASS__,
+            self::class,
             Log::HISTORY_PLUGIN,
         );
     }
@@ -862,10 +847,10 @@ class PluginUninstallUninstall extends CommonDBTM
     public static function getHistoryEntry($data)
     {
 
-        switch ($data['linked_action'] - Log::HISTORY_PLUGIN) {
-            case 0:
-                return $data['new_value'];
+        if ($data['linked_action'] - Log::HISTORY_PLUGIN === 0) {
+            return $data['new_value'];
         }
+
         return '';
     }
 
@@ -884,7 +869,7 @@ class PluginUninstallUninstall extends CommonDBTM
             'WHERE' => ['name' => self::PLUGIN_UNINSTALL_TRANSFER_NAME],
         ]);
 
-        if (!count($iterator)) {
+        if (count($iterator) === 0) {
             if ($create) {
                 $transfer                   = new Transfer();
                 $input["name"]              = self::PLUGIN_UNINSTALL_TRANSFER_NAME;
@@ -904,6 +889,7 @@ class PluginUninstallUninstall extends CommonDBTM
             $data = $iterator->current();
             $id   = $data['id'];
         }
+
         return $id;
     }
 
@@ -926,9 +912,10 @@ class PluginUninstallUninstall extends CommonDBTM
             ],
         ]);
 
-        if (count($it)) {
+        if (count($it) > 0) {
             return $it->current()['id'];
         }
+
         return 0;
     }
 
@@ -970,7 +957,7 @@ class PluginUninstallUninstall extends CommonDBTM
             ];
 
             Ajax::updateItemOnSelectEvent(
-                "dropdown_model_id$rand",
+                'dropdown_model_id' . $rand,
                 "show_objects",
                 $CFG_GLPI['root_doc'] . "/plugins/uninstall/ajax/locations.php",
                 $params,
@@ -1086,6 +1073,7 @@ class PluginUninstallUninstall extends CommonDBTM
                                        : "")
                                     . $data["name"];
         }
+
         return $templates;
     }
 
@@ -1096,13 +1084,11 @@ class PluginUninstallUninstall extends CommonDBTM
         global $UNINSTALL_TYPES;
 
         if (
-            self::canView()
-            && in_array($item->getType(), $UNINSTALL_TYPES)
+            self::canView() && in_array($item->getType(), $UNINSTALL_TYPES) && !$withtemplate
         ) {
-            if (!$withtemplate) {
-                return __('Lifecycle', 'uninstall');
-            }
+            return __('Lifecycle', 'uninstall');
         }
+
         return '';
     }
 
@@ -1118,6 +1104,7 @@ class PluginUninstallUninstall extends CommonDBTM
         ) {
             self::showFormUninstallation($item->getField('id'), $item, Session::getLoginUserID());
         }
+
         return true;
     }
 }

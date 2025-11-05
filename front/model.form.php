@@ -30,8 +30,6 @@
 
 use Glpi\Exception\Http\AccessDeniedHttpException;
 
-include('../../../inc/includes.php');
-
 Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
 if (!isset($_GET["withtemplate"])) {
@@ -69,17 +67,11 @@ if (isset($_POST["add"])) {
         "model",
     );
 
-    if ($model->getFromDB($id)) {
-        if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT) {
-            if (
-                !Session::haveRight(
-                    'uninstall:profile',
-                    PluginUninstallProfile::RIGHT_REPLACE,
-                )
-            ) {
-                throw new AccessDeniedHttpException();
-            }
-        }
+    if ($model->getFromDB($id) && $model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT && !Session::haveRight(
+        'uninstall:profile',
+        PluginUninstallProfile::RIGHT_REPLACE,
+    )) {
+        throw new AccessDeniedHttpException();
     }
 
     $model->display(['id'           => $id,

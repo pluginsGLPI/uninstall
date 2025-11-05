@@ -40,7 +40,7 @@ class PluginUninstallProfile extends Profile
      */
     public function getGeneralRights()
     {
-        $rights = [
+        return [
             [
                 'itemtype'  => 'PluginUninstallProfile',
                 'label'     => PluginUninstallUninstall::getTypeName(),
@@ -51,7 +51,6 @@ class PluginUninstallProfile extends Profile
                 ],
             ],
         ];
-        return $rights;
     }
 
     public function showForm($ID, $options = [])
@@ -101,20 +100,13 @@ class PluginUninstallProfile extends Profile
      **/
     public static function translateARight($old_right)
     {
-        switch ($old_right) {
-            case '':
-                return 0;
-            case 'r':
-                return READ;
-            case 'w':
-                return UPDATE + READ;
-            case '0':
-            case '1':
-                return $old_right;
-
-            default:
-                return 0;
-        }
+        return match ($old_right) {
+            '' => 0,
+            'r' => READ,
+            'w' => UPDATE + READ,
+            '0', '1' => $old_right,
+            default => 0,
+        };
     }
 
     /**
@@ -142,9 +134,11 @@ class PluginUninstallProfile extends Profile
             ) as $profile_data
         ) {
             $translatedRight = self::translateARight($profile_data["use"]);
-            $translatedRight = $translatedRight | (self::translateARight($profile_data["replace"]) ? self::RIGHT_REPLACE : 0);
+            $translatedRight |= self::translateARight($profile_data["replace"]) ? self::RIGHT_REPLACE : 0;
             ProfileRight::updateProfileRights($profiles_id, [PluginUninstallProfile::$rightname => $translatedRight]);
         }
+
+        return null;
     }
 
     /**
@@ -170,6 +164,7 @@ class PluginUninstallProfile extends Profile
         foreach ($profiles_it as $prof) {
             self::migrateOneProfile($prof['id']);
         }
+
         $rights_it = $DB->request([
             'FROM' => 'glpi_profilerights',
             'WHERE' => [
@@ -185,11 +180,10 @@ class PluginUninstallProfile extends Profile
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
-        if ($item instanceof Profile) {
-            if ($item->getField('interface') == 'central') {
-                return PluginUninstallUninstall::getTypeName();
-            }
+        if ($item instanceof Profile && $item->getField('interface') == 'central') {
+            return PluginUninstallUninstall::getTypeName();
         }
+
         return '';
     }
 
@@ -205,6 +199,7 @@ class PluginUninstallProfile extends Profile
             ) {
                 $profileRight->deleteByCriteria(['profiles_id' => $profiles_id, 'name' => $right]);
             }
+
             if (
                 !countElementsInTable(
                     'glpi_profilerights',
@@ -235,6 +230,7 @@ class PluginUninstallProfile extends Profile
             );
             $prof->showForm($ID);
         }
+
         return true;
     }
 
@@ -300,6 +296,7 @@ class PluginUninstallProfile extends Profile
             $DB->doQuery($query);
             self::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
         }
+
         return true;
     }
 
@@ -308,6 +305,6 @@ class PluginUninstallProfile extends Profile
         /** @var DBmysql $DB */
         global $DB;
 
-        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
+        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(self::class) . "`");
     }
 }
