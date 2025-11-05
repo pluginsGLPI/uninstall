@@ -30,6 +30,8 @@
 
 use Glpi\Plugin\Hooks;
 
+use function Safe\define;
+
 define('PLUGIN_UNINSTALL_VERSION', '2.10.1');
 define("PLUGIN_UNINSTALL_MIN_GLPI", "11.0.0");
 define("PLUGIN_UNINSTALL_MAX_GLPI", "11.0.99");
@@ -80,7 +82,7 @@ function plugin_init_uninstall()
 
             $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
                 [
-                    'label' => 'Apply uninstall profile',
+                    'label' => __s('Apply uninstall profile'),
                     'render_callback' => static function ($config) {
                         return PluginUninstallConfig::renderStaleAgentConfigField();
                     },

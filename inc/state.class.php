@@ -28,6 +28,10 @@
  * -------------------------------------------------------------------------
  */
 
+use function Safe\json_encode;
+use function Safe\ob_end_clean;
+use function Safe\ob_start;
+
 class PluginUninstallState
 {
     public static function replaceState($params = [])
@@ -61,9 +65,9 @@ class PluginUninstallState
         // we json encore to pass it to js (auto-escaping)
         $html = json_encode("
          $states_name
-         <a href='#' id='uninstall_actions_open' class='vsubmit'>" .
-            __("Update") .
-         "</a>");
+         <a href='#' id='uninstall_actions_open' class='vsubmit'>"
+            . __("Update")
+         . "</a>");
         $modal_body = json_encode($html_modal);
 
         $JS = <<<JAVASCRIPT
