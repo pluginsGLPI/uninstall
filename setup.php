@@ -76,7 +76,6 @@ function plugin_init_uninstall()
                 }
             }
 
-            // be processed by an `add` or `update`
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_ADD]['uninstall'] = [Config::class => PluginUninstallConfig::preConfigSet(...)];
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['uninstall'] = [Config::class => PluginUninstallConfig::preConfigSet(...)];
 
