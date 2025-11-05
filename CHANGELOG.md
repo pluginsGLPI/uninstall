@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
 
+### Fixed
+
+- Fix "Apply uninstall profile" was not saved when updating configuration
+
 ## [2.10.1] - 2025-10-24
 
 ### Fixed
