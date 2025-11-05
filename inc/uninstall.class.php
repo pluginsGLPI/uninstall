@@ -30,6 +30,8 @@
 
 use Glpi\Asset\Asset_PeripheralAsset;
 
+use function Safe\preg_grep;
+
 /**
  * -------------------------------------------------------------------------
  * Uninstall plugin for GLPI
@@ -375,7 +377,7 @@ class PluginUninstallUninstall extends CommonDBTM
         $count = 0;
         $tot   = count($tab_ids[$type]);
 
-        Html::createProgressBar(__('Please wait, uninstallation is running...', 'uninstall'));
+        $message = __('Please wait, uninstallation is running...', 'uninstall');
 
         foreach ($tab_ids[$type] as $id => $value) {
             $count++;
@@ -388,7 +390,8 @@ class PluginUninstallUninstall extends CommonDBTM
                     'location' => $location,
                 ]);
 
-                Html::changeProgressBarPosition($count, $tot + 1);
+                $percent = (int) (($count / $tot) * 100);
+                Html::getProgressBar($percent, $message);
 
                 //Add line in machine's history to say that machine was uninstalled
                 self::addUninstallLog([
@@ -398,8 +401,6 @@ class PluginUninstallUninstall extends CommonDBTM
                 ]);
             }
         }
-
-        Html::changeProgressBarPosition($count, $tot, __('Uninstallation successful', 'uninstall'));
 
         echo "</td></tr>";
         echo "</table></div>";

@@ -31,6 +31,10 @@
 use Glpi\Api\Deprecated\Computer_Item;
 use Glpi\Asset\Asset_PeripheralAsset;
 
+use function Safe\fclose;
+use function Safe\fopen;
+use function Safe\fwrite;
+
 /**
  * -------------------------------------------------------------------------
  * Uninstall plugin for GLPI
@@ -99,8 +103,6 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<tr class='tab_bg_2'><td>";
         $count = 0;
         $tot   = count($tab_ids);
-
-        Html::createProgressBar(__('Please wait, replacement is running...', 'uninstall'));
 
         foreach ($tab_ids as $olditem_id => $newitem_id) {
             $count++;
@@ -593,14 +595,9 @@ class PluginUninstallReplace extends CommonDBTM
                 'action'    => 'replace',
                 'models_id' => $model_id,
             ]);
-            Html::changeProgressBarPosition($count, $tot + 1);
+            $percent = (int) (($count / $tot) * 100);
+            Html::getProgressBar($percent);
         }
-
-        Html::changeProgressBarPosition(
-            $count,
-            $tot,
-            __('Replacement successful', 'uninstall'),
-        );
 
         echo "</td></tr>";
         echo "</table></div>";

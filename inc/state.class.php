@@ -28,6 +28,10 @@
  * -------------------------------------------------------------------------
  */
 
+use function Safe\json_encode;
+use function Safe\ob_end_clean;
+use function Safe\ob_start;
+
 class PluginUninstallState
 {
     public static function replaceState($params = [])
