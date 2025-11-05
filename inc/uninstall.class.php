@@ -95,8 +95,8 @@ class PluginUninstallUninstall extends CommonDBTM
                     $_SESSION["glpiID"],
                     $_SESSION["glpiactive_entity"],
                 );
-                echo "&nbsp;" .
-                  Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
+                echo "&nbsp;"
+                  . Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
                 return true;
         }
         return false;

@@ -80,19 +80,19 @@ class PluginUninstallConfig extends Config
         echo "<h2 class='header'>" . __("Shortcuts", 'uninstall') . "</h2>";
 
         echo "<ul class='shortcuts'>";
-        echo "<li><a href='" . PluginUninstallModel::getSearchURL() . "' class='vsubmit'>" .
-        PluginUninstallModel::getTypeName(Session::getPluralNumber()) . "</a><li>";
-        echo "<li><a href='preference.php?forcetab=PluginUninstallPreference$1' class='vsubmit'>" .
-        __("Location preferences", 'uninstall') . "</a><li>";
+        echo "<li><a href='" . PluginUninstallModel::getSearchURL() . "' class='vsubmit'>"
+        . PluginUninstallModel::getTypeName(Session::getPluralNumber()) . "</a><li>";
+        echo "<li><a href='preference.php?forcetab=PluginUninstallPreference$1' class='vsubmit'>"
+        . __("Location preferences", 'uninstall') . "</a><li>";
         echo "</ul>";
 
         echo "<h2 class='header'>" . __("Configuration") . "</h2>";
 
         $rand = mt_rand();
         echo "<div class='field'>";
-        echo "<label for='dropdown_replace_status_dropdown$rand'>" .
-           __("Replace status dropdown by plugin actions", 'uninstall') .
-           "</label>";
+        echo "<label for='dropdown_replace_status_dropdown$rand'>"
+           . __("Replace status dropdown by plugin actions", 'uninstall')
+           . "</label>";
         Dropdown::showYesNo("replace_status_dropdown", $cfg['replace_status_dropdown'], -1, [
             'rand' => $rand,
         ]);

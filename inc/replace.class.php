@@ -180,8 +180,8 @@ class PluginUninstallReplace extends CommonDBTM
                 fwrite($open_file, $out);
                 fclose($open_file);
                 // Compute comment text
-                $comment  = __('This document is the archive of this replaced item', 'uninstall') . " " .
-                        self::getCommentsForReplacement($olditem, false, false);
+                $comment  = __('This document is the archive of this replaced item', 'uninstall') . " "
+                        . self::getCommentsForReplacement($olditem, false, false);
 
                 // Create & Attach new document to current item
                 $doc   = new Document();
@@ -689,13 +689,13 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<div class='first_bloc'>";
         echo "<table class='tab_cadre_fixe' cellpadding='5'>";
 
-        echo "<tr class='tab_bg_1 center'>" .
-           "<th colspan='6'>" . sprintf(
+        echo "<tr class='tab_bg_1 center'>"
+           . "<th colspan='6'>" . sprintf(
                __('%1$s - %2$s'),
                __('Reminder of the replacement model', 'uninstall'),
                __('General informations', 'uninstall'),
-           ) .
-           "</th></tr>";
+           )
+           . "</th></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
         echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), __('Name')) . "</td>";
@@ -709,8 +709,8 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<tr><td colspan='6'></td></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
-        echo "<td colspan='2'>" . __('Overwrite informations (from old item to the new)', 'uninstall') .
-           "</td>";
+        echo "<td colspan='2'>" . __('Overwrite informations (from old item to the new)', 'uninstall')
+           . "</td>";
         echo "<td>" . self::coloredYN($model->fields["overwrite"]) . "</td>";
         echo "<td colspan='2'>" . __('Archiving method of the old material', 'uninstall') . "</td>";
         echo "<td>";
@@ -772,8 +772,8 @@ class PluginUninstallReplace extends CommonDBTM
             __('%1$s - %2$s'),
             __('Reminder of the replacement model', 'uninstall'),
             __('Connections with other materials', 'uninstall'),
-        ) .
-           "</th></tr>";
+        )
+           . "</th></tr>";
 
         echo "<tr class='tab_bg_1 center'>";
         echo "<td>" . sprintf(__('%1$s %2$s'), __('Copy'), _n('Document', 'Documents', 2)) . "</td>";

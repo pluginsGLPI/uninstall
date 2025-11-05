@@ -330,11 +330,11 @@ class PluginUninstallModel extends CommonDBTM
         ) {
             echo "<tr class='tab_bg_1'>";
             echo "<td colspan='2'>";
-            echo "<a href='" . $CFG_GLPI["root_doc"] .
-                "/front/transfer.form.php'\">" . __('Add template', 'uninstall') . "</td>";
+            echo "<a href='" . $CFG_GLPI["root_doc"]
+                . "/front/transfer.form.php'\">" . __('Add template', 'uninstall') . "</td>";
             echo "<td colspan='2'>";
-            echo "<a href='" . $CFG_GLPI["root_doc"] . "/front/transfer.php'\">" .
-                __('Manage templates', 'uninstall') . "</a></td>";
+            echo "<a href='" . $CFG_GLPI["root_doc"] . "/front/transfer.php'\">"
+                . __('Manage templates', 'uninstall') . "</a></td>";
             echo "</tr>";
         }
 
@@ -431,8 +431,8 @@ class PluginUninstallModel extends CommonDBTM
         echo "<td>" . sprintf(
             __('%1$s %2$s'),
             __('Blank'),
-            __('IP') . " & " . __('Subnet mask') . " & " . __('Gateway') . " & " .
-            __('Subnet'),
+            __('IP') . " & " . __('Subnet mask') . " & " . __('Gateway') . " & "
+            . __('Subnet'),
         ) . "</td>";
         echo "<td>";
         Dropdown::showYesNo(
@@ -529,8 +529,8 @@ class PluginUninstallModel extends CommonDBTM
         $plug = new Plugin();
         if ($plug->isActivated('ocsinventoryng')) {
             echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . _n('OCSNG link', 'OCSNG links', 2, 'ocsinventoryng') .
-              "</th></tr>";
+            echo "<th colspan='4'>" . _n('OCSNG link', 'OCSNG links', 2, 'ocsinventoryng')
+              . "</th></tr>";
             echo "<th colspan='4'>" . __(
                 'These options only apply to computers coming from OCSNG',
                 'uninstall',
@@ -559,8 +559,8 @@ class PluginUninstallModel extends CommonDBTM
 
         if ($plug->isActivated('fusioninventory')) {
             echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . __('FusionInventory') .
-              "</th></tr>";
+            echo "<th colspan='4'>" . __('FusionInventory')
+              . "</th></tr>";
 
             echo "<tr class='tab_bg_1 center'>";
             echo "<td>" . __('Delete computer in FusionInventory', 'uninstall') . "</td>";
@@ -579,8 +579,8 @@ class PluginUninstallModel extends CommonDBTM
 
         if ($plug->isActivated('fields')) {
             echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . __("Additionnal fields", "fields") .
-              "</th></tr>";
+            echo "<th colspan='4'>" . __("Additionnal fields", "fields")
+              . "</th></tr>";
 
             echo "<tr class='tab_bg_1 center'>";
             echo "<td>" . __('Delete Fields plugin informations', 'uninstall') . "</td>";
@@ -1337,8 +1337,8 @@ class PluginUninstallModel extends CommonDBTM
         switch ($ma->getAction()) {
             case 'transfert':
                 Entity::dropdown();
-                echo "&nbsp;" .
-                Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
+                echo "&nbsp;"
+                . Html::submit(_x('button', 'Post'), ['name' => 'massiveaction']);
                 return true;
         }
         return false;
