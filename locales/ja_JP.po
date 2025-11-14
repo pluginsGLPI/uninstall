@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 01:46+0000\n"
+"POT-Creation-Date: 2025-11-14 01:46+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: INOUE Daisuke, 2025\n"
 "Language-Team: Japanese (Japan) (https://app.transifex.com/teclib/teams/28042/ja_JP/)\n"
@@ -31,7 +31,7 @@ msgstr "全般情報"
 
 #: templates/model_config.html.twig
 msgid "Copy in new item"
-msgstr ""
+msgstr "新規アイテムにコピー"
 
 #: templates/model_config.html.twig inc/replace.class.php:692
 msgid "Overwrite informations (from old item to the new)"
@@ -50,7 +50,7 @@ msgstr "PDF プラグインはインストール済みで有効"
 msgid ""
 "Plugin PDF is not installed, you won't be able to use PDF format for "
 "archiving"
-msgstr ""
+msgstr "PDF プラグインがインストールされていないため、保管に PDF 形式を利用できません。"
 
 #: templates/model_config.html.twig inc/replace.class.php:756
 msgid "Connections with other materials"
