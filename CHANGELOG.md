@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Fixed
 
 - Fix config redirection link
+- Fix plugin name display in marketplace
 
 ## [2.10.2] - 2025-11-05
 
