@@ -31,7 +31,6 @@
 use Glpi\Asset\Asset_PeripheralAsset;
 
 use function Safe\preg_grep;
-
 /**
  * -------------------------------------------------------------------------
  * Uninstall plugin for GLPI
@@ -1029,7 +1028,7 @@ class PluginUninstallUninstall extends CommonDBTM
     }
 
     public static function showLinksUninstallation(
-        $params
+        $params,
     ) {
         /**
          * @var array $UNINSTALL_TYPES
