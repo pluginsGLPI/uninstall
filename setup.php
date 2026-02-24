@@ -82,6 +82,7 @@ function plugin_init_uninstall()
             if (!$uninstallconfig['replace_status_dropdown']) {
                 $PLUGIN_HOOKS[Hooks::POST_ITEM_FORM]['uninstall'] = PluginUninstallUninstall::showLinksUninstallation(...);
             }
+
             $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
                 [
                     'label' => __s('Apply uninstall profile'),

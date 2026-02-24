@@ -1015,6 +1015,7 @@ class PluginUninstallUninstall extends CommonDBTM
                 ]);
                 echo "</td>";
             }
+
             echo "</tr>";
 
             echo "<tr class='tab_bg_1 center'><td colspan='3'>";
@@ -1083,6 +1084,7 @@ class PluginUninstallUninstall extends CommonDBTM
                     JAVASCRIPT;
                 echo Html::scriptBlock($JS);
             }
+
             echo "</div>";
         }
 
