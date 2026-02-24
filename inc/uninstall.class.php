@@ -60,6 +60,10 @@ use function Safe\preg_grep;
  * -------------------------------------------------------------------------
  */
 
+use function Safe\json_encode;
+use function Safe\ob_end_clean;
+use function Safe\ob_start;
+
 class PluginUninstallUninstall extends CommonDBTM
 {
     public const PLUGIN_UNINSTALL_TRANSFER_NAME = "plugin_uninstall";
@@ -1026,9 +1030,12 @@ class PluginUninstallUninstall extends CommonDBTM
     public static function showLinksUninstallation(
         $params
     ) {
+        /**
+         * @var array $UNINSTALL_TYPES
+         */
         global $DB, $UNINSTALL_TYPES;
 
-        $right = true;
+        $right = Session::haveRight(self::$rightname, READ);
 
         $users_id = Session::getLoginUserID();
         $item = $params['item'];
