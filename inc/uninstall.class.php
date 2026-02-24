@@ -1072,7 +1072,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
                 $JS = <<<JAVASCRIPT
                           $(function() {
-                             $("#$templates_id").on("click", function(event) {
+                             $("#{$templates_id}").on("click", function(event) {
                                 event.preventDefault();
 
                                 glpi_html_dialog({

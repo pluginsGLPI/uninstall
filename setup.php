@@ -80,10 +80,7 @@ function plugin_init_uninstall()
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['uninstall'] = [Config::class => PluginUninstallConfig::preConfigSet(...)];
 
             if (!$uninstallconfig['replace_status_dropdown']) {
-                $PLUGIN_HOOKS[Hooks::POST_ITEM_FORM]['uninstall'] = [
-                    PluginUninstallUninstall::class,
-                    'showLinksUninstallation'
-                ];
+                $PLUGIN_HOOKS[Hooks::POST_ITEM_FORM]['uninstall'] = PluginUninstallUninstall::showLinksUninstallation(...);
             }
             $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
                 [

@@ -464,7 +464,7 @@ class PluginUninstallReplace extends CommonDBTM
             }
 
             // Location
-            if ((int) $location != 0 && $olditem->isField('locations_id')) {
+            if ((int) $location !== 0 && $olditem->isField('locations_id')) {
                 $olditem->getFromDB($olditem_id);
                 switch ($location) {
                     case -1:
