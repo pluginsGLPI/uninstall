@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add Links for uninstall templates From Item Form
 
-## [2.10.2] - 2025-11-05
-
 ## [2.10.3] - 2025-11-25
 
 ## Fixed
