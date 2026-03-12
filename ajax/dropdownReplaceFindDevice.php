@@ -83,7 +83,7 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
 
     if (
         isset($_REQUEST['searchText'])
-        && strlen($_REQUEST['searchText']) > 0
+        && (string) $_REQUEST['searchText'] !== ''
         && $_REQUEST['searchText'] != $CFG_GLPI["ajax_wildcard"]
     ) {
         // isset already makes sure the search value isn't null
@@ -143,7 +143,7 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
                         );
                     }
 
-                    if ((strlen((string) $withoutput) > 0) && ($withoutput != '&nbsp;')) {
+                    if (((string) $withoutput !== '') && ($withoutput != '&nbsp;')) {
                         $outputval = sprintf(__s('%1$s - %2$s'), $outputval, $withoutput);
                     }
                 }
@@ -160,7 +160,7 @@ if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBT
 
         if (
             $_SESSION["glpiis_ids_visible"]
-            || (strlen((string) $outputval) == 0)
+            || ((string) $outputval === '')
         ) {
             $outputval = sprintf(__s('%1$s (%2$s)'), $outputval, $ID);
         }
