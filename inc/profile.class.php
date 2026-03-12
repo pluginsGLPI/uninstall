@@ -181,7 +181,7 @@ class PluginUninstallProfile extends Profile
     {
 
         if ($item instanceof Profile && $item->getField('interface') == 'central') {
-            return PluginUninstallUninstall::getTypeName();
+            return self::createTabEntry(PluginUninstallUninstall::getTypeName(), 0, $item::getType(), PluginUninstallReplace::getIcon());
         }
 
         return '';
