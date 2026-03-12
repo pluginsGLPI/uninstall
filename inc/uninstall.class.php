@@ -964,9 +964,9 @@ class PluginUninstallUninstall extends CommonDBTM
                                 'WHERE'  => [
                                     'types_id' => [2, 3],
                                 ],
-                            ])
+                            ]),
                         ),
-                        'id'
+                        'id',
                     );
                 }
 
