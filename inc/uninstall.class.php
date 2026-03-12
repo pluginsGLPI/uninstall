@@ -956,16 +956,18 @@ class PluginUninstallUninstall extends CommonDBTM
             } else {
                 $used = [];
                 if (!PluginUninstallModel::canReplace()) {
-                    foreach (
-                        $DB->request([
-                            "FROM" => 'glpi_plugin_uninstall_models',
-                            "WHERE" => [
-                                'types_id' => [2, 3],
-                            ],
-                        ]) as $data
-                    ) {
-                        $used[] = $data['id'];
-                    }
+                    $used = array_column(
+                        iterator_to_array(
+                            $DB->request([
+                                'SELECT' => ['id'],
+                                'FROM'   => 'glpi_plugin_uninstall_models',
+                                'WHERE'  => [
+                                    'types_id' => [2, 3],
+                                ],
+                            ])
+                        ),
+                        'id'
+                    );
                 }
 
                 $rand = PluginUninstallModel::dropdown([
