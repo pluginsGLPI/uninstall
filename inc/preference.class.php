@@ -256,7 +256,7 @@ class PluginUninstallPreference extends CommonDBTM
     {
 
         if ($item->getType() == 'Preference' && Session::haveRight('uninstall:profile', READ)) {
-            return PluginUninstallUninstall::getTypeName();
+            return self::createTabEntry(PluginUninstallUninstall::getTypeName(), 0, $item::getType(), PluginUninstallReplace::getIcon());
         }
 
         return '';

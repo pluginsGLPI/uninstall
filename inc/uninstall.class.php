@@ -68,7 +68,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
     public static function getTypeName($nb = 0)
     {
-        return __s("Item's Lifecycle", 'uninstall');
+        return __("Item's Lifecycle", 'uninstall');
     }
 
     /**
