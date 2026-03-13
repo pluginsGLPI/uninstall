@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix config redirection link
 - Fix plugin name display in marketplace
+- Fix impossible to update Location preferences because table glpi_plugin_uninstall_profiles is dropped.
 
 ## [2.10.2] - 2025-11-05
 
