@@ -276,8 +276,6 @@ class PluginUninstallProfile extends Profile
             }
 
             self::migrateAllProfiles();
-
-            $migration->dropTable($table);
         } else {
             // plugin never installed
             $query = "CREATE TABLE `" . $table . "` (
