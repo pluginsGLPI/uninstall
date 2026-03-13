@@ -1026,7 +1026,7 @@ class PluginUninstallModel extends CommonDBTM
             $migration->addField($table, 'FK_entities', 'integer');
             $migration->addField($table, 'recursive', 'int NOT NULL DEFAULT 1');
             $migration->addField($table, 'name', 'string');
-            $migration->addField($table, `comments`, 'text', ['value' => 'NOT NULL']);
+            $migration->addField($table, 'comments', 'text', ['value' => 'NOT NULL']);
 
             $migration->migrationOneTable($table);
             $ID = PluginUninstallUninstall::getUninstallTransferModelID();
