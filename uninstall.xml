@@ -18,7 +18,7 @@
    <homepage>https://github.com/pluginsglpi/uninstall</homepage>
    <download>https://github.com/pluginsglpi/uninstall/releases</download>
    <issues>https://github.com/pluginsglpi/uninstall/issues</issues>
-   <readme>https://glpi-plugins.readthedocs.io/en/latest/uninstall/index.html</readme>
+   <readme>https://help.glpi-project.org/doc-plugins/uninstall</readme>
    <authors>
       <author>Walid Nouh</author>
       <author>François Legastelois</author>
