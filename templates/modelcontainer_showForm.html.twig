@@ -1,0 +1,104 @@
+{#
+# -------------------------------------------------------------------------
+# Uninstall plugin for GLPI
+# -------------------------------------------------------------------------
+#
+# LICENSE
+#
+# This file is part of Uninstall.
+#
+# Uninstall is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# Uninstall is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Uninstall. If not, see <http://www.gnu.org/licenses/>.
+# -------------------------------------------------------------------------
+# @copyright Copyright (C) 2015-2026 by Teclib'.
+# @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+# @link      https://github.com/pluginsGLPI/uninstall
+# -------------------------------------------------------------------------
+#}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+<h3>{{ __('Model') }} {{ modelValues['name'] }}</h3>
+<tr class='tab_bg_1 center'>
+    <th colspan='4'> {{ __('Block informations', 'uninstall') }} </th>
+</tr>
+<tr class='tab_bg_1 center'>
+    <td>{{ pluginFieldsContainer['typeName'] }}</td>
+    <td><a href="{{ pluginFieldsContainer['formUrlWithId'] }}">{{ pluginFieldsContainer['values']['label'] }}</a></td>
+    <td>{{ __("Associated item type") }} : </td>
+    <td>{{ itemObjet }}</td>
+</tr>
+<tr class='tab_bg_1 center'>
+    {% if modelValues['types_id'] != constant('PluginUninstallModel::TYPE_MODEL_UNINSTALL') %}
+        <th colspan="{{ collspan['title'] }}">{{ __('Action for ', 'uninstall') }} {{ __('Replacement', 'uninstall') }}</th>
+    {% endif %}
+
+    {% if modelValues['types_id'] != constant('PluginUninstallModel::TYPE_MODEL_REPLACEMENT') %}
+        <th colspan="{{ collspan['title'] }}">{{ __('Action for ', 'uninstall') }} {{ __('Uninstallation', 'uninstall') }}</th>
+    {% endif %}
+</tr>
+<tr class='tab_bg_1 center'>
+    {% if modelValues['types_id'] != constant('PluginUninstallModel::TYPE_MODEL_UNINSTALL') %}
+        <td>{{ __('Action') }}</td>
+        <td colspan="{{ collspan['action'] }}">
+            {% if modelValues['action_plugin_fields_replace'] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED') %}
+                {{ fields.dropdownArrayField(
+                    'action_replace',
+                    dropdown['value'],
+                    dropdown['values'],
+                    '',
+                    {
+                        'rand': rand,
+                        'width': dropdown['width'],
+                    }
+                ) }}
+            {% else %}
+                <strong>
+                    {% if modelValues['action_plugin_fields_replace'] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_NONE') %}
+                        {{ __('Do nothing') }}
+                    {% elseif modelValues['action_plugin_fields_replace'] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_COPY') %}
+                        {{ __('Copy') }}
+                    {% endif %}
+                </strong> ({{ __('inherit from model', 'uninstall') }})
+            {% endif %}
+        </td>
+    {% endif %}
+
+    {% if modelValues['types_id'] != constant('PluginUninstallModel::TYPE_MODEL_REPLACEMENT') %}
+        <td>{{ __('Action') }}</td>
+        <td colspan="{{ collspan['action'] }}">
+            {% if modelValues['action_plugin_fields_uninstall'] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED') %}
+                {{ fields.dropdownArrayField(
+                    'action_uninstall',
+                    dropdown['value'],
+                    dropdown['values'],
+                    '',
+                    {
+                        'rand': rand,
+                        'width': dropdown['width'],
+                    }
+                ) }}
+            {% else %}
+                <strong>
+                    {% if modelValues['action_plugin_fields_uninstall'] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_NONE') %}
+                        {{ __('Do nothing') }}
+                    {% elseif modelValues['action_plugin_fields_uninstall'] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_COPY') %}
+                        {{ __('Copy') }}
+                    {% endif %}
+                </strong> ({{ __('inherit from model', 'uninstall') }})
+            {% endif %}
+        </td>
+    {% endif %}
+</tr>
+
+

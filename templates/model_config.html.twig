@@ -195,4 +195,13 @@
             __('%1$s %2$s')|format(__('Copy'), __('Alternate username number')),
             field_options
         ) }}
+    {% if plugin_fields_activate %}
+        {{ fields.dropdownArrayField(
+            'action_plugin_fields_replace',
+            item.fields.action_plugin_fields_replace ?? constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_NONE'),
+            fields_action_list,
+            __('Fields plugin informations', 'uninstall'),
+            field_options
+        ) }}
+    {% endif %}
 </div>
