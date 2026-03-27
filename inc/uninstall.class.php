@@ -1010,7 +1010,7 @@ class PluginUninstallUninstall extends CommonDBTM
                     'comments' => 1,
                     'entity' => $item->fields["entities_id"],
                     'toadd' => [
-                        -1 => __s('Keep previous location', 'uninstall'),
+                        -1 => __('Keep previous location', 'uninstall'),
                         0 => __s('Empty location', 'uninstall'),
                     ],
                 ]);
