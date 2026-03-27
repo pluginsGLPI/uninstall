@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.10.3] - 2025-11-25
 
-## Fixed
+### Fixed
 
 - Fix config redirection link
 - Fix plugin name display in marketplace
