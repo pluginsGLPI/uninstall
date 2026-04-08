@@ -213,7 +213,8 @@ class PluginUninstallUninstall extends CommonDBTM
             }
         }
 
-        if ($item->isField('groups_id')) {
+        $can_update_groups = $item->isField('groups_id') || method_exists($item, 'prepareGroupFields');
+        if ($can_update_groups) {
             $nbgroup = countElementsInTableForEntity(
                 "glpi_groups",
                 $entity,
