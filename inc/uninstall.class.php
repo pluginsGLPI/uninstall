@@ -29,6 +29,7 @@
  */
 
 use Glpi\Asset\Asset_PeripheralAsset;
+use Glpi\Features\AssignableItemInterface;
 
 use function Safe\preg_grep;
 
@@ -215,8 +216,10 @@ class PluginUninstallUninstall extends CommonDBTM
             }
         }
 
-        $can_update_groups = $item->isField('groups_id') || method_exists($item, 'prepareGroupFields');
-        if ($can_update_groups) {
+        if (
+            $item->isField('groups_id')
+            || ($item instanceof AssignableItemInterface)
+        ) {
             $nbgroup = countElementsInTableForEntity(
                 "glpi_groups",
                 $entity,
