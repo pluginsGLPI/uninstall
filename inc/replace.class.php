@@ -451,9 +451,8 @@ class PluginUninstallReplace extends CommonDBTM
                     foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
                         foreach ($connections as $connection) {
                             $comp_item->update(
-                                ['id'           => $connection['id'],
-                                    'computers_id' => $newitem_id,
-                                    'itemtype'     => $itemtype,
+                                ['id'             => $connection['id'],
+                                    'items_id_asset' => $newitem_id,
                                 ],
                                 false,
                             );
