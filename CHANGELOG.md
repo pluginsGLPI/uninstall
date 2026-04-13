@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fix locales encoding
+- Fix group assignment when applying uninstall templates on assignable items
 
 ## [2.10.3] - 2025-11-25
 
