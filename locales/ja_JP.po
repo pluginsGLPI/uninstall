@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 01:53+0000\n"
+"POT-Creation-Date: 2026-04-14 02:49+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: INOUE Daisuke, 2025\n"
 "Language-Team: Japanese (Japan) (https://app.transifex.com/teclib/teams/28042/ja_JP/)\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Informations replacement"
 msgstr "情報の置き換え"
 
-#: templates/model_config.html.twig inc/replace.class.php:676
+#: templates/model_config.html.twig inc/replace.class.php:675
 msgid "General informations"
 msgstr "全般情報"
 
@@ -33,11 +33,11 @@ msgstr "全般情報"
 msgid "Copy in new item"
 msgstr "新規アイテムにコピー"
 
-#: templates/model_config.html.twig inc/replace.class.php:692
+#: templates/model_config.html.twig inc/replace.class.php:691
 msgid "Overwrite informations (from old item to the new)"
 msgstr "情報を上書き（古いアイテムから新しいアイテムへ）"
 
-#: templates/model_config.html.twig inc/replace.class.php:695
+#: templates/model_config.html.twig inc/replace.class.php:694
 #: inc/model.class.php:800
 msgid "Archiving method of the old material"
 msgstr "古い機材のアーカイブ方法"
@@ -52,39 +52,120 @@ msgid ""
 "archiving"
 msgstr "PDF プラグインがインストールされていないため、保管に PDF 形式を利用できません。"
 
-#: templates/model_config.html.twig inc/replace.class.php:756
+#: templates/model_config.html.twig inc/replace.class.php:755
 msgid "Connections with other materials"
 msgstr "他の機材への接続"
 
-#: templates/model_config.html.twig inc/replace.class.php:801
+#: templates/model_config.html.twig inc/replace.class.php:800
 msgid "Direct connections"
 msgstr "直接接続"
+
+#: ajax/locations.php:48 inc/replace.class.php:717
+#: inc/preference.class.php:103
+msgid "Keep previous location"
+msgstr "以前の場所に維持"
+
+#: ajax/locations.php:49 inc/replace.class.php:721
+#: inc/preference.class.php:104
+msgid "Empty location"
+msgstr "場所を初期状態に"
 
 #: setup.php:119
 msgid "Item's Lifecycle (uninstall)"
 msgstr "アイテムのライフサイクル（撤去）"
 
+#: hook.php:44 inc/uninstall.class.php:365
+msgid "Uninstall"
+msgstr "撤去"
+
+#: front/action.php:62
+msgid "Replacement successful"
+msgstr "置き換えに成功しました"
+
+#: front/action.php:111
+msgid "Uninstallation successful"
+msgstr "撤去しました"
+
+#: inc/replace.class.php:78
+msgid "Item's replacement"
+msgstr "アイテムの置き換え"
+
+#: inc/replace.class.php:104 inc/replace.class.php:162 inc/model.class.php:135
+#: inc/model.class.php:941
+msgid "Replacement"
+msgstr "置き換え"
+
+#: inc/replace.class.php:187
+msgid "This document is the archive of this replaced item"
+msgstr "この文書は置き換えたアイテムのアーカイブです"
+
+#: inc/replace.class.php:192
+msgid "Archive of old material"
+msgstr "古い機材のアーカイブ"
+
+#: inc/replace.class.php:507
+msgid "See attached document"
+msgstr "添付文書を表示"
+
+#: inc/replace.class.php:614
+msgid "This item is a replacement for item"
+msgstr "このアイテムは置き換えです"
+
+#: inc/replace.class.php:616
+msgid "This item was replaced by"
+msgstr "このアイテムの置き換え元 : "
+
+#: inc/replace.class.php:674 inc/replace.class.php:754
+msgid "Reminder of the replacement model"
+msgstr "置き換えモデルのリマインダー"
+
+#: inc/replace.class.php:714
+msgid "New location of item"
+msgstr "アイテムの新しい場所"
+
+#: inc/replace.class.php:731 inc/model.class.php:285
+msgid "New status of the computer"
+msgstr "コンピューターの新しい状態"
+
+#: inc/replace.class.php:812
+msgid "Choices for item to replace"
+msgstr "置き換えるアイテムの選択"
+
+#: inc/replace.class.php:815
+msgid "Old item"
+msgstr "古いアイテム"
+
+#: inc/replace.class.php:825
+msgid "New item"
+msgstr "新しいアイテム"
+
+#: inc/replace.class.php:828
+msgid "Remove"
+msgstr "削除"
+
+#: inc/replace.class.php:877
+msgid "Replace"
+msgstr "置き換え"
+
 #: inc/preference.class.php:78
 msgid "Item's location after uninstall"
 msgstr "撤去後のアイテムの場所"
 
-#: inc/preference.class.php:103 inc/replace.class.php:718
-#: ajax/locations.php:48
-msgid "Keep previous location"
-msgstr "以前の場所に維持"
-
-#: inc/preference.class.php:104 inc/replace.class.php:722
-#: ajax/locations.php:49
-msgid "Empty location"
-msgstr "場所を初期状態に"
-
-#: inc/uninstall.class.php:71 inc/model.class.php:84 inc/config.class.php:37
+#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
 msgid "Item's Lifecycle"
 msgstr "アイテムのライフサイクル"
 
-#: inc/uninstall.class.php:365 hook.php:44
-msgid "Uninstall"
-msgstr "撤去"
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "ショートカット"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "場所の設定"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "状態のドロップダウンをプラグインの操作に置き換える"
 
 #: inc/uninstall.class.php:370
 msgid "Please wait, uninstallation is running..."
@@ -127,67 +208,6 @@ msgstr "モデル適用後のアイテムの場所"
 #: inc/uninstall.class.php:1089
 msgid "Lifecycle"
 msgstr "ライフサイクル"
-
-#: inc/replace.class.php:78
-msgid "Item's replacement"
-msgstr "アイテムの置き換え"
-
-#: inc/replace.class.php:104 inc/replace.class.php:162 inc/model.class.php:135
-#: inc/model.class.php:941
-msgid "Replacement"
-msgstr "置き換え"
-
-#: inc/replace.class.php:187
-msgid "This document is the archive of this replaced item"
-msgstr "この文書は置き換えたアイテムのアーカイブです"
-
-#: inc/replace.class.php:192
-msgid "Archive of old material"
-msgstr "古い機材のアーカイブ"
-
-#: inc/replace.class.php:508
-msgid "See attached document"
-msgstr "添付文書を表示"
-
-#: inc/replace.class.php:615
-msgid "This item is a replacement for item"
-msgstr "このアイテムは置き換えです"
-
-#: inc/replace.class.php:617
-msgid "This item was replaced by"
-msgstr "このアイテムの置き換え元 : "
-
-#: inc/replace.class.php:675 inc/replace.class.php:755
-msgid "Reminder of the replacement model"
-msgstr "置き換えモデルのリマインダー"
-
-#: inc/replace.class.php:715
-msgid "New location of item"
-msgstr "アイテムの新しい場所"
-
-#: inc/replace.class.php:732 inc/model.class.php:285
-msgid "New status of the computer"
-msgstr "コンピューターの新しい状態"
-
-#: inc/replace.class.php:813
-msgid "Choices for item to replace"
-msgstr "置き換えるアイテムの選択"
-
-#: inc/replace.class.php:816
-msgid "Old item"
-msgstr "古いアイテム"
-
-#: inc/replace.class.php:826
-msgid "New item"
-msgstr "新しいアイテム"
-
-#: inc/replace.class.php:829
-msgid "Remove"
-msgstr "削除"
-
-#: inc/replace.class.php:878
-msgid "Replace"
-msgstr "置き換え"
 
 #: inc/model.class.php:107
 msgid "The purge archiving method is not available for this model type"
@@ -297,23 +317,3 @@ msgstr "追加のフィールド"
 #: inc/model.class.php:572
 msgid "Delete Fields plugin informations"
 msgstr "追加のフィールド情報を削除"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "ショートカット"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "場所の設定"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "状態のドロップダウンをプラグインの操作に置き換える"
-
-#: front/action.php:62
-msgid "Replacement successful"
-msgstr "置き換えに成功しました"
-
-#: front/action.php:111
-msgid "Uninstallation successful"
-msgstr "撤去しました"

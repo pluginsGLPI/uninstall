@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# SeongHyeon Cho <jaymz9634@gmail.com>, 2020
+# 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 02:07+0000\n"
+"POT-Creation-Date: 2026-04-14 02:49+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
-"Last-Translator: SeongHyeon Cho <jaymz9634@gmail.com>, 2020\n"
+"Last-Translator: 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020\n"
 "Language-Team: Korean (Korea) (https://app.transifex.com/teclib/teams/28042/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Informations replacement"
 msgstr "교체 정보"
 
-#: templates/model_config.html.twig inc/replace.class.php:676
+#: templates/model_config.html.twig inc/replace.class.php:675
 msgid "General informations"
 msgstr "일반 정보"
 
@@ -33,11 +33,11 @@ msgstr "일반 정보"
 msgid "Copy in new item"
 msgstr ""
 
-#: templates/model_config.html.twig inc/replace.class.php:692
+#: templates/model_config.html.twig inc/replace.class.php:691
 msgid "Overwrite informations (from old item to the new)"
 msgstr "정보 덮어쓰기 (이전 품목에서 새 품목으로)"
 
-#: templates/model_config.html.twig inc/replace.class.php:695
+#: templates/model_config.html.twig inc/replace.class.php:694
 #: inc/model.class.php:800
 msgid "Archiving method of the old material"
 msgstr "이전 자료의 보관 방법"
@@ -52,39 +52,120 @@ msgid ""
 "archiving"
 msgstr ""
 
-#: templates/model_config.html.twig inc/replace.class.php:756
+#: templates/model_config.html.twig inc/replace.class.php:755
 msgid "Connections with other materials"
 msgstr "다른 자료와 연결"
 
-#: templates/model_config.html.twig inc/replace.class.php:801
+#: templates/model_config.html.twig inc/replace.class.php:800
 msgid "Direct connections"
 msgstr "직접 연결"
+
+#: ajax/locations.php:48 inc/replace.class.php:717
+#: inc/preference.class.php:103
+msgid "Keep previous location"
+msgstr "이전 위치 유지"
+
+#: ajax/locations.php:49 inc/replace.class.php:721
+#: inc/preference.class.php:104
+msgid "Empty location"
+msgstr "빈 위치"
 
 #: setup.php:119
 msgid "Item's Lifecycle (uninstall)"
 msgstr "품목 주기 (제거)"
 
+#: hook.php:44 inc/uninstall.class.php:365
+msgid "Uninstall"
+msgstr "제거"
+
+#: front/action.php:62
+msgid "Replacement successful"
+msgstr "대체함"
+
+#: front/action.php:111
+msgid "Uninstallation successful"
+msgstr "제거함"
+
+#: inc/replace.class.php:78
+msgid "Item's replacement"
+msgstr "품목 대체"
+
+#: inc/replace.class.php:104 inc/replace.class.php:162 inc/model.class.php:135
+#: inc/model.class.php:941
+msgid "Replacement"
+msgstr "교체"
+
+#: inc/replace.class.php:187
+msgid "This document is the archive of this replaced item"
+msgstr "이 문서는 이 교체된 품목의 보관입니다"
+
+#: inc/replace.class.php:192
+msgid "Archive of old material"
+msgstr "이전 자료의 보관"
+
+#: inc/replace.class.php:507
+msgid "See attached document"
+msgstr "첨부된 문서 보기"
+
+#: inc/replace.class.php:614
+msgid "This item is a replacement for item"
+msgstr "이 품목은 품목 교체용 입니다"
+
+#: inc/replace.class.php:616
+msgid "This item was replaced by"
+msgstr "이 품목은 다음에 의해 교체됨"
+
+#: inc/replace.class.php:674 inc/replace.class.php:754
+msgid "Reminder of the replacement model"
+msgstr "대체 모델의 알림"
+
+#: inc/replace.class.php:714
+msgid "New location of item"
+msgstr "품목의 새 위치"
+
+#: inc/replace.class.php:731 inc/model.class.php:285
+msgid "New status of the computer"
+msgstr "컴퓨터의 새 상태"
+
+#: inc/replace.class.php:812
+msgid "Choices for item to replace"
+msgstr "대체할 품목 선택"
+
+#: inc/replace.class.php:815
+msgid "Old item"
+msgstr "예전 품목"
+
+#: inc/replace.class.php:825
+msgid "New item"
+msgstr "새 품목"
+
+#: inc/replace.class.php:828
+msgid "Remove"
+msgstr ""
+
+#: inc/replace.class.php:877
+msgid "Replace"
+msgstr "대체"
+
 #: inc/preference.class.php:78
 msgid "Item's location after uninstall"
 msgstr "제거 후 품목 위치"
 
-#: inc/preference.class.php:103 inc/replace.class.php:718
-#: ajax/locations.php:48
-msgid "Keep previous location"
-msgstr "이전 위치 유지"
-
-#: inc/preference.class.php:104 inc/replace.class.php:722
-#: ajax/locations.php:49
-msgid "Empty location"
-msgstr "빈 위치"
-
-#: inc/uninstall.class.php:71 inc/model.class.php:84 inc/config.class.php:37
+#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
 msgid "Item's Lifecycle"
 msgstr "품목 주기"
 
-#: inc/uninstall.class.php:365 hook.php:44
-msgid "Uninstall"
-msgstr "제거"
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "바로가기"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "위치 설정"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "플러그인 동작으로 상태 드롭다운 교체"
 
 #: inc/uninstall.class.php:370
 msgid "Please wait, uninstallation is running..."
@@ -127,67 +208,6 @@ msgstr "모델 적용 후 품목 위치"
 #: inc/uninstall.class.php:1089
 msgid "Lifecycle"
 msgstr "주기"
-
-#: inc/replace.class.php:78
-msgid "Item's replacement"
-msgstr "품목 대체"
-
-#: inc/replace.class.php:104 inc/replace.class.php:162 inc/model.class.php:135
-#: inc/model.class.php:941
-msgid "Replacement"
-msgstr "교체"
-
-#: inc/replace.class.php:187
-msgid "This document is the archive of this replaced item"
-msgstr "이 문서는 이 교체된 품목의 보관입니다"
-
-#: inc/replace.class.php:192
-msgid "Archive of old material"
-msgstr "이전 자료의 보관"
-
-#: inc/replace.class.php:508
-msgid "See attached document"
-msgstr "첨부된 문서 보기"
-
-#: inc/replace.class.php:615
-msgid "This item is a replacement for item"
-msgstr "이 품목은 품목 교체용 입니다"
-
-#: inc/replace.class.php:617
-msgid "This item was replaced by"
-msgstr "이 품목은 다음에 의해 교체됨"
-
-#: inc/replace.class.php:675 inc/replace.class.php:755
-msgid "Reminder of the replacement model"
-msgstr "대체 모델의 알림"
-
-#: inc/replace.class.php:715
-msgid "New location of item"
-msgstr "품목의 새 위치"
-
-#: inc/replace.class.php:732 inc/model.class.php:285
-msgid "New status of the computer"
-msgstr "컴퓨터의 새 상태"
-
-#: inc/replace.class.php:813
-msgid "Choices for item to replace"
-msgstr "대체할 품목 선택"
-
-#: inc/replace.class.php:816
-msgid "Old item"
-msgstr "예전 품목"
-
-#: inc/replace.class.php:826
-msgid "New item"
-msgstr "새 품목"
-
-#: inc/replace.class.php:829
-msgid "Remove"
-msgstr ""
-
-#: inc/replace.class.php:878
-msgid "Replace"
-msgstr "대체"
 
 #: inc/model.class.php:107
 msgid "The purge archiving method is not available for this model type"
@@ -297,23 +317,3 @@ msgstr "추가 항목"
 #: inc/model.class.php:572
 msgid "Delete Fields plugin informations"
 msgstr "항목 플러그인 정보 삭제"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "바로가기"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "위치 설정"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "플러그인 동작으로 상태 드롭다운 교체"
-
-#: front/action.php:62
-msgid "Replacement successful"
-msgstr "대체함"
-
-#: front/action.php:111
-msgid "Uninstallation successful"
-msgstr "제거함"
