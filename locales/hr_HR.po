@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 02:07+0000\n"
+"POT-Creation-Date: 2026-04-14 02:49+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2023\n"
 "Language-Team: Croatian (Croatia) (https://app.transifex.com/teclib/teams/28042/hr_HR/)\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Informations replacement"
 msgstr "Zamjena informacija"
 
-#: templates/model_config.html.twig inc/replace.class.php:676
+#: templates/model_config.html.twig inc/replace.class.php:675
 msgid "General informations"
 msgstr "Opće informacije"
 
@@ -33,11 +33,11 @@ msgstr "Opće informacije"
 msgid "Copy in new item"
 msgstr ""
 
-#: templates/model_config.html.twig inc/replace.class.php:692
+#: templates/model_config.html.twig inc/replace.class.php:691
 msgid "Overwrite informations (from old item to the new)"
 msgstr "Prepiši informacije (od starog predmeta na novi)"
 
-#: templates/model_config.html.twig inc/replace.class.php:695
+#: templates/model_config.html.twig inc/replace.class.php:694
 #: inc/model.class.php:800
 msgid "Archiving method of the old material"
 msgstr "Način arhiviranja starog materijala"
@@ -52,39 +52,120 @@ msgid ""
 "archiving"
 msgstr ""
 
-#: templates/model_config.html.twig inc/replace.class.php:756
+#: templates/model_config.html.twig inc/replace.class.php:755
 msgid "Connections with other materials"
 msgstr "Veze s ostalim materijalima"
 
-#: templates/model_config.html.twig inc/replace.class.php:801
+#: templates/model_config.html.twig inc/replace.class.php:800
 msgid "Direct connections"
 msgstr "Izravne veze"
+
+#: ajax/locations.php:48 inc/replace.class.php:717
+#: inc/preference.class.php:103
+msgid "Keep previous location"
+msgstr "Zadrži prethodnu lokaciju"
+
+#: ajax/locations.php:49 inc/replace.class.php:721
+#: inc/preference.class.php:104
+msgid "Empty location"
+msgstr "Prazna lokacija"
 
 #: setup.php:119
 msgid "Item's Lifecycle (uninstall)"
 msgstr "Životni vijek predmeta (deinstaliraj)"
 
+#: hook.php:44 inc/uninstall.class.php:365
+msgid "Uninstall"
+msgstr "Deinstaliraj"
+
+#: front/action.php:62
+msgid "Replacement successful"
+msgstr "Zamjena uspješna"
+
+#: front/action.php:111
+msgid "Uninstallation successful"
+msgstr "Deinstalacija uspješna"
+
+#: inc/replace.class.php:78
+msgid "Item's replacement"
+msgstr "Zamjena predmeta"
+
+#: inc/replace.class.php:104 inc/replace.class.php:162 inc/model.class.php:135
+#: inc/model.class.php:941
+msgid "Replacement"
+msgstr "Zamjena"
+
+#: inc/replace.class.php:187
+msgid "This document is the archive of this replaced item"
+msgstr "Predmet je arhiva ovog zamijenjenog predmeta"
+
+#: inc/replace.class.php:192
+msgid "Archive of old material"
+msgstr "Arhiva starog materijala"
+
+#: inc/replace.class.php:507
+msgid "See attached document"
+msgstr "Pogledaj priloženi dokument"
+
+#: inc/replace.class.php:614
+msgid "This item is a replacement for item"
+msgstr "Predmet je zamjena za predmet"
+
+#: inc/replace.class.php:616
+msgid "This item was replaced by"
+msgstr "Predmet je zamijenjen s"
+
+#: inc/replace.class.php:674 inc/replace.class.php:754
+msgid "Reminder of the replacement model"
+msgstr "Podsjetnik modela zamjene"
+
+#: inc/replace.class.php:714
+msgid "New location of item"
+msgstr "Nova lokacija predmeta"
+
+#: inc/replace.class.php:731 inc/model.class.php:285
+msgid "New status of the computer"
+msgstr "Novo stanje računala"
+
+#: inc/replace.class.php:812
+msgid "Choices for item to replace"
+msgstr "Opcije za predmet koji se zamijenjuje"
+
+#: inc/replace.class.php:815
+msgid "Old item"
+msgstr "Stari predmet"
+
+#: inc/replace.class.php:825
+msgid "New item"
+msgstr "Novi predmet"
+
+#: inc/replace.class.php:828
+msgid "Remove"
+msgstr "Ukloni"
+
+#: inc/replace.class.php:877
+msgid "Replace"
+msgstr "Zamijeni"
+
 #: inc/preference.class.php:78
 msgid "Item's location after uninstall"
 msgstr "Lokacija predmeta nakon deinstaliranja"
 
-#: inc/preference.class.php:103 inc/replace.class.php:718
-#: ajax/locations.php:48
-msgid "Keep previous location"
-msgstr "Zadrži prethodnu lokaciju"
-
-#: inc/preference.class.php:104 inc/replace.class.php:722
-#: ajax/locations.php:49
-msgid "Empty location"
-msgstr "Prazna lokacija"
-
-#: inc/uninstall.class.php:71 inc/model.class.php:84 inc/config.class.php:37
+#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
 msgid "Item's Lifecycle"
 msgstr "Životni vijek predmeta"
 
-#: inc/uninstall.class.php:365 hook.php:44
-msgid "Uninstall"
-msgstr "Deinstaliraj"
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Prečaci"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Postavke lokacije"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Zamijeni padajući popis stanja s radnjama dodatka"
 
 #: inc/uninstall.class.php:370
 msgid "Please wait, uninstallation is running..."
@@ -127,67 +208,6 @@ msgstr "Lokacija predmeta nakon primjenjivanja modela"
 #: inc/uninstall.class.php:1089
 msgid "Lifecycle"
 msgstr "Životni vijek"
-
-#: inc/replace.class.php:78
-msgid "Item's replacement"
-msgstr "Zamjena predmeta"
-
-#: inc/replace.class.php:104 inc/replace.class.php:162 inc/model.class.php:135
-#: inc/model.class.php:941
-msgid "Replacement"
-msgstr "Zamjena"
-
-#: inc/replace.class.php:187
-msgid "This document is the archive of this replaced item"
-msgstr "Predmet je arhiva ovog zamijenjenog predmeta"
-
-#: inc/replace.class.php:192
-msgid "Archive of old material"
-msgstr "Arhiva starog materijala"
-
-#: inc/replace.class.php:508
-msgid "See attached document"
-msgstr "Pogledaj priloženi dokument"
-
-#: inc/replace.class.php:615
-msgid "This item is a replacement for item"
-msgstr "Predmet je zamjena za predmet"
-
-#: inc/replace.class.php:617
-msgid "This item was replaced by"
-msgstr "Predmet je zamijenjen s"
-
-#: inc/replace.class.php:675 inc/replace.class.php:755
-msgid "Reminder of the replacement model"
-msgstr "Podsjetnik modela zamjene"
-
-#: inc/replace.class.php:715
-msgid "New location of item"
-msgstr "Nova lokacija predmeta"
-
-#: inc/replace.class.php:732 inc/model.class.php:285
-msgid "New status of the computer"
-msgstr "Novo stanje računala"
-
-#: inc/replace.class.php:813
-msgid "Choices for item to replace"
-msgstr "Opcije za predmet koji se zamijenjuje"
-
-#: inc/replace.class.php:816
-msgid "Old item"
-msgstr "Stari predmet"
-
-#: inc/replace.class.php:826
-msgid "New item"
-msgstr "Novi predmet"
-
-#: inc/replace.class.php:829
-msgid "Remove"
-msgstr "Ukloni"
-
-#: inc/replace.class.php:878
-msgid "Replace"
-msgstr "Zamijeni"
 
 #: inc/model.class.php:107
 msgid "The purge archiving method is not available for this model type"
@@ -301,23 +321,3 @@ msgstr "Dodatna polja"
 #: inc/model.class.php:572
 msgid "Delete Fields plugin informations"
 msgstr "Izbriši informacije dodatka „Polja”"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Prečaci"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Postavke lokacije"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Zamijeni padajući popis stanja s radnjama dodatka"
-
-#: front/action.php:62
-msgid "Replacement successful"
-msgstr "Zamjena uspješna"
-
-#: front/action.php:111
-msgid "Uninstallation successful"
-msgstr "Deinstalacija uspješna"
