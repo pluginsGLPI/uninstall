@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
 
-### Fixed
+### Added
 
+- Add Links for uninstall templates From Item Form
 - Fix SQL errors when uninstalling or replacing peripheral assets
 - Fix locales encoding
 
