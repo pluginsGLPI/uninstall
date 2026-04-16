@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Add Links for uninstall templates From Item Form
+- Fix SQL errors when uninstalling or replacing peripheral assets
+- Fix locales encoding
 
 ## [2.10.3] - 2025-11-25
 
@@ -17,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix config redirection link
 - Fix plugin name display in marketplace
+- Fix impossible to update Location preferences because table glpi_plugin_uninstall_profiles is dropped.
 
 ## [2.10.2] - 2025-11-05
 

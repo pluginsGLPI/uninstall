@@ -448,12 +448,11 @@ class PluginUninstallReplace extends CommonDBTM
             ) { #do not update computer_item if no computer
                 $comp_item = new Asset_PeripheralAsset();
                 if ($olditem instanceof Computer) {
-                    foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
+                    foreach (self::getAssociatedItems($olditem) as $connections) {
                         foreach ($connections as $connection) {
                             $comp_item->update(
-                                ['id'           => $connection['id'],
-                                    'computers_id' => $newitem_id,
-                                    'itemtype'     => $itemtype,
+                                ['id'             => $connection['id'],
+                                    'items_id_asset' => $newitem_id,
                                 ],
                                 false,
                             );

@@ -167,8 +167,8 @@ class PluginUninstallUninstall extends CommonDBTM
         //------------------//
         if (in_array($type, $UNINSTALL_DIRECT_CONNECTIONS_TYPE)) {
             $conn = new Asset_PeripheralAsset();
-            $conn->deleteByCriteria(['itemtype' => $type,
-                'items_id' => $id,
+            $conn->deleteByCriteria(['itemtype_peripheral' => $type,
+                'items_id_peripheral' => $id,
             ], true);
         }
 
