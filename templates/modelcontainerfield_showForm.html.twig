@@ -1,0 +1,213 @@
+{#
+# -------------------------------------------------------------------------
+# Uninstall plugin for GLPI
+# -------------------------------------------------------------------------
+#
+# LICENSE
+#
+# This file is part of Uninstall.
+#
+# Uninstall is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# Uninstall is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Uninstall. If not, see <http://www.gnu.org/licenses/>.
+# -------------------------------------------------------------------------
+# @copyright Copyright (C) 2015-2026 by Teclib'.
+# @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+# @link      https://github.com/pluginsGLPI/uninstall
+# -------------------------------------------------------------------------
+#}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+
+<tr class='tab_bg_1 center'>
+    <th colspan="4">{{ __('Parents', 'uninstall') }}</th>
+</tr>
+<tr class='tab_bg_1 center'>
+    <td>{{ __('Model') }} : </td>
+    <td><a href="{{ link['model'] }}">{{ model['name'] }}</a></td>
+    <td>{{ __('Bloc') }}</td>
+    <td><a href="{{ link['container'] }}">{{ fieldsContainer['name'] }}</a></td>
+</tr>
+<tr class='tab_bg_1 center'>
+    <th colspan="4" class="fs-2">{{ __('Field informations', 'uninstall') }}</th>
+</tr>
+<tr class='tab_bg_1 center fw-bold'>
+    <td>{{ __("Label") }} : </td>
+    <td>{{ pluginFieldsField['label'] }}</td>
+    <td>{{ __("Type") }} : </td>
+    <td>{{ pluginFieldsFieldType }}</td>
+</tr>
+<tr class='tab_bg_1 center'>
+    <td>{{ __('Active') }} : </td>
+    <td>
+        {% if pluginFieldsField['is_active'] %}
+            {{ __('Yes') }}
+        {% else %}
+            {{ __('No') }}
+        {% endif %}
+    </td>
+    <td>{{ __("Mandatory field") }} : </td>
+    <td>
+        {% if pluginFieldsField['mandatory'] %}
+            {{ __('Yes') }}
+        {% else %}
+            {{ __('No') }}
+        {% endif %}
+    </td>
+</tr>
+
+
+
+    {% set actionFields = ['action_replace', 'action_uninstall'] %}
+
+    {% for field in actionFields %}
+
+    {% if
+        (field == 'action_uninstall' and modelValues['types_id'] != constant('PluginUninstallModel::TYPE_MODEL_REPLACEMENT'))
+        or
+        (field == 'action_replace' and modelValues['types_id'] != constant('PluginUninstallModel::TYPE_MODEL_UNINSTALL'))
+    %}
+
+        {% if field == 'action_uninstall' %}
+            {% set typeTitle = __('Uninstallation', 'uninstall') %}
+            {% set modelProperty = 'action_plugin_fields_uninstall' %}
+        {% elseif field == 'action_replace' %}
+            {% set typeTitle = __('Replacement', 'uninstall') %}
+            {% set modelProperty = 'action_plugin_fields_replace' %}
+        {% endif %}
+
+        <tr class='tab_bg_1 center'>
+            <th colspan="4" class="center fs-3">
+                {{ __('Action for ', 'uninstall') ~ typeTitle }}
+            </th>
+        </tr>
+
+
+        <tr class="tab_bg_1 center">
+
+            {% if
+                modelValues[modelProperty] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED')
+                and uninstallContainer[field] == constant('PluginUninstallModelcontainer::ACTION_CUSTOM')
+            %}
+
+                <td>{{ __('Action') }} :</td>
+
+                {% set colspan = field == 'action_uninstall' ? 1 : 3 %}
+                <td colspan="{{ colspan }}">
+
+                    {% set rand = random() %}
+
+                    {% set options = {
+                        constant('PluginUninstallModelcontainerfield::ACTION_NONE'): __('Do nothing')
+                    } %}
+
+                    {% if field == 'action_uninstall' %}
+                        {% set options = options|merge({
+                            (constant('PluginUninstallModelcontainerfield::ACTION_RAZ')): __('Blank')
+                        }) %}
+
+                        {% if pluginFieldsField['type'] != 'glpi_item' %}
+                            {% set options = options|merge({
+                                (constant('PluginUninstallModelcontainerfield::ACTION_NEW_VALUE')): __('Set value', 'uninstall')
+                            }) %}
+                        {% endif %}
+                    {% else %}
+                        {% set options = options|merge({
+                            (constant('PluginUninstallModelcontainerfield::ACTION_COPY')): __('Copy')
+                        }) %}
+                    {% endif %}
+
+
+                    {{ fields.dropdownArrayField(
+                        field,
+                        itemValues[field] ?? constant('PluginUninstallModelcontainerfield::ACTION_NONE'),
+                        options,
+                        '',
+                        {
+                            'rand': rand,
+                            'width': '100%',
+                        }
+                    ) }}
+                </td>
+
+                {% if field == 'action_uninstall' %}
+                    <td>
+                                <span id="label-set-value{{ rand }}" style="display:none">
+                                    {{ __('New value', 'uninstall') }} :
+                                </span>
+                    </td>
+
+                    <td id="container-set-value{{ rand }}">
+                        {% if pluginFieldsField['type'] == 'glpi_item' %}
+                            {{ __('Action set value is not available for this field type', 'uninstall') }}
+                        {% endif %}
+                    </td>
+
+                    <script>
+                        $(document).ready(function() {
+                            const select = $('#dropdown_{{ field }}{{ rand }}');
+                            const label = $('#label-set-value{{ rand }}');
+                            const inputContainer = $('#container-set-value{{ rand }}');
+
+                            select.change(e => {
+                                if (e.target.selectedIndex === {{ constant('PluginUninstallModelcontainerfield::ACTION_NEW_VALUE') }}) {
+                                    label[0].style.display = '';
+                                } else {
+                                    label[0].style.display = 'none';
+                                }
+
+                                inputContainer.load('{{ link['ajax'] }}', {
+                                    id: {{ idItem }},
+                                    action: e.target.selectedIndex
+                                });
+                            });
+
+                            select.trigger('change');
+                        });
+                    </script>
+
+                {% endif %}
+
+            {% else %}
+
+                {% if modelValues[modelProperty] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_ADVANCED') %}
+                    <td colspan="4">
+                        <strong>{{ undertitle[field] }}</strong>
+                        ({{ __('set by bloc', 'uninstall') }})
+                    </td>
+
+                {% else %}
+
+                    {% if modelValues[modelProperty] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_NONE') %}
+                        {% set action = __('Do nothing') %}
+                    {% elseif modelValues[modelProperty] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_RAZ') %}
+                        {% set action = __('Blank') %}
+                    {% elseif modelValues[modelProperty] == constant('PluginUninstallModel::PLUGIN_FIELDS_ACTION_COPY') %}
+                        {% set action = __('Copy') %}
+                    {% endif %}
+
+                    <td colspan="4">
+                        <strong>{{ action }}</strong>
+                        ({{ __('set by model', 'uninstall') }})
+                    </td>
+
+                {% endif %}
+            {% endif %}
+
+        </tr>
+
+    {% endif %}
+{% endfor %}
+
+
+
+
