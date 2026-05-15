@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 02:49+0000\n"
+"POT-Creation-Date: 2026-05-15 03:42+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: INOUE Daisuke, 2025\n"
 "Language-Team: Japanese (Japan) (https://app.transifex.com/teclib/teams/28042/ja_JP/)\n"
@@ -60,23 +60,19 @@ msgstr "他の機材への接続"
 msgid "Direct connections"
 msgstr "直接接続"
 
-#: ajax/locations.php:48 inc/replace.class.php:717
-#: inc/preference.class.php:103
+#: ajax/locations.php:48 inc/preference.class.php:103
+#: inc/replace.class.php:717
 msgid "Keep previous location"
 msgstr "以前の場所に維持"
 
-#: ajax/locations.php:49 inc/replace.class.php:721
-#: inc/preference.class.php:104
+#: ajax/locations.php:49 inc/preference.class.php:104
+#: inc/replace.class.php:721
 msgid "Empty location"
 msgstr "場所を初期状態に"
 
 #: setup.php:119
 msgid "Item's Lifecycle (uninstall)"
 msgstr "アイテムのライフサイクル（撤去）"
-
-#: hook.php:44 inc/uninstall.class.php:365
-msgid "Uninstall"
-msgstr "撤去"
 
 #: front/action.php:62
 msgid "Replacement successful"
@@ -85,6 +81,26 @@ msgstr "置き換えに成功しました"
 #: front/action.php:111
 msgid "Uninstallation successful"
 msgstr "撤去しました"
+
+#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
+msgid "Item's Lifecycle"
+msgstr "アイテムのライフサイクル"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "ショートカット"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "場所の設定"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "状態のドロップダウンをプラグインの操作に置き換える"
+
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
+msgstr "撤去後のアイテムの場所"
 
 #: inc/replace.class.php:78
 msgid "Item's replacement"
@@ -147,25 +163,9 @@ msgstr "削除"
 msgid "Replace"
 msgstr "置き換え"
 
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr "撤去後のアイテムの場所"
-
-#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
-msgid "Item's Lifecycle"
-msgstr "アイテムのライフサイクル"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "ショートカット"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "場所の設定"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "状態のドロップダウンをプラグインの操作に置き換える"
+#: inc/uninstall.class.php:365 hook.php:44
+msgid "Uninstall"
+msgstr "撤去"
 
 #: inc/uninstall.class.php:370
 msgid "Please wait, uninstallation is running..."

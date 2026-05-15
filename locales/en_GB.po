@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 02:49+0000\n"
-"PO-Revision-Date: 2026-04-14 02:49+0000\n"
+"POT-Creation-Date: 2026-05-15 03:42+0000\n"
+"PO-Revision-Date: 2026-05-15 03:42+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -58,21 +58,17 @@ msgstr "Connections with other materials"
 msgid "Direct connections"
 msgstr "Direct connections"
 
-#: ajax/locations.php:48 inc/replace.class.php:717 inc/preference.class.php:103
+#: ajax/locations.php:48 inc/preference.class.php:103 inc/replace.class.php:717
 msgid "Keep previous location"
 msgstr "Keep previous location"
 
-#: ajax/locations.php:49 inc/replace.class.php:721 inc/preference.class.php:104
+#: ajax/locations.php:49 inc/preference.class.php:104 inc/replace.class.php:721
 msgid "Empty location"
 msgstr "Empty location"
 
 #: setup.php:119
 msgid "Item's Lifecycle (uninstall)"
 msgstr "Item's Lifecycle (uninstall)"
-
-#: hook.php:44 inc/uninstall.class.php:365
-msgid "Uninstall"
-msgstr "Uninstall"
 
 #: front/action.php:62
 msgid "Replacement successful"
@@ -81,6 +77,26 @@ msgstr "Replacement successful"
 #: front/action.php:111
 msgid "Uninstallation successful"
 msgstr "Uninstallation successful"
+
+#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
+msgid "Item's Lifecycle"
+msgstr "Item's Lifecycle"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Shortcuts"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Location preferences"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Replace status dropdown by plugin actions"
+
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
+msgstr "Item's location after uninstall"
 
 #: inc/replace.class.php:78
 msgid "Item's replacement"
@@ -143,25 +159,9 @@ msgstr "Remove"
 msgid "Replace"
 msgstr "Replace"
 
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr "Item's location after uninstall"
-
-#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
-msgid "Item's Lifecycle"
-msgstr "Item's Lifecycle"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Shortcuts"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Location preferences"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Replace status dropdown by plugin actions"
+#: inc/uninstall.class.php:365 hook.php:44
+msgid "Uninstall"
+msgstr "Uninstall"
 
 #: inc/uninstall.class.php:370
 msgid "Please wait, uninstallation is running..."

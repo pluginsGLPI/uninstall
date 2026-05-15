@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 02:49+0000\n"
+"POT-Creation-Date: 2026-05-15 03:42+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Edwin Elias Alvarez <elias986@yahoo.com>, 2026\n"
 "Language-Team: Spanish (Mexico) (https://app.transifex.com/teclib/teams/28042/es_MX/)\n"
@@ -63,23 +63,19 @@ msgstr "Conexiones con otros materiales"
 msgid "Direct connections"
 msgstr "Conexiones directas"
 
-#: ajax/locations.php:48 inc/replace.class.php:717
-#: inc/preference.class.php:103
+#: ajax/locations.php:48 inc/preference.class.php:103
+#: inc/replace.class.php:717
 msgid "Keep previous location"
 msgstr "Conservar la ubicación anterior"
 
-#: ajax/locations.php:49 inc/replace.class.php:721
-#: inc/preference.class.php:104
+#: ajax/locations.php:49 inc/preference.class.php:104
+#: inc/replace.class.php:721
 msgid "Empty location"
 msgstr "Ubicación vacía"
 
 #: setup.php:119
 msgid "Item's Lifecycle (uninstall)"
 msgstr "Ciclo de vida del elemento (desinstalar)"
-
-#: hook.php:44 inc/uninstall.class.php:365
-msgid "Uninstall"
-msgstr "Desinstalar"
 
 #: front/action.php:62
 msgid "Replacement successful"
@@ -88,6 +84,27 @@ msgstr "Reemplazo con éxito"
 #: front/action.php:111
 msgid "Uninstallation successful"
 msgstr "Desinstalación correcta"
+
+#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
+msgid "Item's Lifecycle"
+msgstr "Ciclo de vida del elemento"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Atajos"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Preferencias de ubicación"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr ""
+"Reemplazar el menú desplegable de estados por las acciones del complemento"
+
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
+msgstr "Ubicación del elemento tras la desinstalación"
 
 #: inc/replace.class.php:78
 msgid "Item's replacement"
@@ -150,26 +167,9 @@ msgstr "Quitar"
 msgid "Replace"
 msgstr "Reemplazar"
 
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr "Ubicación del elemento tras la desinstalación"
-
-#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
-msgid "Item's Lifecycle"
-msgstr "Ciclo de vida del elemento"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Atajos"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Preferencias de ubicación"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr ""
-"Reemplazar el menú desplegable de estados por las acciones del complemento"
+#: inc/uninstall.class.php:365 hook.php:44
+msgid "Uninstall"
+msgstr "Desinstalar"
 
 #: inc/uninstall.class.php:370
 msgid "Please wait, uninstallation is running..."
