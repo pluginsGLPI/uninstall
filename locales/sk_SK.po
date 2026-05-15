@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 02:49+0000\n"
+"POT-Creation-Date: 2026-05-15 03:42+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: feonsu <feonsu@gmail.com>, 2023\n"
 "Language-Team: Slovak (Slovakia) (https://app.transifex.com/teclib/teams/28042/sk_SK/)\n"
@@ -60,23 +60,19 @@ msgstr "Prepojenie s ostatnými materiálmi"
 msgid "Direct connections"
 msgstr "Priame pripojenia"
 
-#: ajax/locations.php:48 inc/replace.class.php:717
-#: inc/preference.class.php:103
+#: ajax/locations.php:48 inc/preference.class.php:103
+#: inc/replace.class.php:717
 msgid "Keep previous location"
 msgstr "Ponechať predchádzajúce umiestnenie"
 
-#: ajax/locations.php:49 inc/replace.class.php:721
-#: inc/preference.class.php:104
+#: ajax/locations.php:49 inc/preference.class.php:104
+#: inc/replace.class.php:721
 msgid "Empty location"
 msgstr "Vyprázdniť umiestnenie"
 
 #: setup.php:119
 msgid "Item's Lifecycle (uninstall)"
 msgstr "Životný cyklus položky (odinštalácia)"
-
-#: hook.php:44 inc/uninstall.class.php:365
-msgid "Uninstall"
-msgstr "Odinštalovať"
 
 #: front/action.php:62
 msgid "Replacement successful"
@@ -85,6 +81,26 @@ msgstr "Nahradenie bolo úspešné"
 #: front/action.php:111
 msgid "Uninstallation successful"
 msgstr "Odinštalácia bola úspešná"
+
+#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
+msgid "Item's Lifecycle"
+msgstr "Životný cyklus položky"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Skratky"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Predvoľby umiestnení"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Nahradiť rozbaľovaciu ponuku stavu pomocou akcií pluginu"
+
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
+msgstr "Umiestnenie položky po odinštalácii"
 
 #: inc/replace.class.php:78
 msgid "Item's replacement"
@@ -147,25 +163,9 @@ msgstr "Zmazať"
 msgid "Replace"
 msgstr "Nahradiť"
 
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr "Umiestnenie položky po odinštalácii"
-
-#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
-msgid "Item's Lifecycle"
-msgstr "Životný cyklus položky"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Skratky"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Predvoľby umiestnení"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Nahradiť rozbaľovaciu ponuku stavu pomocou akcií pluginu"
+#: inc/uninstall.class.php:365 hook.php:44
+msgid "Uninstall"
+msgstr "Odinštalovať"
 
 #: inc/uninstall.class.php:370
 msgid "Please wait, uninstallation is running..."
