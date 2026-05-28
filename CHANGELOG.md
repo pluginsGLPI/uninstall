@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fix SQL errors when uninstalling or replacing peripheral assets
 - Fix locales encoding
+- Fixed the display of “Item's Lifecycle” in the breadcrumb trail
 
 ## [2.10.3] - 2025-11-25
 
