@@ -81,7 +81,7 @@ class PluginUninstallModel extends CommonDBTM
         $menu = [];
 
         // get Menu name :
-        $menu['title'] = __s("Item's Lifecycle", 'uninstall');
+        $menu['title'] = __("Item's Lifecycle", 'uninstall');
         $menu['page']  = $CFG_GLPI['root_doc'] . '/plugins/uninstall/front/model.php';
         $menu['icon']  = PluginUninstallReplace::getIcon();
 
