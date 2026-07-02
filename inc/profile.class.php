@@ -308,6 +308,7 @@ class PluginUninstallProfile extends Profile
         foreach (self::getGeneralRights() as $right) {
             ProfileRight::deleteProfileRights([$right['field']]);
         }
+
         ProfileRight::deleteProfileRights(['plugin_uninstall_replace']);
     }
 }
