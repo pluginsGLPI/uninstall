@@ -101,6 +101,5 @@ function plugin_uninstall_uninstall()
     PluginUninstallModel::uninstall();
     PluginUninstallPreference::uninstall();
     PluginUninstallConfig::uninstall();
-
     return true;
 }
