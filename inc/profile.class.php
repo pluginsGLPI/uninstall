@@ -38,7 +38,7 @@ class PluginUninstallProfile extends Profile
      *
      * @return array rights matrix
      */
-    public function getGeneralRights()
+    public static function getGeneralRights()
     {
         return [
             [
@@ -71,7 +71,7 @@ class PluginUninstallProfile extends Profile
             $this->showFormHeader($options);
         }
 
-        $rights = $this->getGeneralRights();
+        $rights = self::getGeneralRights();
         $profile->displayRightsChoiceMatrix($rights, ['canedit'       => $canedit,
             'default_class' => 'tab_bg_2',
         ]);
@@ -304,5 +304,11 @@ class PluginUninstallProfile extends Profile
         global $DB;
 
         $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(self::class) . "`");
+
+        foreach (self::getGeneralRights() as $right) {
+            ProfileRight::deleteProfileRights([$right['field']]);
+        }
+
+        ProfileRight::deleteProfileRights(['plugin_uninstall_replace']);
     }
 }
