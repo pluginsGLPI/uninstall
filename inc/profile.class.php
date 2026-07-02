@@ -310,6 +310,4 @@ class PluginUninstallProfile extends Profile
         }
         ProfileRight::deleteProfileRights(['plugin_uninstall_replace']);
     }
-
-
 }
