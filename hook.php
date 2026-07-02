@@ -98,8 +98,10 @@ function plugin_uninstall_uninstall()
     require_once($dir . "/inc/config.class.php");
 
     PluginUninstallProfile::uninstall();
+    PluginUninstallProfile::deleteProfileRights([PluginUninstallProfile::RIGHT_REPLACE]);
     PluginUninstallModel::uninstall();
     PluginUninstallPreference::uninstall();
     PluginUninstallConfig::uninstall();
+
     return true;
 }
