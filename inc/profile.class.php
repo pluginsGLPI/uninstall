@@ -304,25 +304,11 @@ class PluginUninstallProfile extends Profile
         global $DB;
 
         $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(self::class) . "`");
-    }
 
-    public static function deleteProfileRights(array $rights)
-    {
-        global $DB, $GLPI_CACHE;
-
-        $GLPI_CACHE->set('all_possible_rights', []);
-        $ok = true;
-        foreach ($rights as $name) {
-            $result = $DB->delete(
-                self::getTable(),
-                [
-                    'name' => $name,
-                ]
-            );
-            if (!$result) {
-                $ok = false;
-            }
+        foreach (self::getGeneralRights() as $right) {
+            ProfileRight::deleteProfileRights([$right['field']]);
         }
-        return $ok;
     }
+
+
 }
