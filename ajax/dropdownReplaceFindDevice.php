@@ -50,9 +50,9 @@ if (!in_array($_REQUEST['itemtype'], array_merge($UNINSTALL_TYPES, $UNINSTALL_DI
     throw new AccessDeniedHttpException(__s("You don't have permission to perform this action."));
 }
 
-if (class_exists($_REQUEST['itemtype']) && is_a($_REQUEST['itemtype'], CommonDBTM::class, true)) {
+$item = getItemForItemtype($_REQUEST['itemtype']);
+if ($item instanceof CommonDBTM) {
     $itemtypeisplugin = isPluginItemType($_REQUEST['itemtype']);
-    $item             = new $_REQUEST['itemtype']();
     $table            = getTableForItemType($_REQUEST['itemtype']);
     $options          = [];
     $count            = 0;
