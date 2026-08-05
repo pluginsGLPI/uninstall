@@ -25,6 +25,11 @@
       <author>Remi Collet</author>
    </authors>
    <versions>
+      <version>
+         <num>2.10.4</num>
+         <compatibility>~11.0.0</compatibility>
+         <download_url>https://github.com/pluginsGLPI/uninstall/releases/download/2.10.4/glpi-uninstall-2.10.4.tar.bz2</download_url>
+      </version>
        <version>
          <num>2.10.3</num>
          <compatibility>~11.0.0</compatibility>
@@ -208,10 +213,5 @@
             <tag>archivovat</tag>
          </cs>
    </tags>
-   <screenshots>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/main/screenshots/uninstall.png</screenshot>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/main/screenshots/uninstall2.png</screenshot>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/main/uninstall.gif</screenshot>
-   </screenshots>
    <license>GPL v2+</license>
 </root>
