@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-15 03:42+0000\n"
+"POT-Creation-Date: 2026-08-13 02:07+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: David Stepan <stepand@tiscali.cz>, 2025\n"
 "Language-Team: Czech (Czech Republic) (https://app.transifex.com/teclib/teams/28042/cs_CZ/)\n"
@@ -62,20 +62,6 @@ msgstr "Propojení s ostatními materiály"
 msgid "Direct connections"
 msgstr "Přímá propojení"
 
-#: ajax/locations.php:48 inc/preference.class.php:103
-#: inc/replace.class.php:717
-msgid "Keep previous location"
-msgstr "Ponechat předchozí umístění"
-
-#: ajax/locations.php:49 inc/preference.class.php:104
-#: inc/replace.class.php:721
-msgid "Empty location"
-msgstr "Prázdné umístění"
-
-#: setup.php:119
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Životní cyklus položky (odinstalace)"
-
 #: front/action.php:62
 msgid "Replacement successful"
 msgstr "Nahrazení úspěšné"
@@ -84,90 +70,17 @@ msgstr "Nahrazení úspěšné"
 msgid "Uninstallation successful"
 msgstr "Odinstalace úspěšná"
 
-#: inc/config.class.php:37 inc/uninstall.class.php:71 inc/model.class.php:84
-msgid "Item's Lifecycle"
-msgstr "Životní cyklus položky"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Zkratky"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Preference umístění"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Nahradit rozbalovací nabídku stavu akcí zásuvného modulu"
-
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr "Umístění položky po odinstalaci"
-
-#: inc/replace.class.php:78
-msgid "Item's replacement"
-msgstr "Nahrazení položky"
-
-#: inc/replace.class.php:104 inc/replace.class.php:162 inc/model.class.php:135
-#: inc/model.class.php:941
-msgid "Replacement"
-msgstr "Nahrazení"
-
-#: inc/replace.class.php:187
-msgid "This document is the archive of this replaced item"
-msgstr "Tento dokument je archiv nahrazené položky"
-
-#: inc/replace.class.php:192
-msgid "Archive of old material"
-msgstr "Archiv starého materiálu"
-
-#: inc/replace.class.php:507
-msgid "See attached document"
-msgstr "Zobrazit přiložený dokument"
-
-#: inc/replace.class.php:614
-msgid "This item is a replacement for item"
-msgstr "Tato položka je náhradou za položku"
-
-#: inc/replace.class.php:616
-msgid "This item was replaced by"
-msgstr "Tato položka byla nahrazena"
-
-#: inc/replace.class.php:674 inc/replace.class.php:754
-msgid "Reminder of the replacement model"
-msgstr "Připomínka modelu nahrazení"
-
-#: inc/replace.class.php:714
-msgid "New location of item"
-msgstr "Nové umístění položky"
-
-#: inc/replace.class.php:731 inc/model.class.php:285
-msgid "New status of the computer"
-msgstr "Nový stav počítače"
-
-#: inc/replace.class.php:812
-msgid "Choices for item to replace"
-msgstr "Volby pro položky k nahrazení"
-
-#: inc/replace.class.php:815
-msgid "Old item"
-msgstr "Původní položka"
-
-#: inc/replace.class.php:825
-msgid "New item"
-msgstr "Nová položka"
-
-#: inc/replace.class.php:828
-msgid "Remove"
-msgstr "Odstranit"
-
-#: inc/replace.class.php:877
-msgid "Replace"
-msgstr "Nahradit"
-
-#: inc/uninstall.class.php:365 hook.php:44
+#: hook.php:44 inc/uninstall.class.php:365
 msgid "Uninstall"
 msgstr "Odinstalovat"
+
+#: setup.php:119
+msgid "Item's Lifecycle (uninstall)"
+msgstr "Životní cyklus položky (odinstalace)"
+
+#: inc/uninstall.class.php:71 inc/config.class.php:37 inc/model.class.php:84
+msgid "Item's Lifecycle"
+msgstr "Životní cyklus položky"
 
 #: inc/uninstall.class.php:370
 msgid "Please wait, uninstallation is running..."
@@ -210,6 +123,93 @@ msgstr "Umístění položky po uplatnění modelu"
 #: inc/uninstall.class.php:1089
 msgid "Lifecycle"
 msgstr "Životní cyklus"
+
+#: inc/replace.class.php:78
+msgid "Item's replacement"
+msgstr "Nahrazení položky"
+
+#: inc/replace.class.php:104 inc/replace.class.php:162 inc/model.class.php:135
+#: inc/model.class.php:941
+msgid "Replacement"
+msgstr "Nahrazení"
+
+#: inc/replace.class.php:187
+msgid "This document is the archive of this replaced item"
+msgstr "Tento dokument je archiv nahrazené položky"
+
+#: inc/replace.class.php:192
+msgid "Archive of old material"
+msgstr "Archiv starého materiálu"
+
+#: inc/replace.class.php:507
+msgid "See attached document"
+msgstr "Zobrazit přiložený dokument"
+
+#: inc/replace.class.php:614
+msgid "This item is a replacement for item"
+msgstr "Tato položka je náhradou za položku"
+
+#: inc/replace.class.php:616
+msgid "This item was replaced by"
+msgstr "Tato položka byla nahrazena"
+
+#: inc/replace.class.php:674 inc/replace.class.php:754
+msgid "Reminder of the replacement model"
+msgstr "Připomínka modelu nahrazení"
+
+#: inc/replace.class.php:714
+msgid "New location of item"
+msgstr "Nové umístění položky"
+
+#: inc/replace.class.php:717 inc/preference.class.php:103
+#: ajax/locations.php:48
+msgid "Keep previous location"
+msgstr "Ponechat předchozí umístění"
+
+#: inc/replace.class.php:721 inc/preference.class.php:104
+#: ajax/locations.php:49
+msgid "Empty location"
+msgstr "Prázdné umístění"
+
+#: inc/replace.class.php:731 inc/model.class.php:285
+msgid "New status of the computer"
+msgstr "Nový stav počítače"
+
+#: inc/replace.class.php:812
+msgid "Choices for item to replace"
+msgstr "Volby pro položky k nahrazení"
+
+#: inc/replace.class.php:815
+msgid "Old item"
+msgstr "Původní položka"
+
+#: inc/replace.class.php:825
+msgid "New item"
+msgstr "Nová položka"
+
+#: inc/replace.class.php:828
+msgid "Remove"
+msgstr "Odstranit"
+
+#: inc/replace.class.php:877
+msgid "Replace"
+msgstr "Nahradit"
+
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
+msgstr "Umístění položky po odinstalaci"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Zkratky"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Preference umístění"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Nahradit rozbalovací nabídku stavu akcí zásuvného modulu"
 
 #: inc/model.class.php:107
 msgid "The purge archiving method is not available for this model type"
