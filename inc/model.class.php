@@ -32,9 +32,9 @@ use Glpi\DBAL\QueryExpression;
 
 class PluginUninstallModel extends CommonDBTM
 {
-    public static $rightname         = "uninstall:profile";
+    public static string $rightname         = "uninstall:profile";
 
-    public $dohistory         = true;
+    public bool $dohistory    = true;
 
     public $first_level_menu  = "plugins";
 
@@ -68,7 +68,7 @@ class PluginUninstallModel extends CommonDBTM
 
     public static function canReplace()
     {
-        return (bool) Session::haveRight(self::$rightname, PluginUninstallProfile::RIGHT_REPLACE);
+        return Session::haveRight(self::$rightname, PluginUninstallProfile::RIGHT_REPLACE);
     }
 
     public static function getMenuContent()
@@ -197,12 +197,12 @@ class PluginUninstallModel extends CommonDBTM
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
 
-        switch ($item->getType()) {
+        switch ($item::class) {
             case 'Preference':
                 return PluginUninstallUninstall::getTypeName(1);
 
             case self::class:
-                return [1 => self::createTabEntry(self::getTypeName(1), 0, $item::getType(), self::getIcon()), 2 => self::createTabEntry(__s('Replacing data', 'uninstall'), 0, $item::getType(), PluginUninstallReplace::getIcon())];
+                return [1 => self::createTabEntry(self::getTypeName(1), 0, $item::class, self::getIcon()), 2 => self::createTabEntry(__s('Replacing data', 'uninstall'), 0, $item::class, PluginUninstallReplace::getIcon())];
         }
 
         return '';
@@ -328,7 +328,7 @@ class PluginUninstallModel extends CommonDBTM
 
         if (
             !Session::isMultiEntitiesMode()
-            && Session::haveRight("transfer", READ)
+            && Session::haveRight(Transfer::$rightname, READ)
         ) {
             echo "<tr class='tab_bg_1'>";
             echo "<td colspan='2'>";
@@ -632,7 +632,7 @@ class PluginUninstallModel extends CommonDBTM
             'field'              => 'name',
             'name'               => __s('Name'),
             'datatype'           => 'itemlink',
-            'itemlink_type'      => $this->getType(),
+            'itemlink_type'      => static::class,
             'autocomplete'       => true,
         ];
 
@@ -1346,7 +1346,7 @@ class PluginUninstallModel extends CommonDBTM
         $isadmin = static::canUpdate();
         $actions = parent::getSpecificMassiveActions($checkitem);
 
-        if ($isadmin && (Session::haveRight('transfer', READ) && Session::isMultiEntitiesMode())) {
+        if ($isadmin && (Session::haveRight(Transfer::$rightname, READ) && Session::isMultiEntitiesMode())) {
             $actions['PluginUninstallModel:transfert'] = __s('Transfer');
         }
 
@@ -1370,7 +1370,7 @@ class PluginUninstallModel extends CommonDBTM
                         "entities_id" => $entities_id,
                         "update" => __s('Update'),
                     ]);
-                    $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
+                    $ma->itemDone($item::class, $id, MassiveAction::ACTION_OK);
                 }
             }
 

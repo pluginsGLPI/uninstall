@@ -71,7 +71,7 @@ class PluginUninstallReplace extends CommonDBTM
 
     public const METHOD_KEEP_AND_COMMENT   = 3;
 
-    public static $rightname = "uninstall:profile";
+    public static string $rightname = "uninstall:profile";
 
     public static function getTypeName($nb = 0)
     {
@@ -360,7 +360,7 @@ class PluginUninstallReplace extends CommonDBTM
                         $resa_new = new ReservationItem();
                         $resa_new->getFromDBbyItem($type, $newitem_id);
 
-                        if (count($resa_new->fields)) {
+                        if ($resa_new->fields !== []) {
                             $resa_new->deleteFromDB(true);
                         }
                     }
@@ -374,7 +374,7 @@ class PluginUninstallReplace extends CommonDBTM
                     $resa_old = new ReservationItem();
                     $resa_old->getFromDBbyItem($type, $olditem_id);
 
-                    if (count($resa_old->fields)) {
+                    if ($resa_old->fields !== []) {
                         $resa_old->update(
                             ['id'       => $resa_old->getID(),
                                 'itemtype' => $type,
@@ -937,12 +937,12 @@ class PluginUninstallReplace extends CommonDBTM
                 return [];
             }
 
-            switch ($item->getType()) {
+            switch ($item::class) {
                 case 'Ticket':
                 case 'KnowbaseItem':
                     break;
                 default:
-                    if (Session::haveRight('document', READ)) {
+                    if (Session::haveRight(Document::$rightname, READ)) {
                         return [];
                     }
             }
@@ -971,7 +971,7 @@ class PluginUninstallReplace extends CommonDBTM
             ],
             'WHERE' => [
                 'glpi_documents_items.items_id' => $item->getField('id'),
-                'glpi_documents_items.itemtype' => $item->getType(),
+                'glpi_documents_items.itemtype' => $item::class,
             ],
         ];
 
@@ -1005,7 +1005,7 @@ class PluginUninstallReplace extends CommonDBTM
 
         $contracts = [];
 
-        if (!Session::haveRight("contract", READ) || !$item->can($item->fields['id'], READ)) {
+        if (!Session::haveRight(Contract::$rightname, READ) || !$item->can($item->fields['id'], READ)) {
             return [];
         }
 
@@ -1028,7 +1028,7 @@ class PluginUninstallReplace extends CommonDBTM
             ],
             'WHERE' => [
                 'glpi_contracts_items.items_id' => $item->getField('id'),
-                'glpi_contracts_items.itemtype' => $item->getType(),
+                'glpi_contracts_items.itemtype' => $item::class,
             ] + getEntitiesRestrictCriteria('glpi_contracts', '', '', true),
         ];
         $it = $DB->request($criteria);
@@ -1054,7 +1054,7 @@ class PluginUninstallReplace extends CommonDBTM
         global $DB;
 
         if (
-            !Session::haveRight("ticket", Ticket::READALL)
+            !Session::haveRight(Ticket::$rightname, Ticket::READALL)
             || !($item = getItemForItemtype($itemtype))
         ) {
             return [];
@@ -1103,7 +1103,7 @@ class PluginUninstallReplace extends CommonDBTM
             return false;
         }
 
-        if (!Session::haveRight('networking', READ) || !$item->can($ID, READ)) {
+        if (!Session::haveRight(NetworkPort::$rightname, READ) || !$item->can($ID, READ)) {
             return false;
         }
 
