@@ -49,8 +49,8 @@ class PluginUninstallConfig extends Config
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-        if ($item->getType() === "Config") {
-            return self::createTabEntry(self::getTypeName(), 0, $item::getType(), PluginUninstallReplace::getIcon());
+        if ($item::class === "Config") {
+            return self::createTabEntry(self::getTypeName(), 0, $item::class, PluginUninstallReplace::getIcon());
         }
 
         return '';
