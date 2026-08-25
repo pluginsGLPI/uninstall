@@ -31,14 +31,14 @@
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
-Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
+Session::checkRightsOr(PluginUninstallUninstall::$rightname, [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
 if (
     Session::haveRight(PluginUninstallUninstall::$rightname, READ)
     && $_POST['templates_id']
 ) {
     $location = PluginUninstallPreference::getLocationByUserByEntity(
-        $_POST["users_id"],
+        Session::getLoginUserID(),
         $_POST["templates_id"],
         $_POST["entity"],
     );

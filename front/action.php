@@ -30,13 +30,19 @@
 
 Html::header(__s('Transfer'), $_SERVER['PHP_SELF'], "admin", "transfer");
 
-Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
+Session::checkRightsOr(PluginUninstallUninstall::$rightname, [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
 if (
     !isset($_REQUEST["device_type"])
     || !isset($_REQUEST["model_id"])
     || ($_REQUEST["model_id"] == 0)
 ) {
+    Html::back();
+}
+
+/** @var array $UNINSTALL_TYPES */
+global $UNINSTALL_TYPES;
+if (!in_array($_REQUEST["device_type"], $UNINSTALL_TYPES, true)) {
     Html::back();
 }
 
@@ -51,6 +57,7 @@ if (isset($_REQUEST["locations_id"])) {
 }
 
 if (isset($_REQUEST["replace"])) {
+    Session::checkRight(PluginUninstallUninstall::$rightname, PluginUninstallProfile::RIGHT_REPLACE);
     PluginUninstallReplace::replace(
         $_REQUEST["device_type"],
         $_REQUEST["model_id"],

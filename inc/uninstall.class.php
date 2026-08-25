@@ -117,10 +117,12 @@ class PluginUninstallUninstall extends CommonDBTM
         if ($ma->getAction() === "uninstall") {
             $itemtype = $ma->getItemtype(false);
             foreach ($ids as $id) {
-                if ($item->getFromDB($id)) {
+                if ($item->getFromDB($id) && $item->can($id, UPDATE)) {
                     //Session::addMessageAfterRedirect(sprintf(__s('Form duplicated: %s', 'formcreator'), $item->getName()));
                     $_SESSION['glpi_uninstalllist'][$itemtype][$id] = $id;
                     $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
+                } else {
+                    $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_NORIGHT);
                 }
             }
 
@@ -373,7 +375,9 @@ class PluginUninstallUninstall extends CommonDBTM
             $count++;
             if (class_exists($type) && is_a($type, CommonDBTM::class, true)) {
                 $item = new $type();
-                $item->getFromDB($id);
+                if (!$item->getFromDB($id) || !$item->can($id, UPDATE)) {
+                    continue;
+                }
 
                 self::doOneUninstall($model, $transfer, $item, [
                     'type' => $type,
@@ -476,6 +480,7 @@ class PluginUninstallUninstall extends CommonDBTM
         global $DB;
         if (class_exists('PluginOcsinventoryngOcsServer')) {
             $DBocs = PluginOcsinventoryngOcsServer::getDBocs($ocs_server_id)->getDB();
+            $ocs_id = (int) $ocs_id;
 
             //First try to remove all the network ports
             $query = "DELETE

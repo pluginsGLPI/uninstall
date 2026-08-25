@@ -114,10 +114,28 @@ class PluginUninstallReplace extends CommonDBTM
             }
 
             $olditem = new $type();
-            $olditem->getFromDB($olditem_id);
+            if (!$olditem->getFromDB($olditem_id) || !$olditem->can($olditem_id, UPDATE)) {
+                continue;
+            }
 
             $newitem = new $type();
-            $newitem->getFromDB($newitem_id);
+            if (!$newitem->getFromDB($newitem_id) || !$newitem->can($newitem_id, UPDATE)) {
+                continue;
+            }
+
+            if (
+                $model->fields['replace_method'] == self::METHOD_PURGE
+                && !$olditem->can($olditem_id, PURGE)
+            ) {
+                continue;
+            }
+
+            if (
+                $model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT
+                && !$olditem->can($olditem_id, DELETE)
+            ) {
+                continue;
+            }
 
             //Hook to perform actions before item is being replaced
             $olditem->fields['_newid'] = $newitem_id;
@@ -839,11 +857,11 @@ class PluginUninstallReplace extends CommonDBTM
                 echo "<td>" . $commonitem->getName() . "</td>";
 
                 if (Search::getOptionNumber($type, 'otherserial')) {
-                    echo "<td>" . $commonitem->fields['otherserial'] . "</td>";
+                    echo "<td>" . htmlentities((string) $commonitem->fields['otherserial']) . "</td>";
                 }
 
                 if (Search::getOptionNumber($type, 'serial')) {
-                    echo "<td>" . $commonitem->fields['serial'] . "</td>";
+                    echo "<td>" . htmlentities((string) $commonitem->fields['serial']) . "</td>";
                 }
 
                 echo "<td>";
