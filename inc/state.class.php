@@ -28,9 +28,7 @@
  * -------------------------------------------------------------------------
  */
 
-use function Safe\json_encode;
-use function Safe\ob_end_clean;
-use function Safe\ob_start;
+use Glpi\Application\View\TemplateRenderer;
 
 class PluginUninstallState
 {
@@ -58,36 +56,17 @@ class PluginUninstallState
             'complete' => true,
         ]);
 
-        // get form for uninstall actions
-        ob_start();
-        PluginUninstallUninstall::showFormUninstallation($items_id, $item, $users_id);
-        $html_modal = ob_get_contents();
-        ob_end_clean();
+        // Get the uninstall actions form as a string (no output buffering).
+        $html_modal = PluginUninstallUninstall::showFormUninstallation($items_id, $item, $users_id, 0, false);
 
-        // we json encore to pass it to js (auto-escaping)
-        $html = json_encode("
-         {$states_name}
-         <a href='#' id='uninstall_actions_open' class='vsubmit'>"
-            . __s("Update")
-         . "</a>");
-        $modal_body = json_encode($html_modal);
+        // The state select is swapped at runtime by scripts/uninstall.js, which
+        // also wires the modal opener; nothing is echoed inline here.
+        TemplateRenderer::getInstance()->display('@uninstall/state_replace.html.twig', [
+            'rand'        => mt_rand(),
+            'states_name' => $states_name,
+            'modal'       => $html_modal,
+        ]);
 
-        $JS = <<<JAVASCRIPT
-      $(function() {
-         // replace status select
-         var state_span = $("#page select[name=states_id]").parent();
-         state_span.html({$html});
-
-         $("#uninstall_actions_open").on("click", function(event) {
-            event.preventDefault();
-
-            glpi_html_dialog({
-               body: {$modal_body}
-            })
-         });
-      });
-JAVASCRIPT;
-        echo Html::scriptBlock($JS);
         return null;
     }
 }
