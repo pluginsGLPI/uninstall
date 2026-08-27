@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- Fix uninstall/replace actions processing items without checking item type or user rights on the item
 - Fix SQL error when copying documents already linked to the target asset.
 - Fix impossible to update Location preferences because table glpi_plugin_uninstall_profiles is droped.
 
