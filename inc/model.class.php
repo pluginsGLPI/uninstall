@@ -279,7 +279,7 @@ class PluginUninstallModel extends CommonDBTM
         echo "</td>";
         echo "<td rowspan='4'>" . __s('Comments') . "</td>";
         echo "<td rowspan='4'>";
-        echo "<textarea cols='60' rows='4' name='comment'>" . $this->fields["comment"] . "</textarea>";
+        echo "<textarea cols='60' rows='4' name='comment'>" . htmlentities((string) $this->fields["comment"]) . "</textarea>";
         echo "</td></tr>";
 
         echo "<tr class='tab_bg_1'><td>" . __s('New status of the computer', 'uninstall') . "</td>";
