@@ -58,7 +58,7 @@ if (isset($_REQUEST["locations_id"])) {
 
 if (isset($_REQUEST["replace"])) {
     Session::checkRight(PluginUninstallUninstall::$rightname, PluginUninstallProfile::RIGHT_REPLACE);
-    PluginUninstallReplace::replace(
+    $skipped = PluginUninstallReplace::replace(
         $_REQUEST["device_type"],
         $_REQUEST["model_id"],
         $_REQUEST['newItems'],
@@ -66,7 +66,15 @@ if (isset($_REQUEST["replace"])) {
     );
 
     unset($_SESSION['glpi_uninstalllist']);
-    Session::addMessageAfterRedirect(__s('Replacement successful', 'uninstall'));
+    if ($skipped > 0) {
+        Session::addMessageAfterRedirect(
+            sprintf(__s('Replacement done with %d item(s) skipped because of insufficient rights', 'uninstall'), $skipped),
+            true,
+            WARNING,
+        );
+    } else {
+        Session::addMessageAfterRedirect(__s('Replacement successful', 'uninstall'));
+    }
 
     Html::footer();
 
@@ -79,6 +87,7 @@ $model->getConfig($_REQUEST["model_id"]);
 
 //Case of a uninstallation initiated from the object form
 if (isset($_REQUEST["uninstall"])) {
+    Session::checkRight(PluginUninstallUninstall::$rightname, UPDATE);
     //Uninstall only if a model is selected
     if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL) {
         //Massive uninstallation
@@ -104,6 +113,7 @@ if (isset($_REQUEST["uninstall"])) {
         Html::footer();
     }
 } elseif ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_UNINSTALL) {
+    Session::checkRight(PluginUninstallUninstall::$rightname, UPDATE);
     //Massive uninstallation
     if (isset($_SESSION['glpi_uninstalllist'])) {
         PluginUninstallUninstall::uninstall(
