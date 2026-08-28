@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fix uninstall/replace actions processing items without checking item type or user rights on the item
+- Fix group assignment when applying uninstall templates on assignable items
 
 ## [2.10.4] - 2026-08-04
 
@@ -18,7 +19,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fix SQL errors when uninstalling or replacing peripheral assets
 - Fix locales encoding
 - Fixed the display of “Item's Lifecycle” in the breadcrumb trail
-- Fix group assignment when applying uninstall templates on assignable items
 
 ## [2.10.3] - 2025-11-25
 
