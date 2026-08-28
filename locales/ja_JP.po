@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-13 02:07+0000\n"
+"POT-Creation-Date: 2026-08-28 10:12+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Daisuke INOUE, 2025\n"
 "Language-Team: Japanese (Japan) (https://app.transifex.com/teclib/teams/28042/ja_JP/)\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Informations replacement"
 msgstr "情報の置き換え"
 
-#: templates/model_config.html.twig inc/replace.class.php:675
+#: templates/model_config.html.twig inc/replace.class.php:707
 msgid "General informations"
 msgstr "全般情報"
 
@@ -33,11 +33,11 @@ msgstr "全般情報"
 msgid "Copy in new item"
 msgstr "新規アイテムにコピー"
 
-#: templates/model_config.html.twig inc/replace.class.php:691
+#: templates/model_config.html.twig inc/replace.class.php:723
 msgid "Overwrite informations (from old item to the new)"
 msgstr "情報を上書き（古いアイテムから新しいアイテムへ）"
 
-#: templates/model_config.html.twig inc/replace.class.php:694
+#: templates/model_config.html.twig inc/replace.class.php:726
 #: inc/model.class.php:800
 msgid "Archiving method of the old material"
 msgstr "古い機材のアーカイブ方法"
@@ -52,23 +52,29 @@ msgid ""
 "archiving"
 msgstr "PDF プラグインがインストールされていないため、保管に PDF 形式を利用できません。"
 
-#: templates/model_config.html.twig inc/replace.class.php:755
+#: templates/model_config.html.twig inc/replace.class.php:787
 msgid "Connections with other materials"
 msgstr "他の機材への接続"
 
-#: templates/model_config.html.twig inc/replace.class.php:800
+#: templates/model_config.html.twig inc/replace.class.php:832
 msgid "Direct connections"
 msgstr "直接接続"
 
-#: front/action.php:62
+#: front/action.php:71
+#, php-format
+msgid ""
+"Replacement done with %d item(s) skipped because of insufficient rights"
+msgstr ""
+
+#: front/action.php:76
 msgid "Replacement successful"
 msgstr "置き換えに成功しました"
 
-#: front/action.php:111
+#: front/action.php:128
 msgid "Uninstallation successful"
 msgstr "撤去しました"
 
-#: hook.php:44 inc/uninstall.class.php:365
+#: hook.php:44 inc/uninstall.class.php:367
 msgid "Uninstall"
 msgstr "撤去"
 
@@ -80,45 +86,45 @@ msgstr "アイテムのライフサイクル（撤去）"
 msgid "Item's Lifecycle"
 msgstr "アイテムのライフサイクル"
 
-#: inc/uninstall.class.php:370
+#: inc/uninstall.class.php:372
 msgid "Please wait, uninstallation is running..."
 msgstr "撤去を実行しています... お待ちください。"
 
-#: inc/uninstall.class.php:795
+#: inc/uninstall.class.php:800
 msgid "Item is now uninstalled"
 msgstr "アイテムを撤去しました"
 
-#: inc/uninstall.class.php:798
+#: inc/uninstall.class.php:803
 #, php-format
 msgid "Item is now uninstalled with model %s"
 msgstr "アイテムを %s モデルとして撤去しました"
 
-#: inc/uninstall.class.php:806
+#: inc/uninstall.class.php:811
 msgid "Item replaced by a new one"
 msgstr "アイテムを新しいもので置き換えました"
 
-#: inc/uninstall.class.php:809
+#: inc/uninstall.class.php:814
 #, php-format
 msgid "Item replaced by a new one with model %s"
 msgstr "アイテムを %s モデルとして新しいものと置き換えました"
 
-#: inc/uninstall.class.php:817
+#: inc/uninstall.class.php:822
 msgid "Item replacing an old one"
 msgstr "置き換え中の古いアイテム"
 
-#: inc/uninstall.class.php:823
+#: inc/uninstall.class.php:828
 msgid "Removed from OCSNG with ID"
 msgstr "ID で OCSNG から削除済み"
 
-#: inc/uninstall.class.php:940
+#: inc/uninstall.class.php:945
 msgid "Apply model"
 msgstr "モデルの適用"
 
-#: inc/uninstall.class.php:968
+#: inc/uninstall.class.php:973
 msgid "Item's location after applying model"
 msgstr "モデル適用後のアイテムの場所"
 
-#: inc/uninstall.class.php:1089
+#: inc/uninstall.class.php:1094
 msgid "Lifecycle"
 msgstr "ライフサイクル"
 
@@ -126,70 +132,75 @@ msgstr "ライフサイクル"
 msgid "Item's replacement"
 msgstr "アイテムの置き換え"
 
-#: inc/replace.class.php:104 inc/replace.class.php:162 inc/model.class.php:135
+#: inc/replace.class.php:104 inc/replace.class.php:186 inc/model.class.php:135
 #: inc/model.class.php:941
 msgid "Replacement"
 msgstr "置き換え"
 
-#: inc/replace.class.php:187
+#: inc/replace.class.php:211
 msgid "This document is the archive of this replaced item"
 msgstr "この文書は置き換えたアイテムのアーカイブです"
 
-#: inc/replace.class.php:192
+#: inc/replace.class.php:216
 msgid "Archive of old material"
 msgstr "古い機材のアーカイブ"
 
-#: inc/replace.class.php:507
+#: inc/replace.class.php:531
 msgid "See attached document"
 msgstr "添付文書を表示"
 
-#: inc/replace.class.php:614
+#: inc/replace.class.php:605
+#, php-format
+msgid "%d item(s) skipped because of insufficient rights"
+msgstr ""
+
+#: inc/replace.class.php:646
 msgid "This item is a replacement for item"
 msgstr "このアイテムは置き換えです"
 
-#: inc/replace.class.php:616
+#: inc/replace.class.php:648
 msgid "This item was replaced by"
 msgstr "このアイテムの置き換え元 : "
 
-#: inc/replace.class.php:674 inc/replace.class.php:754
+#: inc/replace.class.php:706 inc/replace.class.php:786
 msgid "Reminder of the replacement model"
 msgstr "置き換えモデルのリマインダー"
 
-#: inc/replace.class.php:714
+#: inc/replace.class.php:746
 msgid "New location of item"
 msgstr "アイテムの新しい場所"
 
-#: inc/replace.class.php:717 inc/preference.class.php:103
+#: inc/replace.class.php:749 inc/preference.class.php:103
 #: ajax/locations.php:48
 msgid "Keep previous location"
 msgstr "以前の場所に維持"
 
-#: inc/replace.class.php:721 inc/preference.class.php:104
+#: inc/replace.class.php:753 inc/preference.class.php:104
 #: ajax/locations.php:49
 msgid "Empty location"
 msgstr "場所を初期状態に"
 
-#: inc/replace.class.php:731 inc/model.class.php:285
+#: inc/replace.class.php:763 inc/model.class.php:285
 msgid "New status of the computer"
 msgstr "コンピューターの新しい状態"
 
-#: inc/replace.class.php:812
+#: inc/replace.class.php:844
 msgid "Choices for item to replace"
 msgstr "置き換えるアイテムの選択"
 
-#: inc/replace.class.php:815
+#: inc/replace.class.php:847
 msgid "Old item"
 msgstr "古いアイテム"
 
-#: inc/replace.class.php:825
+#: inc/replace.class.php:857
 msgid "New item"
 msgstr "新しいアイテム"
 
-#: inc/replace.class.php:828
+#: inc/replace.class.php:860
 msgid "Remove"
 msgstr "削除"
 
-#: inc/replace.class.php:877
+#: inc/replace.class.php:909
 msgid "Replace"
 msgstr "置き換え"
 
