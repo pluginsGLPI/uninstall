@@ -230,7 +230,10 @@ class PluginUninstallUninstall extends CommonDBTM
                 && ($nbgroup == 1 || $model->fields["groups_id"] == 0)
             ) {
                 // If a new group is defined and if the group is accessible in the object's entity
-                $fields["groups_id"] = $model->fields["groups_id"];
+                // Assignable items store the group in `glpi_groups_items`, so `groups_id` must be an array (0 is filtered out, clearing the group)
+                $fields["groups_id"] = $item instanceof AssignableItemInterface
+                    ? [$model->fields["groups_id"]]
+                    : $model->fields["groups_id"];
             }
         }
 
