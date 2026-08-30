@@ -46,6 +46,17 @@ class PluginUninstallModel extends CommonDBTM
 
     public const TYPE_MODEL_REPLACEMENT_UNINSTALL = 3;
 
+    // do nothing
+    const PLUGIN_FIELDS_ACTION_NONE = 0;
+    // delete values, uninstall only
+    const PLUGIN_FIELDS_ACTION_RAZ = 1;
+    // copy values, replace only
+    const PLUGIN_FIELDS_ACTION_COPY = 2;
+    // choose action for each container individually
+    const PLUGIN_FIELDS_ACTION_ADVANCED = 3;
+
+
+
     public static function getTypeName($nb = 0)
     {
         return _sn("Template", "Templates", $nb);
@@ -202,7 +213,12 @@ class PluginUninstallModel extends CommonDBTM
                 return PluginUninstallUninstall::getTypeName(1);
 
             case self::class:
-                return [1 => self::createTabEntry(self::getTypeName(1), 0, $item::getType(), self::getIcon()), 2 => self::createTabEntry(__s('Replacing data', 'uninstall'), 0, $item::getType(), PluginUninstallReplace::getIcon())];
+                $tab = [1 => self::createTabEntry(self::getTypeName(1), 0, $item::getType(), self::getIcon()), 2 => self::createTabEntry(__s('Replacing data', 'uninstall'), 0, $item::getType(), PluginUninstallReplace::getIcon())];
+                $plugin = new Plugin();
+                if ($plugin->isActivated('fields')) {
+                    $tab[3] = __('Additional fields options', 'uninstall');
+                }
+                return $tab;
         }
 
         return '';
@@ -220,6 +236,9 @@ class PluginUninstallModel extends CommonDBTM
                     break;
                 case 2:
                     $item->showFormAction($item);
+                    break;
+                case 3:
+                    $item->showFormPluginFields($item);
                     break;
             }
         }
@@ -458,6 +477,33 @@ class PluginUninstallModel extends CommonDBTM
             -1,
         );
         echo "</td></tr>";
+
+        if ((new Plugin())->isActivated('fields')) {
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<th colspan='4'>" . __('Uninstallation', 'uninstall') . ' - ' . __("Additionnal fields", "fields") .
+                "</th></tr>";
+
+            echo "<tr class='tab_bg_1 center'>";
+            echo "<td>" . __('Fields plugin informations', 'uninstall') . "</td>";
+            echo "<td>";
+            $choices = [
+                self::PLUGIN_FIELDS_ACTION_NONE => __('Do nothing'),
+                self::PLUGIN_FIELDS_ACTION_RAZ => __('Blank'),
+                self::PLUGIN_FIELDS_ACTION_ADVANCED => __('Advanced options', 'uninstall')
+            ];
+            Dropdown::showFromArray(
+                "action_plugin_fields_uninstall",
+                $choices,
+                [
+                    'value' => isset($this->fields["action_plugin_fields_uninstall"]) ?
+                        $this->fields["action_plugin_fields_uninstall"] : self::PLUGIN_FIELDS_ACTION_RAZ,
+                    'width' => '100%'
+                ]
+            );
+            echo "</td>";
+            echo "<td colspan='2'></td>";
+            echo "</tr>";
+        }
     }
 
     public function showPartFormRemplacement()
@@ -472,6 +518,12 @@ class PluginUninstallModel extends CommonDBTM
             'replace_method' => $this->fields["replace_method"] ?? 0,
             'methods_list' => $methods,
             'pdf_activated' => $plug->isActivated('PDF'),
+            'plugin_fields_activate' => (new Plugin())->isActivated('fields'),
+            'fields_action_list' => [
+                self::PLUGIN_FIELDS_ACTION_NONE => __('Do nothing'),
+                self::PLUGIN_FIELDS_ACTION_COPY => __('Copy'),
+                self::PLUGIN_FIELDS_ACTION_ADVANCED => __('Advanced options', 'uninstall')
+            ],
         ]);
     }
 
@@ -563,24 +615,24 @@ class PluginUninstallModel extends CommonDBTM
             echo "</tr>";
         }
 
-        if ($plug->isActivated('fields')) {
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<th colspan='4'>" . __s("Additionnal fields", "fields")
-              . "</th></tr>";
-
-            echo "<tr class='tab_bg_1 center'>";
-            echo "<td>" . __s('Delete Fields plugin informations', 'uninstall') . "</td>";
-            echo "<td>";
-            Dropdown::showYesNo(
-                "raz_plugin_fields",
-                ($this->fields["raz_plugin_fields"] ?? 1),
-                -1,
-                ['width' => '100%'],
-            );
-            echo "</td>";
-            echo "<td colspan='2'></td>";
-            echo "</tr>";
-        }
+//        if ($plug->isActivated('fields')) {
+//            echo "<tr class='tab_bg_1 center'>";
+//            echo "<th colspan='4'>" . __s("Additionnal fields", "fields")
+//              . "</th></tr>";
+//
+//            echo "<tr class='tab_bg_1 center'>";
+//            echo "<td>" . __s('Delete Fields plugin informations', 'uninstall') . "</td>";
+//            echo "<td>";
+//            Dropdown::showYesNo(
+//                "raz_plugin_fields",
+//                ($this->fields["raz_plugin_fields"] ?? 1),
+//                -1,
+//                ['width' => '100%'],
+//            );
+//            echo "</td>";
+//            echo "<td colspan='2'></td>";
+//            echo "</tr>";
+//        }
 
         if ($canedit) {
             echo "<tr class='tab_bg_1 center'>";
@@ -595,6 +647,60 @@ class PluginUninstallModel extends CommonDBTM
         echo "<input type='hidden' name='entities_id' value='" . $this->fields["entities_id"] . "'>";
         Html::closeForm();
 
+        return true;
+    }
+
+    /**
+     * @param $item
+     **/
+    public function showFormPluginFields($item)
+    {
+        $plugin = new Plugin();
+        if ($plugin->isActivated('fields')) {
+            $separator = false;
+
+            echo '<h3>' . __('Plugin additionnal fields blocks', 'uninstall') . '</h3>';
+
+            if ($item->fields["types_id"] != self::TYPE_MODEL_UNINSTALL) {
+                if ($item->fields['action_plugin_fields_replace'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                    $separator = true;
+                    PluginUninstallModelcontainer::showListsForType($item->getID(), self::TYPE_MODEL_REPLACEMENT);
+                } else {
+                    switch ($item->fields['action_plugin_fields_replace']) {
+                        case self::PLUGIN_FIELDS_ACTION_NONE:
+                            $action = __('Do nothing');
+                            break;
+                        case self::PLUGIN_FIELDS_ACTION_COPY:
+                            $action = __('Copy');
+                            break;
+                    }
+
+                    echo "<h3>" . __('Action for ', 'uninstall') . __('Replacement', 'uninstall') . ' : ' . $action . "</h3>";
+                }
+            }
+
+            echo "<div class='m-4'></div>";
+
+            if ($item->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
+                if ($item->fields['action_plugin_fields_uninstall'] === self::PLUGIN_FIELDS_ACTION_ADVANCED) {
+                    PluginUninstallModelcontainer::showListsForType($item->getID(), self::TYPE_MODEL_UNINSTALL);
+                } else {
+                    switch ($item->fields['action_plugin_fields_uninstall']) {
+                        case self::PLUGIN_FIELDS_ACTION_NONE:
+                            $action = __('Do nothing');
+                            break;
+                        case self::PLUGIN_FIELDS_ACTION_RAZ:
+                            $action = __('Blank');
+                            break;
+                    }
+
+                    echo "<h3>" . __('Action for ', 'uninstall') . __('Uninstallation', 'uninstall') . ' : ' . $action . "</h3>";
+                }
+            }
+        } else {
+            echo "<span class='center b'>" . __("Activate the plugin 'fields' to access this tab.") . "</span>";
+            return false;
+        }
         return true;
     }
 
@@ -1173,6 +1279,47 @@ class PluginUninstallModel extends CommonDBTM
                 $migration->addField($table, 'raz_glpiinventory', "integer");
             }
 
+            // 2.10.4
+            if (!$DB->fieldExists($table, 'action_plugin_fields_replace')) {
+                $migration->addField($table, 'action_plugin_fields_replace', "int NOT NULL DEFAULT '" . self::PLUGIN_FIELDS_ACTION_NONE . "'");
+                $migration->addField($table, 'action_plugin_fields_uninstall', "int NOT NULL DEFAULT '" . self::PLUGIN_FIELDS_ACTION_NONE . "'");
+                $migration->addPostQuery(
+                // uninstall with no raz
+                    $DB->buildUpdate(
+                        $table,
+                        ['action_plugin_fields_uninstall' => '0'],
+                        [
+                            'raz_plugin_fields' => '0',
+                            'types_id' => '1'
+                        ]
+                    )
+                );
+                $migration->addPostQuery(
+                // uninstall with raz
+                    $DB->buildUpdate(
+                        $table,
+                        ['action_plugin_fields_uninstall' => '1'],
+                        [
+                            'raz_plugin_fields' => '1',
+                            'types_id' => '1'
+                        ]
+                    )
+                );
+                $migration->addPostQuery(
+                // replace default value
+                    $DB->buildUpdate(
+                        $table,
+                        ['action_plugin_fields_replace' => '0'],
+                        ['types_id' => '2']
+                    )
+                );
+
+                if ($DB->fieldExists($table, 'raz_plugin_fields')) {
+                    $migration->deleteField($table, 'raz_plugin_fields', "bool");
+                }
+
+            }
+
             $migration->migrationOneTable($table);
 
             $self = new self();
@@ -1223,7 +1370,8 @@ class PluginUninstallModel extends CommonDBTM
                     `replace_method` int NOT NULL DEFAULT '2',
                     `raz_glpiinventory` int NOT NULL DEFAULT '1',
                     `raz_fusioninventory` int NOT NULL DEFAULT '1',
-                    `raz_plugin_fields` tinyint NOT NULL DEFAULT '1',
+                    `action_plugin_fields_uninstall` int NOT NULL DEFAULT '0',
+                    `action_plugin_fields_replace` int NOT NULL DEFAULT '0',
                     `replace_contact` tinyint NOT NULL DEFAULT '0',
                     `replace_contact_num` tinyint NOT NULL DEFAULT '0',
                     PRIMARY KEY (`id`)
@@ -1289,7 +1437,8 @@ class PluginUninstallModel extends CommonDBTM
             $tmp['raz_ocs_registrykeys']       = 1;
             $tmp['raz_glpiinventory']          = 1;
             $tmp['raz_fusioninventory']        = 1;
-            $tmp['raz_plugin_fields']          = 1;
+            $tmp['action_plugin_fields_uninstall'] = 0;
+            $tmp['action_plugin_fields_replace'] = 0;
             $tmp['comment']                    = '';
             $tmp['groups_action']              = 'set';
             $tmp['groups_id']                  = 0;
@@ -1381,5 +1530,44 @@ class PluginUninstallModel extends CommonDBTM
     public static function getIcon()
     {
         return "ti ti-template";
+    }
+
+    /**
+     * Create all non-existing relations between plugin fields containers and a model
+     * @param $modelId int
+     */
+    public function createPluginFieldsRelations($modelId)
+    {
+        global $DB, $UNINSTALL_TYPES;
+        if ($DB->tableExists('glpi_plugin_fields_containers')) {
+            $uninstallContainer = new PluginUninstallModelcontainer();
+            $uninstallContainers = $uninstallContainer->find(['plugin_uninstall_models_id' => $modelId]);
+            $existingContainersIds = array_map(fn($e) => $e['plugin_fields_containers_id'], $uninstallContainers);
+            $existingContainersIds = array_unique($existingContainersIds);
+
+            $fieldsContainers = PluginUninstallModelcontainer::getContainerForItemtypes($existingContainersIds);
+
+            $fieldsField = new PluginFieldsField();
+            $uninstallField = new PluginUninstallModelcontainerfield();
+
+            foreach ($fieldsContainers as $container) {
+                $types = json_decode($container['itemtypes']);
+                // only create matching elements for containers concerning item types used by the plugin
+                if (!empty(array_intersect($types, $UNINSTALL_TYPES))) {
+                    $newId = $uninstallContainer->add([
+                        'plugin_uninstall_models_id' => $modelId,
+                        'plugin_fields_containers_id' => $container['id']
+                    ]);
+
+                    $fieldsFields = $fieldsField->find(['plugin_fields_containers_id' => $container['id']]);
+                    foreach ($fieldsFields as $field) {
+                        $uninstallField->add([
+                            'plugin_fields_fields_id' => $field['id'],
+                            'plugin_uninstall_modelcontainers_id' => $newId
+                        ]);
+                    }
+                }
+            }
+        }
     }
 }

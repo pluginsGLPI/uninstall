@@ -110,6 +110,17 @@ function plugin_init_uninstall()
         }
 
         $PLUGIN_HOOKS[Hooks::POST_INIT]['uninstall'] = 'plugin_uninstall_postinit';
+
+        if ($plugin->isActivated('fields')) {
+            $PLUGIN_HOOKS[Hooks::ITEM_ADD]['uninstall'] = [
+                PluginFieldsContainer::class => 'plugin_uninstall_hook_add_container',
+                PluginFieldsField::class => 'plugin_uninstall_hook_add_field',
+            ];
+            $PLUGIN_HOOKS[Hooks::ITEM_PURGE]['uninstall'] = [
+                PluginFieldsContainer::class => 'plugin_uninstall_hook_purge_container',
+                PluginFieldsField::class => 'plugin_uninstall_hook_purge_field',
+            ];
+        }
     }
 }
 
