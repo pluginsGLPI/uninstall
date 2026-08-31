@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fix uninstall/replace actions processing items without checking item type or user rights on the item
+- Fix group assignment when applying uninstall templates on assignable items
 
 ## [2.10.4] - 2026-08-04
 
