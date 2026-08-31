@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Add Links for uninstall templates From Item Form
+
 ### Fixed
 
 - Fix uninstall/replace actions processing items without checking item type or user rights on the item
