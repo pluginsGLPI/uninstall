@@ -30,11 +30,9 @@
 
 use Glpi\Exception\Http\AccessDeniedHttpException;
 
-Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
+Session::checkRightsOr(PluginUninstallPreference::$rightname, [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
-if (!isset($_GET["withtemplate"])) {
-    $_GET["withtemplate"] = "";
-}
+$_GET["withtemplate"] ??= "";
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
@@ -68,7 +66,7 @@ if (isset($_POST["add"])) {
     );
 
     if ($model->getFromDB($id) && $model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT && !Session::haveRight(
-        'uninstall:profile',
+        PluginUninstallPreference::$rightname,
         PluginUninstallProfile::RIGHT_REPLACE,
     )) {
         throw new AccessDeniedHttpException();

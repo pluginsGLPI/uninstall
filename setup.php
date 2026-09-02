@@ -33,8 +33,8 @@ use Glpi\Plugin\Hooks;
 use function Safe\define;
 
 define('PLUGIN_UNINSTALL_VERSION', '2.10.5');
-define("PLUGIN_UNINSTALL_MIN_GLPI", "11.0.0");
-define("PLUGIN_UNINSTALL_MAX_GLPI", "11.0.99");
+define("PLUGIN_UNINSTALL_MIN_GLPI", "12.0.0");
+define("PLUGIN_UNINSTALL_MAX_GLPI", "12.0.99");
 
 /**
  * Function Init
@@ -94,10 +94,10 @@ function plugin_init_uninstall()
                 ],
             ];
 
-            if (Session::haveRight('uninstall:profile', READ)) {
+            if (Session::haveRight(PluginUninstallPreference::$rightname, READ)) {
                 $PLUGIN_HOOKS[Hooks::USE_MASSIVE_ACTION]['uninstall'] = true;
 
-                if (Session::haveRight('uninstall:profile', UPDATE)) {
+                if (Session::haveRight(PluginUninstallPreference::$rightname, UPDATE)) {
                     // Add link in GLPI plugins list :
                     $PLUGIN_HOOKS[Hooks::MENU_TOADD]['uninstall'] = ['admin' => PluginUninstallModel::class];
                 }
