@@ -849,11 +849,11 @@ class PluginUninstallReplace extends CommonDBTM
             echo "<td>" . $commonitem->getName() . "</td>";
 
             if (Search::getOptionNumber($type, 'otherserial')) {
-                echo "<td>" . htmlentities((string) $commonitem->fields['otherserial']) . "</td>";
+                echo "<td>" . htmlspecialchars((string) $commonitem->fields['otherserial'], ENT_QUOTES, 'UTF-8') . "</td>";
             }
 
             if (Search::getOptionNumber($type, 'serial')) {
-                echo "<td>" . htmlentities((string) $commonitem->fields['serial']) . "</td>";
+                echo "<td>" . htmlspecialchars((string) $commonitem->fields['serial'], ENT_QUOTES, 'UTF-8') . "</td>";
             }
 
             echo "<td>";
