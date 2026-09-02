@@ -393,7 +393,7 @@ class PluginUninstallReplace extends CommonDBTM
             ) {
                 if (
                     $newitem->isField('groups_id')
-                    && ($overwrite || empty($newitem->isField('groups_id')))
+                    && ($overwrite || empty($newitem->getField('groups_id')))
                 ) {
                     $newitem->update(
                         ['id'        => $newitem_id,
@@ -445,15 +445,17 @@ class PluginUninstallReplace extends CommonDBTM
                 && $newitem_id
             ) { #do not update computer_item if no computer
                 $comp_item = new Computer_Item();
-                foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
-                    foreach ($connections as $connection) {
-                        $comp_item->update(
-                            ['id'           => $connection['id'],
-                                'computers_id' => $newitem_id,
-                                'itemtype'     => $itemtype,
-                            ],
-                            false,
-                        );
+                if ($olditem instanceof Computer) {
+                    foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
+                        foreach ($connections as $connection) {
+                            $comp_item->update(
+                                ['id'           => $connection['id'],
+                                    'computers_id' => $newitem_id,
+                                    'itemtype'     => $itemtype,
+                                ],
+                                false,
+                            );
+                        }
                     }
                 }
             }
@@ -563,7 +565,7 @@ class PluginUninstallReplace extends CommonDBTM
                         'models_id' => $model_id,
                     ]);
                     if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
-                        $olditem->delete(['id' => $olditem_id], 0, false);
+                        $olditem->delete(['id' => $olditem_id], false, false);
                     }
                     break;
             }

@@ -38,7 +38,7 @@ class PluginUninstallProfile extends Profile
      *
      * @return array rights matrix
      */
-    public function getGeneralRights()
+    public static function getGeneralRights()
     {
         $rights = [
             [
