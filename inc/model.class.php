@@ -948,7 +948,9 @@ class PluginUninstallModel extends CommonDBTM
             case 'groups_id':
                 if ($values['groups_action'] === 'old') {
                     return __s('Keep in the current group', 'uninstall');
-                } elseif ($values['groups_id'] === 0) {
+                }
+
+                if ($values['groups_id'] === 0) {
                     return __s('None');
                 }
 
