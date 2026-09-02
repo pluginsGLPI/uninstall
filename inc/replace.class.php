@@ -1183,14 +1183,14 @@ class PluginUninstallReplace extends CommonDBTM
             array_unshift($tab, "_main_");
 
             return $tab;
-        } else {
-            $tabs = [];
-            foreach ($iterator as $data) {
-                $tabs[] = $data['tabref'];
-            }
-
-            return $tabs;
         }
+
+        $tabs = [];
+        foreach ($iterator as $data) {
+            $tabs[] = $data['tabref'];
+        }
+
+        return $tabs;
     }
 
     public static function getIcon()

@@ -32,9 +32,7 @@ use Glpi\Exception\Http\AccessDeniedHttpException;
 
 Session::checkRightsOr(PluginUninstallPreference::$rightname, [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
-if (!isset($_GET["withtemplate"])) {
-    $_GET["withtemplate"] = "";
-}
+$_GET["withtemplate"] ??= "";
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
