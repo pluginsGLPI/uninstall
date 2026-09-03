@@ -38,7 +38,7 @@ class PluginUninstallProfile extends Profile
      *
      * @return array rights matrix
      */
-    public function getGeneralRights()
+    public static function getGeneralRights()
     {
         $rights = [
             [
@@ -296,6 +296,12 @@ class PluginUninstallProfile extends Profile
         /** @var DBmysql $DB */
         global $DB;
 
-        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`");
+        $DB->doQuery("DROP TABLE IF EXISTS `" . getTableForItemType(self::class) . "`");
+
+        foreach (self::getGeneralRights() as $right) {
+            ProfileRight::deleteProfileRights([$right['field']]);
+        }
+
+        ProfileRight::deleteProfileRights(['plugin_uninstall_replace']);
     }
 }

@@ -48,7 +48,7 @@ class PluginUninstallReplace extends CommonDBTM
      * @param $tab_ids
      * @param $location
     **/
-    public static function replace($type, $model_id, $tab_ids, $location)
+    public static function replace($type, $model_id, $tab_ids, $location): int
     {
         /**
          * @var array $CFG_GLPI
@@ -66,17 +66,46 @@ class PluginUninstallReplace extends CommonDBTM
         echo "<div class='center'>";
         echo "<table class='tab_cadre_fixe'><tr><th>" . __('Replacement', 'uninstall') . "</th></tr>";
         echo "<tr class='tab_bg_2'><td>";
-        $count = 0;
-        $tot   = count($tab_ids);
+        $count   = 0;
+        $skipped = 0;
+        $tot     = count($tab_ids);
         Html::createProgressBar(__('Please wait, replacement is running...', 'uninstall'));
 
         foreach ($tab_ids as $olditem_id => $newitem_id) {
             $count++;
+
+            if (!class_exists($type) || !is_a($type, CommonDBTM::class, true)) {
+                $skipped++;
+                continue;
+            }
+
             $olditem = new $type();
-            $olditem->getFromDB($olditem_id);
+            if (!$olditem->getFromDB($olditem_id) || !$olditem->can($olditem_id, UPDATE)) {
+                $skipped++;
+                continue;
+            }
 
             $newitem = new $type();
-            $newitem->getFromDB($newitem_id);
+            if (!$newitem->getFromDB($newitem_id) || !$newitem->can($newitem_id, UPDATE)) {
+                $skipped++;
+                continue;
+            }
+
+            if (
+                $model->fields['replace_method'] == self::METHOD_PURGE
+                && !$olditem->can($olditem_id, PURGE)
+            ) {
+                $skipped++;
+                continue;
+            }
+
+            if (
+                $model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT
+                && !$olditem->can($olditem_id, DELETE)
+            ) {
+                $skipped++;
+                continue;
+            }
 
             //Hook to perform actions before item is being replaced
             $olditem->fields['_newid'] = $newitem_id;
@@ -364,7 +393,7 @@ class PluginUninstallReplace extends CommonDBTM
             ) {
                 if (
                     $newitem->isField('groups_id')
-                    && ($overwrite || empty($newitem->isField('groups_id')))
+                    && ($overwrite || empty($newitem->getField('groups_id')))
                 ) {
                     $newitem->update(
                         ['id'        => $newitem_id,
@@ -416,15 +445,17 @@ class PluginUninstallReplace extends CommonDBTM
                 && $newitem_id
             ) { #do not update computer_item if no computer
                 $comp_item = new Computer_Item();
-                foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
-                    foreach ($connections as $connection) {
-                        $comp_item->update(
-                            ['id'           => $connection['id'],
-                                'computers_id' => $newitem_id,
-                                'itemtype'     => $itemtype,
-                            ],
-                            false,
-                        );
+                if ($olditem instanceof Computer) {
+                    foreach (self::getAssociatedItems($olditem) as $itemtype => $connections) {
+                        foreach ($connections as $connection) {
+                            $comp_item->update(
+                                ['id'           => $connection['id'],
+                                    'computers_id' => $newitem_id,
+                                    'itemtype'     => $itemtype,
+                                ],
+                                false,
+                            );
+                        }
                     }
                 }
             }
@@ -534,7 +565,7 @@ class PluginUninstallReplace extends CommonDBTM
                         'models_id' => $model_id,
                     ]);
                     if ($model->fields['replace_method'] == self::METHOD_DELETE_AND_COMMENT) {
-                        $olditem->delete(['id' => $olditem_id], 0, false);
+                        $olditem->delete(['id' => $olditem_id], false, false);
                     }
                     break;
             }
@@ -559,6 +590,13 @@ class PluginUninstallReplace extends CommonDBTM
         );
 
         echo "</td></tr>";
+        if ($skipped > 0) {
+            echo "<tr class='tab_bg_2'><td>" . sprintf(
+                __s('%d item(s) skipped because of insufficient rights', 'uninstall'),
+                $skipped,
+            ) . "</td></tr>";
+        }
+
         echo "</table></div>";
 
         if ($model->fields['types_id'] == PluginUninstallModel::TYPE_MODEL_REPLACEMENT_UNINSTALL) {
@@ -573,6 +611,8 @@ class PluginUninstallReplace extends CommonDBTM
                 $location,
             );
         }
+
+        return $skipped;
     }
 
 
@@ -811,11 +851,11 @@ class PluginUninstallReplace extends CommonDBTM
             echo "<td>" . $commonitem->getName() . "</td>";
 
             if (Search::getOptionNumber($type, 'otherserial')) {
-                echo "<td>" . $commonitem->fields['otherserial'] . "</td>";
+                echo "<td>" . htmlspecialchars((string) $commonitem->fields['otherserial'], ENT_QUOTES, 'UTF-8') . "</td>";
             }
 
             if (Search::getOptionNumber($type, 'serial')) {
-                echo "<td>" . $commonitem->fields['serial'] . "</td>";
+                echo "<td>" . htmlspecialchars((string) $commonitem->fields['serial'], ENT_QUOTES, 'UTF-8') . "</td>";
             }
 
             echo "<td>";
