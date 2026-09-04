@@ -198,10 +198,5 @@
             <tag>archivovat</tag>
          </cs>
    </tags>
-   <screenshots>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/main/screenshots/uninstall.png</screenshot>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/main/screenshots/uninstall2.png</screenshot>
-      <screenshot>https://raw.githubusercontent.com/pluginsGLPI/escalade/main/uninstall.gif</screenshot>
-   </screenshots>
    <license>GPL v2+</license>
 </root>
