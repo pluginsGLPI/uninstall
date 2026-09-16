@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 10:12+0000\n"
+"POT-Creation-Date: 2026-09-04 03:30+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Diego Nobre <diego@koruma.com.br>, 2025\n"
 "Language-Team: Portuguese (Brazil) (https://app.transifex.com/teclib/teams/28042/pt_BR/)\n"
@@ -64,6 +64,10 @@ msgstr "Conexões com outros materiais"
 msgid "Direct connections"
 msgstr "Conexões diretas"
 
+#: setup.php:119
+msgid "Item's Lifecycle (uninstall)"
+msgstr "Ciclo de vida do item (desinstalar)"
+
 #: front/action.php:71
 #, php-format
 msgid ""
@@ -78,57 +82,79 @@ msgstr "Substituição executada com sucesso"
 msgid "Uninstallation successful"
 msgstr "Desinstalação executada com sucesso"
 
-#: hook.php:44 inc/uninstall.class.php:367
+#: hook.php:44 inc/uninstall.class.php:374
 msgid "Uninstall"
 msgstr "Desinstalar"
 
-#: setup.php:119
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Ciclo de vida do item (desinstalar)"
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
+msgstr "Localização do item após a desinstalação"
 
-#: inc/uninstall.class.php:71 inc/config.class.php:37 inc/model.class.php:84
+#: inc/preference.class.php:103 inc/replace.class.php:749
+#: ajax/locations.php:48
+msgid "Keep previous location"
+msgstr "Manter localização anterior"
+
+#: inc/preference.class.php:104 inc/replace.class.php:753
+#: ajax/locations.php:49
+msgid "Empty location"
+msgstr "Esvaziar localização"
+
+#: inc/config.class.php:37 inc/uninstall.class.php:72 inc/model.class.php:84
 msgid "Item's Lifecycle"
 msgstr "Ciclo de vida do item"
 
-#: inc/uninstall.class.php:372
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Atalhos"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Preferências de localização"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Substituir o dropdown de estado pelas ações do plugin"
+
+#: inc/uninstall.class.php:379
 msgid "Please wait, uninstallation is running..."
 msgstr "Por favor aguarde, desinstalação em execução..."
 
-#: inc/uninstall.class.php:800
+#: inc/uninstall.class.php:807
 msgid "Item is now uninstalled"
 msgstr "O item está desinstalado"
 
-#: inc/uninstall.class.php:803
+#: inc/uninstall.class.php:810
 #, php-format
 msgid "Item is now uninstalled with model %s"
 msgstr "Item é desinstalado agora com modelo %s"
 
-#: inc/uninstall.class.php:811
+#: inc/uninstall.class.php:818
 msgid "Item replaced by a new one"
 msgstr "Item substituído por outro"
 
-#: inc/uninstall.class.php:814
+#: inc/uninstall.class.php:821
 #, php-format
 msgid "Item replaced by a new one with model %s"
 msgstr "Item substituído por um novo com modelo %s"
 
-#: inc/uninstall.class.php:822
+#: inc/uninstall.class.php:829
 msgid "Item replacing an old one"
 msgstr "Item substituindo um mais antigo"
 
-#: inc/uninstall.class.php:828
+#: inc/uninstall.class.php:835
 msgid "Removed from OCSNG with ID"
 msgstr "Removido do OCSNG com ID"
 
-#: inc/uninstall.class.php:945
+#: inc/uninstall.class.php:952
 msgid "Apply model"
 msgstr "Aplicar o modelo"
 
-#: inc/uninstall.class.php:973
+#: inc/uninstall.class.php:980
 msgid "Item's location after applying model"
 msgstr "Localização do item depois de aplicar o modelo"
 
-#: inc/uninstall.class.php:1094
+#: inc/uninstall.class.php:1101
 msgid "Lifecycle"
 msgstr "Ciclo de vida"
 
@@ -174,16 +200,6 @@ msgstr "Lembrete de modelo de substituição"
 msgid "New location of item"
 msgstr "Nova localização do item"
 
-#: inc/replace.class.php:749 inc/preference.class.php:103
-#: ajax/locations.php:48
-msgid "Keep previous location"
-msgstr "Manter localização anterior"
-
-#: inc/replace.class.php:753 inc/preference.class.php:104
-#: ajax/locations.php:49
-msgid "Empty location"
-msgstr "Esvaziar localização"
-
 #: inc/replace.class.php:763 inc/model.class.php:285
 msgid "New status of the computer"
 msgstr "Novo status do computador"
@@ -207,22 +223,6 @@ msgstr "Remover"
 #: inc/replace.class.php:909
 msgid "Replace"
 msgstr "Substituir"
-
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr "Localização do item após a desinstalação"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Atalhos"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Preferências de localização"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Substituir o dropdown de estado pelas ações do plugin"
 
 #: inc/model.class.php:107
 msgid "The purge archiving method is not available for this model type"

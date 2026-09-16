@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 10:12+0000\n"
+"POT-Creation-Date: 2026-09-04 03:30+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2023\n"
 "Language-Team: Croatian (Croatia) (https://app.transifex.com/teclib/teams/28042/hr_HR/)\n"
@@ -60,6 +60,10 @@ msgstr "Veze s ostalim materijalima"
 msgid "Direct connections"
 msgstr "Izravne veze"
 
+#: setup.php:119
+msgid "Item's Lifecycle (uninstall)"
+msgstr "Životni vijek predmeta (deinstaliraj)"
+
 #: front/action.php:71
 #, php-format
 msgid ""
@@ -74,57 +78,79 @@ msgstr "Zamjena uspješna"
 msgid "Uninstallation successful"
 msgstr "Deinstalacija uspješna"
 
-#: hook.php:44 inc/uninstall.class.php:367
+#: hook.php:44 inc/uninstall.class.php:374
 msgid "Uninstall"
 msgstr "Deinstaliraj"
 
-#: setup.php:119
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Životni vijek predmeta (deinstaliraj)"
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
+msgstr "Lokacija predmeta nakon deinstaliranja"
 
-#: inc/uninstall.class.php:71 inc/config.class.php:37 inc/model.class.php:84
+#: inc/preference.class.php:103 inc/replace.class.php:749
+#: ajax/locations.php:48
+msgid "Keep previous location"
+msgstr "Zadrži prethodnu lokaciju"
+
+#: inc/preference.class.php:104 inc/replace.class.php:753
+#: ajax/locations.php:49
+msgid "Empty location"
+msgstr "Prazna lokacija"
+
+#: inc/config.class.php:37 inc/uninstall.class.php:72 inc/model.class.php:84
 msgid "Item's Lifecycle"
 msgstr "Životni vijek predmeta"
 
-#: inc/uninstall.class.php:372
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Prečaci"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Postavke lokacije"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Zamijeni padajući popis stanja s radnjama dodatka"
+
+#: inc/uninstall.class.php:379
 msgid "Please wait, uninstallation is running..."
 msgstr "Pričekaj, deinstalacija je u tijeku …"
 
-#: inc/uninstall.class.php:800
+#: inc/uninstall.class.php:807
 msgid "Item is now uninstalled"
 msgstr "Predmet je sada deinstaliran"
 
-#: inc/uninstall.class.php:803
+#: inc/uninstall.class.php:810
 #, php-format
 msgid "Item is now uninstalled with model %s"
 msgstr "Predmet je sada deinstaliran s modelom %s"
 
-#: inc/uninstall.class.php:811
+#: inc/uninstall.class.php:818
 msgid "Item replaced by a new one"
 msgstr "Predmet je zamijenjen jednim novim"
 
-#: inc/uninstall.class.php:814
+#: inc/uninstall.class.php:821
 #, php-format
 msgid "Item replaced by a new one with model %s"
 msgstr "Predmet je zamijenjen jednim novim s modelom %s"
 
-#: inc/uninstall.class.php:822
+#: inc/uninstall.class.php:829
 msgid "Item replacing an old one"
 msgstr "Predmet zamijenjuje jedan stari"
 
-#: inc/uninstall.class.php:828
+#: inc/uninstall.class.php:835
 msgid "Removed from OCSNG with ID"
 msgstr "Uklonjeno iz OCSNG-a s ID oznakom"
 
-#: inc/uninstall.class.php:945
+#: inc/uninstall.class.php:952
 msgid "Apply model"
 msgstr "Primijeni model"
 
-#: inc/uninstall.class.php:973
+#: inc/uninstall.class.php:980
 msgid "Item's location after applying model"
 msgstr "Lokacija predmeta nakon primjenjivanja modela"
 
-#: inc/uninstall.class.php:1094
+#: inc/uninstall.class.php:1101
 msgid "Lifecycle"
 msgstr "Životni vijek"
 
@@ -170,16 +196,6 @@ msgstr "Podsjetnik modela zamjene"
 msgid "New location of item"
 msgstr "Nova lokacija predmeta"
 
-#: inc/replace.class.php:749 inc/preference.class.php:103
-#: ajax/locations.php:48
-msgid "Keep previous location"
-msgstr "Zadrži prethodnu lokaciju"
-
-#: inc/replace.class.php:753 inc/preference.class.php:104
-#: ajax/locations.php:49
-msgid "Empty location"
-msgstr "Prazna lokacija"
-
 #: inc/replace.class.php:763 inc/model.class.php:285
 msgid "New status of the computer"
 msgstr "Novo stanje računala"
@@ -203,22 +219,6 @@ msgstr "Ukloni"
 #: inc/replace.class.php:909
 msgid "Replace"
 msgstr "Zamijeni"
-
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr "Lokacija predmeta nakon deinstaliranja"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Prečaci"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Postavke lokacije"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Zamijeni padajući popis stanja s radnjama dodatka"
 
 #: inc/model.class.php:107
 msgid "The purge archiving method is not available for this model type"
