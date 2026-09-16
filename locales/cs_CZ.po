@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 10:12+0000\n"
+"POT-Creation-Date: 2026-09-04 03:30+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: David Stepan <stepand@tiscali.cz>, 2025\n"
 "Language-Team: Czech (Czech Republic) (https://app.transifex.com/teclib/teams/28042/cs_CZ/)\n"
@@ -62,6 +62,10 @@ msgstr "Propojení s ostatními materiály"
 msgid "Direct connections"
 msgstr "Přímá propojení"
 
+#: setup.php:119
+msgid "Item's Lifecycle (uninstall)"
+msgstr "Životní cyklus položky (odinstalace)"
+
 #: front/action.php:71
 #, php-format
 msgid ""
@@ -76,57 +80,79 @@ msgstr "Nahrazení úspěšné"
 msgid "Uninstallation successful"
 msgstr "Odinstalace úspěšná"
 
-#: hook.php:44 inc/uninstall.class.php:367
+#: hook.php:44 inc/uninstall.class.php:374
 msgid "Uninstall"
 msgstr "Odinstalovat"
 
-#: setup.php:119
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Životní cyklus položky (odinstalace)"
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
+msgstr "Umístění položky po odinstalaci"
 
-#: inc/uninstall.class.php:71 inc/config.class.php:37 inc/model.class.php:84
+#: inc/preference.class.php:103 inc/replace.class.php:749
+#: ajax/locations.php:48
+msgid "Keep previous location"
+msgstr "Ponechat předchozí umístění"
+
+#: inc/preference.class.php:104 inc/replace.class.php:753
+#: ajax/locations.php:49
+msgid "Empty location"
+msgstr "Prázdné umístění"
+
+#: inc/config.class.php:37 inc/uninstall.class.php:72 inc/model.class.php:84
 msgid "Item's Lifecycle"
 msgstr "Životní cyklus položky"
 
-#: inc/uninstall.class.php:372
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Zkratky"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Preference umístění"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Nahradit rozbalovací nabídku stavu akcí zásuvného modulu"
+
+#: inc/uninstall.class.php:379
 msgid "Please wait, uninstallation is running..."
 msgstr "Čekejte, probíhá odinstalace…"
 
-#: inc/uninstall.class.php:800
+#: inc/uninstall.class.php:807
 msgid "Item is now uninstalled"
 msgstr "Položka je nyní odinstalovaná"
 
-#: inc/uninstall.class.php:803
+#: inc/uninstall.class.php:810
 #, php-format
 msgid "Item is now uninstalled with model %s"
 msgstr "Položka je nyní odinstalována pomocí modelu %s"
 
-#: inc/uninstall.class.php:811
+#: inc/uninstall.class.php:818
 msgid "Item replaced by a new one"
 msgstr "Položka je nahrazena novou"
 
-#: inc/uninstall.class.php:814
+#: inc/uninstall.class.php:821
 #, php-format
 msgid "Item replaced by a new one with model %s"
 msgstr "Položka nahrazena za novou pomocí modelu %s"
 
-#: inc/uninstall.class.php:822
+#: inc/uninstall.class.php:829
 msgid "Item replacing an old one"
 msgstr "Položka nahrazující tu původní"
 
-#: inc/uninstall.class.php:828
+#: inc/uninstall.class.php:835
 msgid "Removed from OCSNG with ID"
 msgstr "Odebráno z OCSNG s identifikátorem"
 
-#: inc/uninstall.class.php:945
+#: inc/uninstall.class.php:952
 msgid "Apply model"
 msgstr "Uplatnit model"
 
-#: inc/uninstall.class.php:973
+#: inc/uninstall.class.php:980
 msgid "Item's location after applying model"
 msgstr "Umístění položky po uplatnění modelu"
 
-#: inc/uninstall.class.php:1094
+#: inc/uninstall.class.php:1101
 msgid "Lifecycle"
 msgstr "Životní cyklus"
 
@@ -172,16 +198,6 @@ msgstr "Připomínka modelu nahrazení"
 msgid "New location of item"
 msgstr "Nové umístění položky"
 
-#: inc/replace.class.php:749 inc/preference.class.php:103
-#: ajax/locations.php:48
-msgid "Keep previous location"
-msgstr "Ponechat předchozí umístění"
-
-#: inc/replace.class.php:753 inc/preference.class.php:104
-#: ajax/locations.php:49
-msgid "Empty location"
-msgstr "Prázdné umístění"
-
 #: inc/replace.class.php:763 inc/model.class.php:285
 msgid "New status of the computer"
 msgstr "Nový stav počítače"
@@ -205,22 +221,6 @@ msgstr "Odstranit"
 #: inc/replace.class.php:909
 msgid "Replace"
 msgstr "Nahradit"
-
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr "Umístění položky po odinstalaci"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Zkratky"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Preference umístění"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Nahradit rozbalovací nabídku stavu akcí zásuvného modulu"
 
 #: inc/model.class.php:107
 msgid "The purge archiving method is not available for this model type"

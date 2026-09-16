@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 10:12+0000\n"
+"POT-Creation-Date: 2026-09-16 03:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,6 +57,10 @@ msgstr ""
 msgid "Direct connections"
 msgstr ""
 
+#: setup.php:119
+msgid "Item's Lifecycle (uninstall)"
+msgstr ""
+
 #: front/action.php:71
 #, php-format
 msgid "Replacement done with %d item(s) skipped because of insufficient rights"
@@ -70,57 +74,77 @@ msgstr ""
 msgid "Uninstallation successful"
 msgstr ""
 
-#: hook.php:44 inc/uninstall.class.php:367
+#: hook.php:44 inc/uninstall.class.php:374
 msgid "Uninstall"
 msgstr ""
 
-#: setup.php:119
-msgid "Item's Lifecycle (uninstall)"
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
 msgstr ""
 
-#: inc/uninstall.class.php:71 inc/config.class.php:37 inc/model.class.php:84
+#: inc/preference.class.php:103 inc/replace.class.php:749 ajax/locations.php:48
+msgid "Keep previous location"
+msgstr ""
+
+#: inc/preference.class.php:104 inc/replace.class.php:753 ajax/locations.php:49
+msgid "Empty location"
+msgstr ""
+
+#: inc/config.class.php:37 inc/uninstall.class.php:72 inc/model.class.php:84
 msgid "Item's Lifecycle"
 msgstr ""
 
-#: inc/uninstall.class.php:372
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr ""
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr ""
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr ""
+
+#: inc/uninstall.class.php:379
 msgid "Please wait, uninstallation is running..."
 msgstr ""
 
-#: inc/uninstall.class.php:800
+#: inc/uninstall.class.php:807
 msgid "Item is now uninstalled"
 msgstr ""
 
-#: inc/uninstall.class.php:803
+#: inc/uninstall.class.php:810
 #, php-format
 msgid "Item is now uninstalled with model %s"
 msgstr ""
 
-#: inc/uninstall.class.php:811
+#: inc/uninstall.class.php:818
 msgid "Item replaced by a new one"
 msgstr ""
 
-#: inc/uninstall.class.php:814
+#: inc/uninstall.class.php:821
 #, php-format
 msgid "Item replaced by a new one with model %s"
 msgstr ""
 
-#: inc/uninstall.class.php:822
+#: inc/uninstall.class.php:829
 msgid "Item replacing an old one"
 msgstr ""
 
-#: inc/uninstall.class.php:828
+#: inc/uninstall.class.php:835
 msgid "Removed from OCSNG with ID"
 msgstr ""
 
-#: inc/uninstall.class.php:945
+#: inc/uninstall.class.php:952
 msgid "Apply model"
 msgstr ""
 
-#: inc/uninstall.class.php:973
+#: inc/uninstall.class.php:980
 msgid "Item's location after applying model"
 msgstr ""
 
-#: inc/uninstall.class.php:1094
+#: inc/uninstall.class.php:1101
 msgid "Lifecycle"
 msgstr ""
 
@@ -166,14 +190,6 @@ msgstr ""
 msgid "New location of item"
 msgstr ""
 
-#: inc/replace.class.php:749 inc/preference.class.php:103 ajax/locations.php:48
-msgid "Keep previous location"
-msgstr ""
-
-#: inc/replace.class.php:753 inc/preference.class.php:104 ajax/locations.php:49
-msgid "Empty location"
-msgstr ""
-
 #: inc/replace.class.php:763 inc/model.class.php:285
 msgid "New status of the computer"
 msgstr ""
@@ -196,22 +212,6 @@ msgstr ""
 
 #: inc/replace.class.php:909
 msgid "Replace"
-msgstr ""
-
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr ""
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr ""
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr ""
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
 msgstr ""
 
 #: inc/model.class.php:107
