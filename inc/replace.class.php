@@ -868,7 +868,7 @@ class PluginUninstallReplace extends CommonDBTM
                 $commonitem->getFromDB($id);
 
                 echo "<tr class='tab_bg_1 center'>";
-                echo "<td>" . $commonitem->getName() . "</td>";
+                echo "<td>" . htmlescape($commonitem->getName()) . "</td>";
 
                 if (Search::getOptionNumber($type, 'otherserial')) {
                     echo "<td>" . htmlentities((string) $commonitem->fields['otherserial']) . "</td>";

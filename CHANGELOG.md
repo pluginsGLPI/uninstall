@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [UNRELEASED]
 
+### Fixed
+
+- Display asset names correctly in the replacement form
+
 ## [2.10.5] - 2026-08-31
 
 ### Fixed
