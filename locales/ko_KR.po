@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 03:30+0000\n"
+"POT-Creation-Date: 2026-09-23 03:52+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: 조성현 (jaymz9634) <jaymz9634@gmail.com>, 2020\n"
 "Language-Team: Korean (Korea) (https://app.transifex.com/teclib/teams/28042/ko_KR/)\n"
@@ -37,8 +37,8 @@ msgstr ""
 msgid "Overwrite informations (from old item to the new)"
 msgstr "정보 덮어쓰기 (이전 품목에서 새 품목으로)"
 
-#: templates/model_config.html.twig inc/replace.class.php:726
-#: inc/model.class.php:800
+#: templates/model_config.html.twig inc/model.class.php:800
+#: inc/replace.class.php:726
 msgid "Archiving method of the old material"
 msgstr "이전 자료의 보관 방법"
 
@@ -60,10 +60,6 @@ msgstr "다른 자료와 연결"
 msgid "Direct connections"
 msgstr "직접 연결"
 
-#: setup.php:119
-msgid "Item's Lifecycle (uninstall)"
-msgstr "품목 주기 (제거)"
-
 #: front/action.php:71
 #, php-format
 msgid ""
@@ -77,10 +73,6 @@ msgstr "대체함"
 #: front/action.php:128
 msgid "Uninstallation successful"
 msgstr "제거함"
-
-#: hook.php:44 inc/uninstall.class.php:374
-msgid "Uninstall"
-msgstr "제거"
 
 #: inc/preference.class.php:78
 msgid "Item's location after uninstall"
@@ -96,129 +88,9 @@ msgstr "이전 위치 유지"
 msgid "Empty location"
 msgstr "빈 위치"
 
-#: inc/config.class.php:37 inc/uninstall.class.php:72 inc/model.class.php:84
+#: inc/model.class.php:84 inc/config.class.php:37 inc/uninstall.class.php:72
 msgid "Item's Lifecycle"
 msgstr "품목 주기"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "바로가기"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "위치 설정"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "플러그인 동작으로 상태 드롭다운 교체"
-
-#: inc/uninstall.class.php:379
-msgid "Please wait, uninstallation is running..."
-msgstr "기다리세요, 제거 중입니다..."
-
-#: inc/uninstall.class.php:807
-msgid "Item is now uninstalled"
-msgstr "이제 품목이 제거 되었습니다"
-
-#: inc/uninstall.class.php:810
-#, php-format
-msgid "Item is now uninstalled with model %s"
-msgstr "이제 모델 %s의 품목이 제거 되었습니다"
-
-#: inc/uninstall.class.php:818
-msgid "Item replaced by a new one"
-msgstr "품목이 새것으로 교체됨"
-
-#: inc/uninstall.class.php:821
-#, php-format
-msgid "Item replaced by a new one with model %s"
-msgstr "품목이 모델 %s의 새것으로 교체됨"
-
-#: inc/uninstall.class.php:829
-msgid "Item replacing an old one"
-msgstr "예전 것을 대체하는 품목"
-
-#: inc/uninstall.class.php:835
-msgid "Removed from OCSNG with ID"
-msgstr "ID가 있는 OCSNG 에서 제거됨"
-
-#: inc/uninstall.class.php:952
-msgid "Apply model"
-msgstr "모델 적용"
-
-#: inc/uninstall.class.php:980
-msgid "Item's location after applying model"
-msgstr "모델 적용 후 품목 위치"
-
-#: inc/uninstall.class.php:1101
-msgid "Lifecycle"
-msgstr "주기"
-
-#: inc/replace.class.php:78
-msgid "Item's replacement"
-msgstr "품목 대체"
-
-#: inc/replace.class.php:104 inc/replace.class.php:186 inc/model.class.php:135
-#: inc/model.class.php:941
-msgid "Replacement"
-msgstr "교체"
-
-#: inc/replace.class.php:211
-msgid "This document is the archive of this replaced item"
-msgstr "이 문서는 이 교체된 품목의 보관입니다"
-
-#: inc/replace.class.php:216
-msgid "Archive of old material"
-msgstr "이전 자료의 보관"
-
-#: inc/replace.class.php:531
-msgid "See attached document"
-msgstr "첨부된 문서 보기"
-
-#: inc/replace.class.php:605
-#, php-format
-msgid "%d item(s) skipped because of insufficient rights"
-msgstr ""
-
-#: inc/replace.class.php:646
-msgid "This item is a replacement for item"
-msgstr "이 품목은 품목 교체용 입니다"
-
-#: inc/replace.class.php:648
-msgid "This item was replaced by"
-msgstr "이 품목은 다음에 의해 교체됨"
-
-#: inc/replace.class.php:706 inc/replace.class.php:786
-msgid "Reminder of the replacement model"
-msgstr "대체 모델의 알림"
-
-#: inc/replace.class.php:746
-msgid "New location of item"
-msgstr "품목의 새 위치"
-
-#: inc/replace.class.php:763 inc/model.class.php:285
-msgid "New status of the computer"
-msgstr "컴퓨터의 새 상태"
-
-#: inc/replace.class.php:844
-msgid "Choices for item to replace"
-msgstr "대체할 품목 선택"
-
-#: inc/replace.class.php:847
-msgid "Old item"
-msgstr "예전 품목"
-
-#: inc/replace.class.php:857
-msgid "New item"
-msgstr "새 품목"
-
-#: inc/replace.class.php:860
-msgid "Remove"
-msgstr ""
-
-#: inc/replace.class.php:909
-msgid "Replace"
-msgstr "대체"
 
 #: inc/model.class.php:107
 msgid "The purge archiving method is not available for this model type"
@@ -227,6 +99,11 @@ msgstr ""
 #: inc/model.class.php:133 inc/model.class.php:351 inc/model.class.php:939
 msgid "Uninstallation"
 msgstr "제거"
+
+#: inc/model.class.php:135 inc/model.class.php:941 inc/replace.class.php:104
+#: inc/replace.class.php:186
+msgid "Replacement"
+msgstr "교체"
 
 #: inc/model.class.php:136 inc/model.class.php:943
 msgid "Replacement then uninstallation"
@@ -263,6 +140,10 @@ msgstr "견본 유형"
 #: inc/model.class.php:266 inc/model.class.php:743
 msgid "Transfer's model to use"
 msgstr "사용할 전송 모델"
+
+#: inc/model.class.php:285 inc/replace.class.php:763
+msgid "New status of the computer"
+msgstr "컴퓨터의 새 상태"
 
 #: inc/model.class.php:294 inc/model.class.php:789
 msgid "Action on group"
@@ -328,3 +209,122 @@ msgstr "추가 항목"
 #: inc/model.class.php:572
 msgid "Delete Fields plugin informations"
 msgstr "항목 플러그인 정보 삭제"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "바로가기"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "위치 설정"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "플러그인 동작으로 상태 드롭다운 교체"
+
+#: inc/replace.class.php:78
+msgid "Item's replacement"
+msgstr "품목 대체"
+
+#: inc/replace.class.php:211
+msgid "This document is the archive of this replaced item"
+msgstr "이 문서는 이 교체된 품목의 보관입니다"
+
+#: inc/replace.class.php:216
+msgid "Archive of old material"
+msgstr "이전 자료의 보관"
+
+#: inc/replace.class.php:531
+msgid "See attached document"
+msgstr "첨부된 문서 보기"
+
+#: inc/replace.class.php:605
+#, php-format
+msgid "%d item(s) skipped because of insufficient rights"
+msgstr ""
+
+#: inc/replace.class.php:646
+msgid "This item is a replacement for item"
+msgstr "이 품목은 품목 교체용 입니다"
+
+#: inc/replace.class.php:648
+msgid "This item was replaced by"
+msgstr "이 품목은 다음에 의해 교체됨"
+
+#: inc/replace.class.php:706 inc/replace.class.php:786
+msgid "Reminder of the replacement model"
+msgstr "대체 모델의 알림"
+
+#: inc/replace.class.php:746
+msgid "New location of item"
+msgstr "품목의 새 위치"
+
+#: inc/replace.class.php:844
+msgid "Choices for item to replace"
+msgstr "대체할 품목 선택"
+
+#: inc/replace.class.php:847
+msgid "Old item"
+msgstr "예전 품목"
+
+#: inc/replace.class.php:857
+msgid "New item"
+msgstr "새 품목"
+
+#: inc/replace.class.php:860
+msgid "Remove"
+msgstr ""
+
+#: inc/replace.class.php:909
+msgid "Replace"
+msgstr "대체"
+
+#: inc/uninstall.class.php:374 hook.php:44
+msgid "Uninstall"
+msgstr "제거"
+
+#: inc/uninstall.class.php:379
+msgid "Please wait, uninstallation is running..."
+msgstr "기다리세요, 제거 중입니다..."
+
+#: inc/uninstall.class.php:807
+msgid "Item is now uninstalled"
+msgstr "이제 품목이 제거 되었습니다"
+
+#: inc/uninstall.class.php:810
+#, php-format
+msgid "Item is now uninstalled with model %s"
+msgstr "이제 모델 %s의 품목이 제거 되었습니다"
+
+#: inc/uninstall.class.php:818
+msgid "Item replaced by a new one"
+msgstr "품목이 새것으로 교체됨"
+
+#: inc/uninstall.class.php:821
+#, php-format
+msgid "Item replaced by a new one with model %s"
+msgstr "품목이 모델 %s의 새것으로 교체됨"
+
+#: inc/uninstall.class.php:829
+msgid "Item replacing an old one"
+msgstr "예전 것을 대체하는 품목"
+
+#: inc/uninstall.class.php:835
+msgid "Removed from OCSNG with ID"
+msgstr "ID가 있는 OCSNG 에서 제거됨"
+
+#: inc/uninstall.class.php:952
+msgid "Apply model"
+msgstr "모델 적용"
+
+#: inc/uninstall.class.php:980
+msgid "Item's location after applying model"
+msgstr "모델 적용 후 품목 위치"
+
+#: inc/uninstall.class.php:1101
+msgid "Lifecycle"
+msgstr "주기"
+
+#: setup.php:119
+msgid "Item's Lifecycle (uninstall)"
+msgstr "품목 주기 (제거)"
