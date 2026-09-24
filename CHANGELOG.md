@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.10.5] - 2026-08-31
 
+### Added
+
+- Add Links for uninstall templates From Item Form
+
 ### Fixed
 
 - Fix uninstall/replace actions processing items without checking item type or user rights on the item

@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+declare(strict_types=1);
+
 Session::checkRight('config', UPDATE);
 
 /** @var array $CFG_GLPI */
