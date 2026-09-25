@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 03:44+0000\n"
+"POT-Creation-Date: 2026-09-25 04:00+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Diego Nobre <diego@koruma.com.br>, 2025\n"
 "Language-Team: Portuguese (Brazil) (https://app.transifex.com/teclib/teams/28042/pt_BR/)\n"
@@ -41,8 +41,8 @@ msgstr ""
 msgid "Overwrite informations (from old item to the new)"
 msgstr "Sobrescrever informações (da mais antiga a mais recente)"
 
-#: templates/model_config.html.twig inc/replace.class.php:726
-#: inc/model.class.php:800
+#: templates/model_config.html.twig inc/model.class.php:800
+#: inc/replace.class.php:726
 msgid "Archiving method of the old material"
 msgstr "Método de arquivamento do material antigo"
 
@@ -64,10 +64,6 @@ msgstr "Conexões com outros materiais"
 msgid "Direct connections"
 msgstr "Conexões diretas"
 
-#: setup.php:119
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Ciclo de vida do item (desinstalar)"
-
 #: front/action.php:71
 #, php-format
 msgid ""
@@ -81,10 +77,6 @@ msgstr "Substituição executada com sucesso"
 #: front/action.php:128
 msgid "Uninstallation successful"
 msgstr "Desinstalação executada com sucesso"
-
-#: hook.php:44 inc/uninstall.class.php:374
-msgid "Uninstall"
-msgstr "Desinstalar"
 
 #: inc/preference.class.php:78
 msgid "Item's location after uninstall"
@@ -100,129 +92,9 @@ msgstr "Manter localização anterior"
 msgid "Empty location"
 msgstr "Esvaziar localização"
 
-#: inc/config.class.php:37 inc/uninstall.class.php:72 inc/model.class.php:84
+#: inc/model.class.php:84 inc/config.class.php:37 inc/uninstall.class.php:72
 msgid "Item's Lifecycle"
 msgstr "Ciclo de vida do item"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Atalhos"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Preferências de localização"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Substituir o dropdown de estado pelas ações do plugin"
-
-#: inc/uninstall.class.php:379
-msgid "Please wait, uninstallation is running..."
-msgstr "Por favor aguarde, desinstalação em execução..."
-
-#: inc/uninstall.class.php:807
-msgid "Item is now uninstalled"
-msgstr "O item está desinstalado"
-
-#: inc/uninstall.class.php:810
-#, php-format
-msgid "Item is now uninstalled with model %s"
-msgstr "Item é desinstalado agora com modelo %s"
-
-#: inc/uninstall.class.php:818
-msgid "Item replaced by a new one"
-msgstr "Item substituído por outro"
-
-#: inc/uninstall.class.php:821
-#, php-format
-msgid "Item replaced by a new one with model %s"
-msgstr "Item substituído por um novo com modelo %s"
-
-#: inc/uninstall.class.php:829
-msgid "Item replacing an old one"
-msgstr "Item substituindo um mais antigo"
-
-#: inc/uninstall.class.php:835
-msgid "Removed from OCSNG with ID"
-msgstr "Removido do OCSNG com ID"
-
-#: inc/uninstall.class.php:952
-msgid "Apply model"
-msgstr "Aplicar o modelo"
-
-#: inc/uninstall.class.php:980
-msgid "Item's location after applying model"
-msgstr "Localização do item depois de aplicar o modelo"
-
-#: inc/uninstall.class.php:1101
-msgid "Lifecycle"
-msgstr "Ciclo de vida"
-
-#: inc/replace.class.php:78
-msgid "Item's replacement"
-msgstr "Substituição de item"
-
-#: inc/replace.class.php:104 inc/replace.class.php:186 inc/model.class.php:135
-#: inc/model.class.php:941
-msgid "Replacement"
-msgstr "Recolocação"
-
-#: inc/replace.class.php:211
-msgid "This document is the archive of this replaced item"
-msgstr "O documento é o arquivo desse item substituído"
-
-#: inc/replace.class.php:216
-msgid "Archive of old material"
-msgstr "Arquivamento de material antigo"
-
-#: inc/replace.class.php:531
-msgid "See attached document"
-msgstr "Visualizar documento anexado"
-
-#: inc/replace.class.php:605
-#, php-format
-msgid "%d item(s) skipped because of insufficient rights"
-msgstr ""
-
-#: inc/replace.class.php:646
-msgid "This item is a replacement for item"
-msgstr "Este item é a substituição para item"
-
-#: inc/replace.class.php:648
-msgid "This item was replaced by"
-msgstr "Este item foi substituído por"
-
-#: inc/replace.class.php:706 inc/replace.class.php:786
-msgid "Reminder of the replacement model"
-msgstr "Lembrete de modelo de substituição"
-
-#: inc/replace.class.php:746
-msgid "New location of item"
-msgstr "Nova localização do item"
-
-#: inc/replace.class.php:763 inc/model.class.php:285
-msgid "New status of the computer"
-msgstr "Novo status do computador"
-
-#: inc/replace.class.php:844
-msgid "Choices for item to replace"
-msgstr "Escolhas de item para substituir"
-
-#: inc/replace.class.php:847
-msgid "Old item"
-msgstr "Item antigo"
-
-#: inc/replace.class.php:857
-msgid "New item"
-msgstr "Novo item"
-
-#: inc/replace.class.php:860
-msgid "Remove"
-msgstr "Remover"
-
-#: inc/replace.class.php:909
-msgid "Replace"
-msgstr "Substituir"
 
 #: inc/model.class.php:107
 msgid "The purge archiving method is not available for this model type"
@@ -233,6 +105,11 @@ msgstr ""
 #: inc/model.class.php:133 inc/model.class.php:351 inc/model.class.php:939
 msgid "Uninstallation"
 msgstr "Desinstalação"
+
+#: inc/model.class.php:135 inc/model.class.php:941 inc/replace.class.php:104
+#: inc/replace.class.php:186
+msgid "Replacement"
+msgstr "Recolocação"
 
 #: inc/model.class.php:136 inc/model.class.php:943
 msgid "Replacement then uninstallation"
@@ -269,6 +146,10 @@ msgstr "Tipo de modelo"
 #: inc/model.class.php:266 inc/model.class.php:743
 msgid "Transfer's model to use"
 msgstr "Modelo de transferência a utilizar"
+
+#: inc/model.class.php:285 inc/replace.class.php:763
+msgid "New status of the computer"
+msgstr "Novo status do computador"
 
 #: inc/model.class.php:294 inc/model.class.php:789
 msgid "Action on group"
@@ -338,3 +219,122 @@ msgstr "Campos adicional"
 #: inc/model.class.php:572
 msgid "Delete Fields plugin informations"
 msgstr "Excluir campos de informações do plugin"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Atalhos"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Preferências de localização"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Substituir o dropdown de estado pelas ações do plugin"
+
+#: inc/replace.class.php:78
+msgid "Item's replacement"
+msgstr "Substituição de item"
+
+#: inc/replace.class.php:211
+msgid "This document is the archive of this replaced item"
+msgstr "O documento é o arquivo desse item substituído"
+
+#: inc/replace.class.php:216
+msgid "Archive of old material"
+msgstr "Arquivamento de material antigo"
+
+#: inc/replace.class.php:531
+msgid "See attached document"
+msgstr "Visualizar documento anexado"
+
+#: inc/replace.class.php:605
+#, php-format
+msgid "%d item(s) skipped because of insufficient rights"
+msgstr ""
+
+#: inc/replace.class.php:646
+msgid "This item is a replacement for item"
+msgstr "Este item é a substituição para item"
+
+#: inc/replace.class.php:648
+msgid "This item was replaced by"
+msgstr "Este item foi substituído por"
+
+#: inc/replace.class.php:706 inc/replace.class.php:786
+msgid "Reminder of the replacement model"
+msgstr "Lembrete de modelo de substituição"
+
+#: inc/replace.class.php:746
+msgid "New location of item"
+msgstr "Nova localização do item"
+
+#: inc/replace.class.php:844
+msgid "Choices for item to replace"
+msgstr "Escolhas de item para substituir"
+
+#: inc/replace.class.php:847
+msgid "Old item"
+msgstr "Item antigo"
+
+#: inc/replace.class.php:857
+msgid "New item"
+msgstr "Novo item"
+
+#: inc/replace.class.php:860
+msgid "Remove"
+msgstr "Remover"
+
+#: inc/replace.class.php:909
+msgid "Replace"
+msgstr "Substituir"
+
+#: inc/uninstall.class.php:374 hook.php:44
+msgid "Uninstall"
+msgstr "Desinstalar"
+
+#: inc/uninstall.class.php:379
+msgid "Please wait, uninstallation is running..."
+msgstr "Por favor aguarde, desinstalação em execução..."
+
+#: inc/uninstall.class.php:807
+msgid "Item is now uninstalled"
+msgstr "O item está desinstalado"
+
+#: inc/uninstall.class.php:810
+#, php-format
+msgid "Item is now uninstalled with model %s"
+msgstr "Item é desinstalado agora com modelo %s"
+
+#: inc/uninstall.class.php:818
+msgid "Item replaced by a new one"
+msgstr "Item substituído por outro"
+
+#: inc/uninstall.class.php:821
+#, php-format
+msgid "Item replaced by a new one with model %s"
+msgstr "Item substituído por um novo com modelo %s"
+
+#: inc/uninstall.class.php:829
+msgid "Item replacing an old one"
+msgstr "Item substituindo um mais antigo"
+
+#: inc/uninstall.class.php:835
+msgid "Removed from OCSNG with ID"
+msgstr "Removido do OCSNG com ID"
+
+#: inc/uninstall.class.php:952
+msgid "Apply model"
+msgstr "Aplicar o modelo"
+
+#: inc/uninstall.class.php:980
+msgid "Item's location after applying model"
+msgstr "Localização do item depois de aplicar o modelo"
+
+#: inc/uninstall.class.php:1101
+msgid "Lifecycle"
+msgstr "Ciclo de vida"
+
+#: setup.php:119
+msgid "Item's Lifecycle (uninstall)"
+msgstr "Ciclo de vida do item (desinstalar)"
