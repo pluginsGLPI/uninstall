@@ -34,7 +34,7 @@ use Glpi\Plugin\Hooks;
 
 use function Safe\define;
 
-define('PLUGIN_UNINSTALL_VERSION', '2.10.4');
+define('PLUGIN_UNINSTALL_VERSION', '2.10.6');
 define("PLUGIN_UNINSTALL_MIN_GLPI", "11.0.0");
 define("PLUGIN_UNINSTALL_MAX_GLPI", "11.0.99");
 

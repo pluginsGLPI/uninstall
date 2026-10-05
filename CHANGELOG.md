@@ -13,6 +13,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- CI: fix Psalm cache directory, drop the stray `glpi-project/tools` composer dependency, declare a unique composer autoloader suffix
+
+## [2.10.6] - 2026-09-18
+
+### Fixed
+
+- Display asset names correctly in the replacement form
+
+## [2.10.5] - 2026-08-31
+
+### Fixed
+
 - Fix uninstall/replace actions processing items without checking item type or user rights on the item
 - Fix group assignment when applying uninstall templates on assignable items
 
