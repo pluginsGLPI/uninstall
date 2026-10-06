@@ -65,7 +65,7 @@ class PluginUninstallUninstall extends CommonDBTM
 {
     public const PLUGIN_UNINSTALL_TRANSFER_NAME = "plugin_uninstall";
 
-    public static $rightname = "uninstall:profile";
+    public static string $rightname = "uninstall:profile";
 
     public static function getTypeName($nb = 0)
     {
@@ -121,9 +121,9 @@ class PluginUninstallUninstall extends CommonDBTM
                 if ($item->getFromDB($id) && $item->can($id, UPDATE)) {
                     //Session::addMessageAfterRedirect(sprintf(__s('Form duplicated: %s', 'formcreator'), $item->getName()));
                     $_SESSION['glpi_uninstalllist'][$itemtype][$id] = $id;
-                    $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
+                    $ma->itemDone($item::class, $id, MassiveAction::ACTION_OK);
                 } else {
-                    $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_NORIGHT);
+                    $ma->itemDone($item::class, $id, MassiveAction::ACTION_NORIGHT);
                 }
             }
 
@@ -140,7 +140,7 @@ class PluginUninstallUninstall extends CommonDBTM
         global $UNINSTALL_DIRECT_CONNECTIONS_TYPE;
 
         $id = $item->fields['id'];
-        $type = $options['type'] ?? $item::getType();
+        $type = $options['type'] ?? $item::class;
         $location = $options['location'] ?? '';
         $plug = new Plugin();
 
@@ -227,7 +227,7 @@ class PluginUninstallUninstall extends CommonDBTM
             );
             if (
                 ($model->fields["groups_action"] === 'set')
-                && ($nbgroup == 1 || $model->fields["groups_id"] == 0)
+                && ($nbgroup === 1 || $model->fields["groups_id"] == 0)
             ) {
                 // If a new group is defined and if the group is accessible in the object's entity
                 // Assignable items store the group in `glpi_groups_items`, so `groups_id` must be an array (0 is filtered out, clearing the group)
@@ -607,7 +607,7 @@ class PluginUninstallUninstall extends CommonDBTM
             $agent = new Agent();
             $agent->deleteByCriteria(
                 [
-                    'itemtype' => $item->getType(),
+                    'itemtype' => $item::class,
                     'items_id' => $item->getID(),
                 ],
                 true,
@@ -619,7 +619,7 @@ class PluginUninstallUninstall extends CommonDBTM
         $computer_item->deleteByCriteria(
             [
                 'items_id_asset' => $item->getID(),
-                'itemtype_asset' => $item->getType(),
+                'itemtype_asset' => $item::class,
                 'is_dynamic'   => 1,
             ],
             true,
@@ -633,7 +633,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
         // manage networkname
         $networkport = new NetworkPort();
-        $db_networkport = $networkport->find(["itemtype" => $item->getType(), "items_id" => $item->getID()]);
+        $db_networkport = $networkport->find(["itemtype" => $item::class, "items_id" => $item->getID()]);
         foreach (array_keys($db_networkport) as $networkport_id) {
             $DB->update(
                 "glpi_networknames",
@@ -664,7 +664,7 @@ class PluginUninstallUninstall extends CommonDBTM
                     continue;
                 }
 
-                if (in_array($sub_item::class, [Agent::class, Asset_PeripheralAsset::class, Lockedfield::class, NetworkName::class])) {
+                if (in_array($sub_item::class, [Agent::class, Asset_PeripheralAsset::class, Lockedfield::class, NetworkName::class], true)) {
                     // Specific handling
                     continue;
                 }
@@ -691,7 +691,7 @@ class PluginUninstallUninstall extends CommonDBTM
                             ],
                             [
                                 $items_id_field => $item->getID(),
-                                $itemtype_field => $item->getType(),
+                                $itemtype_field => $item::class,
                                 'is_dynamic' => 1,
                             ],
                         );
@@ -1096,7 +1096,7 @@ class PluginUninstallUninstall extends CommonDBTM
         global $UNINSTALL_TYPES;
 
         if (
-            self::canView() && in_array($item->getType(), $UNINSTALL_TYPES) && !$withtemplate
+            self::canView() && in_array($item::class, $UNINSTALL_TYPES) && !$withtemplate
         ) {
             return __s('Lifecycle', 'uninstall');
         }
@@ -1112,7 +1112,7 @@ class PluginUninstallUninstall extends CommonDBTM
 
         if (
             ($item instanceof CommonDBTM)
-            && in_array($item->getType(), $UNINSTALL_TYPES)
+            && in_array($item::class, $UNINSTALL_TYPES)
         ) {
             self::showFormUninstallation($item->getField('id'), $item, Session::getLoginUserID());
         }
