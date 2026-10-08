@@ -28,8 +28,17 @@
  * -------------------------------------------------------------------------
  */
 
-Session::checkRight(Config::$rightname, UPDATE);
+require __DIR__ . '/../../../tests/bootstrap.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
-/** @var array $CFG_GLPI */
-global $CFG_GLPI;
-Html::redirect($CFG_GLPI["root_doc"] . "/front/config.form.php?forcetab=PluginUninstallConfig\$1");
+$plugin = new Plugin();
+$plugin->checkPluginState('uninstall');
+$plugin->getFromDBbyDir('uninstall');
+
+if (!$plugin->isInstalled('uninstall')) {
+    $plugin->install($plugin->getID());
+}
+
+if (!$plugin->isActivated('uninstall')) {
+    $plugin->activate($plugin->getID());
+}

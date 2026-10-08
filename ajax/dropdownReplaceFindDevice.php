@@ -36,7 +36,7 @@ use function Safe\json_encode;
 header("Content-Type: text/html; charset=UTF-8");
 Html::header_nocache();
 
-Session::checkRightsOr('uninstall:profile', [READ, PluginUninstallProfile::RIGHT_REPLACE]);
+Session::checkRightsOr(PluginUninstallPreference::$rightname, [READ, PluginUninstallProfile::RIGHT_REPLACE]);
 
 /**
  * @var array $UNINSTALL_TYPES
