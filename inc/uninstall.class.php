@@ -923,7 +923,7 @@ class PluginUninstallUninstall extends CommonDBTM
          */
         global $CFG_GLPI, $DB;
 
-        $type = $item->getType();
+        $type = $item::class;
 
         $supported = $item instanceof CommonDBTM;
 
