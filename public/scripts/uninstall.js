@@ -51,7 +51,7 @@ $(document).on('click', '.plugin-uninstall-open-model', function (event) {
  * into the status field cell so it visually takes the select's place, keeping the
  * modal <template> in the DOM so the delegated opener above can still find it.
  */
-$(function () {
+function replaceStateSelect() {
     document.querySelectorAll('.plugin-uninstall-state-replace').forEach(function (holder) {
         if (holder.dataset.uninstallApplied) {
             return;
@@ -70,4 +70,7 @@ $(function () {
         }
         holder.remove();
     });
-});
+}
+
+$(replaceStateSelect);
+$(document).on('glpi.tab.loaded', replaceStateSelect);
