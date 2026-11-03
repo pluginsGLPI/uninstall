@@ -30,8 +30,8 @@
     <div class="form-button-separator card-body mx-n2 border-top d-flex flex-row-reverse align-items-start flex-wrap">
         {% for link in links %}
             {# The model name comes from the database and is auto-escaped by Twig. #}
-            <a href="#" class="btn btn-primary me-2 plugin-uninstall-open-model"
-               data-uninstall-target="plugin_uninstall_model_{{ link.id }}">{{ link.name }}</a>
+            <button type="button" class="btn btn-primary me-2 plugin-uninstall-open-model"
+               data-uninstall-target="plugin_uninstall_model_{{ link.id }}">{{ link.name }}</button>
             <template id="plugin_uninstall_model_{{ link.id }}">{{ link.modal|raw }}</template>
         {% endfor %}
     </div>
