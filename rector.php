@@ -30,6 +30,8 @@
 
 declare(strict_types=1);
 
+use Rector\Configuration\RectorConfigBuilder;
+
 require_once __DIR__ . '/../../src/Plugin.php';
 
 $baseline_file = __DIR__ . '/../../PluginsRector.php';
