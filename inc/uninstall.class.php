@@ -1047,6 +1047,7 @@ class PluginUninstallUninstall extends CommonDBTM
             !$right
             || !in_array($item->getType(), $UNINSTALL_TYPES)
             || $item->getID() <= 0
+            || $item->isTemplate()
         ) {
             return null;
         }
