@@ -28,7 +28,6 @@
 
 {% if supported %}
     <form action="{{ action_url }}" method="post">
-        <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="device_type" value="{{ device_type }}">
         <table class="tab_cadre_fixe" cellpadding="5">
             <tr>
