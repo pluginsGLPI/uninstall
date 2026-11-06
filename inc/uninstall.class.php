@@ -916,12 +916,12 @@ class PluginUninstallUninstall extends CommonDBTM
      *
      * @return string|null the HTML when $display is false
      **/
-    public static function showFormUninstallation($ID, $item, $user_id, $templates_id = 0, $display = true, $used = null)
+    public static function showFormUninstallation($ID, $item, $user_id, $templates_id = 0, $display = true)
     {
         /**
          * @var array $CFG_GLPI
          */
-        global $CFG_GLPI, $DB;
+        global $CFG_GLPI;
 
         $type = $item::class;
 
@@ -966,32 +966,11 @@ class PluginUninstallUninstall extends CommonDBTM
 
                 $location_html = "<span id='show_objects'>" . Dropdown::EMPTY_VALUE . "</span>";
             } else {
-                // $used may be supplied by the caller (see showLinksUninstallation)
-                // to avoid recomputing this query once per link; fall back to
-                // computing it here when the method is called on its own.
-                if ($used === null) {
-                    $used = [];
-                    if (!PluginUninstallModel::canReplace()) {
-                        $used = array_column(
-                            iterator_to_array(
-                                $DB->request([
-                                    'SELECT' => ['id'],
-                                    'FROM'   => 'glpi_plugin_uninstall_models',
-                                    'WHERE'  => [
-                                        'types_id' => [2, 3],
-                                    ],
-                                ]),
-                            ),
-                            'id',
-                        );
-                    }
-                }
-
                 $model_dropdown = PluginUninstallModel::dropdown([
                     'name'    => "model_id",
                     'value'   => $templates_id,
                     'entity'  => $entities_id,
-                    'used'    => $used,
+                    'used'    => PluginUninstallModel::getHiddenModelIds(),
                     'display' => false,
                 ]);
 
@@ -1057,24 +1036,10 @@ class PluginUninstallUninstall extends CommonDBTM
             'WHERE' => getEntitiesRestrictCriteria('glpi_plugin_uninstall_models', '', $item->fields['entities_id'], true),
         ];
 
-        // Compute the excluded/used model ids once, before the loop:
-        // showFormUninstallation() would otherwise re-run this same
-        // canReplace() query for every link (2N redundant round-trips).
-        $used = [];
-        if (!PluginUninstallModel::canReplace()) {
-            $criteria['WHERE']['NOT'] = ['types_id' => [2, 3]];
-            $used = array_column(
-                iterator_to_array(
-                    $DB->request([
-                        'SELECT' => ['id'],
-                        'FROM'   => 'glpi_plugin_uninstall_models',
-                        'WHERE'  => [
-                            'types_id' => [2, 3],
-                        ],
-                    ]),
-                ),
-                'id',
-            );
+        // Models the user may not apply get no link at all.
+        $hidden_ids = PluginUninstallModel::getHiddenModelIds();
+        if ($hidden_ids !== []) {
+            $criteria['WHERE']['NOT'] = ['id' => $hidden_ids];
         }
 
         $links = [];
@@ -1084,7 +1049,7 @@ class PluginUninstallUninstall extends CommonDBTM
                 'name'  => $data['name'],
                 // The modal body is captured as a string (no output buffering)
                 // and rendered inside an inert <template> element by Twig.
-                'modal' => self::showFormUninstallation($item->getID(), $item, $users_id, $data['id'], false, $used),
+                'modal' => self::showFormUninstallation($item->getID(), $item, $users_id, $data['id'], false),
             ];
         }
 
@@ -1141,27 +1106,11 @@ class PluginUninstallUninstall extends CommonDBTM
     **/
     public static function dropdownUninstallModels($name, $user, $entity, $options = [])
     {
-        /** @var DBmysql $DB */
-        global $DB;
-
-        $used = [];
-
-        if (!PluginUninstallModel::canReplace()) {
-            foreach ($DB->request([
-                "TABLE" => 'glpi_plugin_uninstall_models',
-                "WHERE" => [
-                    'types_id' => 2,
-                ],
-            ]) as $data) {
-                $used[] = $data['id'];
-            }
-        }
-
         return PluginUninstallModel::dropdown(array_merge([
             'name'   => $name,
             'value'  => 0,
             'entity' => $entity,
-            'used'   => $used,
+            'used'   => PluginUninstallModel::getHiddenModelIds(),
         ], $options));
     }
 
