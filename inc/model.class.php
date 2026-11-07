@@ -71,6 +71,42 @@ class PluginUninstallModel extends CommonDBTM
         return Session::haveRight(self::$rightname, PluginUninstallProfile::RIGHT_REPLACE);
     }
 
+    /**
+     * Ids of the models the current user may not apply.
+     *
+     * Both replacement types (with or without uninstall) require the replace right: without it,
+     * they are left out of every model selector.
+     *
+     * @return int[]
+     */
+    public static function getHiddenModelIds(): array
+    {
+        /** @var DBmysql $DB */
+        global $DB;
+
+        if (self::canReplace()) {
+            return [];
+        }
+
+        $ids = [];
+        foreach (
+            $DB->request([
+                'SELECT' => ['id'],
+                'FROM'   => self::getTable(),
+                'WHERE'  => [
+                    'types_id' => [
+                        self::TYPE_MODEL_REPLACEMENT,
+                        self::TYPE_MODEL_REPLACEMENT_UNINSTALL,
+                    ],
+                ],
+            ]) as $data
+        ) {
+            $ids[] = (int) $data['id'];
+        }
+
+        return $ids;
+    }
+
     public static function getMenuContent()
     {
         /**

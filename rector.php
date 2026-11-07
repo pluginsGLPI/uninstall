@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+declare(strict_types=1);
+
 use Rector\Configuration\RectorConfigBuilder;
 
 require_once __DIR__ . '/../../src/Plugin.php';

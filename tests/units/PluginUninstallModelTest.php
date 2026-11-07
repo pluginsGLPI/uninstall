@@ -32,6 +32,7 @@ namespace GlpiPlugin\Uninstall\Tests\Units;
 
 use Glpi\Tests\DbTestCase;
 use PluginUninstallModel;
+use PluginUninstallProfile;
 use PluginUninstallReplace;
 use Transfer;
 
@@ -107,5 +108,31 @@ class PluginUninstallModelTest extends DbTestCase
 
         $this->assertNotEmpty($input);
         $this->assertSame('Valid model', $input['name']);
+    }
+
+    public function testReplacementModelsAreHiddenWithoutTheReplaceRight(): void
+    {
+        $this->login();
+
+        $uninstall = $this->createItem(PluginUninstallModel::class, $this->getRequiredModelInput([
+            'name' => 'Uninstall model',
+        ]));
+        $replacement = $this->createItem(PluginUninstallModel::class, $this->getRequiredModelInput([
+            'name'     => 'Replacement model',
+            'types_id' => PluginUninstallModel::TYPE_MODEL_REPLACEMENT,
+        ]));
+        $replacement_uninstall = $this->createItem(PluginUninstallModel::class, $this->getRequiredModelInput([
+            'name'     => 'Replacement uninstall model',
+            'types_id' => PluginUninstallModel::TYPE_MODEL_REPLACEMENT_UNINSTALL,
+        ]));
+
+        $_SESSION['glpiactiveprofile'][PluginUninstallModel::$rightname] = READ;
+        $hidden = PluginUninstallModel::getHiddenModelIds();
+        $this->assertContains($replacement->getID(), $hidden);
+        $this->assertContains($replacement_uninstall->getID(), $hidden);
+        $this->assertNotContains($uninstall->getID(), $hidden);
+
+        $_SESSION['glpiactiveprofile'][PluginUninstallModel::$rightname] = READ | PluginUninstallProfile::RIGHT_REPLACE;
+        $this->assertSame([], PluginUninstallModel::getHiddenModelIds());
     }
 }
