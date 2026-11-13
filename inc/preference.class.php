@@ -58,6 +58,9 @@ class PluginUninstallPreference extends CommonDBTM
 
     public function showFormUserPreferences()
     {
+        /** @var DBmysql $DB */
+        global $DB;
+
         $entity     = $_SESSION['glpiactive_entity'];
         $userID     = Session::getLoginUserID();
         $templates  = PluginUninstallUninstall::getAllTemplatesByEntity(
@@ -78,21 +81,39 @@ class PluginUninstallPreference extends CommonDBTM
             echo "<th>" . __s("Item's location after uninstall", "uninstall") . "</th>";
             echo "</tr>";
 
+            // One query for all the user preferences in this entity instead of two per model
+            $prefs = [];
+            foreach (
+                $DB->request([
+                    'SELECT' => ['id', 'templates_id', 'locations_action', 'locations_id'],
+                    'FROM'   => self::getTable(),
+                    'WHERE'  => [
+                        'users_id'    => $userID,
+                        'entities_id' => $entity,
+                    ],
+                ]) as $row
+            ) {
+                $prefs[$row['templates_id']] ??= $row;
+            }
+
             foreach ($templates as $ID => $name) {
-                $pref_ID = self::checkIfPreferenceExistsByEntity($userID, $ID, $entity);
-
-                if (!$pref_ID) {
-                    $pref_ID = self::addDefaultPreference($userID, $ID, $entity);
+                if (!isset($prefs[$ID])) {
+                    // Default preference: keep the previous location (see handleLocationPref())
+                    $prefs[$ID] = [
+                        'id'               => self::addDefaultPreference($userID, $ID, $entity),
+                        'locations_action' => 'old',
+                        'locations_id'     => 0,
+                    ];
                 }
-
-                $this->getFromDB($pref_ID);
+                $pref    = $prefs[$ID];
+                $pref_ID = $pref['id'];
 
                 echo "<tr class='tab_bg_1'><td>" . $name . "</td>";
                 echo "<td>";
-                $value = ($this->fields["locations_id"] ?? 0);
+                $value = ($pref["locations_id"] ?? 0);
 
                 // Handle "old" special value, dropdown expect "-1" in this case
-                if ($this->fields['locations_action'] == "old" && $value == 0) {
+                if ($pref['locations_action'] == "old" && $value == 0) {
                     $value = -1;
                 }
 
@@ -321,6 +342,9 @@ class PluginUninstallPreference extends CommonDBTM
                     ),
                 );
             }
+
+            // Preferences are always searched by user, entity and model
+            $migration->addKey($table, ['users_id', 'entities_id', 'templates_id'], 'users_entities_templates');
         } else {
             // plugin nevers installed
             $query = "CREATE TABLE `" . $table . "` (
@@ -330,7 +354,8 @@ class PluginUninstallPreference extends CommonDBTM
                      `templates_id` int {$default_key_sign} DEFAULT '0',
                      `locations_action` varchar(10) NOT NULL DEFAULT 'set',
                      `locations_id` int {$default_key_sign} DEFAULT '0',
-                     PRIMARY KEY (`id`)
+                     PRIMARY KEY (`id`),
+                     KEY `users_entities_templates` (`users_id`, `entities_id`, `templates_id`)
                      ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
             $DB->doQuery($query);
         }
