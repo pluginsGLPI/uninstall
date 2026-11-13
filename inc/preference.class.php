@@ -105,6 +105,7 @@ class PluginUninstallPreference extends CommonDBTM
                         'locations_id'     => 0,
                     ];
                 }
+
                 $pref    = $prefs[$ID];
                 $pref_ID = $pref['id'];
 
