@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - CI: fix Psalm cache directory, drop the stray `glpi-project/tools` composer dependency, declare a unique composer autoloader suffix
+- Speed up the Lifecycle tab of the user preferences and the location lookup when applying a model, and remove the SQL queries the plugin ran on every page to check its own activation
 
 ## [2.10.6] - 2026-09-18
 
