@@ -73,4 +73,8 @@ function replaceStateSelect() {
 }
 
 $(replaceStateSelect);
-$(document).on('glpi.tab.loaded', replaceStateSelect);
+// The main tab is loaded via AJAX: defer the swap so that the ready callbacks of the tab, those
+// of the core included, run first (console "backdrop" TypeError otherwise)
+$(document).on('glpi.tab.loaded', function () {
+    $(replaceStateSelect);
+});

@@ -114,6 +114,23 @@ class PluginUninstallUninstallLinksTest extends DbTestCase
         $this->assertSame('', $this->renderLinks($computer));
     }
 
+    /**
+     * Applying a model updates the item: without the UPDATE right on it, no link either, as
+     * replaceState() and the massive action do
+     */
+    public function testNothingIsRenderedWithoutTheUpdateRightOnTheItem(): void
+    {
+        $this->login();
+        $this->setUninstallRight(READ | PluginUninstallProfile::RIGHT_REPLACE);
+        $model = $this->createModel('Model of a read only item');
+        $computer = $this->createComputer();
+
+        $this->assertArrayHasKey($model->getID(), $this->getRenderedLinks($this->renderLinks($computer)));
+
+        $_SESSION['glpiactiveprofile'][Computer::$rightname] = READ;
+        $this->assertSame('', $this->renderLinks($computer));
+    }
+
     public function testNothingIsRenderedForAnUnsupportedItem(): void
     {
         $this->login();

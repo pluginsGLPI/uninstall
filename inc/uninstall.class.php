@@ -1022,11 +1022,13 @@ class PluginUninstallUninstall extends CommonDBTM
 
         $users_id = Session::getLoginUserID();
         $item = $params['item'];
+        // Applying a model updates the item: same right as replaceState() and the massive action
         if (
             !$right
             || !in_array($item->getType(), $UNINSTALL_TYPES)
             || $item->getID() <= 0
             || $item->isTemplate()
+            || !$item->can($item->getID(), UPDATE)
         ) {
             return null;
         }
