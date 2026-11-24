@@ -121,6 +121,7 @@ function plugin_version_uninstall()
         'homepage'       => 'https://github.com/pluginsGLPI/uninstall',
         'version'        => PLUGIN_UNINSTALL_VERSION,
         'license'        => 'GPLv2+',
+        'csp_compliant'  => true,
         'requirements'   => [
             'glpi' => [
                 'min' => PLUGIN_UNINSTALL_MIN_GLPI,
