@@ -51,8 +51,9 @@ function plugin_init_uninstall()
     Plugin::registerClass(PluginUninstallPreference::class, ['addtabon' => [Preference::class]]);
     Plugin::registerClass(PluginUninstallProfile::class, ['addtabon' => [Profile::class]]);
 
-    $plugin = new Plugin();
-    if ($plugin->isActivated('uninstall')) {
+    // Core also runs this init while installing or activating the plugin: keep the guard,
+    // but read the list of active plugins filled at boot instead of querying glpi_plugins.
+    if (in_array('uninstall', Plugin::getPlugins(), true)) {
         $UNINSTALL_TYPES                    = [Computer::class, Monitor::class, NetworkEquipment::class, Peripheral::class, Phone::class, Printer::class];
         $UNINSTALL_DIRECT_CONNECTIONS_TYPE  = [Monitor::class, Peripheral::class, Phone::class, Printer::class];
 
