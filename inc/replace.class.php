@@ -889,7 +889,7 @@ class PluginUninstallReplace extends CommonDBTM
 
                 if (count($tab_ids[$type]) > 1) {
                     echo "<td>";
-                    $button = "<button type='button' onclick=\"$(this).closest('tr').remove();\" ><i class='ti ti-trash'></i></button>";
+                    $button = "<button type='button' data-uninstall-remove-row ><i class='ti ti-trash'></i></button>";
                     echo $button;
                     echo "<td>";
                 }
@@ -911,6 +911,7 @@ class PluginUninstallReplace extends CommonDBTM
         echo "</td></tr>";
 
         echo "</table>";
+        echo Html::scriptBlock("$(document).on('click', '[data-uninstall-remove-row]', function () { $(this).closest('tr').remove(); });");
         Html::closeForm();
     }
 

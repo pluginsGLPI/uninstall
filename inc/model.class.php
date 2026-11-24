@@ -292,17 +292,17 @@ class PluginUninstallModel extends CommonDBTM
         echo "<tr class='tab_bg_1'>";
         if ($this->fields["types_id"] != self::TYPE_MODEL_REPLACEMENT) {
             echo "<td>" . __s('Action on group', 'uninstall') . "</td><td>";
-            Dropdown::showFromArray(
+            $groups_action_rand = Dropdown::showFromArray(
                 "groups_action",
                 [
                     'old' => __s('Keep in the current group', 'uninstall'),
                     'set' => __s('Affect to a new group', 'uninstall'),
                 ],
                 [
-                    'on_change' => '$("#show_groups").toggle($(this).val() === "set");',
-                    'value'     => $this->fields["groups_action"],
+                    'value' => $this->fields["groups_action"],
                 ],
             );
+            echo Html::scriptBlock(sprintf("\$('#dropdown_groups_action%s').on('change', function () { \$('#show_groups').toggle(\$(this).val() === 'set'); });", $groups_action_rand));
             echo "</td>";
         } else {
             echo "<td colspan='2'></td>";
