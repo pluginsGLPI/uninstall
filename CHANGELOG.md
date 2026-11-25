@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Add links to apply the uninstall models from the item form footer (when the status dropdown is not replaced)
 - Add Transifex translations link to README
 
 ## [2.11.0] - 2026-10-06

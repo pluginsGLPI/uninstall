@@ -28,6 +28,8 @@
  * -------------------------------------------------------------------------
  */
 
+declare(strict_types=1);
+
 use Glpi\Plugin\Hooks;
 
 use function Safe\define;
@@ -63,6 +65,9 @@ function plugin_init_uninstall()
             $uninstallconfig = PluginUninstallConfig::getConfig();
 
             $PLUGIN_HOOKS[Hooks::ADD_CSS]['uninstall'] = ['css/uninstall.css'];
+            // Modal opener + status-select swap handlers, shipped as a dedicated
+            // script instead of inline <script> blocks (GLPI convention).
+            $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['uninstall'] = ['scripts/uninstall.js'];
 
             if ($uninstallconfig['replace_status_dropdown']) {
                 // replace item state by uninstall list
@@ -78,6 +83,10 @@ function plugin_init_uninstall()
 
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_ADD]['uninstall'] = [Config::class => PluginUninstallConfig::preConfigSet(...)];
             $PLUGIN_HOOKS[Hooks::PRE_ITEM_UPDATE]['uninstall'] = [Config::class => PluginUninstallConfig::preConfigSet(...)];
+
+            if (!$uninstallconfig['replace_status_dropdown']) {
+                $PLUGIN_HOOKS[Hooks::POST_ITEM_FORM]['uninstall'] = PluginUninstallUninstall::showLinksUninstallation(...);
+            }
 
             $PLUGIN_HOOKS[Hooks::STALE_AGENT_CONFIG]['uninstall'] = [
                 [
