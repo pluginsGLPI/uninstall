@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add links to apply the uninstall models from the item form footer (when the status dropdown is not replaced)
 - Add Transifex translations link to README
 
+### Changed
+
+- Make the plugin compatible with the Content Security Policy
+
 ## [2.11.0] - 2026-10-06
 
 ### Added
