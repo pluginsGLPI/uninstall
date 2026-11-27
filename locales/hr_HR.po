@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 04:00+0000\n"
+"POT-Creation-Date: 2026-11-26 07:23+0000\n"
 "PO-Revision-Date: 2017-01-03 22:10+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>, 2023\n"
 "Language-Team: Croatian (Croatia) (https://app.transifex.com/teclib/teams/28042/hr_HR/)\n"
@@ -21,11 +21,19 @@ msgstr ""
 "Language: hr_HR\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: templates/form_uninstallation.html.twig
+msgid "Apply model"
+msgstr "Primijeni model"
+
+#: templates/form_uninstallation.html.twig
+msgid "Item's location after applying model"
+msgstr "Lokacija predmeta nakon primjenjivanja modela"
+
 #: templates/model_config.html.twig
 msgid "Informations replacement"
 msgstr "Zamjena informacija"
 
-#: templates/model_config.html.twig inc/replace.class.php:707
+#: templates/model_config.html.twig inc/replace.class.php:679
 msgid "General informations"
 msgstr "Opće informacije"
 
@@ -33,12 +41,12 @@ msgstr "Opće informacije"
 msgid "Copy in new item"
 msgstr ""
 
-#: templates/model_config.html.twig inc/replace.class.php:723
+#: templates/model_config.html.twig inc/replace.class.php:695
 msgid "Overwrite informations (from old item to the new)"
 msgstr "Prepiši informacije (od starog predmeta na novi)"
 
-#: templates/model_config.html.twig inc/model.class.php:800
-#: inc/replace.class.php:726
+#: templates/model_config.html.twig inc/replace.class.php:698
+#: inc/model.class.php:836
 msgid "Archiving method of the old material"
 msgstr "Način arhiviranja starog materijala"
 
@@ -52,13 +60,264 @@ msgid ""
 "archiving"
 msgstr ""
 
-#: templates/model_config.html.twig inc/replace.class.php:787
+#: templates/model_config.html.twig inc/replace.class.php:759
 msgid "Connections with other materials"
 msgstr "Veze s ostalim materijalima"
 
-#: templates/model_config.html.twig inc/replace.class.php:832
+#: templates/model_config.html.twig inc/replace.class.php:804
 msgid "Direct connections"
 msgstr "Izravne veze"
+
+#: inc/config.class.php:37 inc/uninstall.class.php:45 inc/model.class.php:120
+msgid "Item's Lifecycle"
+msgstr "Životni vijek predmeta"
+
+#: inc/config.class.php:81
+msgid "Shortcuts"
+msgstr "Prečaci"
+
+#: inc/config.class.php:87
+msgid "Location preferences"
+msgstr "Postavke lokacije"
+
+#: inc/config.class.php:95
+msgid "Replace status dropdown by plugin actions"
+msgstr "Zamijeni padajući popis stanja s radnjama dodatka"
+
+#: inc/uninstall.class.php:347 hook.php:44
+msgid "Uninstall"
+msgstr "Deinstaliraj"
+
+#: inc/uninstall.class.php:352
+msgid "Please wait, uninstallation is running..."
+msgstr "Pričekaj, deinstalacija je u tijeku …"
+
+#: inc/uninstall.class.php:780
+msgid "Item is now uninstalled"
+msgstr "Predmet je sada deinstaliran"
+
+#: inc/uninstall.class.php:783
+#, php-format
+msgid "Item is now uninstalled with model %s"
+msgstr "Predmet je sada deinstaliran s modelom %s"
+
+#: inc/uninstall.class.php:791
+msgid "Item replaced by a new one"
+msgstr "Predmet je zamijenjen jednim novim"
+
+#: inc/uninstall.class.php:794
+#, php-format
+msgid "Item replaced by a new one with model %s"
+msgstr "Predmet je zamijenjen jednim novim s modelom %s"
+
+#: inc/uninstall.class.php:802
+msgid "Item replacing an old one"
+msgstr "Predmet zamijenjuje jedan stari"
+
+#: inc/uninstall.class.php:808
+msgid "Removed from OCSNG with ID"
+msgstr "Uklonjeno iz OCSNG-a s ID oznakom"
+
+#: inc/uninstall.class.php:987 inc/replace.class.php:721
+#: inc/preference.class.php:103 ajax/locations.php:48
+msgid "Keep previous location"
+msgstr "Zadrži prethodnu lokaciju"
+
+#: inc/uninstall.class.php:988 inc/replace.class.php:725
+#: inc/preference.class.php:104 ajax/locations.php:49
+msgid "Empty location"
+msgstr "Prazna lokacija"
+
+#: inc/uninstall.class.php:1160
+msgid "Lifecycle"
+msgstr "Životni vijek"
+
+#: inc/replace.class.php:50
+msgid "Item's replacement"
+msgstr "Zamjena predmeta"
+
+#: inc/replace.class.php:76 inc/replace.class.php:158 inc/model.class.php:171
+#: inc/model.class.php:977
+msgid "Replacement"
+msgstr "Zamjena"
+
+#: inc/replace.class.php:183
+msgid "This document is the archive of this replaced item"
+msgstr "Predmet je arhiva ovog zamijenjenog predmeta"
+
+#: inc/replace.class.php:188
+msgid "Archive of old material"
+msgstr "Arhiva starog materijala"
+
+#: inc/replace.class.php:503
+msgid "See attached document"
+msgstr "Pogledaj priloženi dokument"
+
+#: inc/replace.class.php:577
+#, php-format
+msgid "%d item(s) skipped because of insufficient rights"
+msgstr ""
+
+#: inc/replace.class.php:618
+msgid "This item is a replacement for item"
+msgstr "Predmet je zamjena za predmet"
+
+#: inc/replace.class.php:620
+msgid "This item was replaced by"
+msgstr "Predmet je zamijenjen s"
+
+#: inc/replace.class.php:678 inc/replace.class.php:758
+msgid "Reminder of the replacement model"
+msgstr "Podsjetnik modela zamjene"
+
+#: inc/replace.class.php:718
+msgid "New location of item"
+msgstr "Nova lokacija predmeta"
+
+#: inc/replace.class.php:735 inc/model.class.php:321
+msgid "New status of the computer"
+msgstr "Novo stanje računala"
+
+#: inc/replace.class.php:816
+msgid "Choices for item to replace"
+msgstr "Opcije za predmet koji se zamijenjuje"
+
+#: inc/replace.class.php:819
+msgid "Old item"
+msgstr "Stari predmet"
+
+#: inc/replace.class.php:829
+msgid "New item"
+msgstr "Novi predmet"
+
+#: inc/replace.class.php:832
+msgid "Remove"
+msgstr "Ukloni"
+
+#: inc/replace.class.php:881
+msgid "Replace"
+msgstr "Zamijeni"
+
+#: inc/preference.class.php:78
+msgid "Item's location after uninstall"
+msgstr "Lokacija predmeta nakon deinstaliranja"
+
+#: inc/model.class.php:143
+msgid "The purge archiving method is not available for this model type"
+msgstr ""
+
+#: inc/model.class.php:169 inc/model.class.php:387 inc/model.class.php:975
+msgid "Uninstallation"
+msgstr "Deinstalacija"
+
+#: inc/model.class.php:172 inc/model.class.php:979
+msgid "Replacement then uninstallation"
+msgstr ""
+
+#: inc/model.class.php:187
+msgid "PDF Archiving"
+msgstr "PDF arhiviranje"
+
+#: inc/model.class.php:189
+msgid "CSV Archiving"
+msgstr "CSV arhiviranje"
+
+#: inc/model.class.php:192
+msgid "Purge"
+msgstr "Izbriši"
+
+#: inc/model.class.php:193
+msgid "Delete + Comment"
+msgstr "Izbriši i komentiraj"
+
+#: inc/model.class.php:194
+msgid "Keep + Comment"
+msgstr "Zadrži i komentiraj"
+
+#: inc/model.class.php:241
+msgid "Replacing data"
+msgstr "Zamjenjivanje podataka"
+
+#: inc/model.class.php:293 inc/model.class.php:815
+msgid "Type of template"
+msgstr "Vrsta predloška"
+
+#: inc/model.class.php:302 inc/model.class.php:779
+msgid "Transfer's model to use"
+msgstr "Model prijenosa koji se koristiti"
+
+#: inc/model.class.php:330 inc/model.class.php:825
+msgid "Action on group"
+msgstr "Radnja na grupu"
+
+#: inc/model.class.php:334 inc/model.class.php:986
+msgid "Keep in the current group"
+msgstr "Zadrži u trenutačnoj grupi"
+
+#: inc/model.class.php:335
+msgid "Affect to a new group"
+msgstr "Utjecaj na novu grupu"
+
+#: inc/model.class.php:351
+msgid "New group"
+msgstr "Nova grupa"
+
+#: inc/model.class.php:372
+msgid "Add template"
+msgstr "Dodaj predložak"
+
+#: inc/model.class.php:375
+msgid "Manage templates"
+msgstr "Upravljaj predlošcima"
+
+#: inc/model.class.php:387
+msgid "Erase datas"
+msgstr "Izbriši podatke"
+
+#: inc/model.class.php:390 inc/model.class.php:687
+msgid "Delete software history (computers)"
+msgstr "Izbriši povijest softvera (računala)"
+
+#: inc/model.class.php:396 inc/model.class.php:846
+msgid "Delete the whole history"
+msgstr "Izbriši cijelu povijest"
+
+#: inc/model.class.php:489
+msgid "Delete inventory data (dynamic flag, locks, agent information, ...)"
+msgstr ""
+"Izbriši podatke inventara (dinamička oznaka, zaključavanja, informacije o "
+"agentu, …)"
+
+#: inc/model.class.php:557
+msgid "OCSNG link"
+msgid_plural "OCSNG links"
+msgstr[0] "OCSNG poveznica"
+msgstr[1] "OCSNG poveznice"
+msgstr[2] "OCSNG poveznice"
+
+#: inc/model.class.php:565 inc/model.class.php:798
+msgid "Delete computer in OCSNG"
+msgstr "Izbriši računalo u OCSNG-u"
+
+#: inc/model.class.php:574 inc/model.class.php:806
+msgid "Delete link with computer in OCSNG"
+msgstr "Izbriši poveznicu s računalom u OCSNG-u"
+
+#: inc/model.class.php:589
+msgid "Delete computer in FusionInventory"
+msgstr "Izbriši računalo u FusionInventory"
+
+#: inc/model.class.php:604
+msgid "Additionnal fields"
+msgstr "Dodatna polja"
+
+#: inc/model.class.php:608
+msgid "Delete Fields plugin informations"
+msgstr "Izbriši informacije dodatka „Polja”"
+
+#: setup.php:128
+msgid "Item's Lifecycle (uninstall)"
+msgstr "Životni vijek predmeta (deinstaliraj)"
 
 #: front/action.php:71
 #, php-format
@@ -73,262 +332,3 @@ msgstr "Zamjena uspješna"
 #: front/action.php:128
 msgid "Uninstallation successful"
 msgstr "Deinstalacija uspješna"
-
-#: inc/preference.class.php:78
-msgid "Item's location after uninstall"
-msgstr "Lokacija predmeta nakon deinstaliranja"
-
-#: inc/preference.class.php:103 inc/replace.class.php:749
-#: ajax/locations.php:48
-msgid "Keep previous location"
-msgstr "Zadrži prethodnu lokaciju"
-
-#: inc/preference.class.php:104 inc/replace.class.php:753
-#: ajax/locations.php:49
-msgid "Empty location"
-msgstr "Prazna lokacija"
-
-#: inc/model.class.php:84 inc/config.class.php:37 inc/uninstall.class.php:72
-msgid "Item's Lifecycle"
-msgstr "Životni vijek predmeta"
-
-#: inc/model.class.php:107
-msgid "The purge archiving method is not available for this model type"
-msgstr ""
-
-#: inc/model.class.php:133 inc/model.class.php:351 inc/model.class.php:939
-msgid "Uninstallation"
-msgstr "Deinstalacija"
-
-#: inc/model.class.php:135 inc/model.class.php:941 inc/replace.class.php:104
-#: inc/replace.class.php:186
-msgid "Replacement"
-msgstr "Zamjena"
-
-#: inc/model.class.php:136 inc/model.class.php:943
-msgid "Replacement then uninstallation"
-msgstr ""
-
-#: inc/model.class.php:151
-msgid "PDF Archiving"
-msgstr "PDF arhiviranje"
-
-#: inc/model.class.php:153
-msgid "CSV Archiving"
-msgstr "CSV arhiviranje"
-
-#: inc/model.class.php:156
-msgid "Purge"
-msgstr "Izbriši"
-
-#: inc/model.class.php:157
-msgid "Delete + Comment"
-msgstr "Izbriši i komentiraj"
-
-#: inc/model.class.php:158
-msgid "Keep + Comment"
-msgstr "Zadrži i komentiraj"
-
-#: inc/model.class.php:205
-msgid "Replacing data"
-msgstr "Zamjenjivanje podataka"
-
-#: inc/model.class.php:257 inc/model.class.php:779
-msgid "Type of template"
-msgstr "Vrsta predloška"
-
-#: inc/model.class.php:266 inc/model.class.php:743
-msgid "Transfer's model to use"
-msgstr "Model prijenosa koji se koristiti"
-
-#: inc/model.class.php:285 inc/replace.class.php:763
-msgid "New status of the computer"
-msgstr "Novo stanje računala"
-
-#: inc/model.class.php:294 inc/model.class.php:789
-msgid "Action on group"
-msgstr "Radnja na grupu"
-
-#: inc/model.class.php:298 inc/model.class.php:950
-msgid "Keep in the current group"
-msgstr "Zadrži u trenutačnoj grupi"
-
-#: inc/model.class.php:299
-msgid "Affect to a new group"
-msgstr "Utjecaj na novu grupu"
-
-#: inc/model.class.php:315
-msgid "New group"
-msgstr "Nova grupa"
-
-#: inc/model.class.php:336
-msgid "Add template"
-msgstr "Dodaj predložak"
-
-#: inc/model.class.php:339
-msgid "Manage templates"
-msgstr "Upravljaj predlošcima"
-
-#: inc/model.class.php:351
-msgid "Erase datas"
-msgstr "Izbriši podatke"
-
-#: inc/model.class.php:354 inc/model.class.php:651
-msgid "Delete software history (computers)"
-msgstr "Izbriši povijest softvera (računala)"
-
-#: inc/model.class.php:360 inc/model.class.php:810
-msgid "Delete the whole history"
-msgstr "Izbriši cijelu povijest"
-
-#: inc/model.class.php:453
-msgid "Delete inventory data (dynamic flag, locks, agent information, ...)"
-msgstr ""
-"Izbriši podatke inventara (dinamička oznaka, zaključavanja, informacije o "
-"agentu, …)"
-
-#: inc/model.class.php:521
-msgid "OCSNG link"
-msgid_plural "OCSNG links"
-msgstr[0] "OCSNG poveznica"
-msgstr[1] "OCSNG poveznice"
-msgstr[2] "OCSNG poveznice"
-
-#: inc/model.class.php:529 inc/model.class.php:762
-msgid "Delete computer in OCSNG"
-msgstr "Izbriši računalo u OCSNG-u"
-
-#: inc/model.class.php:538 inc/model.class.php:770
-msgid "Delete link with computer in OCSNG"
-msgstr "Izbriši poveznicu s računalom u OCSNG-u"
-
-#: inc/model.class.php:553
-msgid "Delete computer in FusionInventory"
-msgstr "Izbriši računalo u FusionInventory"
-
-#: inc/model.class.php:568
-msgid "Additionnal fields"
-msgstr "Dodatna polja"
-
-#: inc/model.class.php:572
-msgid "Delete Fields plugin informations"
-msgstr "Izbriši informacije dodatka „Polja”"
-
-#: inc/config.class.php:81
-msgid "Shortcuts"
-msgstr "Prečaci"
-
-#: inc/config.class.php:87
-msgid "Location preferences"
-msgstr "Postavke lokacije"
-
-#: inc/config.class.php:95
-msgid "Replace status dropdown by plugin actions"
-msgstr "Zamijeni padajući popis stanja s radnjama dodatka"
-
-#: inc/replace.class.php:78
-msgid "Item's replacement"
-msgstr "Zamjena predmeta"
-
-#: inc/replace.class.php:211
-msgid "This document is the archive of this replaced item"
-msgstr "Predmet je arhiva ovog zamijenjenog predmeta"
-
-#: inc/replace.class.php:216
-msgid "Archive of old material"
-msgstr "Arhiva starog materijala"
-
-#: inc/replace.class.php:531
-msgid "See attached document"
-msgstr "Pogledaj priloženi dokument"
-
-#: inc/replace.class.php:605
-#, php-format
-msgid "%d item(s) skipped because of insufficient rights"
-msgstr ""
-
-#: inc/replace.class.php:646
-msgid "This item is a replacement for item"
-msgstr "Predmet je zamjena za predmet"
-
-#: inc/replace.class.php:648
-msgid "This item was replaced by"
-msgstr "Predmet je zamijenjen s"
-
-#: inc/replace.class.php:706 inc/replace.class.php:786
-msgid "Reminder of the replacement model"
-msgstr "Podsjetnik modela zamjene"
-
-#: inc/replace.class.php:746
-msgid "New location of item"
-msgstr "Nova lokacija predmeta"
-
-#: inc/replace.class.php:844
-msgid "Choices for item to replace"
-msgstr "Opcije za predmet koji se zamijenjuje"
-
-#: inc/replace.class.php:847
-msgid "Old item"
-msgstr "Stari predmet"
-
-#: inc/replace.class.php:857
-msgid "New item"
-msgstr "Novi predmet"
-
-#: inc/replace.class.php:860
-msgid "Remove"
-msgstr "Ukloni"
-
-#: inc/replace.class.php:909
-msgid "Replace"
-msgstr "Zamijeni"
-
-#: inc/uninstall.class.php:374 hook.php:44
-msgid "Uninstall"
-msgstr "Deinstaliraj"
-
-#: inc/uninstall.class.php:379
-msgid "Please wait, uninstallation is running..."
-msgstr "Pričekaj, deinstalacija je u tijeku …"
-
-#: inc/uninstall.class.php:807
-msgid "Item is now uninstalled"
-msgstr "Predmet je sada deinstaliran"
-
-#: inc/uninstall.class.php:810
-#, php-format
-msgid "Item is now uninstalled with model %s"
-msgstr "Predmet je sada deinstaliran s modelom %s"
-
-#: inc/uninstall.class.php:818
-msgid "Item replaced by a new one"
-msgstr "Predmet je zamijenjen jednim novim"
-
-#: inc/uninstall.class.php:821
-#, php-format
-msgid "Item replaced by a new one with model %s"
-msgstr "Predmet je zamijenjen jednim novim s modelom %s"
-
-#: inc/uninstall.class.php:829
-msgid "Item replacing an old one"
-msgstr "Predmet zamijenjuje jedan stari"
-
-#: inc/uninstall.class.php:835
-msgid "Removed from OCSNG with ID"
-msgstr "Uklonjeno iz OCSNG-a s ID oznakom"
-
-#: inc/uninstall.class.php:952
-msgid "Apply model"
-msgstr "Primijeni model"
-
-#: inc/uninstall.class.php:980
-msgid "Item's location after applying model"
-msgstr "Lokacija predmeta nakon primjenjivanja modela"
-
-#: inc/uninstall.class.php:1101
-msgid "Lifecycle"
-msgstr "Životni vijek"
-
-#: setup.php:119
-msgid "Item's Lifecycle (uninstall)"
-msgstr "Životni vijek predmeta (deinstaliraj)"
